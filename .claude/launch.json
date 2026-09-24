@@ -1,0 +1,11 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "arfazrll-portfolio",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev", "--", "-p", "5310"],
+            "port": 5310
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/components/ui/horizontal-timeline.tsx"
+        ],
+        "createdAt": "2026-09-21T05:22:07.789Z",
+        "reason": "Degradado disolvente en el titular: lenguaje de marca de Atlas, confirmado por el usuario (pidio hacerlo mas perceptible)"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/components/ui/certificate-marquee.tsx"
+        ],
+        "createdAt": "2026-09-21T16:49:47.670Z",
+        "reason": "Titular disolvente: lenguaje de marca de Atlas, confirmado por el usuario (pidio replicar el de Testimonios)"
+      },
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/components/sections/AboutSection.tsx"
+        ],
+        "createdAt": "2026-09-21T19:43:21.320Z",
+        "reason": "Titular Precios con degradado disolvente: lenguaje de marca de Atlas, confirmado por el usuario"
+      }
+    ]
+  }
+}
