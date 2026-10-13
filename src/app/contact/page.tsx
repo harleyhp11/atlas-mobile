@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { Send, CheckCircle, AlertCircle, Loader2, Disc, Music, ArrowUpRight, Sparkles, HelpCircle, MessageSquare, ExternalLink, Github, Linkedin, Twitter, Instagram, ChevronDown } from 'lucide-react';
+import { Send, AlertCircle, Loader2, Disc, Music, ArrowUpRight, Sparkles, HelpCircle, MessageSquare, ExternalLink, Github, Linkedin, Twitter, Instagram, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { portfolioData } from '@/data/portfolio';
+import { GlowingCard, GlowingCardTitle, GlowingCardLabel } from '@/components/ui/glowing-card';
 import dynamic from 'next/dynamic';
 
 const Lanyard = dynamic<{ position?: [number, number, number], gravity?: [number, number, number], isLowPowerMode?: boolean }>(() => import('@/components/three/Lanyard').then(mod => mod.Lanyard), {
@@ -92,7 +93,100 @@ function SocialCard({ item }: { item: any }) {
     );
 }
 
-const InputGroup = ({ label, name, type = "text", value, onChange, required = false }: any) => {
+/* EL NUMERO SALE DE UN SOLO SITIO: portfolioData.personal.phone. Aqui solo se
+   le quitan espacios y el "+" porque wa.me exige los digitos pelados, con el
+   codigo de pais delante (51 = Peru). */
+const WHATSAPP_ATLAS = (portfolioData.personal.phone ?? '').replace(/\D/g, '');
+
+/* Las cuatro opciones son los cuatro planes de /servicios (servicios/datos.ts),
+   en singular porque aqui se elige UNO. Si cambian los planes, cambiar tambien
+   esta lista. */
+const TIPOS_PROYECTO = [
+    'Tienda online',
+    'Landing page',
+    'Web corporativa',
+    'Software a medida',
+    'Otro / aún no lo sé',
+];
+
+/* RANGOS EN SOLES, NO EN DOLARES. La referencia traia "Menos de $5,000", pero
+   $5,000 son unos S/ 18,500: mas que todo el catalogo de Atlas junto. Los
+   cortes salen de los precios publicados de los planes —tienda S/ 400-1,200,
+   landing 600-1,500, corporativa 900-2,500, software a medida—, asi que cada
+   rango cae sobre algo que Atlas de verdad vende. */
+const PRESUPUESTOS = [
+    'Menos de S/ 600',
+    'S/ 600 – 1,200',
+    'S/ 1,200 – 2,500',
+    'Más de S/ 2,500',
+    'Aún no lo sé',
+];
+
+type DatosContacto = {
+    nombre: string;
+    whatsapp: string;
+    tipo: string;
+    negocio: string;
+    presupuesto: string;
+    mensaje: string;
+};
+
+const VACIO: DatosContacto = { nombre: '', whatsapp: '', tipo: '', negocio: '', presupuesto: '', mensaje: '' };
+
+/* EL MENSAJE QUE LLEGA A WHATSAPP.
+
+   Cada dato va con su ✅ delante, a proposito. Algunos clientes de WhatsApp
+   —el de escritorio en Mac, por lo menos— se comen los saltos de linea del
+   enlace y juntan todo en un parrafo. Con la marca delante de cada dato, aunque
+   pase eso, cada cosa sigue leyendose separada:
+
+     "... Estos son mis datos: ✅ Nombre: Harley ✅ Proyecto: Web corporativa ..."
+
+   Los *asteriscos* son negrita y los _guiones bajos_ cursiva en WhatsApp.
+
+   Lo que la persona escribe se arregla lo justo para que el mensaje tenga
+   coherencia —mayuscula inicial, punto final en el detalle— sin reescribirle
+   nada. Los campos opcionales vacios no salen. */
+const capital = (t: string) => t.charAt(0).toLocaleUpperCase('es') + t.slice(1);
+const nombrePropio = (t: string) => t.replace(/(^|\s)(\p{L})/gu, (_, sep, letra) => sep + letra.toLocaleUpperCase('es'));
+const conPunto = (t: string) => (/[.!?…]$/.test(t) ? t : t + '.');
+
+function armarMensaje(d: DatosContacto): string {
+    const item = (etiqueta: string, valor: string) => `✅ *${etiqueta}:* ${valor}`;
+    const nombre = nombrePropio(d.nombre.trim());
+    const whatsapp = d.whatsapp.trim();
+    const negocio = d.negocio.trim();
+    const mensaje = d.mensaje.trim();
+
+    const lineas = [
+        'Hola Atlas 👋',
+        'Quiero cotizar un proyecto. Estos son mis datos:',
+        '',
+        item('Nombre', nombre),
+    ];
+    if (whatsapp) lineas.push(item('WhatsApp de contacto', whatsapp));
+    lineas.push(item('Proyecto', d.tipo));
+    if (negocio) lineas.push(item('Negocio', capital(negocio)));
+    if (d.presupuesto) lineas.push(item('Presupuesto', d.presupuesto));
+    if (mensaje) lineas.push('', '💬 *Detalle:*', conPunto(capital(mensaje)));
+    lineas.push('', '_Enviado desde la web de Atlas_');
+    return lineas.join('\n');
+}
+
+const LINEA =
+    "peer block w-full appearance-none border-0 border-b-2 border-foreground/20 bg-transparent py-2.5 px-0 text-xl font-medium text-foreground focus:border-foreground focus:outline-none focus:ring-0 transition-colors duration-300";
+
+/* Etiqueta flotante. En un campo normal baja dentro de la linea cuando esta
+   vacio (peer-placeholder-shown). En un select o en un campo con texto de
+   ejemplo se queda SIEMPRE arriba: si bajara, se montaria encima del "Ej.
+   Restaurante" o de la opcion elegida. */
+const ETIQUETA =
+    "pointer-events-none absolute top-3 -z-10 origin-[0] -translate-y-8 scale-75 transform text-sm font-bold tracking-widest text-muted-foreground duration-300 peer-focus:text-foreground";
+const ETIQUETA_BAJA =
+    " peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-8 peer-focus:scale-75";
+
+const InputGroup = ({ label, name, type = "text", value, onChange, required = false, marcador, opciones, inputMode, autoComplete, maxLength }: any) => {
+    const fija = type === 'select' || !!marcador;
     return (
         <div className="group relative z-0 w-full mb-10">
             {type === 'textarea' ? (
@@ -101,10 +195,27 @@ const InputGroup = ({ label, name, type = "text", value, onChange, required = fa
                     value={value}
                     onChange={onChange}
                     required={required}
+                    maxLength={maxLength}
                     rows={1}
-                    className="peer block w-full appearance-none border-0 border-b-2 border-foreground/20 bg-transparent py-2.5 px-0 text-xl font-medium text-foreground focus:border-foreground focus:outline-none focus:ring-0 transition-colors duration-300 resize-y min-h-[50px] max-h-[200px]"
+                    className={cn(LINEA, "resize-y min-h-[50px] max-h-[200px]")}
                     placeholder=" "
                 />
+            ) : type === 'select' ? (
+                <>
+                    <select
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        required={required}
+                        className={cn(LINEA, "cursor-pointer pr-10", !value && "text-foreground/35")}
+                    >
+                        <option value="" disabled className="bg-background text-foreground/50">Elige una opción</option>
+                        {opciones.map((o: string) => (
+                            <option key={o} value={o} className="bg-background text-foreground">{o}</option>
+                        ))}
+                    </select>
+                    <ChevronDown className="pointer-events-none absolute right-0 top-4 w-5 h-5 text-foreground/40 transition-colors group-focus-within:text-foreground" />
+                </>
             ) : (
                 <input
                     type={type}
@@ -112,51 +223,57 @@ const InputGroup = ({ label, name, type = "text", value, onChange, required = fa
                     value={value}
                     onChange={onChange}
                     required={required}
-                    className="peer block w-full appearance-none border-0 border-b-2 border-foreground/20 bg-transparent py-2.5 px-0 text-xl font-medium text-foreground focus:border-foreground focus:outline-none focus:ring-0 transition-colors duration-300"
-                    placeholder=" "
+                    inputMode={inputMode}
+                    autoComplete={autoComplete}
+                    maxLength={maxLength}
+                    className={cn(LINEA, "placeholder:font-normal placeholder:text-foreground/30")}
+                    placeholder={marcador ?? " "}
                 />
             )}
-            <label className="absolute top-3 -z-10 origin-[0] -translate-y-8 scale-75 transform text-sm font-bold tracking-widest text-muted-foreground duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-8 peer-focus:scale-75 peer-focus:text-foreground">
+            <label className={cn(ETIQUETA, !fija && ETIQUETA_BAJA)}>
                 {label.toUpperCase()}
             </label>
         </div>
     );
 };
 
+/* EL FORMULARIO YA NO MANDA CORREO: ARMA UN WHATSAPP.
+
+   Antes enviaba a /api/contact (nodemailer), que devuelve 500 porque faltan
+   EMAIL_USER y EMAIL_APP_PASSWORD. Ahora junta lo que se escribio en un mensaje
+   ordenado y abre wa.me con el texto ya puesto: la persona solo pulsa enviar
+   dentro de WhatsApp. Sin servidor de por medio, no hay nada que pueda fallar
+   de nuestro lado.
+
+   No se vacia el formulario al abrir WhatsApp: si la persona vuelve sin haber
+   enviado, sigue teniendo lo que escribio. */
 function ContactForm() {
     const t = useTranslations('contact');
-    const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [datos, setDatos] = useState<DatosContacto>(VACIO);
+    const [abriendo, setAbriendo] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setStatus('loading');
+        /* api.whatsapp.com y NO wa.me. wa.me redirige a esta misma direccion y,
+           en esa redireccion, su servidor cambia cada emoji por "�" (lo
+           comprobado: manda %E2%9C%85 y reenvia %EF%BF%BD). Las tildes las
+           respeta; los emojis no. Yendo directo al destino final no hay
+           redireccion que los rompa. */
+        const url = `https://api.whatsapp.com/send?phone=${WHATSAPP_ATLAS}&text=${encodeURIComponent(armarMensaje(datos))}`;
 
-        try {
-            const response = await fetch('/api/contact', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+        /* Sin "noopener" en la llamada a proposito: con el, window.open devuelve
+           null aunque SI abra, y no habria forma de saber si un bloqueador lo
+           freno. Se corta el opener a mano despues. */
+        const ventana = window.open(url, '_blank');
+        if (ventana) ventana.opener = null;
+        else window.location.href = url;
 
-            if (response.ok) {
-                setStatus('success');
-                setFormData({ name: '', email: '', subject: '', message: '' });
-            } else {
-                setStatus('error');
-            }
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            setStatus('error');
-        } finally {
-            setTimeout(() => setStatus('idle'), 3000);
-        }
+        setAbriendo(true);
+        setTimeout(() => setAbriendo(false), 2500);
     };
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+        setDatos((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     return (
@@ -172,117 +289,40 @@ function ContactForm() {
             </div>
 
             <form onSubmit={handleSubmit} className="w-full relative z-10">
-                <InputGroup label={t('form.name')} name="name" value={formData.name} onChange={handleChange} required />
-                <InputGroup label={t('form.email')} name="email" type="email" value={formData.email} onChange={handleChange} required />
-                <InputGroup label={t('form.subject')} name="subject" value={formData.subject} onChange={handleChange} required />
+                <div className="grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
+                    <InputGroup label={t('form.name')} name="nombre" value={datos.nombre} onChange={handleChange} autoComplete="name" maxLength={80} required />
+                    <InputGroup label={t('form.whatsapp')} name="whatsapp" type="tel" inputMode="tel" autoComplete="tel" maxLength={20} value={datos.whatsapp} onChange={handleChange} />
+                    <InputGroup label={t('form.projectType')} name="tipo" type="select" opciones={TIPOS_PROYECTO} value={datos.tipo} onChange={handleChange} required />
+                    <InputGroup label={t('form.businessType')} name="negocio" marcador={t('form.businessPlaceholder')} maxLength={60} value={datos.negocio} onChange={handleChange} />
+                </div>
+                <InputGroup label={t('form.budget')} name="presupuesto" type="select" opciones={PRESUPUESTOS} value={datos.presupuesto} onChange={handleChange} />
                 <InputGroup
                     label={t('form.messagePlaceholder')} // Using placeholder label style
-                    name="message"
+                    name="mensaje"
                     type="textarea"
-                    value={formData.message}
+                    maxLength={800}
+                    value={datos.mensaje}
                     onChange={handleChange}
-                    required
                 />
 
-                {/* Creative Large Button */}
-                <motion.button
+                {/* El boton de envio es la tarjeta con punto viajero
+                    (components/ui/glowing-card). Dos ajustes respecto al
+                    original, por ser un boton y no un adorno:
+                      · el texto, mas pequeño para que "ENVIAR MENSAJE" quepa;
+                      · los extremos del brillo en gris en vez de negro. Con
+                        negro, la primera y la ultima letra se perdian contra
+                        el fondo casi negro de la tarjeta, y es el boton que
+                        hay que leer. */}
+                <GlowingCard
+                    as="button"
                     type="submit"
-                    disabled={status === 'loading'}
-                    className="group relative w-full flex items-center justify-between border-b-2 border-foreground py-8 text-left hover:bg-foreground/5 transition-colors disabled:opacity-50"
-                    whileTap={{ scale: 0.98 }}
+                    className="mt-2"
+                    style={{ '--gc-texto': 'clamp(1.75rem, 3vw, 2.75rem)', '--gc-sombra': '#8a8a8a' } as React.CSSProperties}
                 >
-                    <span className="text-3xl md:text-4xl font-bold tracking-tight text-foreground group-hover:pl-4 transition-all duration-300">
-                        {status === 'loading' ? t('form.sending') : status === 'success' ? t('form.sent') : t('form.submit')}
-                    </span>
-
-                    <div className="relative overflow-hidden w-12 h-12 flex items-center justify-center rounded-full bg-foreground text-background group-hover:scale-110 transition-transform duration-500">
-                        {status === 'loading' ? <Loader2 className="w-6 h-6 animate-spin" /> :
-                            status === 'success' ? <CheckCircle className="w-6 h-6" /> :
-                                <ArrowUpRight className="w-6 h-6 group-hover:rotate-45 transition-transform duration-300" />
-                        }
-                    </div>
-                </motion.button>
+                    <GlowingCardTitle>{abriendo ? t('form.opening') : t('form.submit')}</GlowingCardTitle>
+                    <GlowingCardLabel>{t('form.via')}</GlowingCardLabel>
+                </GlowingCard>
             </form>
-        </div>
-    );
-}
-
-function FAQSection() {
-    const t = useTranslations('contact');
-    const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-    const faqs = [
-        {
-            q: t('faqData.0.q'),
-            a: t('faqData.0.a')
-        },
-        {
-            q: t('faqData.1.q'),
-            a: t('faqData.1.a')
-        },
-        {
-            q: t('faqData.2.q'),
-            a: t('faqData.2.a')
-        },
-        {
-            q: t('faqData.3.q'),
-            a: t('faqData.3.a')
-        },
-        {
-            q: t('faqData.4.q'),
-            a: t('faqData.4.a')
-        }
-    ];
-
-    return (
-        <div className="w-full max-w-6xl mx-auto py-20 px-4 md:px-8">
-            <div className="flex flex-col items-center mb-16 relative z-10 text-center">
-
-                <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-4">Frequently Asked Questions</h2>
-                <div className="h-1 w-20 bg-primary/20 rounded-full" />
-            </div>
-
-            <div className="space-y-0 relative z-10">
-                {faqs.map((faq, index) => (
-                    <div
-                        key={index}
-                        className="border-b border-border last:border-0"
-                    >
-                        <button
-                            onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                            className="w-full py-8 md:py-10 flex items-center justify-between text-left group"
-                        >
-                            <span className={cn(
-                                "text-xl md:text-3xl font-bold tracking-tight transition-all duration-300",
-                                openIndex === index ? "text-primary translate-x-2" : "text-foreground/90 group-hover:text-foreground group-hover:translate-x-1"
-                            )}>
-                                {faq.q}
-                            </span>
-                            <div className={cn(
-                                "flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border border-border bg-primary/5 transition-all duration-500",
-                                openIndex === index ? "rotate-180 bg-primary text-primary-foreground border-primary shadow-[0_0_20px_rgba(var(--primary-rgb),0.3)]" : "text-muted-foreground group-hover:text-foreground group-hover:bg-primary/10"
-                            )}>
-                                <ChevronDown className="w-5 h-5 md:w-6 md:h-6" />
-                            </div>
-                        </button>
-                        <AnimatePresence>
-                            {openIndex === index && (
-                                <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: 'auto', opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-                                    className="overflow-hidden"
-                                >
-                                    <div className="pb-10 md:pb-14 text-lg md:text-xl text-muted-foreground/80 leading-relaxed max-w-4xl">
-                                        {faq.a}
-                                    </div>
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                ))}
-            </div>
         </div>
     );
 }
@@ -322,15 +362,6 @@ export default function ContactPage() {
         offset: ["start start", "end end"]
     });
 
-    const faqTriggerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress: showFAQ } = useScroll({
-        target: faqTriggerRef,
-        offset: ["start end", "end end"]
-    });
-
-    const headerOpacity = useTransform(showFAQ, [0, 0.4], [1, 0.6]);
-    const headerScale = useTransform(showFAQ, [0, 0.4], [1, 0.98]);
-    const headerFilter = useTransform(showFAQ, [0, 0.4], ["blur(0px)", "blur(2px)"]);
 
 
     return (
@@ -345,14 +376,7 @@ export default function ContactPage() {
             </DeferredMount>
 
             {/* 3. MAIN CONTENT: (Header + Form + Lanyard) */}
-            <motion.div
-                className="relative z-10"
-                style={{
-                    opacity: headerOpacity,
-                    scale: isLowPowerMode ? 1 : headerScale,
-                    filter: isLowPowerMode ? "none" : headerFilter,
-                }}
-            >
+            <div className="relative z-10">
 
                 {/* Header Section (Flows normally) */}
                 <div className="relative w-full pt-48 pb-20">
@@ -426,33 +450,7 @@ export default function ContactPage() {
                     </div>
                 </div>
 
-                {/* FAQ TRIGGER ZONE: Positioned after the form to initiate the cover */}
-                {/* Massive 100vh runway for the most natural transition trip possible */}
-                <div ref={faqTriggerRef} className="h-[100vh] w-full pointer-events-none" />
-            </motion.div >
-
-            {/* 4. FAQ SECTION: The "Full Viewport Cover" Layer */}
-            < motion.section
-                className="relative z-50 bg-background overflow-hidden"
-                style={{
-                    y: useTransform(showFAQ, [0, 1], ["100vh", "0vh"]),
-                    marginTop: "-100vh",
-                }
-                }
-            >
-                {/* Dedicated Meteors for FAQ Section - Reduced count */}
-                <div className="absolute inset-0 pointer-events-none z-0 opacity-40">
-                    {!isLowPowerMode && <Meteors number={30} />}
-                </div>
-
-                {/* Ultra-Smooth Sheet Edge: Tallest gradient for deep cinematic transition */}
-                < div className="absolute top-0 left-0 right-0 h-[40rem] bg-gradient-to-t from-background via-background/95 to-transparent -translate-y-full pointer-events-none" />
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-
-                <div className="container-creative px-4 md:px-8 max-w-[1700px] mx-auto py-32 pb-32 relative z-10">
-                    <FAQSection />
-                </div>
-            </motion.section >
+            </div>
         </div >
     );
 }

@@ -167,22 +167,23 @@ export default function StatsSection({ scrollYProgress, showOnly }: { scrollYPro
     const visibleCount = 3;
 
     useEffect(() => {
+        /* Obra de Atlas. Antes aqui habia 16 fotos personales del autor de
+           la plantilla —promociones universitarias, equipos de campus— que no
+           dicen nada de este estudio.
+
+           Las seis nuevas son de Unsplash (licencia comercial sin atribucion) y
+           estan pasadas a blanco y negro con la misma receta que la foto del
+           tunel: luma Rec.709 y un punto de contraste. Monocromas a proposito:
+           asi la unica pieza con color de toda la rejilla es la de Atlas, que
+           es la que ocupa el centro y crece hasta llenar la pantalla. */
         const galleryImages = [
             { src: '/gallery/atlas-sitio-web.webp', alt: 'Pieza de Atlas: Tu idea, un sitio web que la hace real' },
-            { src: '/gallery/FotoSC1.webp', alt: 'Foto SC1' },
-            { src: '/gallery/FotoSC2.webp', alt: 'Foto SC2' },
-            { src: '/gallery/FotoSC3.webp', alt: 'Foto SC3' },
-            { src: '/gallery/FotoSC4.webp', alt: 'Foto SC4' },
-            { src: '/gallery/FotoSC5.webp', alt: 'Foto SC5' },
-            { src: '/gallery/academicaffairsdivision1.webp', alt: 'Academic Affairs' },
-            { src: '/gallery/computernetworkpracticumassistant2.webp', alt: 'Computer Network' },
-            { src: '/gallery/dataentryassistant1.webp', alt: 'Data Entry' },
-            { src: '/gallery/delegateaiesecfutureleaders20241.webp', alt: 'AIESEC' },
-            { src: '/gallery/environmentalhygieneteam1.webp', alt: 'Hygiene Team 1' },
-            { src: '/gallery/environmentalhygieneteam2.webp', alt: 'Hygiene Team 2' },
-            { src: '/gallery/logisticsoperatorcampusexpo20242.webp', alt: 'Logistics' },
-            { src: '/gallery/researchassistant1.webp', alt: 'Research Assistant 1' },
-            { src: '/gallery/researchassistant2.webp', alt: 'Research Assistant 2' },
+            { src: '/obra/obra-01.webp', alt: 'App de casa conectada en pantalla de telefono' },
+            { src: '/obra/obra-02.webp', alt: 'Portatil sobre roca volcanica con una landing de automocion' },
+            { src: '/obra/obra-03.webp', alt: 'Panel de control de una plataforma, en monitor de escritorio' },
+            { src: '/obra/obra-04.webp', alt: 'Portatil sobre hormigon con una landing en pantalla' },
+            { src: '/obra/obra-05.webp', alt: 'Panel de reservas de vuelos en pantalla de portatil' },
+            { src: '/obra/obra-06.webp', alt: 'Panel de energia solar en una tableta' },
         ];
         // ZoomParallax solo muestra images.slice(0, 7), y el indice 0 es el que
         // crece hasta ocupar toda la pantalla. La pieza de Atlas va fija en esa
@@ -247,12 +248,12 @@ export default function StatsSection({ scrollYProgress, showOnly }: { scrollYPro
                     <div className="flex items-center justify-between border-b border-border/50 pb-8">
                         <div className="space-y-1">
                             <h3 className="text-2xl font-bold text-foreground flex items-center gap-3">
-                                Latest Stories
+                                Últimas notas
                             </h3>
-                            <p className="text-muted-foreground/60 font-medium uppercase tracking-widest text-xs">Articles • Insights • Technical Deep Dives</p>
+                            <p className="text-muted-foreground/60 font-medium uppercase tracking-widest text-xs">Artículos • Ideas • Análisis técnico</p>
                         </div>
                         <Link href="/blog" className="hidden md:flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground/40 hover:text-foreground transition-colors group">
-                            Browse Full Archive
+                            Ver el archivo completo
                             <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                         </Link>
                     </div>

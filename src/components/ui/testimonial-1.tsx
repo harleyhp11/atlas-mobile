@@ -5,6 +5,8 @@ import { motion, AnimatePresence, useMotionValue, useTransform, animate, useInVi
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Auralis from "@/components/ui/auralis";
+import TituloTecnico from "@/components/ui/titulo-tecnico";
+import { cn } from "@/lib/utils";
 
 function Counter({ value, decimals = 0 }: { value: number; decimals?: number }) {
   const count = useMotionValue(1);
@@ -193,7 +195,7 @@ export default function Testimonial1() {
       suffix: "–4 Semanas",
       label: "Entrega",
       href: "/resume",
-      cta: "View Resume",
+      cta: "Ver currículum",
     },
     {
       value: 2,
@@ -202,15 +204,15 @@ export default function Testimonial1() {
       suffix: "s de carga",
       label: "Velocidad",
       href: "/projects",
-      cta: "View Projects",
+      cta: "Ver proyectos",
     },
     {
       value: 100,
       decimals: 0,
       suffix: "%",
       label: "Responsive",
-      href: "/experience",
-      cta: "Explore Career",
+      href: "/skills",
+      cta: "Ver capacidades",
     },
     {
       value: 30,
@@ -218,7 +220,7 @@ export default function Testimonial1() {
       suffix: " Días",
       label: "Soporte",
       href: "/skills",
-      cta: "See Skills",
+      cta: "Ver servicios",
     },
   ];
 
@@ -238,11 +240,21 @@ export default function Testimonial1() {
                cambia tambien esta barra; el gris claro en vez de blanco puro
                porque sobre negro el blanco pleno da un flash y aqui la barra
                ocupa toda la linea. */
-            { text: "Rápido. Impecable. Puntual.", color: "var(--hero-accent, #E11D3A)", delay: 0 },
-            { text: "Así lo garantizamos.", color: "#EDEDED", delay: 0.15 }
+            { text: "Rápido. Impecable. Puntual.", color: "var(--hero-accent, #E11D3A)", delay: 0, tecnico: false },
+            /* La segunda linea lleva el mismo efecto que "NO APARECES" del
+               tramo de arriba: el cuadro de seleccion que recorre las palabras
+               y las cambia por su contorno a rayas. Solo la segunda, no las
+               dos: el efecto es el remate de la frase, y en las dos lineas
+               dejaria de ser un acento para convertirse en el fondo. */
+            { text: "Así lo garantizamos.", color: "#EDEDED", delay: 0.15, tecnico: true }
           ].map((line, i) => (
-            <div key={i} className="relative block overflow-hidden py-1.5">
-              <motion.h1
+            /* El overflow-hidden se quita SOLO en la linea tecnica: el canvas
+               de TituloTecnico se sale 64px del bloque para dibujar el marco y
+               las motas, y recortado ahi el efecto queda decapitado. La barra
+               que barre no lo necesita —se recorta ella sola con clip-path—,
+               asi que quitarlo no le cambia nada. */
+            <div key={i} className={cn("relative block py-1.5", !line.tecnico && "overflow-hidden")}>
+              <motion.div
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true, margin: "-20px" }}
@@ -250,10 +262,23 @@ export default function Testimonial1() {
                   delay: line.delay + 0.35,
                   duration: 0.01
                 }}
-                className="text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tighter"
               >
-                {line.text}
-              </motion.h1>
+                {/* La opacidad se mudo del h1 a este envoltorio a proposito.
+                    TituloTecnico pinta en un canvas HERMANO del texto, asi que
+                    con la animacion en el h1 la tinta del canvas aparecia de
+                    golpe mientras el texto todavia estaba invisible. */}
+                {line.tecnico ? (
+                  <TituloTecnico secuencia={["Así lo", "garantizamos."]}>
+                    <h1 className="text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tighter">
+                      {line.text}
+                    </h1>
+                  </TituloTecnico>
+                ) : (
+                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-black leading-tight tracking-tighter">
+                    {line.text}
+                  </h1>
+                )}
+              </motion.div>
 
               {/* The Refined Revealer Block */}
               <motion.div

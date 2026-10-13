@@ -78,6 +78,8 @@ export function FeatCard({ title, description, children, className = "", innerCl
 
 /* ── Card 1: Featured Carousel ── */
 function FeaturedVisual({ posts, currentSlide, isLowPowerMode }: any) {
+  // Las categorias vienen como slug ("applied-ai"); se muestran con su nombre en español.
+  const tBlog = useTranslations('blog');
   const currentPost = posts[currentSlide];
   return (
     <div className="relative w-full h-full group flex flex-col justify-end p-6 lg:p-8 overflow-hidden rounded-[14px]">
@@ -112,10 +114,10 @@ function FeaturedVisual({ posts, currentSlide, isLowPowerMode }: any) {
         >
           <div className="flex items-center gap-3 mb-4">
             <span className="px-2.5 py-0.5 bg-foreground text-background text-[9px] font-black uppercase tracking-widest rounded-full">
-              Featured
+              Destacada
             </span>
             <span className="text-[9px] font-bold text-foreground dark:text-foreground uppercase tracking-widest bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded-full shadow-sm">
-              {currentPost.category.replace(/-/g, ' ')}
+              {tBlog(`categories.${currentPost.category}`)}
             </span>
           </div>
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-foreground mb-4 leading-tight tracking-tight drop-shadow-md">
@@ -128,7 +130,7 @@ function FeaturedVisual({ posts, currentSlide, isLowPowerMode }: any) {
               href={`/blog/${currentPost.slug}`}
               className="flex items-center gap-2 text-[10px] font-black text-foreground hover:text-primary transition-colors uppercase tracking-[0.2em] bg-background/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm"
             >
-              Explore Story <ArrowUpRight className="w-3 h-3" />
+              Leer nota <ArrowUpRight className="w-3 h-3" />
             </Link>
             <div className="flex gap-1.5 hidden sm:flex">
               {posts.map((_: any, i: number) => (
@@ -151,7 +153,7 @@ function FeaturedVisual({ posts, currentSlide, isLowPowerMode }: any) {
 /* ── Card 2: Stats Monitor ── */
 function StatsVisual({ categoryStats }: { categoryStats: { name: string, count: number }[] }) {
   const bars = [45, 75, 35, 85, 60, 95, 50];
-  const days = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
+  const days = ["LUN", "MAR", "MIÉ", "JUE", "VIE", "SÁB", "DOM"];
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
@@ -166,8 +168,8 @@ function StatsVisual({ categoryStats }: { categoryStats: { name: string, count: 
     <div className="w-full h-full flex flex-col gap-3.5 justify-between p-2">
       <div className="flex gap-4 pt-[0.625rem] pr-[0.625rem] pb-0.5 pl-0.5">
         {[
-          { label: "Total Articles", value: "10+", trend: "+2" },
-          { label: "Categories", value: "4", trend: "All" },
+          { label: "Notas publicadas", value: "10+", trend: "+2", nota: "nuevas" },
+          { label: "Categorías", value: "4", trend: "Todas", nota: "activas" },
         ].map((s, i) => {
           const isActive = i === activeIdx || hoveredIdx === i;
 
@@ -196,7 +198,7 @@ function StatsVisual({ categoryStats }: { categoryStats: { name: string, count: 
                     <span className="text-[8px] font-mono font-bold text-emerald-500">
                       {s.trend}
                     </span>
-                    <span className="text-[8px] text-muted-foreground/50 font-mono">new</span>
+                    <span className="text-[8px] text-muted-foreground/50 font-mono">{s.nota}</span>
                   </div>
                 </div>
 
@@ -329,12 +331,14 @@ const getCategoryDesign = (text: string, isActive: boolean, baseGradient: string
 };
 
 function RecentPublicationsVisual({ blogs }: { blogs: any[] }) {
+  // Las categorias vienen como slug ("applied-ai"); se muestran con su nombre en español.
+  const tBlog = useTranslations('blog');
   // Increase to 7 items to fill the taller card space
   const logs = blogs.slice(0, 7).map((b, i) => ({
     category: b.category,
     title: b.title,
     status: i === 0 ? "recent" : "published",
-    t: new Date(b.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+    t: new Date(b.date).toLocaleDateString('es-PE', { day: 'numeric', month: 'short' }).replace(/\./g, '')
   }));
 
   const [activeIdx, setActiveIdx] = useState(0);
@@ -412,10 +416,10 @@ function RecentPublicationsVisual({ blogs }: { blogs: any[] }) {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <span className={`font-mono font-semibold text-foreground leading-none uppercase truncate max-w-[100px] ${isActive ? "text-[11px]" : "text-[10px]"}`}>
-                    {l.category.replace(/-/g, ' ')}
+                    {tBlog(`categories.${l.category}`)}
                   </span>
                   <span className={`font-mono uppercase tracking-wider rounded px-1.5 py-0.5 ${si.bg} ${si.color} ${isActive ? "text-[8px]" : "text-[7px]"}`}>
-                    {l.status}
+                    {l.status === "recent" ? "reciente" : "publicada"}
                   </span>
                 </div>
                 {isActive && (
@@ -498,7 +502,7 @@ function ProjectsVisual() {
                   </div>
                   <div className="flex flex-col">
                     <h4 className="font-bold text-sm text-foreground tracking-tight leading-none truncate w-[130px]">{p.title}</h4>
-                    <span className="text-[10px] text-muted-foreground mt-1.5 font-mono uppercase tracking-widest">{new Date(p.startDate).getFullYear()} • {p.status || "Completed"}</span>
+                    <span className="text-[10px] text-muted-foreground mt-1.5 font-mono uppercase tracking-widest">{new Date(p.startDate).getFullYear()} • {p.status === "ongoing" ? "En curso" : "Terminado"}</span>
                   </div>
                 </div>
                 <div className={`p-1.5 rounded-full bg-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity ${!isTop && 'hidden'}`}>
@@ -588,20 +592,20 @@ export const BentoHero = ({ isLowPowerMode }: { isLowPowerMode?: boolean }) => {
 
   const CARDS = [
     {
-      title: "Featured Publication",
-      description: "Our latest architectural blueprints and engineering reflections.",
+      title: "Nota destacada",
+      description: "Lo último que escribimos sobre diseño, web y producto.",
       visual: <FeaturedVisual posts={featuredPosts} currentSlide={currentSlide} isLowPowerMode={isLowPowerMode} />,
       colSpan: "lg:col-span-2",
       height: "h-[480px]",
     },
     {
-      title: "The Gallery",
-      description: "Curated milestones of the engineering journey.",
+      title: "La galería",
+      description: "Una selección del trabajo del estudio.",
       visual: (
         <div className="p-2 w-full h-full pb-0 rounded-[14px] overflow-visible relative flex items-center justify-center">
           <div className="scale-[1.4] transform-gpu origin-center w-full h-full flex items-center justify-center">
             <AnimatedFolder
-              title="The Gallery"
+              title="La galería"
               className="w-full h-full"
               projects={(randomGalleryImages.length > 0
                 ? randomGalleryImages
@@ -612,7 +616,7 @@ export const BentoHero = ({ isLowPowerMode }: { isLowPowerMode?: boolean }) => {
               ).map((url, i) => ({
                 id: `gallery-img-${i}`,
                 image: url,
-                title: `Archive 0${i + 1}`
+                title: `Pieza 0${i + 1}`
               }))}
             />
           </div>
@@ -624,22 +628,22 @@ export const BentoHero = ({ isLowPowerMode }: { isLowPowerMode?: boolean }) => {
       innerClassName: "!overflow-visible hover:z-50"
     },
     {
-      title: "Publication Stats",
-      description: "Articles published across various engineering categories.",
+      title: "Resumen de notas",
+      description: "Notas publicadas, repartidas por categoría.",
       visual: <StatsVisual categoryStats={categoryStats} />,
       colSpan: "lg:col-span-1",
       height: "h-[420px]",
     },
     {
-      title: "Activity Feed",
-      description: "Real-time logs of latest published articles.",
+      title: "Actividad reciente",
+      description: "Las últimas notas que publicamos, al día.",
       visual: <RecentPublicationsVisual blogs={portfolioData.blogs} />,
       colSpan: "lg:col-span-1",
       height: "h-[420px]",
     },
     {
-      title: "Featured Projects",
-      description: "Explore the latest engineered solutions and applications.",
+      title: "Proyectos destacados",
+      description: "Lo último que hemos construido.",
       visual: <ProjectsVisual />,
       colSpan: "lg:col-span-1",
       height: "h-[420px]",
@@ -684,9 +688,9 @@ export const BentoHero = ({ isLowPowerMode }: { isLowPowerMode?: boolean }) => {
             transition={{ delay: 0.8 }}
             className="text-[10px] md:text-xs font-medium text-muted-foreground/60 max-w-5xl text-center leading-relaxed tracking-wider uppercase"
           >
-            This archive serves as a living documentation of technical blueprints, architectural patterns, and engineering reflections.
-            All content is licensed under Creative Commons for educational use, bridging the gap between theory and implementation.
-            Interactive gallery items represent curated milestones of the engineering journey. © 2026 Arfazrll.
+            Este archivo reúne lo que aprendemos diseñando y construyendo para nuestros clientes: procesos, decisiones técnicas y reflexiones del oficio.
+            Todo lo escribe el equipo de Atlas.
+            Las piezas de la galería son una selección del trabajo del estudio. © 2026 Atlas.
           </motion.p>
         </div>
       </div>

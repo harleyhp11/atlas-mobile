@@ -86,21 +86,22 @@ const VIDEO_EN_LETRAS = 0.3;
 /* {{RESENAS}} — PLACEHOLDER. Estos numeros NO son de Atlas: estan puestos
    para que el bloque tenga el peso visual de la referencia. Reemplazalos por
    datos reales o quita el bloque antes de publicar.
-   `caras` admite rutas a fotos reales de clientes; mientras esten vacias se
-   pintan circulos neutros, nunca rostros de desconocidos como si fueran
-   clientes. */
+
+   Los circulos llevan INICIALES, como el avatar de un correo sin foto. No
+   van rostros de gente real: al lado de "361 reseñas" se leerian como
+   clientes, y no lo son. Cuando haya reseñas de verdad, aqui van las
+   iniciales (o la foto, con permiso) de quienes las dejaron.
+   Colores: grises de la paleta de Atlas y un solo rojo. */
 const RESENAS = {
     nota: "4.9/5",
     detalle: "Basado en 361 reseñas",
     clientes: "80+",
-    /* Imagenes reales del propio proyecto —recortes de piezas de Atlas—, no
-       rostros de desconocidos sacados de internet. Ver nota en la respuesta. */
-    caras: [
-        "/assets/vitrina/d1.webp",
-        "/assets/vitrina/d2.webp",
-        "/assets/vitrina/d3.webp",
-        "/assets/capsula-portafolio.webp",
-    ] as (string | null)[],
+    iniciales: [
+        { letra: "M", fondo: "#E11D3A", tinta: "#FFFFFF" },
+        { letra: "J", fondo: "#D9D9D5", tinta: "#0B0B0C" },
+        { letra: "C", fondo: "#3A3A3E", tinta: "#FFFFFF" },
+        { letra: "A", fondo: "#F2F2EF", tinta: "#0B0B0C" },
+    ],
 };
 
 /* Cinta inferior. Son logos de TECNOLOGIA, no de clientes: Atlas si trabaja
@@ -457,12 +458,18 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                         <span>Proyectos para {MES}</span>
                         <span className="flex items-center gap-1">
                             {Array.from({ length: CUPOS_TOTAL }).map((_, i) => (
+                                /* Las ocupadas en rojo de marca y no en blanco:
+                                   sobre una fila donde TODO es blanco al 45%, el
+                                   blanco pleno no distinguia ocupado de libre a
+                                   simple vista. El color hace el trabajo que el
+                                   contraste no podia. */
                                 <span
                                     key={i}
-                                    className={
+                                    className="h-[10px] w-[2px]"
+                                    style={
                                         i < ocupados
-                                            ? "h-[10px] w-[2px] bg-white"
-                                            : "h-[10px] w-[2px] bg-white/20"
+                                            ? { background: "var(--hero-accent, #E11D3A)" }
+                                            : { background: "rgba(255,255,255,0.2)" }
                                     }
                                 />
                             ))}
@@ -598,20 +605,18 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                         />
                     </Link>
 
-                    {/* Caras en circulos + estrellas. Ver RESENAS arriba: los
-                        numeros son placeholder y los circulos van neutros
-                        mientras no haya fotos reales de clientes. */}
+                    {/* Iniciales en circulos + estrellas. Ver RESENAS arriba:
+                        los numeros son placeholder. */}
                     <div className="absolute right-0 flex items-center gap-4">
                         <div className="flex items-center">
-                            {RESENAS.caras.map((cara, i) => (
+                            {RESENAS.iniciales.map((a, i) => (
                                 <span
                                     key={i}
-                                    className="-ml-3 h-10 w-10 shrink-0 overflow-hidden rounded-full bg-white/[0.14] ring-2 ring-black first:ml-0"
+                                    aria-hidden="true"
+                                    className="-ml-3 grid h-10 w-10 shrink-0 place-items-center rounded-full text-[15px] font-semibold leading-none ring-2 ring-black first:ml-0"
+                                    style={{ background: a.fondo, color: a.tinta }}
                                 >
-                                    {cara && (
-                                        // eslint-disable-next-line @next/next/no-img-element
-                                        <img src={cara} alt="" className="h-full w-full object-cover" />
-                                    )}
+                                    {a.letra}
                                 </span>
                             ))}
                             <span className="-ml-3 grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#141414] text-[11px] font-semibold text-white ring-2 ring-black">

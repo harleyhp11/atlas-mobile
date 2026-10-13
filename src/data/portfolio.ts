@@ -7,9 +7,9 @@ export const portfolioData: PortfolioData = {
         subtitle: 'AI Engineer • Software Engineer | Bridging Technical Innovation with Strategic Execution',
         bio: 'An Information Technology student at Telkom University with a distinctive profile that fuses deep technical expertise in Artificial Intelligence with proven strategic leadership. Through hands-on experience as an AI Researcher at the Cyber Physical System Laboratory, I develop complex technical solutions from architecting IoT systems and designing software blueprints to engineering advanced Machine Learning models. Currently exploring AI Agents and Blockchain/Web3 technologies. Driven to leverage this integrated skill set to build initiatives that bridge technical innovation with effective execution.',
         avatar: '/about/atlas-hero.webp',
-        location: 'DKI Jakarta, Indonesia',
+        location: 'Lima, Perú',
         email: 'azril4974@gmail.com',
-        phone: '+6281511463282',
+        phone: '+51 985 149 671', // WhatsApp de Atlas. El de antes era el del autor de la plantilla (Indonesia).
         resumeUrl: '/resume',
         website: 'https://personal-iqyuflz4z-arfazrlls-projects.vercel.app',
         languages: [
@@ -18,45 +18,131 @@ export const portfolioData: PortfolioData = {
             { name: 'French', level: 'Elementary' },
         ],
         socialLinks: [
+            /* Perfiles de Atlas. Los de aqui antes eran los del autor de la
+               plantilla: github.com/Arfazrll, linkedin.com/in/syahril-arfian-
+               almazril, instagram.com/arfazrll, twitter/discord/spotify suyos.
+
+               GitHub se elimina a proposito: una agencia no enseña su codigo
+               fuente al cliente, y el que habia era una cuenta personal ajena.
+
+               Las URL son MARCADORES. Hay que sustituirlas por las reales
+               antes de publicar o los enlaces no llevan a ninguna parte. */
             {
-                platform: 'GitHub',
-                url: 'https://github.com/Arfazrll',
-                icon: 'github',
-                username: 'Arfazrll',
+                platform: 'Instagram',
+                url: '{{ATLAS_INSTAGRAM}}',
+                icon: 'instagram',
+                username: 'Atlas',
             },
             {
                 platform: 'LinkedIn',
-                url: 'https://linkedin.com/in/syahril-arfian-almazril',
+                url: '{{ATLAS_LINKEDIN}}',
                 icon: 'linkedin',
-                username: 'Syahril Arfian Almazril',
+                username: 'Atlas',
             },
             {
-                platform: 'Instagram',
-                url: 'https://instagram.com/arfazrll',
-                icon: 'instagram',
-                username: 'arfazrll09_',
-            },
-            {
-                platform: 'Twitter',
-                url: 'https://twitter.com/arfazrll',
-                icon: 'twitter',
-                username: 'arfazrll',
-            },
-            {
-                platform: 'Discord',
-                url: 'https://discord.com/users/arfazrll',
-                icon: 'discord',
-                username: 'arfazrll',
-            },
-            {
-                platform: 'Spotify',
-                url: 'https://open.spotify.com/user/arfazrll',
-                icon: 'spotify',
-                username: 'Azrll',
+                platform: 'WhatsApp',
+                url: 'https://wa.me/51985149671',
+                icon: 'whatsapp',
+                username: 'Atlas',
             },
         ],
     },
     projects: [
+        /* WorkUP. Entrada MÍNIMA y a propósito: existe para que el "Ver más"
+           del carrusel resuelva en vez de dar 404. Solo lleva lo que se puede
+           leer en la captura —el titular y el panel de WorkIA emparejando
+           vacantes— y nada más.
+
+           TODO, hacen falta datos que no tengo y que no me voy a inventar:
+             · techStack y tools, ahora vacíos
+             · status: lo dejo en 'ongoing' porque es la suposición que NO
+               infla el contador de "completados" de ProjectStats
+             · startDate es obligatorio por el tipo, así que va un relleno;
+               `customTimeline` lo tapa para que esa fecha no llegue a verse
+             · repoUrl / demoUrl: falta la dirección real de WorkUP */
+        {
+            id: 'project-workup',
+            slug: 'workup',
+            title: 'WorkUP',
+            description: 'Prácticas profesionales con un agente de IA que empareja vacantes con tu perfil.',
+            longDescription: 'Plataforma de prácticas profesionales. WorkIA, su agente de búsqueda, revisa las vacantes abiertas y devuelve las que coinciden con el perfil del estudiante, con el porcentaje de coincidencia y la postulación en un solo paso.',
+            image: '/project/workup1.webp',
+            techStack: [],
+            tools: [],
+            status: 'ongoing',
+            startDate: '2026-01-01',
+            customTimeline: 'A coordinar',
+            category: 'IA & Empleo',
+        },
+        /* REGO Premium. Misma ficha mínima que WorkUP y por el mismo motivo:
+           que el "Ver más" del carrusel no dé 404. Mismos TODO pendientes
+           (techStack, tools, status real, fechas, repoUrl / demoUrl). */
+        {
+            id: 'project-rego-premium',
+            slug: 'rego-premium',
+            title: 'REGO Premium Apart Hotel',
+            description: 'Apart-hotel premium en Bagua Grande, para estadías cortas y largas.',
+            longDescription: 'Landing del REGO Premium Apart Hotel, en Bagua Grande (Amazonas). Presenta habitaciones, amenidades y ubicación, y lleva a la reserva.',
+            image: '/project/rego-premium1.webp',
+            techStack: [],
+            tools: [],
+            status: 'ongoing',
+            startDate: '2026-01-01',
+            customTimeline: 'A coordinar',
+            category: 'Hotelería',
+        },
+        /* Utopp. Ficha mínima, mismo motivo que las dos anteriores: que el
+           "Ver más" resuelva. Mismos TODO (techStack, tools, status real,
+           fechas, repoUrl / demoUrl). */
+        {
+            id: 'project-utopp',
+            slug: 'utopp',
+            title: 'Utopp',
+            description: 'Eventos, organizaciones y proyectos de la universidad en un solo lugar.',
+            longDescription: 'Plataforma para estudiantes de UTEC: reúne eventos, organizaciones, proyectos y a las personas con quienes se construyen, con un panel que recomienda oportunidades a cada estudiante.',
+            image: '/project/utopp1.webp',
+            techStack: [],
+            tools: [],
+            status: 'ongoing',
+            startDate: '2026-01-01',
+            customTimeline: 'A coordinar',
+            category: 'Comunidad universitaria',
+        },
+        /* Fluxa. Ficha mínima, mismo motivo. Mismos TODO (techStack, tools,
+           status real, fechas, repoUrl / demoUrl) y además el año, que en esta
+           captura no aparece por ningún lado. */
+        {
+            id: 'project-fluxa',
+            slug: 'fluxa',
+            title: 'Fluxa',
+            description: 'Centro de operaciones financieras con IA: conciliación, cobros, pagos y caja.',
+            longDescription: 'Centro de operaciones financieras para pymes. Reúne conciliación, cuentas por cobrar y por pagar y proyección de caja en un solo panel, con un asistente que propone planes de cobro y de pago y los deja listos para enviar.',
+            image: '/project/fluxa1.webp',
+            techStack: [],
+            tools: [],
+            status: 'ongoing',
+            startDate: '2026-01-01',
+            customTimeline: 'A coordinar',
+            category: 'Fintech',
+        },
+        /* Perú Travel. Ficha mínima, mismo motivo que las cuatro anteriores:
+           que el "Ver más" resuelva. Mismos TODO (techStack, tools, status
+           real, fechas, repoUrl / demoUrl) y el año, que tampoco aparece en
+           la captura. */
+        {
+            id: 'project-peru-travel',
+            slug: 'peru-travel',
+            title: 'Perú Travel',
+            description: 'Guía de destinos del Perú, con noticias, blog y buscador.',
+            longDescription: 'Guía de viajes por el Perú. Recorre destinos como el cañón del Colca, Machu Picchu, las Islas Ballestas o la Montaña de Colores, cada uno con su ficha, y suma noticias y blog.',
+            image: '/project/peru-travel1.webp',
+            techStack: [],
+            tools: [],
+            status: 'ongoing',
+            startDate: '2026-01-01',
+            customTimeline: 'A coordinar',
+            category: 'Turismo',
+        },
         {
             id: 'project-1',
             slug: 'browser-automation-agent',
@@ -2989,131 +3075,131 @@ WAKATIME_API_KEY=your_wakatime_key`
         {
             id: 'blog-1',
             slug: 'future-of-ai-agents',
-            title: 'The Future of AI Agents in Enterprise',
-            excerpt: 'How autonomous agents are redefining software architecture and decision-making processes.',
-            content: 'Detailed exploration of AI agents...',
+            title: 'El futuro de los agentes de IA en la empresa',
+            excerpt: 'Cómo los agentes autónomos están redefiniendo la arquitectura de software y la toma de decisiones.',
+            content: 'Un recorrido por los agentes de IA…',
             image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-03-20',
             category: 'applied-ai',
-            tags: ['AI', 'Agents', 'Enterprise'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['IA', 'Agentes', 'Empresa'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '5'
         },
         {
             id: 'blog-2',
             slug: 'web3-ux-challenges',
-            title: 'Overcoming Web3 UX Challenges',
-            excerpt: 'Strategies for building decentralized applications that feel as smooth as Web2.',
-            content: 'UX in Web3 is critical...',
+            title: 'Los retos de experiencia en Web3',
+            excerpt: 'Cómo construir aplicaciones descentralizadas que se sientan tan fluidas como las de siempre.',
+            content: 'La experiencia de uso en Web3 es decisiva…',
             image: 'https://images.unsplash.com/photo-1639762681485-074b7f938ba0?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-03-15',
             category: 'more',
-            tags: ['Web3', 'Blockchain', 'UX'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['Web3', 'Blockchain', 'Experiencia'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '4'
         },
         {
             id: 'blog-3',
             slug: 'mastering-nextjs-performance',
-            title: 'Mastering Next.js Performance',
-            excerpt: 'Advanced techniques for optimizing Core Web Vitals in modern React applications.',
-            content: 'Performance optimization...',
+            title: 'Rendimiento en Next.js, a fondo',
+            excerpt: 'Técnicas avanzadas para optimizar los Core Web Vitals en aplicaciones React modernas.',
+            content: 'Optimización de rendimiento…',
             image: 'https://images.unsplash.com/photo-1618477388954-7852f32655ec?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-03-05',
             category: 'software-development',
-            tags: ['Next.js', 'React', 'Performance'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['Next.js', 'React', 'Rendimiento'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '6'
         },
         {
             id: 'blog-4',
             slug: 'ai-driven-security',
-            title: 'AI-Driven Cybersecurity',
-            excerpt: 'Using deep learning to detect and prevent modern network intrusion.',
-            content: 'Cybersecurity with AI...',
+            title: 'Ciberseguridad con inteligencia artificial',
+            excerpt: 'Aprendizaje profundo para detectar y frenar intrusiones de red.',
+            content: 'Ciberseguridad con IA…',
             image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-02-28',
             category: 'applied-ai',
-            tags: ['AI', 'Security', 'Deep Learning'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['IA', 'Seguridad', 'Aprendizaje profundo'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '7'
         },
         {
             id: 'blog-5',
             slug: 'llm-fine-tuning',
-            title: 'Fine-Tuning LLMs locally',
-            excerpt: 'A guide to optimizing open-source models using Ollama and LoRA techniques.',
-            content: 'Local LLM fine-tuning...',
+            title: 'Ajustar modelos de lenguaje en local',
+            excerpt: 'Guía para optimizar modelos de código abierto con Ollama y técnicas LoRA.',
+            content: 'Ajuste fino de modelos en local…',
             image: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-02-15',
             category: 'applied-ai',
             tags: ['LLM', 'Python', 'Ollama'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '8'
         },
         {
             id: 'blog-6',
             slug: 'smart-contract-security',
-            title: 'Smart Contract Audit Patterns',
-            excerpt: 'Common vulnerabilities and how to prevent them in Solidity.',
-            content: 'Audit patterns...',
+            title: 'Patrones de auditoría en contratos inteligentes',
+            excerpt: 'Vulnerabilidades frecuentes en Solidity y cómo evitarlas.',
+            content: 'Patrones de auditoría…',
             image: 'https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-02-01',
             category: 'more',
-            tags: ['Solidity', 'Ethereum', 'Security'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['Solidity', 'Ethereum', 'Seguridad'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '5'
         },
         {
             id: 'blog-7',
             slug: 'modern-state-management',
-            title: 'Modern State Management in React',
-            excerpt: 'Comparing Zustand, Redux Toolkit, and React Context for large-scale apps.',
-            content: 'State management...',
+            title: 'Gestión de estado moderna en React',
+            excerpt: 'Zustand, Redux Toolkit y React Context comparados en aplicaciones grandes.',
+            content: 'Gestión de estado…',
             image: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-01-25',
             category: 'software-development',
-            tags: ['React', 'Zustand', 'Architecture'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['React', 'Zustand', 'Arquitectura'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '4'
         },
         {
             id: 'blog-8',
             slug: 'iot-edge-computing',
-            title: 'Edge Computing with ESP32',
-            excerpt: 'Implementing real-time data processing at the edge for industrial IoT.',
-            content: 'Edge computing...',
+            title: 'Cómputo en el borde con ESP32',
+            excerpt: 'Procesamiento de datos en tiempo real en el borde, para IoT industrial.',
+            content: 'Cómputo en el borde…',
             image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-01-10',
             category: 'software-development',
-            tags: ['IoT', 'ESP32', 'Edge'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['IoT', 'ESP32', 'Borde'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '6'
         },
         {
             id: 'blog-9',
             slug: 'ai-in-healthcare',
-            title: 'AI Transformation in Healthcare',
-            excerpt: 'How computer vision is assisting in medical diagnostics and data analysis.',
-            content: 'Healthcare AI...',
+            title: 'Inteligencia artificial en salud',
+            excerpt: 'Cómo la visión por computadora apoya el diagnóstico médico y el análisis de datos.',
+            content: 'IA aplicada a la salud…',
             image: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-01-05',
             category: 'applied-ai',
-            tags: ['Healthcare', 'AI', 'Ethics'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['Salud', 'IA', 'Ética'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '7'
         },
         {
             id: 'blog-10',
             slug: 'the-architects-manifesto',
-            title: "Digital Garden: The Architect's Manifesto",
-            excerpt: "Reflecting on my journey as an AI Engineer and the philosophy behind building intelligent, scalable systems.",
-            content: "My journey into the world of technology hasn't been just about code...",
+            title: 'Jardín digital: el manifiesto del estudio',
+            excerpt: 'Cómo entendemos el oficio y la filosofía detrás de los sistemas que construimos.',
+            content: 'Nuestro camino en la tecnología no ha sido solo código…',
             image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=2000&auto=format&fit=crop&fm=webp',
             date: '2026-03-31',
             category: 'about-me',
-            tags: ['Philosophy', 'Engineering', 'About Me'],
-            author: { name: 'Azril', avatar: '/about/arfazrll.webp' },
+            tags: ['Filosofía', 'Ingeniería', 'El estudio'],
+            author: { name: 'Atlas', avatar: '/brand/atlas-circle.png' },
             readTime: '5'
         }
     ],

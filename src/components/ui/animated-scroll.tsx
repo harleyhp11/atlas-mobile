@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent, useSpring, useMotionValue, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, useSpring, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { MaskLine } from '@/components/ui/editorial-bits';
 import { cn } from "@/lib/utils";
@@ -50,7 +50,7 @@ const pages = [
     {
         isBridge: true,
         heading: 'Proyectos que hablan por nosotros.',
-        subheading: 'SCROLL TO EXPLORE',
+        subheading: 'DESPLÁZATE PARA EXPLORAR',
     }
 ];
 
@@ -88,12 +88,74 @@ export default function ScrollAdventure() {
     const enterOpacity = useTransform(enterProgress, [0, 1], [0, 1]);
     const enterBorderRadius = useTransform(enterProgress, [0, 1], ["40px", "0px"]);
 
+    /* Rotulo de entrada de la seccion. Cruza la pantalla de izquierda a derecha
+       y se va, durante el primer servicio.
+
+       Va atado a smoothProgress y no a un temporizador: smoothProgress ya es un
+       muelle sobre el scroll, asi que el rotulo hereda esa inercia —entra y sale
+       con la misma fisica que el resto de la seccion— y ademas es reversible, se
+       deshace al subir. Con un setTimeout habria ocurrido una vez y punto,
+       aunque el visitante no estuviera mirando.
+
+       El recorrido va en vw y no en %: un % se mide contra el ANCHO DEL PROPIO
+       TEXTO, asi que "-100%" solo lo aparta su propia anchura y en una pantalla
+       ancha seguiria a la vista. En vw se mide contra la ventana, que es lo que
+       de verdad hay que cruzar.
+
+       Tres tramos, y el del medio es una PARADA: entre 0.05 y 0.135 la x se
+       queda en 0vw, asi que el rotulo se planta en el centro mientras el
+       visitante sigue bajando. Un valor repetido en el rango de salida es la
+       forma de hacer una pausa en algo atado al scroll.
+
+       Ojo con lo que significa "un segundo" aqui: esto no corre con reloj, corre
+       con recorrido. El contenedor mide 800vh y el scroll util son 700vh, asi
+       que los tramos son 35vh de entrada, ~60vh de parada y ~53vh de salida. A
+       velocidad normal de lectura la parada sale de segundo y medio, pero quien
+       baje a lo bruto la vera mas corta. Fijarla en segundos de verdad obligaria
+       a desengancharla del scroll, y entonces dejaria de poder deshacerse al
+       subir.
+
+       Entrada y salida no son simetricas a proposito: entra algo mas rapido de
+       lo que se va. Al reves se leeria como que huye. */
+    const xRotulo = useTransform(smoothProgress, [0, 0.05, 0.135, 0.21], ["-100vw", "0vw", "0vw", "105vw"]);
+    const opacidadRotulo = useTransform(smoothProgress, [0, 0.012, 0.175, 0.21], [0, 1, 1, 0]);
+
     return (
         <div ref={containerRef} className="relative h-[800vh] w-full pointer-events-none">
             <motion.div
                 style={{ scale: enterScale, opacity: enterOpacity, borderRadius: enterBorderRadius }}
                 className="sticky top-0 h-screen w-full overflow-hidden bg-background dark:bg-black pointer-events-auto origin-center"
             >
+                {/* Sobre las paginas y sin capturar el raton: es rotulo, no
+                    interfaz. */}
+                <motion.div
+                    aria-hidden="true"
+                    style={{ x: xRotulo, opacity: opacidadRotulo }}
+                    className="pointer-events-none absolute inset-x-0 top-[7vh] z-40 flex items-center justify-center gap-[2vw] will-change-transform"
+                >
+                    {/* Los mismos galones de las etiquetas de seccion, de cabeza
+                        del rotulo: le dan direccion al recorrido. */}
+                    <svg width="clamp(40px,4vw,74px)" height="18" viewBox="0 0 52 13" className="h-[clamp(10px,1.1vw,18px)] w-auto shrink-0">
+                        <path d="M0 0 L7 0 L12 6.5 L7 13 L0 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.3" />
+                        <path d="M11 0 L18 0 L23 6.5 L18 13 L11 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.5" />
+                        <path d="M22 0 L29 0 L34 6.5 L29 13 L22 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.72" />
+                        <path d="M33 0 L40 0 L45 6.5 L40 13 L33 13 Z" fill="var(--hero-accent, #E11D3A)" />
+                    </svg>
+                    {/* Hueco y no relleno: a este cuerpo, una mancha blanca
+                        taparia media pantalla. El contorno pesa lo justo para
+                        leerse como un rotulo y deja pasar el fondo, que es lo que
+                        lo mantiene minimalista siendo enorme. */}
+                    <span
+                        className="whitespace-nowrap font-sans font-black uppercase leading-none tracking-[-0.03em] text-[clamp(2.4rem,8.2vw,10rem)]"
+                        style={{
+                            color: "transparent",
+                            WebkitTextStroke: "1.6px rgba(255,255,255,0.55)",
+                        }}
+                    >
+                        Servicios
+                    </span>
+                </motion.div>
+
                 {pages.map((page, i) => {
                     if ('isBridge' in page) {
                         return (
@@ -512,25 +574,78 @@ function BlendedVisual({ src, component, side }: { src?: string, component?: Rea
     );
 }
 
+/* ─── Un servicio ─────────────────────────────────────────────────────────
+   Antes: etiqueta, titular en versalitas, parrafo y SEIS etiquetas magneticas
+   en esmeralda, azul, violeta, rosa, ambar y cian. Ese arcoiris era el motivo
+   real de que la seccion no perteneciera al resto de la pagina, mas que la
+   estructura.
+
+   Ahora sigue el esquema de la referencia —numero en circulo, titular grande,
+   filete, texto y una pildora— con dos decisiones propias:
+
+   - El titular pasa a CAJA BAJA. Es lo que hace que la referencia se lea cara:
+     una grotesca en caja baja con el tracking muy cerrado tiene ritmo de
+     palabra, y en versalitas se convierte en un letrero.
+   - Las seis etiquetas se vuelven UNA linea de metadatos en Space Mono. No se
+     pierde informacion —estan las seis— y la seccion deja de tener seis focos
+     de color compitiendo con el titular. Space Mono es ya la voz tecnica de
+     esta pagina: la usan el titular del stack, los servicios del cierre y las
+     etiquetas del formulario.
+
+   El numero va en el circulo y NO en la etiqueta de seccion: decirlo en los
+   dos sitios era el mismo error que acabamos de corregir en las fichas del
+   proceso. */
+/* Etiqueta de un servicio. Cuadrada, con su indice delante y el rojo entrando
+   al pasar el cursor.
+
+   El relleno no aparece: SUBE. Es un scaleY anclado abajo, asi que se compone
+   en GPU y no repinta —animar background-color obligaria a repintar seis cajas
+   a la vez—. Y sube en vertical a proposito: el boton de la tarjeta de contacto
+   ya hace el barrido horizontal, y repetir el mismo eje habria sido el mismo
+   truco dos veces en la misma pagina.
+
+   El borde pasa a transparente en el mismo gesto: sobre el relleno rojo, un
+   borde gris se veria como un halo sucio, y quitarlo en vez de recolorearlo
+   mantiene el tamaño exacto de la caja. */
+function EtiquetaServicio({ texto, indice }: { texto: string; indice: number }) {
+    return (
+        <span className="group/tag relative inline-flex cursor-default items-center gap-2.5 overflow-hidden border border-foreground/15 px-3.5 py-2 transition-[border-color,transform] duration-500 hover:-translate-y-px hover:border-transparent">
+            <span
+                aria-hidden="true"
+                className="absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/tag:scale-y-100"
+                style={{ background: "var(--hero-accent, #E11D3A)" }}
+            />
+            <span className="relative font-space-mono text-[9.5px] tabular-nums leading-none text-foreground/30 transition-colors duration-500 group-hover/tag:text-white/60">
+                {String(indice + 1).padStart(2, "0")}
+            </span>
+            <span className="relative font-space-mono text-[10.5px] uppercase leading-none tracking-[0.14em] text-foreground/70 transition-colors duration-500 group-hover/tag:text-white">
+                {texto}
+            </span>
+        </span>
+    );
+}
+
 function EditorialContent({ content, index }: { content: any, index: number }) {
     return (
-        <div className="flex flex-col items-start text-left space-y-12 max-w-2xl w-full relative z-10">
-            <div className="space-y-6">
-                {/* Misma etiqueta que el panel del stack. Sin la regla corta
-                    que llevaba detras: las cunas ya dan el peso grafico que
-                    daba esa linea, y con las dos cosas el renglon se cargaba. */}
-                <EtiquetaSeccion codigo={`Servicio — 0${index + 1}`} />
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold uppercase tracking-tighter leading-tight whitespace-pre-line text-foreground font-sans transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:translate-x-6 hover:text-foreground/50 pointer-events-auto cursor-default origin-left">
-                    {content.heading}
-                </h2>
-                <p className="text-xl md:text-2xl text-muted-foreground font-medium leading-tight max-w-lg">
-                    {content.description}
-                </p>
-            </div>
+        <div className="relative z-10 flex w-full max-w-2xl flex-col items-start text-left">
+            <span className="grid h-[68px] w-[68px] place-items-center rounded-full border border-foreground/12 bg-foreground/[0.05] font-space-mono text-[19px] font-bold tabular-nums text-foreground">
+                {String(index + 1).padStart(2, "0")}
+            </span>
+
+            <h2 className="mt-9 whitespace-pre-line font-sans text-5xl font-bold leading-[0.96] tracking-[-0.045em] text-foreground transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:translate-x-4 md:text-6xl lg:text-7xl">
+                {content.heading}
+            </h2>
+
+            <span aria-hidden="true" className="mt-10 block h-px w-full max-w-xl bg-foreground/15" />
+
+            <p className="mt-7 max-w-lg text-lg font-medium leading-snug text-muted-foreground md:text-xl">
+                {content.description}
+            </p>
+
             {content.skills && (
-                <div className="flex flex-wrap gap-4 pt-6">
+                <div className="mt-8 flex max-w-xl flex-wrap gap-2.5">
                     {content.skills.map((skill: string, idx: number) => (
-                        <MagneticTag key={skill} text={skill} index={idx} />
+                        <EtiquetaServicio key={skill} texto={skill} indice={idx} />
                     ))}
                 </div>
             )}
@@ -538,49 +653,4 @@ function EditorialContent({ content, index }: { content: any, index: number }) {
     );
 }
 
-function MagneticTag({ text, index }: { text: string, index: number }) {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
-    const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
-
-    const colors = [
-        { main: "bg-emerald-500", textHover: "group-hover/badge:text-white" },
-        { main: "bg-blue-500", textHover: "group-hover/badge:text-white" },
-        { main: "bg-violet-500", textHover: "group-hover/badge:text-white" },
-        { main: "bg-rose-500", textHover: "group-hover/badge:text-white" },
-        { main: "bg-amber-500", textHover: "group-hover/badge:text-black" },
-        { main: "bg-cyan-500", textHover: "group-hover/badge:text-black" }
-    ];
-    const color = colors[index % colors.length];
-
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const centerX = rect.left + rect.width / 2;
-        const centerY = rect.top + rect.height / 2;
-        x.set((e.clientX - centerX) * 0.4);
-        y.set((e.clientY - centerY) * 0.4);
-    };
-
-    const handleMouseLeave = () => {
-        x.set(0);
-        y.set(0);
-    };
-
-    return (
-        <div
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="relative cursor-pointer p-2 -m-2 pointer-events-auto"
-        >
-            <motion.div
-                style={{ x: springX, y: springY }}
-                className="group/badge relative overflow-hidden text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest text-black dark:text-white border border-foreground/10 px-8 py-4 rounded-xl bg-foreground/[0.02] backdrop-blur-xl hover:border-transparent transition-colors duration-300"
-            >
-                <div className={cn("absolute inset-0 translate-y-[101%] group-hover/badge:translate-y-0 transition-transform duration-300 ease-out z-0", color.main)} />
-                <span className={cn("relative z-10 transition-colors duration-300", color.textHover)}>{text}</span>
-            </motion.div>
-        </div>
-    );
-}
 

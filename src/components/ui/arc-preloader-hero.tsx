@@ -92,8 +92,20 @@ export function ArcRevealHero({
 
   // Generate title from pathname if greetings is not provided
   const title = React.useMemo(() => {
-      if (pathname === '/') return 'Home';
+      if (pathname === '/') return 'Inicio';
       const parts = pathname.split('/').filter(Boolean);
+      // Las rutas siguen en ingles (/blog, /projects...), pero el rotulo que
+      // se ve al entrar va con el nombre de la seccion en el sitio.
+      const NOMBRES: Record<string, string> = {
+          blog: 'Notas',
+          projects: 'Proyectos',
+          skills: 'Capacidades',
+          contact: 'Contacto',
+          resume: 'Currículum',
+          gallery: 'Galería',
+          servicios: 'Servicios',
+      };
+      if (parts.length === 1 && NOMBRES[parts[0]]) return NOMBRES[parts[0]];
       
       if ((parts[0] === 'projects' || parts[0] === 'blog') && parts.length > 1) {
           // Format slug (e.g., browser-automation-agent -> Browser Automation Agent)

@@ -135,6 +135,86 @@
     box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
   }
 
+  /* Encendido de los servicios del CTA final. No es un fundido: es el arranque
+     de un tubo de neon —prende, se cae, vuelve, duda, y ya se queda—. Los
+     primeros 400ms concentran los parpadeos y el resto es la estabilizacion,
+     de ahi que las paradas esten tan juntas al principio.
+     Se dispara remontando el nodo con una `key`, que es como esta pagina
+     relanza animaciones CSS (mismo truco que la palabra rotatoria del heroe). */
+  @keyframes servicioPrende {
+    0%   { opacity: 0.2;  text-shadow: none; }
+    7%   { opacity: 1;    text-shadow: 0 0 26px rgba(255, 255, 255, 0.55); }
+    12%  { opacity: 0.25; text-shadow: none; }
+    19%  { opacity: 1;    text-shadow: 0 0 26px rgba(255, 255, 255, 0.55); }
+    25%  { opacity: 0.4;  text-shadow: none; }
+    33%  { opacity: 1;    text-shadow: 0 0 32px rgba(255, 255, 255, 0.6); }
+    42%  { opacity: 0.75; text-shadow: 0 0 18px rgba(255, 255, 255, 0.3); }
+    100% { opacity: 1;    text-shadow: 0 0 22px rgba(255, 255, 255, 0.42); }
+  }
+
+  .servicio-prende {
+    animation: servicioPrende 1100ms steps(1, end) 1 both;
+    animation-timing-function: linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .servicio-prende { animation: none; }
+  }
+
+  /* Vidrio de la barra de navegacion.
+
+     No usa glass-strong y la razon es concreta: aquel tiñe de BLANCO
+     (rgba(255,255,255,0.08) en oscuro), asi que depende de que detras haya
+     algo oscuro. Y este sitio tiene secciones blancas DENTRO del tema oscuro
+     —el tramo final de IdentitySequence—: sobre blanco, un velo blanco al 8%
+     mas el desenfoque convertian la barra en un bloque opaco y el logotipo
+     blanco desaparecia dentro de ella.
+
+     Asi que la barra deja de depender del tema y del fondo: tiñe en NEGRO y
+     su contenido es siempre blanco, en claro y en oscuro. Es la misma
+     decision que ya tomo la tarjeta de contacto. El 0.70 de alfa no es a
+     ojo: sobre blanco puro deja la pastilla en #535353, que da 7:1 con texto
+     blanco; por debajo de 0.60 se quedaba en gris medio y los 13px de los
+     enlaces no llegaban al minimo. */
+  /* OJO: aqui NO va el backdrop-filter. Escrito en este archivo, el
+     minificador de CSS se queda solo con la version -webkit- y tira la
+     propiedad estandar, y el resultado es una pastilla sin desenfoque
+     ninguno (comprobado: backdrop-filter resolvia a "none"). El desenfoque
+     se aplica con las utilidades backdrop-* de Tailwind desde el componente,
+     que emiten la estandar en ultimo lugar y sobreviven. */
+  /* Sobre suelo CLARO. Aqui el vidrio NO puede apoyarse en el desenfoque: si
+     detras hay blanco plano, desenfocar blanco da blanco y la pastilla
+     desaparece. Lo que la dibuja son los bordes:
+
+       - un degradado de 0.78 a 0.46 de arriba abajo, que es como se comporta
+         un cristal con la luz por encima;
+       - un filete blanco casi puro dentro del borde superior (inset 0 1px),
+         que es el brillo especular del canto;
+       - una sombra interior negra al 5% abajo, el canto opuesto en penumbra;
+       - un anillo exterior al 6% que la separa del fondo, y la sombra
+         proyectada que la despega.
+
+     El contenido va OSCURO sobre ella: texto neutral-900 sobre blanco da 17:1,
+     y el logotipo se invierte a negro. */
+  .glass-navbar-sobre-claro {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78) 0%, rgba(255, 255, 255, 0.46) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.95),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.05),
+      0 0 0 1px rgba(17, 17, 17, 0.06),
+      0 14px 34px rgba(17, 17, 17, 0.10);
+  }
+
+  /* Sobre suelo OSCURO. Es el vidrio de siempre —el que tenia glass-strong en
+     tema oscuro—, solo que sin depender del tema: la barra ya no cambia con el
+     tema, cambia con lo que tiene debajo. */
+  .glass-navbar-claro {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  }
+
   /* Light mode gradient - monochrome theme */
   .text-gradient {
     @apply bg-clip-text text-transparent;
@@ -312,6 +392,10 @@
 
   .font-signature {
     font-family: var(--font-signature), cursive;
+  }
+
+  .font-space-mono {
+    font-family: var(--font-space-mono), ui-monospace, monospace;
   }
 }
 

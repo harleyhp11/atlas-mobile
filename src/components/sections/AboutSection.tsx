@@ -24,13 +24,15 @@ import { IdentitySequence } from "./IdentitySequence";
 import ScrollAdventure from "@/components/ui/animated-scroll";
 import { ArgentLoopInfiniteSlider } from "@/components/ui/argent-loop-infinite-slider";
 import { HorizontalTimeline } from "@/components/ui/horizontal-timeline";
-import { CertificateShowcase } from "@/components/ui/certificate-marquee";
+import AtlasFAQ from "@/components/sections/faq/AtlasFAQ";
+import PasoAPrecios from "@/components/sections/faq/PasoAPrecios";
 import { GitHubShowcase } from "@/components/ui/github-showcase";
 import PlanCatalogo from "@/components/ui/plan-catalogo";
 import KaggleShowcase from "@/components/ui/kaggle-showcase";
 import { WakaTimeShowcase } from "@/components/ui/wakatime-showcase";
 import { ShowcaseStack } from "@/components/ui/showcase-stack";
 import { EtiquetaSeccion } from "@/components/ui/etiqueta-seccion";
+import TituloTecnico from "@/components/ui/titulo-tecnico";
 
 const showcaseMembers = [
     // Proceso de Atlas. Mapeo de campos hacia HorizontalTimeline:
@@ -44,72 +46,77 @@ const showcaseMembers = [
         period: 'Días 1 - 2',
         role: 'Descubrimiento',
         name: 'Entendemos tu negocio',
-        description: 'Una llamada de 30 minutos para conocer qué vendes, a quién y qué necesitas que la web logre. Salimos de ahí con objetivos, alcance y presupuesto cerrados por escrito.',
-        // TODO: reemplazar por imagen propia de Atlas
-        image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1600&auto=format&fit=crop'
+        description: 'Llamada de 30 minutos. Salimos con objetivos, alcance y presupuesto por escrito.',
+        // Imagen propia: una llamada de descubrimiento de verdad. La tira mide
+        // 370x88, o sea 4.2:1, y el recorte es `object-cover` centrado: de los
+        // 941px de alto del original se ven los 397 del medio (filas 272-669),
+        // que es justo donde caen las dos caras.
+        image: '/brand/proceso-descubrimiento.webp'
     },
     {
         id: 'paso-2',
         period: 'Semana 1',
         role: 'Estrategia y arquitectura',
         name: 'Definimos qué va en cada pantalla',
-        description: 'Ordenamos la estructura, los mensajes y el recorrido del visitante hasta el contacto o la compra. Antes de diseñar, ya sabemos qué tiene que decir cada sección y por qué.',
-        // TODO: reemplazar por imagen propia de Atlas
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1600&auto=format&fit=crop'
+        description: 'Ordenamos estructura, mensajes y recorrido. Antes de diseñar ya sabemos qué dice cada sección.',
+        // Wireframes enlazados con chinchetas rojas. El recorte centrado deja la
+        // banda del medio (filas 328-693 de 1024): el pie de la fila de arriba,
+        // los enlaces y la cabeza de la de abajo, que es donde se lee la
+        // estructura. Monocromo y rojo: la paleta de la casa sin tocar nada.
+        image: '/brand/proceso-estrategia.webp'
     },
     {
         id: 'paso-3',
         period: 'Semana 1 - 2',
         role: 'Diseño',
         name: 'Prototipo navegable en Figma',
-        description: 'Diseñamos pantalla por pantalla, en escritorio y en móvil. Lo revisas, comentas y apruebas. No escribimos una línea de código hasta que el diseño te convence.',
-        // TODO: reemplazar por imagen propia de Atlas
-        image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1600&auto=format&fit=crop'
+        description: 'Pantalla por pantalla, escritorio y móvil. No tocamos código hasta que el diseño te convence.',
+        // Captura de Figma. El recorte centrado deja fuera la barra de título y
+        // la de herramientas, y entra la banda del medio: panel de capas,
+        // columnas de pantallas y estilos de texto (filas 330-805 de 1136).
+        image: '/brand/proceso-diseno.webp'
     },
     {
         id: 'paso-4',
         period: 'Semana 2 - 3',
         role: 'Desarrollo',
         name: 'Código a medida, rápido y responsive',
-        description: 'Construimos el sitio con la tecnología que mejor le sirva a tu negocio. Optimizado para cargar en menos de 2 segundos, listo para SEO y funcionando en cualquier pantalla.',
-        // TODO: reemplazar por imagen propia de Atlas
-        image: 'https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?q=80&w=1600&auto=format&fit=crop'
+        description: 'La tecnología que le sirva a tu negocio. Menos de 2 segundos de carga y lista para SEO.',
+        // El editor y la página corriendo al lado, que es justo lo que dice la
+        // tarjeta. El recorte centrado (filas 271-669 de 941) deja fuera la barra
+        // de título y la de estado, y entra el árbol de archivos, el código y el
+        // titular de la página ya renderizado.
+        image: '/brand/proceso-desarrollo.webp'
     },
     {
         id: 'paso-5',
         period: 'Semana 4 + 30 días',
         role: 'Lanzamiento y soporte',
         name: 'Publicamos, medimos y acompañamos',
-        description: 'Configuramos dominio, hosting y analítica, y te enseñamos a administrar tu web. Los siguientes 30 días quedamos disponibles para ajustes y dudas.',
-        // TODO: reemplazar por imagen propia de Atlas
-        image: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop'
+        description: 'Dominio, hosting y analítica listos. Te enseñamos a administrarla y seguimos 30 días contigo.',
+        // Analítica después de publicar, que es la mitad de lo que promete la
+        // tarjeta. El recorte centrado (filas 328-693 de 1024) agarra la curva,
+        // las barras, el anillo y el canto del teléfono. Negro y rojo: la paleta
+        // de la casa, sin un solo color de fuera.
+        image: '/brand/proceso-lanzamiento.webp'
     },
     // 6. View more
     {
         id: 'view-more',
-        name: 'View more',
-        role: 'Explore all experiences',
+        name: 'Ver más',
+        role: 'Ver todo el proceso',
         image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop',
-        social: { website: '/experience' }
+        social: { website: '/skills' }
     }
 ];
 
 const GALLERY_IMAGES = [
-    "/gallery/Foto Utama.webp",
-    "/gallery/FotoSC1.webp",
-    "/gallery/FotoSC2.webp",
-    "/gallery/FotoSC3.webp",
-    "/gallery/FotoSC4.webp",
-    "/gallery/FotoSC5.webp",
-    "/gallery/academicaffairsdivision1.webp",
-    "/gallery/computernetworkpracticumassistant2.webp",
-    "/gallery/dataentryassistant1.webp",
-    "/gallery/delegateaiesecfutureleaders20241.webp",
-    "/gallery/environmentalhygieneteam1.webp",
-    "/gallery/environmentalhygieneteam2.webp",
-    "/gallery/logisticsoperatorcampusexpo20242.webp",
-    "/gallery/researchassistant1.webp",
-    "/gallery/researchassistant2.webp"
+    "/obra/obra-01.webp",
+    "/obra/obra-02.webp",
+    "/obra/obra-03.webp",
+    "/obra/obra-04.webp",
+    "/obra/obra-05.webp",
+    "/obra/obra-06.webp",
 ];
 
 const AboutLeadInImageStack = () => {
@@ -363,14 +370,27 @@ const AboutLeadIn = () => {
                                 ningun ancho. align-super lo sube sin sacarlo del
                                 flujo, y al ir dentro del text-right queda arriba a
                                 la derecha de la linea 1. */}
-                            <h2 className="font-black uppercase leading-[0.86] tracking-[-0.03em] text-[clamp(1.75rem,5.2vw,5.5rem)]">
-                                Te buscan,
-                                <span className="ml-[0.1em] align-super text-[0.26em] font-bold tracking-[-0.01em] text-white/70">
-                                    (01)
-                                </span>
-                                <br />
-                                No apareces.
-                            </h2>
+                            {/* TituloTecnico NO compone el texto: el <h2> de
+                                abajo sigue siendo el que manda en la
+                                maquetacion —clamp, leading, tracking, el salto
+                                de linea y el (01) volado quedan intactos— y el
+                                efecto solo lee donde ha caido cada letra para
+                                pintar encima. El (01) se marca con
+                                data-tec-ignorar para que se quede como texto
+                                normal: es otro cuerpo y otro color, y metido en
+                                el juego de las rayas solo ensuciaria. Su clase
+                                text-white/70 le da color propio, asi que no le
+                                afecta el transparent que recibe el h2. */}
+                            <TituloTecnico secuencia={["No", "apareces."]}>
+                                <h2 className="font-black uppercase leading-[0.86] tracking-[-0.03em] text-[clamp(1.75rem,5.2vw,5.5rem)]">
+                                    Te buscan,
+                                    <span data-tec-ignorar className="ml-[0.1em] align-super text-[0.26em] font-bold tracking-[-0.01em] text-white/70">
+                                        (01)
+                                    </span>
+                                    <br />
+                                    No apareces.
+                                </h2>
+                            </TituloTecnico>
                         </div>
                     </div>
 
@@ -767,12 +787,12 @@ export default function AboutSection() {
                             </div>
                             <div className="w-full pb-0">
                                 <HorizontalTimeline data={showcaseMembers.map((member) => ({
-                                    title: member.id === 'view-more' ? 'Explore all experiences' : (member.role || member.name),
+                                    title: member.id === 'view-more' ? 'Ver todo el proceso' : (member.role || member.name),
                                     isEnd: member.id === 'view-more',
                                     period: 'period' in member ? member.period : undefined,
                                     content: member.id === 'view-more' ? (
                                         <Link
-                                            href={member.social?.website || '/experience'}
+                                            href={member.social?.website || '/skills'}
                                             className="relative flex items-center h-[140px] w-[250px] z-30"
                                         >
                                             <div className="flex items-center gap-4">
@@ -780,84 +800,102 @@ export default function AboutSection() {
                                                     <ArrowUpRight className="w-8 h-8 text-neutral-600 dark:text-neutral-400 transition-all duration-500 group-hover:text-primary-foreground group-hover:rotate-45 group-hover:scale-110" />
                                                 </div>
                                                 <span className="text-lg md:text-xl font-bold text-neutral-900 dark:text-white opacity-0 -translate-x-4 transition-all duration-500 group-hover:opacity-100 group-hover:translate-x-0 whitespace-nowrap drop-shadow-sm">
-                                                    View more
+                                                    Ver más
                                                 </span>
                                             </div>
                                         </Link>
                                     ) : (
-                                        /* Vidrio liquido. Tres cosas lo separan
-                                           del "fondo translucido + blur" que
-                                           habia antes:
-                                             - El relleno baja a 0.06 de alfa y
-                                               el desenfoque sube a 2xl, con
-                                               saturado al 150%. Saturar lo que
-                                               hay detras es lo que hace que el
-                                               cristal parezca tener cuerpo en
-                                               vez de ser una gasa gris.
-                                             - Un filo especular de 1px arriba,
-                                               mas claro en el centro que en las
-                                               puntas, como la luz rozando un
-                                               canto biselado.
-                                             - Una caida de luz en la mitad
-                                               superior, que es la que da el
-                                               volumen.
-                                           Las dos capas de luz van ANTES que el
-                                           contenido en el DOM y el contenido va
-                                           envuelto en un relative: los dos son
-                                           posicionados con z auto, asi que el
-                                           orden del DOM decide y el texto queda
-                                           por encima sin necesidad de z-index. */
-                                        <div className="relative mt-4 flex w-[320px] flex-col overflow-hidden rounded-[24px] border border-neutral-200/60 bg-white/40 p-6 shadow-[0_18px_44px_rgba(0,0,0,0.18)] backdrop-blur-[48px] backdrop-saturate-[1.7] backdrop-brightness-[1.15] md:w-[400px] dark:border-white/[0.11] dark:bg-white/[0.035] dark:shadow-[0_22px_50px_rgba(0,0,0,0.55)]">
-                                            {/* El brillo del backdrop es lo que hace
-                                                que esto se lea como cristal y no como
-                                                un agujero: detras hay una montana casi
-                                                negra, y sin levantar un punto los
-                                                negros el panel no devuelve nada y
-                                                parece un recorte. */}
+                                        /* Tarjeta del paso. Estructura tomada de
+                                           la referencia: cabecera clara con el
+                                           numero en un bloque de acento y el
+                                           nombre del paso, y debajo el cuerpo
+                                           oscuro con imagen y texto.
+
+                                           TODO CUADRADO, sin una sola esquina
+                                           redondeada: es lo que la separa del
+                                           resto de la pagina —que va de radios
+                                           generosos— y lo que le da el aire de
+                                           ficha tecnica que pedia la referencia.
+
+                                           Sigue siendo vidrio liquido por detras.
+                                           El brillo del backdrop no es capricho:
+                                           detras hay una montana casi negra, y sin
+                                           levantar un punto los negros el panel no
+                                           devuelve nada y parece un recorte. */
+                                        <div className="relative mt-4 w-[300px] overflow-hidden border border-neutral-200/60 bg-white/40 shadow-[0_18px_44px_rgba(0,0,0,0.18)] backdrop-blur-[48px] backdrop-saturate-[1.7] backdrop-brightness-[1.15] md:w-[370px] dark:border-white/[0.11] dark:bg-white/[0.04] dark:shadow-[0_22px_50px_rgba(0,0,0,0.55)]">
+                                            {/* Filo especular arriba y canto en
+                                                sombra abajo: juntos son el bisel. */}
                                             <span
                                                 aria-hidden="true"
-                                                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent dark:via-white/55"
-                                            />
-                                            {/* Canto inferior en sombra: junto al filo
-                                                de luz de arriba es lo que da el bisel. */}
-                                            <span
-                                                aria-hidden="true"
-                                                className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-black/20 dark:bg-black/40"
+                                                className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent dark:via-white/55"
                                             />
                                             <span
                                                 aria-hidden="true"
-                                                className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/25 to-transparent dark:from-white/[0.06]"
+                                                className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-px bg-black/20 dark:bg-black/40"
                                             />
 
-                                            <div className="relative flex flex-col gap-4">
-                                            <div className="flex flex-col gap-2">
-                                                <div className="flex flex-row items-center justify-between">
-                                                    <h4 className="text-lg font-bold text-neutral-900 dark:text-white leading-tight">
-                                                        {member.name}
-                                                    </h4>
-                                                </div>
+                                            {/* ── Cabecera ── */}
+                                            <div className="relative flex items-stretch border-b border-black/10 bg-white dark:border-white/10">
+                                                {/* Aqui iba el numero del paso, y
+                                                    sobraba: el circulo de la linea ya
+                                                    lo lleva y se queda encendido
+                                                    mientras la tarjeta esta abierta.
+                                                    Distinto es el TITULO, que si se
+                                                    desvanece de la linea cuando la
+                                                    tarjeta aparece —eso es un relevo,
+                                                    no una repeticion— y por eso se
+                                                    queda en la cabecera.
+
+                                                    Tampoco lo sustitui por el plazo:
+                                                    tambien lo muestra la pildora
+                                                    flotante al abrirse, asi que habria
+                                                    cambiado un dato repetido por otro.
+
+                                                    Como no faltaba informacion, el rojo
+                                                    deja de rotular y pasa a ser
+                                                    estructura: un filete a sangre en el
+                                                    canto izquierdo. Sigue anclando la
+                                                    cabecera y marcando el paso, sin
+                                                    decir nada que ya este dicho. */}
+                                                <span
+                                                    aria-hidden="true"
+                                                    className="w-[5px] shrink-0"
+                                                    style={{ background: "var(--hero-accent, #E11D3A)" }}
+                                                />
+                                                <span className="flex min-w-0 flex-1 items-center truncate px-4 py-3 font-sans text-[12.5px] font-black uppercase leading-none tracking-[0.05em] text-neutral-900">
+                                                    {member.role}
+                                                </span>
+                                                {/* Los mismos galones que firman las
+                                                    etiquetas de seccion. Decorativos:
+                                                    atan la ficha al resto de la pagina
+                                                    sin fingir que son un boton. */}
+                                                <svg width="34" height="9" viewBox="0 0 52 13" aria-hidden="true" className="mr-3.5 self-center shrink-0">
+                                                    <path d="M0 0 L7 0 L12 6.5 L7 13 L0 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.25" />
+                                                    <path d="M11 0 L18 0 L23 6.5 L18 13 L11 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.4" />
+                                                    <path d="M22 0 L29 0 L34 6.5 L29 13 L22 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.55" />
+                                                    <path d="M33 0 L40 0 L45 6.5 L40 13 L33 13 Z" fill="var(--hero-accent, #E11D3A)" opacity="0.7" />
+                                                </svg>
                                             </div>
 
-                                            {'description' in member && member.description && (
-                                                <p className="text-sm font-normal text-neutral-600 dark:text-neutral-400 leading-relaxed mt-1 line-clamp-3" title={member.description}>
-                                                    {member.description}
-                                                </p>
-                                            )}
-
-                                            <div className="w-full mt-4 rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden relative group/card h-32">
+                                            {/* ── Imagen ── */}
+                                            <div className="relative h-[88px] w-full overflow-hidden border-b border-black/10 dark:border-white/10">
                                                 <img
                                                     src={member.image}
-                                                    alt={member.name}
-                                                    className="w-full h-full object-cover opacity-90 group-hover/card:opacity-100 transition-opacity duration-500 group-hover/card:scale-105"
+                                                    alt=""
+                                                    className="h-full w-full object-cover opacity-90 transition-opacity duration-500 group-hover:opacity-100"
                                                 />
-                                                {member.social?.website && (
-                                                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-sm">
-                                                        <Link href={member.social.website} target="_blank" className="px-5 py-2.5 bg-white text-black text-xs font-bold rounded-full hover:scale-105 transition-transform">
-                                                            View Details
-                                                        </Link>
-                                                    </div>
-                                                )}
                                             </div>
+
+                                            {/* ── Cuerpo ── */}
+                                            <div className="relative p-4">
+                                                <h4 className="text-[15px] font-bold leading-tight tracking-[-0.01em] text-neutral-900 dark:text-white">
+                                                    {member.name}
+                                                </h4>
+                                                {'description' in member && member.description && (
+                                                    <p className="mt-1.5 text-[12.5px] leading-[1.5] text-neutral-600 dark:text-white/60">
+                                                        {member.description}
+                                                    </p>
+                                                )}
                                             </div>
                                         </div>
                                     )
@@ -865,37 +903,40 @@ export default function AboutSection() {
                             </div>
                         </motion.div>
 
-                        {/* Certificate Showcase Section */}
-                        <div className="w-full mt-8 md:mt-12">
-                            <CertificateShowcase />
-                        </div>
+                        {/* Preguntas (ocupa el sitio de la seccion de
+                            certificaciones, que se retiro entera) y Precios,
+                            que sube por encima como una lamina con parallax. */}
+                        <PasoAPrecios
+                            preguntas={<AtlasFAQ />}
+                            precios={<>
+                                {/* Encabezado de la seccion de planes */}
+                                <PreciosHeading />
 
-                        {/* Encabezado de la seccion de planes */}
-                        <PreciosHeading />
+                                {/* Stacking Card Showcases. z-10 para montarse sobre
+                                    el pie de la palabra "Precios." */}
+                                <div className="relative z-10 -mt-[9vh]">
+                                <ShowcaseStack>
+                                    <div className="w-full">
+                                        <PlanCatalogo />
+                                    </div>
+                                    <div className="w-full">
+                                        <GitHubShowcase />
+                                    </div>
+                                    <div className="w-full">
+                                        <KaggleShowcase />
+                                    </div>
+                                    <div className="w-full">
+                                        <WakaTimeShowcase />
+                                    </div>
+                                </ShowcaseStack>
+                                </div>
 
-                        {/* Stacking Card Showcases. z-10 para montarse sobre
-                            el pie de la palabra "Precios." */}
-                        <div className="relative z-10 -mt-[9vh]">
-                        <ShowcaseStack>
-                            <div className="w-full">
-                                <PlanCatalogo />
-                            </div>
-                            <div className="w-full">
-                                <GitHubShowcase />
-                            </div>
-                            <div className="w-full">
-                                <KaggleShowcase />
-                            </div>
-                            <div className="w-full">
-                                <WakaTimeShowcase />
-                            </div>
-                        </ShowcaseStack>
-                        </div>
-
-                        {/* Nota legal de los planes */}
-                        <p className="w-full max-w-[1700px] mx-auto px-6 mt-4 text-xs text-black/40 dark:text-white/30 leading-relaxed">
-                            Precios referenciales en soles. El monto final depende del alcance, las integraciones y el contenido de cada proyecto.
-                        </p>
+                                {/* Nota legal de los planes */}
+                                <p className="w-full max-w-[1700px] mx-auto px-6 mt-4 text-xs text-black/40 dark:text-white/30 leading-relaxed">
+                                    Precios referenciales en soles. El monto final depende del alcance, las integraciones y el contenido de cada proyecto.
+                                </p>
+                            </>}
+                        />
                     </div>
                 </div>
             </div>

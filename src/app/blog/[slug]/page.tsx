@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import Link from 'next/link';
 import { portfolioData } from '@/data/portfolio';
-import { Clock, Copy, Linkedin, Github, BookOpen, Link as LinkIcon, ArrowLeft, Check } from 'lucide-react';
+import { Clock, Copy, BookOpen, Link as LinkIcon, ArrowLeft, Check } from 'lucide-react';
 import { notFound, useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
@@ -63,7 +63,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                         <div className="flex items-center gap-2 text-sm text-muted-foreground font-medium hover:text-primary transition-colors">
                             <button onClick={handleBack} className="flex items-center gap-2 focus:outline-none">
                                 <ArrowLeft className="w-4 h-4" />
-                                <span>Back</span>
+                                <span>Volver</span>
                             </button>
                         </div>
                     </div>
@@ -105,13 +105,13 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                 <div className="flex flex-col md:flex-row items-center justify-between border-y border-border/40 py-6 gap-6">
                     <div className="flex items-center gap-12 w-full md:w-auto justify-between md:justify-start">
                         <div className="flex flex-col gap-1">
-                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Written by</span>
+                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Escrito por</span>
                             <div className="flex items-center gap-2">
                                 <span className="font-bold text-foreground">{post.author.name}</span>
                             </div>
                         </div>
                         <div className="flex flex-col gap-1">
-                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Published on</span>
+                            <span className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">Publicado el</span>
                             <span className="font-bold text-foreground">{post.date}</span>
                         </div>
                     </div>
@@ -128,24 +128,19 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                         >
                             {copied ? (
                                 <>
-                                    <Check className="w-4 h-4" /> <span>Copied!</span>
+                                    <Check className="w-4 h-4" /> <span>¡Copiado!</span>
                                 </>
                             ) : (
                                 <>
-                                    <Copy className="w-4 h-4" /> <span className="hidden sm:inline">Copy link</span>
+                                    <Copy className="w-4 h-4" /> <span className="hidden sm:inline">Copiar enlace</span>
                                 </>
                             )}
                         </button>
-                        <div className="w-px h-6 bg-border/40 hidden sm:block" />
-                        <Link href="https://linkedin.com/in/syahril-arfian-almazril" target="_blank" className="p-2 text-muted-foreground hover:text-primary transition-colors bg-secondary/10 rounded-lg hover:bg-primary/10">
-                            <Linkedin className="w-4 h-4" />
-                        </Link>
-                        <Link href="https://github.com/Arfazrll" target="_blank" className="p-2 text-muted-foreground hover:text-primary transition-colors bg-secondary/10 rounded-lg hover:bg-primary/10">
-                            <Github className="w-4 h-4" />
-                        </Link>
-                        <Link href="https://medium.com/@arfazrll" target="_blank" className="p-2 text-muted-foreground hover:text-primary transition-colors bg-secondary/10 rounded-lg hover:bg-primary/10">
-                            <BookOpen className="w-4 h-4" />
-                        </Link>
+                        {/* Aqui habia tres enlaces a los perfiles personales del
+                            autor de la plantilla: su LinkedIn, su GitHub y su
+                            Medium. Se eliminan, no se sustituyen: los perfiles
+                            de Atlas en portfolio.ts siguen siendo marcadores,
+                            y un enlace inventado es peor que ninguno. */}
                     </div>
                 </div>
             </div>
@@ -160,12 +155,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
                             {slug === 'future-of-ai-agents' && (
                                 <>
-                                    <h2 id="intro" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The Rise of Autonomous Agents</h2>
+                                    <h2 id="intro" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">El auge de los agentes autónomos</h2>
                                     <p className="mb-8">
-                                        The landscape of enterprise software is undergoing a seismic shift. We are moving beyond static automation and scripted workflows into an era of <strong>Autonomous AI Agents</strong>. These agents are not just tools; they are proactive entities capable of perceiving, reasoning, acting, and learning to achieve complex goals with minimal human intervention.
+                                        El software de empresa está cambiando de raíz. Dejamos atrás la automatización rígida y los flujos guionizados para entrar en la era de los <strong>agentes de IA autónomos</strong>. No son herramientas: son entidades que perciben, razonan, actúan y aprenden para cumplir objetivos complejos con muy poca intervención humana.
                                     </p>
                                     <p className="mb-8">
-                                        In the traditional software paradigm, humans defined every step of a process. If condition A met condition B, then action C was executed. Today, agents powered by Large Language Models (LLMs) can understand vague instructions like "analyze our Q3 sales data and generate a strategy for Q4," and then autonomously figure out the necessary steps—querying databases, running statistical models, and drafting reports—all on their own.
+                                        En el software de siempre, una persona definía cada paso del proceso. Si la condición A coincidía con la B, se ejecutaba la acción C. Hoy, los agentes que corren sobre modelos de lenguaje entienden una instrucción vaga como «analiza las ventas del tercer trimestre y propón una estrategia para el cuarto», y se las arreglan solos: consultan la base de datos, corren modelos estadísticos y redactan el informe.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -179,47 +174,47 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                         />
                                     </div>
 
-                                    <h2 id="core" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Architecting for Autonomy</h2>
+                                    <h2 id="core" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Arquitectura para la autonomía</h2>
                                     <p className="mb-8">
-                                        Building an effective AI agent requires a rethinking of software architecture. It isn't just about the model; it's about the <strong>Cognitive Architecture</strong> that surrounds it.
+                                        Construir un agente que funcione obliga a repensar la arquitectura. No va del modelo, va de la <strong>arquitectura cognitiva</strong> que lo rodea.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>Memory:</strong> Agents need short-term memory (context window) to manage immediate tasks and long-term memory (vector databases) to recall past interactions and knowledge.</li>
-                                        <li><strong>Tools:</strong> An agent is only as powerful as the tools it can wield. We specifically design interfaces (APIs) that allow agents to interact with CRMs, ERPs, and the broader web.</li>
-                                        <li><strong>Planning:</strong> The ability to break down a high-level goal into a sequence of executable actions (Chain of Thought) is what separates a chatbot from an agent.</li>
+                                        <li><strong>Memoria:</strong> El agente necesita memoria corta (la ventana de contexto) para lo que tiene entre manos, y memoria larga (bases vectoriales) para recordar lo que ya pasó y lo que ya sabe.</li>
+                                        <li><strong>Herramientas:</strong> Un agente vale lo que valen las herramientas que puede usar. Diseñamos interfaces (APIs) para que pueda operar sobre un CRM, un ERP o la web abierta.</li>
+                                        <li><strong>Planificación:</strong> Saber partir un objetivo grande en una secuencia de acciones ejecutables es lo que separa a un agente de un chatbot.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "The future of software is not humans telling computers what to do, but computers asking humans what they want to achieve."
+                                        «El futuro del software no es que las personas digan a las máquinas qué hacer, sino que las máquinas pregunten a las personas qué quieren conseguir.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">AI Engineer</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Ingeniería de IA</div>
                                             </div>
                                         </footer>
                                     </blockquote>
 
-                                    <h2 id="impact" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Redefining Decision Making</h2>
+                                    <h2 id="impact" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Decidir de otra manera</h2>
                                     <p className="mb-8">
-                                        The integration of agents into decision-making processes brings a new level of speed and data-driven accuracy. Agents doesn't act on intuition; they act on data. They can synthesize millions of data points in seconds to catch anomalies in cybersecurity, optimize supply chains in real-time, or personalize customer experiences at scale.
+                                        Meter agentes en la toma de decisiones añade velocidad y criterio basado en datos. Un agente no actúa por intuición: actúa por datos. Puede cruzar millones de registros en segundos para detectar una anomalía de seguridad, ajustar una cadena de suministro en vivo o personalizar la atención a gran escala.
                                     </p>
                                     <p className="mb-8">
-                                        However, this power comes with responsibility. The challenge now shifts to <strong>Alignment</strong> and <strong>Governance</strong>—ensuring that these autonomous systems act in accordance with human values and business objectives.
+                                        Pero ese poder trae responsabilidad. El reto se mueve ahora hacia la <strong>alineación</strong> y la <strong>gobernanza</strong>—asegurar que estos sistemas actúen conforme a los valores de las personas y a los objetivos del negocio.
                                     </p>
                                 </>
                             )}
 
                             {slug === 'web3-ux-challenges' && (
                                 <>
-                                    <h2 id="ux-gap" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The UX Gap in Web3</h2>
+                                    <h2 id="ux-gap" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">La brecha de experiencia en Web3</h2>
                                     <p className="mb-8">
-                                        We often hear that "Web3 is the future," but for the average user, it feels like stepping back into the dial-up era. Managing private keys, understanding gas fees, and the terrifying irreversibility of transactions are massive hurdles. To reach mass adoption, Web3 applications must feel indistinguishable from the Web2 apps we use every day—intuitive, fast, and forgiving.
+                                        Se repite que «Web3 es el futuro», pero para una persona normal se siente como volver al módem. Custodiar claves privadas, entender las comisiones de gas y asumir que una transacción no se deshace son barreras enormes. Para llegar a todo el mundo, una aplicación Web3 tiene que sentirse igual que las que usamos a diario: intuitiva, rápida y capaz de perdonar un error.
                                     </p>
                                     <p className="mb-8">
-                                        The core problem lies in the friction between <strong>security</strong> and <strong>convenience</strong>. In traditional finance, banks act as custodians, resetting your password if you forget it. In DeFi, if you lose your seed phrase, your assets are gone forever. We need to bridge this gap without compromising the decentralized ethos.
+                                        El problema de fondo es la fricción entre <strong>seguridad</strong> y la <strong>comodidad</strong>. En la banca de siempre, el banco custodia: si olvidas la contraseña, te la restablece. En DeFi, si pierdes tu frase semilla, tus fondos se van para siempre. Hay que cerrar esa brecha sin renunciar a la descentralización.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -233,47 +228,47 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                         />
                                     </div>
 
-                                    <h2 id="seed-phrases" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The Death of Seed Phrases</h2>
+                                    <h2 id="seed-phrases" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">El final de las frases semilla</h2>
                                     <p className="mb-8">
-                                        The biggest barrier to entry is the wallet. Expecting users to safeguard a 12-word mnemonic is unrealistic for global scale. Enter <strong>Account Abstraction (ERC-4337)</strong>.
+                                        La mayor barrera de entrada es la billetera. Esperar que alguien custodie doce palabras no escala. Aquí entra <strong>Account Abstraction (ERC-4337)</strong>.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>Social Recovery:</strong> Lose your key? Recover your account via trusted friends or biometric authentication.</li>
-                                        <li><strong>Sponsored Transactions:</strong> DApps can pay gas fees for users, eliminating the need to buy ETH just to try a new service.</li>
-                                        <li><strong>Bundled Transactions:</strong> Approve and swap in a single click, rather than signing multiple confusing pop-ups.</li>
+                                        <li><strong>Recuperación social:</strong> ¿Perdiste la clave? Recuperas la cuenta con personas de confianza o con biometría.</li>
+                                        <li><strong>Transacciones patrocinadas:</strong> La aplicación paga el gas por ti, así nadie tiene que comprar ETH solo para probar un servicio.</li>
+                                        <li><strong>Transacciones agrupadas:</strong> Aprobar e intercambiar en un solo clic, en vez de firmar tres ventanas que nadie entiende.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "The next billion users won't know they're using the blockchain. They'll just know they're using a better, fairer internet."
+                                        «Los próximos mil millones de usuarios no van a saber que usan blockchain. Solo van a saber que usan un internet mejor y más justo.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">Blockchain Developer</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Desarrollo blockchain</div>
                                             </div>
                                         </footer>
                                     </blockquote>
 
-                                    <h2 id="latency" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Managing Latency & Feedback</h2>
+                                    <h2 id="latency" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Latencia y respuesta</h2>
                                     <p className="mb-8">
-                                        Blockchains are inherently slower than centralized servers. Users shouldn't stare at a spinner for 15 seconds. <strong>Optimistic UI</strong> updates are crucial—show the user the action succeeded immediately while the transaction confirms in the background. If it fails, gracefully roll back and inform the user.
+                                        Una blockchain es más lenta que un servidor centralizado. Nadie debería mirar un spinner quince segundos. <strong>interfaz optimista</strong> es clave: muestra el resultado al instante mientras la transacción se confirma por detrás. Si falla, se revierte con elegancia y se avisa.
                                     </p>
                                     <p className="mb-8">
-                                        Furthermore, transaction data is cryptic. Instead of showing "0x... sent to 0x...", we need human-readable transaction simulations that tell the user: "You are giving OpenSea permission to move your Bored Ape." Clarity is the best security feature.
+                                        Además, los datos de una transacción son crípticos. En vez de «0x… envió a 0x…», hace falta una simulación legible que diga: «Estás dando permiso a OpenSea para mover tu Bored Ape». La claridad es la mejor medida de seguridad.
                                     </p>
                                 </>
                             )}
 
                             {slug === 'mastering-nextjs-performance' && (
                                 <>
-                                    <h2 id="rendering" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Rendering Patterns: SSG, SSR, & PPR</h2>
+                                    <h2 id="rendering" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Patrones de renderizado: SSG, SSR y PPR</h2>
                                     <p className="mb-8">
-                                        Performance starts with how you deliver content. Next.js offers a spectrum of rendering strategies. <strong>Static Site Generation (SSG)</strong> is the gold standard for speed, serving pre-built HTML from the Edge. However, for dynamic content, we traditionally relied on Server-Side Rendering (SSR), which can introduce latency.
+                                        El rendimiento empieza por cómo entregas el contenido. Next.js ofrece todo un abanico de estrategias. <strong>La generación estática (SSG)</strong> es el patrón de referencia en velocidad: sirve HTML ya construido desde el borde. Para contenido dinámico, en cambio, se dependía del renderizado en servidor (SSR), que mete latencia.
                                     </p>
                                     <p className="mb-8">
-                                        The game changer is <strong>Partial Prerendering (PPR)</strong>. It allows us to keep the shell of the application static (instant load) while streaming in dynamic parts (like user data) in parallel. This hybrid model mimics the speed of static sites with the flexibility of server-rendered apps.
+                                        Lo que lo cambia todo es el <strong>prerrenderizado parcial (PPR)</strong>. Permite dejar el armazón de la aplicación estático —carga instantánea— mientras las partes dinámicas, como los datos del usuario, llegan en paralelo. Ese híbrido tiene la velocidad de un sitio estático y la flexibilidad de uno servido.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -287,35 +282,35 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                         />
                                     </div>
 
-                                    <h2 id="assets" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Optimizing Assets (Images & Fonts)</h2>
+                                    <h2 id="assets" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Optimizar imágenes y tipografías</h2>
                                     <p className="mb-8">
-                                        Largest Contentful Paint (LCP) is often dragged down by unoptimized images. The standard <code>&lt;img&gt;</code> tag is insufficient. The Next.js <code>&lt;Image&gt;</code> component automatically handles resizing, lazy loading, and serving modern formats like WebP/AVIF.
+                                        El Largest Contentful Paint suele hundirse por imágenes sin optimizar. La etiqueta <code>&lt;img&gt;</code> no basta. El componente <code>&lt;Image&gt;</code> de Next.js redimensiona, carga en diferido y sirve formatos modernos como WebP y AVIF sin que hagas nada.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>Size Attribute:</strong> Always define explicit width/height or uses <code>fill</code> with a parent container to prevent layout shifts (CLS).</li>
-                                        <li><strong>Priority:</strong> Mark your LCP image (usually the hero) with the <code>priority</code> prop to preload it.</li>
-                                        <li><strong>Next/Font:</strong> Self-host Google fonts automatically to eliminate layout shifts and zero internal network requests.</li>
+                                        <li><strong>Atributo de tamaño:</strong> Define siempre ancho y alto, o usa <code>fill</code> con un contenedor padre, para que no se mueva el diseño (CLS).</li>
+                                        <li><strong>Prioridad:</strong> Marca la imagen del LCP —casi siempre la del hero— con <code>priority</code> para precargarla.</li>
+                                        <li><strong>Next/Font:</strong> Aloja las tipografías de Google en tu propio servidor: cero saltos de diseño y cero peticiones externas.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "Performance is not just a metric; it's a user experience feature. A fast site builds trust."
+                                        «El rendimiento no es una métrica, es parte de la experiencia. Un sitio rápido genera confianza.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">Fullstack Developer</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Desarrollo full stack</div>
                                             </div>
                                         </footer>
                                     </blockquote>
 
-                                    <h2 id="bundles" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Code Splitting & Bundle Size</h2>
+                                    <h2 id="bundles" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">División de código y peso del bundle</h2>
                                     <p className="mb-8">
-                                        JavaScript execution time blocks the main thread. Shipping a massive single bundle is a recipe for a slow First Input Delay (FID). Next.js splits code by route automatically, but we can go further.
+                                        Ejecutar JavaScript bloquea el hilo principal. Mandar un bundle enorme es la receta para un First Input Delay malo. Next.js separa el código por ruta de forma automática, pero se puede ir más lejos.
                                     </p>
                                     <p className="mb-8">
-                                        Use <code>next/dynamic</code> to lazy load heavy components that aren't critical for the initial viewport (e.g., a modal or a complex chart below the fold).
+                                        Usa <code>next/dynamic</code> para cargar en diferido los componentes pesados que no hacen falta en la primera pantalla: una ventana modal, un gráfico complejo más abajo.
                                     </p>
                                     <div className="p-4 bg-secondary/10 rounded-lg border border-border/40 font-mono text-xs mb-8">
                                         <code>
@@ -327,12 +322,12 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
 
                             {slug === 'ai-driven-security' && (
                                 <>
-                                    <h2 id="threats" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The Speed of Modern Attacks</h2>
+                                    <h2 id="threats" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">La velocidad de los ataques de hoy</h2>
                                     <p className="mb-8">
-                                        The traditional SOC (Security Operations Center) model is broken. Analysts are drowning in false positives while attackers use automation to scan, breach, and exfiltrate data in minutes. Human reaction time is simply too slow.
+                                        El modelo clásico de centro de operaciones de seguridad está roto. Los analistas se ahogan en falsos positivos mientras los atacantes automatizan el escaneo, la intrusión y la extracción de datos en minutos. El tiempo de reacción humano no da.
                                     </p>
                                     <p className="mb-8">
-                                        <strong>AI-Driven Security</strong> changes the equation. Instead of relying on static signatures (looking for known bad files), AI models analyze behavior. They learn what "normal" network traffic looks like for your specific organization and can instantly flag anomalies—like a marketing intern accessing the production database at 3 AM.
+                                        <strong>La seguridad con IA</strong> cambia la ecuación. En vez de buscar firmas estáticas —archivos ya conocidos como maliciosos—, los modelos analizan comportamiento. Aprenden cómo es el tráfico normal de tu organización y levantan la mano al instante ante una anomalía: por ejemplo, un practicante de marketing entrando a la base de producción a las tres de la mañana.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -346,47 +341,47 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                         />
                                     </div>
 
-                                    <h2 id="detection" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Deep Learning for Detection</h2>
+                                    <h2 id="detection" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Aprendizaje profundo para detectar</h2>
                                     <p className="mb-8">
-                                        Deep Learning models excel at pattern recognition. In cybersecurity, this means detecting zero-day exploits that have never been seen before.
+                                        Los modelos de aprendizaje profundo son buenísimos reconociendo patrones. En seguridad eso significa detectar exploits de día cero que nadie ha visto antes.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>User Entity Behavior Analytics (UEBA):</strong> Tracking user habits to detect compromised credentials.</li>
-                                        <li><strong>Malware DNA:</strong> Analyzing the actual code structure of a file rather than just its hash to identify polymorphic malware.</li>
-                                        <li><strong>Phishing Detection:</strong> NLP models reading emails to detect intent and urgency, not just keyword matching.</li>
+                                        <li><strong>Análisis de comportamiento (UEBA):</strong> Seguir los hábitos de cada usuario para detectar credenciales robadas.</li>
+                                        <li><strong>ADN del malware:</strong> Analizar la estructura real del código de un archivo, no solo su hash, para identificar malware polimórfico.</li>
+                                        <li><strong>Detección de phishing:</strong> Modelos de lenguaje que leen el correo para detectar intención y urgencia, no solo palabras clave.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "Defenders have to be right every time. Attackers only have to be right once. AI helps level the playing field."
+                                        «Quien defiende tiene que acertar siempre. Quien ataca, una sola vez. La IA empareja un poco el terreno.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">Security Researcher</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Investigación en seguridad</div>
                                             </div>
                                         </footer>
                                     </blockquote>
 
-                                    <h2 id="adversarial" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Adversarial AI</h2>
+                                    <h2 id="adversarial" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">IA adversaria</h2>
                                     <p className="mb-8">
-                                        The arms race is escalating. Attackers are now using their own AI to generate convincing deepfake voice notes for CEO fraud, write polymorphic code that evades detection, and automate vulnerability scanning.
+                                        La carrera se acelera. Los atacantes ya usan su propia IA para generar notas de voz falsas y suplantar a un directivo, escribir código polimórfico que esquiva la detección y automatizar el escaneo de vulnerabilidades.
                                     </p>
                                     <p className="mb-8">
-                                        To combat this, we utilize <strong>Generative Adversarial Networks (GANs)</strong> to pit two AIs against each other—one trying to create an attack, and the other trying to block it—constantly improving our defenses through simulation.
+                                        Para contrarrestarlo usamos <strong>redes generativas adversarias (GAN)</strong> para enfrentar dos IA entre sí —una intenta crear el ataque y la otra bloquearlo— y así mejorar las defensas a base de simulación.
                                     </p>
                                 </>
                             )}
 
                             {slug === 'llm-fine-tuning' && (
                                 <>
-                                    <h2 id="why-visual" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Why Fine-Tune Locally?</h2>
+                                    <h2 id="why-visual" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">¿Por qué ajustar en local?</h2>
                                     <p className="mb-8">
-                                        The release of Llama 3 and Mistral has democratized access to powerful LLMs. However, base models are generalists. To make them excel at specific tasks—like writing SQL queries for your proprietary schema or answering customer support tickets with your brand voice—you need <strong>Fine-Tuning</strong>.
+                                        Llama 3 y Mistral democratizaron el acceso a modelos potentes. Pero un modelo base es generalista. Para que destaque en algo concreto —escribir consultas SQL sobre tu propio esquema, o responder tickets con la voz de tu marca— hace falta <strong>ajuste fino</strong>.
                                     </p>
                                     <p className="mb-8">
-                                        Running this locally (or on a private cloud) ensures <strong>Data Privacy</strong>. Sending sensitive legal contracts or medical data to OpenAI's API is often a non-starter for enterprises. Local fine-tuning keeps your data within your perimeter.
+                                        Hacerlo en local, o en una nube privada, garantiza la <strong>privacidad de los datos</strong>. Mandar contratos o historias clínicas a la API de un tercero es inviable para muchas empresas. El ajuste local mantiene los datos dentro de casa.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -400,21 +395,21 @@ export default function BlogPostPage({ params }: { params: Promise<{ slug: strin
                                         />
                                     </div>
 
-                                    <h2 id="lora" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">LoRA & QLoRA Explained</h2>
+                                    <h2 id="lora" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">LoRA y QLoRA, explicados</h2>
                                     <p className="mb-8">
-                                        Full fine-tuning updates all 7 billion+ parameters of a model, requiring massive GPU VRAM. <strong>Low-Rank Adaptation (LoRA)</strong> freezes the pre-trained model weights and injects trainable rank decomposition matrices into each layer of the Transformer architecture.
+                                        Un ajuste completo actualiza los más de siete mil millones de parámetros del modelo y exige una barbaridad de memoria de GPU. <strong>LoRA (Low-Rank Adaptation)</strong> congela los pesos del modelo preentrenado e inyecta matrices entrenables de rango reducido en cada capa del Transformer.
                                     </p>
                                     <p className="mb-8">
-                                        <strong>QLoRA</strong> takes this further by quantizing the base model to 4-bit precision, allowing you to fine-tune a 70B parameter model on a single 48GB GPU, or a 7B model on a consumer RTX 4090.
+                                        <strong>QLoRA</strong> va más allá y cuantiza el modelo base a 4 bits, con lo que puedes ajustar un modelo de 70B en una sola GPU de 48GB, o uno de 7B en una RTX 4090 de escritorio.
                                     </p>
 
-                                    <h2 id="ollama" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The Stack: Ollama + Unsloth</h2>
+                                    <h2 id="ollama" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">El stack: Ollama y Unsloth</h2>
                                     <p className="mb-8">
-                                        For local inference, <strong>Ollama</strong> is the easiest way to run GGUF models. For training, <strong>Unsloth</strong> is currently the fastest library, offering 2-5x faster training speeds and 60% less memory usage than standard HuggingFace implementations.
+                                        Para inferencia local, <strong>Ollama</strong> es la forma más sencilla de correr modelos GGUF. Para entrenar, <strong>Unsloth</strong> es hoy la biblioteca más rápida: de dos a cinco veces más veloz y con un 60% menos de memoria que la implementación estándar de HuggingFace.
                                     </p>
 
                                     <div className="p-4 bg-secondary/10 rounded-lg border border-border/40 font-mono text-xs mb-8 overflow-x-auto">
-                                        <p className="text-muted-foreground mb-2"># Install Unsloth and export model to Ollama</p>
+                                        <p className="text-muted-foreground mb-2"># Instalar Unsloth y exportar el modelo a Ollama</p>
                                         <code className="block whitespace-pre">
                                             {`from unsloth import FastLanguageModel
 model, tokenizer = FastLanguageModel.from_pretrained(
@@ -430,14 +425,14 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                     </div>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "Fine-tuning is the bridge between a generic reasoning engine and a specialized expert system."
+                                        «El ajuste fino es el puente entre un motor de razonamiento genérico y un sistema experto.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">AI Engineer</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Ingeniería de IA</div>
                                             </div>
                                         </footer>
                                     </blockquote>
@@ -446,12 +441,12 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
 
                              {slug === 'smart-contract-security' && (
                                 <>
-                                    <h2 id="audits" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The Necessity of Rigorous Audits</h2>
+                                    <h2 id="audits" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Por qué auditar en serio</h2>
                                     <p className="mb-8">
-                                        In the decentralized world, code is law. But when that law has a loophole, millions of dollars can vanish in an instant. <strong>Smart Contract Security</strong> is no longer just a best practice; it is the foundation of trust in Web3. A single reentrancy vulnerability or an unchecked mathematical overflow can lead to catastrophic exploits.
+                                        En el mundo descentralizado, el código es la ley. Y cuando esa ley tiene un hueco, millones desaparecen en un instante. <strong>La seguridad de los contratos inteligentes</strong> dejó de ser una buena práctica: es la base de la confianza en Web3. Una sola vulnerabilidad de reentrada o un desbordamiento sin comprobar bastan para un desastre.
                                     </p>
                                     <p className="mb-8">
-                                        Audit patterns have evolved from simple manual reviews to sophisticated automated formal verification. We are now seeing the integration of AI-powered static analysis tools that can scan thousands of lines of Solidity in seconds, identifying common patterns of vulnerability like <em>Flash Loan Attacks</em> or <em>Oracle Manipulation</em>.
+                                        Los patrones de auditoría pasaron de la revisión manual a la verificación formal automatizada. Hoy ya se integran herramientas de análisis estático con IA capaces de revisar miles de líneas de Solidity en segundos e identificar patrones conocidos, como los <em>ataques con préstamos flash</em> or <em>la manipulación de oráculos</em>.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -465,25 +460,25 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                         />
                                     </div>
 
-                                    <h2 id="patterns" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Securing the Layers</h2>
+                                    <h2 id="patterns" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Asegurar todas las capas</h2>
                                     <p className="mb-8">
-                                        Security must be holistic. It starts at the language level but extends to the architectural design.
+                                        La seguridad tiene que ser integral. Empieza en el lenguaje, pero llega hasta el diseño de la arquitectura.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>Access Control:</strong> Implementing robust Role-Based Access Control (RBAC) to ensure only authorized entities can execute critical functions.</li>
-                                        <li><strong>Invariant Testing:</strong> Defining properties that must always hold true, regardless of the state, and using fuzzing to try and break them.</li>
-                                        <li><strong>Pausability:</strong> Building "Circuit Breakers" into contracts that allow developers to freeze functionality during a detected attack.</li>
+                                        <li><strong>Control de acceso:</strong> Implementar control por roles (RBAC) para que solo quien debe pueda ejecutar las funciones críticas.</li>
+                                        <li><strong>Pruebas de invariantes:</strong> Definir propiedades que deben cumplirse siempre, pase lo que pase, y usar fuzzing para intentar romperlas.</li>
+                                        <li><strong>Pausa de emergencia:</strong> Meter interruptores en el contrato que permitan congelar funciones si se detecta un ataque.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "A secure smart contract is one that assumes every user is a potential attacker and every external call is a potential exploit."
+                                        «Un contrato seguro es el que asume que cada usuario es un atacante en potencia y cada llamada externa, un exploit en potencia.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">Blockchain Security Auditor</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Auditoría de seguridad blockchain</div>
                                             </div>
                                         </footer>
                                     </blockquote>
@@ -492,12 +487,12 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
 
                             {slug === 'modern-state-management' && (
                                 <>
-                                    <h2 id="beyond-redux" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Moving Beyond Redux Complexity</h2>
+                                    <h2 id="beyond-redux" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Más allá de la complejidad de Redux</h2>
                                     <p className="mb-8">
-                                        For years, Redux was the undisputed king of React state management. However, its boilerplate-heavy nature often led to "State Management Fatigue." Today, we are witnessing a renaissance of minimalist libraries like <strong>Zustand</strong> and <strong>Jotai</strong>, which prioritize developer experience without sacrificing performance.
+                                        Durante años Redux reinó en la gestión de estado en React. Pero tanto código repetido terminó cansando a todo el mundo. Hoy vivimos un renacer de bibliotecas minimalistas como <strong>Zustand</strong> y la <strong>Jotai</strong>, que priorizan la experiencia de quien programa sin sacrificar rendimiento.
                                     </p>
                                     <p className="mb-8">
-                                        Zustand, in particular, has gained massive traction by providing a simple, hook-based API that doesn't require wrapping your whole app in a provider. It allows for atomic state updates and easy integration with middleware like Immer for immutable state manipulation.
+                                        Zustand, en particular, se ha extendido muchísimo por su API sencilla basada en hooks, que no obliga a envolver toda la aplicación en un proveedor. Permite actualizaciones atómicas y se integra fácil con middleware como Immer.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -511,25 +506,25 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                         />
                                     </div>
 
-                                    <h2 id="atomic-vs-global" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Atomic vs. Global State</h2>
+                                    <h2 id="atomic-vs-global" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Estado atómico o global</h2>
                                     <p className="mb-8">
-                                        Choosing the right pattern depends on your application's architecture.
+                                        Elegir el patrón depende de la arquitectura de tu aplicación.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>Global State (Zustand):</strong> Best for shared data like user profiles or global settings that many components need.</li>
-                                        <li><strong>Atomic State (Jotai/Recoil):</strong> Ideal for independent pieces of state that need to be highly reactive and decoupled.</li>
-                                        <li><strong>Server State (React Query):</strong> Crucial for managing data fetched from APIs, handling caching, and synchronization automatically.</li>
+                                        <li><strong>Estado global (Zustand):</strong> Mejor para datos compartidos, como el perfil del usuario o los ajustes generales que muchos componentes necesitan.</li>
+                                        <li><strong>Estado atómico (Jotai/Recoil):</strong> Ideal para piezas independientes que deben ser muy reactivas y estar desacopladas.</li>
+                                        <li><strong>Estado del servidor (React Query):</strong> Imprescindible para manejar datos de APIs, con caché y sincronización automáticas.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "The best state management is the one you don't notice. It should be as invisible as possible, only revealing itself when needed."
+                                        «La mejor gestión de estado es la que no se nota. Debería ser invisible y aparecer solo cuando hace falta.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">Senior Frontend Engineer</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Ingeniería frontend</div>
                                             </div>
                                         </footer>
                                     </blockquote>
@@ -538,12 +533,12 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
 
                             {slug === 'iot-edge-computing' && (
                                 <>
-                                    <h2 id="edge-vs-cloud" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Processing at the Edge</h2>
+                                    <h2 id="edge-vs-cloud" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Procesar en el borde</h2>
                                     <p className="mb-8">
-                                        In Industrial IoT, latency is the enemy. Waiting for a round-trip to a cloud server to shut down a malfunctioning machine can take precious seconds that an organization doesn't have. <strong>Edge Computing</strong> brings the intelligence directly to the hardware—leveraging powerful microcontrollers like the ESP32 or Raspberry Pi to process data locally.
+                                        En el IoT industrial, la latencia es el enemigo. Esperar la ida y vuelta a un servidor en la nube para detener una máquina averiada cuesta segundos que no se tienen. <strong>El cómputo en el borde</strong> lleva la inteligencia al propio hardware: microcontroladores como el ESP32 o una Raspberry Pi procesando los datos ahí mismo.
                                     </p>
                                     <p className="mb-8">
-                                        By filtering and analyzing data at the edge, we significantly reduce bandwidth costs and improve system reliability. Even if the network goes down, the edge node continues to operate, making critical decisions based on real-time sensor inputs.
+                                        Filtrar y analizar en el borde baja mucho el costo de ancho de banda y hace el sistema más fiable. Aunque se caiga la red, el nodo sigue funcionando y decidiendo con lo que leen sus sensores.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -557,25 +552,25 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                         />
                                     </div>
 
-                                    <h2 id="hw-optimization" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Hardware-Level Optimization</h2>
+                                    <h2 id="hw-optimization" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Optimizar a nivel de hardware</h2>
                                     <p className="mb-8">
-                                        Implementing AI at the edge requires significant optimization to fit within limited memory constraints.
+                                        Meter IA en el borde exige optimizar bastante para caber en una memoria muy limitada.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>TinyML:</strong> Deploying quantized machine learning models that can run on simple microcontrollers.</li>
-                                        <li><strong>Local Storage:</strong> Using SPIFFS or LittleFS for local data logging and configuration management.</li>
-                                        <li><strong>Energy Efficiency:</strong> Implementing deep sleep modes and asynchronous processing to maximize battery life.</li>
+                                        <li><strong>TinyML:</strong> Desplegar modelos cuantizados capaces de correr en microcontroladores sencillos.</li>
+                                        <li><strong>Almacenamiento local:</strong> Usar SPIFFS o LittleFS para registrar datos y guardar la configuración.</li>
+                                        <li><strong>Eficiencia energética:</strong> Modos de sueño profundo y procesamiento asíncrono para estirar la batería.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "The cloud is for reflection; the edge is for action."
+                                        «La nube es para pensar; el borde es para actuar.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">IoT Solutions Architect</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Arquitectura de soluciones IoT</div>
                                             </div>
                                         </footer>
                                     </blockquote>
@@ -584,12 +579,12 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
 
                             {slug === 'ai-in-healthcare' && (
                                 <>
-                                    <h2 id="diagnostics" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">AI as a Diagnostic Tool</h2>
+                                    <h2 id="diagnostics" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">La IA como herramienta de diagnóstico</h2>
                                     <p className="mb-8">
-                                        Healthcare is one of the most promising frontiers for Artificial Intelligence. Computer Vision models are now capable of identifying early signs of diseases in X-rays, MRIs, and CT scans with a precision that often exceeds human capability. This <strong>Diagnostic Augmentation</strong> doesn't replace doctors; it empowers them.
+                                        La salud es una de las fronteras más prometedoras para la inteligencia artificial. Los modelos de visión por computadora ya identifican signos tempranos de enfermedad en radiografías, resonancias y tomografías con una precisión que a menudo supera la humana. Ese <strong>apoyo al diagnóstico</strong> no reemplaza al médico: lo potencia.
                                     </p>
                                     <p className="mb-8">
-                                        The real challenge isn't the model's accuracy—it's <strong>Explainability</strong>. For a doctor to trust an AI's diagnosis, they need to understand *why* the model made that decision. Techniques like Grad-CAM are being used to highlight the specific pixels that a CNN focused on during its analysis.
+                                        El reto de verdad no es la precisión del modelo, es la <strong>explicabilidad</strong>. Para que un médico confíe en un diagnóstico de IA necesita entender *por qué* el modelo decidió eso. Técnicas como Grad-CAM resaltan los píxeles concretos en los que se fijó la red durante el análisis.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -603,25 +598,25 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                         />
                                     </div>
 
-                                    <h2 id="ethics" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Ethics & Data Privacy</h2>
+                                    <h2 id="ethics" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Ética y privacidad de los datos</h2>
                                     <p className="mb-8">
-                                        When dealing with medical data, privacy is paramount.
+                                        Con datos médicos, la privacidad manda.
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>HIPAA Compliance:</strong> Ensuring all AI systems adhere to strict regulatory standards for patient confidentiality.</li>
-                                        <li><strong>Anonymization:</strong> Developing robust pipelines to strip Personal Identifiable Information (PII) before training.</li>
-                                        <li><strong>Federated Learning:</strong> Training models across multi-institutional datasets without ever moving the raw data from its home server.</li>
+                                        <li><strong>Cumplimiento normativo:</strong> Que todo el sistema respete los estándares de confidencialidad del paciente.</li>
+                                        <li><strong>Anonimización:</strong> Procesos sólidos para quitar cualquier dato personal identificable antes de entrenar.</li>
+                                        <li><strong>Aprendizaje federado:</strong> Entrenar modelos sobre datos de varias instituciones sin mover nunca los datos crudos de su servidor.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "AI in healthcare is not about replacing the human touch, but about providing the superhuman insight that saves lives."
+                                        «La IA en salud no va de reemplazar el trato humano, sino de aportar la lectura sobrehumana que salva vidas.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">Medical AI Researcher</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Investigación en IA médica</div>
                                             </div>
                                         </footer>
                                     </blockquote>
@@ -630,12 +625,12 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
 
                             {slug === 'the-architects-manifesto' && (
                                 <>
-                                    <h2 id="manifesto" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">The Philosophy of the Digital Garden</h2>
+                                    <h2 id="manifesto" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">La filosofía del jardín digital</h2>
                                     <p className="mb-8">
-                                        A portfolio should not be a static graveyard of past projects. It should be a <strong>Digital Garden</strong>—a living, breathing space where ideas are planted, cultivated, and eventually shared as mature insights. As an AI Engineer, my goal is not just to build software, but to architect systems that are as elegant as they are intelligent.
+                                        Un portafolio no debería ser un cementerio de proyectos terminados. Debería ser un <strong>jardín digital</strong>—un sitio vivo donde las ideas se siembran, se cuidan y se comparten cuando maduran. Nuestro objetivo no es solo construir software, sino diseñar sistemas tan elegantes como inteligentes.
                                     </p>
                                     <p className="mb-8">
-                                        This manifesto is a reflection of my commitment to continuous learning and open-source contribution. In an era where technology moves at a breakneck pace, the true value lies in deep focus, ethical engineering, and the pursuit of technological beauty.
+                                        Este manifiesto refleja nuestro compromiso con aprender sin parar y aportar al código abierto. En una época donde la tecnología corre como corre, el valor está en la concentración profunda, la ingeniería honesta y la búsqueda de que las cosas estén bien hechas.
                                     </p>
 
                                     <div className="my-12 relative w-full aspect-video rounded-2xl overflow-hidden border border-border/40 bg-secondary/5">
@@ -649,25 +644,25 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                         />
                                     </div>
 
-                                    <h2 id="principles" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">My Core Engineering Principles</h2>
+                                    <h2 id="principles" className="text-3xl font-bold mb-6 text-foreground scroll-mt-32">Nuestros principios de trabajo</h2>
                                     <p className="mb-8">
-                                        These are the values that guide every line of code I write:
+                                        Estos son los valores que guían cada línea que escribimos:
                                     </p>
                                     <ul className="list-disc pl-6 mb-8 sapce-y-2 text-muted-foreground">
-                                        <li><strong>Intelligence with Intent:</strong> AI should solve real problems, not just provide novel interactions.</li>
-                                        <li><strong>Scalability by Design:</strong> Architecting systems that can grow gracefully without losing performance.</li>
-                                        <li><strong>Human-Centric Engineering:</strong> Technology serves people, and its primary focus should be improving human agency.</li>
+                                        <li><strong>Inteligencia con intención:</strong> La IA debe resolver problemas reales, no solo ofrecer interacciones vistosas.</li>
+                                        <li><strong>Escalar por diseño:</strong> Arquitecturas que crecen sin perder rendimiento por el camino.</li>
+                                        <li><strong>Ingeniería centrada en las personas:</strong> La tecnología está al servicio de la gente, y su fin es ampliar lo que puede hacer.</li>
                                     </ul>
 
                                     <blockquote className="border-l-4 border-primary pl-6 my-12 italic text-xl font-medium text-foreground">
-                                        "We don't just build tools; we build the future. Let us build it with wisdom and craft."
+                                        «No construimos solo herramientas; construimos el futuro. Construyámoslo con criterio y oficio.»
                                         <footer className="mt-4 text-sm font-bold not-italic text-primary flex items-center gap-2">
                                             <div className="w-8 h-8 rounded-full bg-secondary overflow-hidden relative">
                                                 <Image src={post.author.avatar} alt="Author" fill sizes="32px" loading="lazy" className="object-cover" />
                                             </div>
                                             <div>
                                                 <div className="text-foreground">{post.author.name}</div>
-                                                <div className="text-muted-foreground text-xs font-normal">AI Architect</div>
+                                                <div className="text-muted-foreground text-xs font-normal">Dirección técnica</div>
                                             </div>
                                         </footer>
                                     </blockquote>
@@ -679,14 +674,14 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                     <div className="p-4 rounded-full bg-secondary/10 text-muted-foreground mb-4">
                                         <BookOpen className="w-8 h-8" />
                                     </div>
-                                    <h2 className="text-2xl font-bold mb-2">Content Coming Soon</h2>
-                                    <p className="text-muted-foreground">This article is currently being written. Check back later!</p>
+                                    <h2 className="text-2xl font-bold mb-2">Próximamente</h2>
+                                    <p className="text-muted-foreground">Esta nota todavía se está escribiendo. Vuelve en unos días.</p>
                                 </div>
                             )}
 
                             {isImplemented && (
                                 <div className="mt-12 pt-12 border-t border-border/40">
-                                    <h3 className="text-lg font-bold mb-6">Related Topics</h3>
+                                    <h3 className="text-lg font-bold mb-6">Temas relacionados</h3>
                                     <div className="flex flex-wrap gap-3">
                                         {post.tags.map(tag => (
                                             <Link key={tag} href={`/blog?q=${tag}`} className="px-4 py-2 bg-secondary/10 hover:bg-primary/10 text-muted-foreground hover:text-primary border border-transparent hover:border-primary/20 rounded-lg text-sm transition-all font-medium">
@@ -706,7 +701,7 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                 {/* Table of Contents */}
                                 <div>
                                     <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-6 pb-4 border-b border-border/40">
-                                        Table of Contents
+                                        Contenido
                                     </h3>
                                     <div className="flex flex-col gap-4">
                                         {slug === 'future-of-ai-agents' && [
@@ -854,7 +849,7 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                 {/* Other Resources */}
                                 <div>
                                     <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-6 pb-4 border-b border-border/40">
-                                        Related Resources
+                                        Recursos relacionados
                                     </h3>
                                     <ul className="space-y-6">
                                         {(slug === 'web3-ux-challenges' ? [
@@ -1074,7 +1069,7 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
                                 {/* Tags / Topics (New addition to fill space) */}
                                 <div>
                                     <h3 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mb-6 pb-4 border-b border-border/40">
-                                        Trending Topics
+                                        Temas en tendencia
                                     </h3>
                                     <div className="flex flex-wrap gap-2">
                                         {(slug === 'web3-ux-challenges'
@@ -1114,9 +1109,9 @@ model.save_pretrained_gguf("model_name", tokenizer, quantization_method = "q4_k_
             {/* Latest From Blog Section */}
             <div className="container max-w-7xl mx-auto px-6 mt-16 border-t border-border/40 pt-16">
                 <div className="flex items-center justify-between mb-12">
-                    <h3 className="text-2xl font-black tracking-tight">From the blog</h3>
+                    <h3 className="text-2xl font-black tracking-tight">De las notas</h3>
                     <Link href="/blog" className="px-6 py-2 rounded-lg bg-secondary/10 border border-border/40 text-sm font-bold hover:bg-secondary/20 transition-all">
-                        View all posts
+                        Ver todas las notas
                     </Link>
                 </div>
 

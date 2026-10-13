@@ -15,45 +15,59 @@ interface ProjectData {
 }
 
 const PROJECT_DATA: ProjectData[] = [
+  // Primer proyecto propio del carrusel. Los otros cuatro siguen siendo los
+  // del autor de la plantilla. Los campos salen de lo que se ve en la propia
+  // captura: el titular ("Tu práctica profesional, impulsada por IA") y el
+  // panel de WorkIA emparejando vacantes con el perfil. Nada inventado.
   {
-    title: "Browser Automation Agent",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop&fm=webp",
-    category: "AI & Automation",
+    title: "WorkUP",
+    image: "/project/workup1.webp",
+    category: "IA & Empleo",
     year: "2026",
-    description: "AI-driven browser interaction & testing engine.",
-    slug: "browser-automation-agent"
+    description: "Prácticas profesionales con un agente de IA que empareja vacantes con tu perfil.",
+    slug: "workup"
   },
+  // Segundo propio. Igual que WorkUP: los campos salen de la captura —el
+  // rótulo "BAGUA GRANDE — AMAZONAS" y la bajada del propio hero—, no de
+  // suposiciones.
   {
-    title: "Swarm AI Blog Writer",
-    image: "/project/swarmaiblogwriter1.webp",
-    category: "AI & Content",
-    year: "2025",
-    description: "Multi-agent orchestration for research-backed content.",
-    slug: "swarm-ai-blog-writer"
+    title: "REGO Premium Apart Hotel",
+    image: "/project/rego-premium1.webp",
+    category: "Hotelería",
+    year: "2026",
+    description: "Apart-hotel premium en Bagua Grande, para estadías cortas y largas.",
+    slug: "rego-premium"
   },
+  // Tercero propio. El año no es suposición mía: la propia captura lleva la
+  // píldora "Disponible en UTEC · 2026-I".
   {
-    title: "Creative Portfolio Website",
-    image: "/project/creativeportfoliowebsite1.webp",
-    category: "Creative Tech",
-    year: "2025",
-    description: "Immersive 3D portfolio with WebGL shaders.",
-    slug: "creative-portfolio-website"
+    title: "Utopp",
+    image: "/project/utopp1.webp",
+    category: "Comunidad universitaria",
+    year: "2026",
+    description: "Eventos, organizaciones y proyectos de la universidad en un solo lugar.",
+    slug: "utopp"
   },
+  // Cuarto propio. OJO: aquí el año SÍ es suposición. La captura de Utopp
+  // traía su "2026-I" escrito; esta solo dice "jueves 8 de junio", sin año.
   {
-    title: "SNBTIn Platform",
-    image: "/project/snbtinplatformpersiapansnbt20251.webp",
-    category: "EdTech",
-    year: "2025",
-    description: "Leading e-learning platform for SNBT preparation.",
-    slug: "snbtin-platform"
+    title: "Fluxa",
+    image: "/project/fluxa1.webp",
+    category: "Fintech",
+    year: "2026",
+    description: "Centro de operaciones financieras con IA: conciliación, cobros, pagos y caja.",
+    slug: "fluxa"
   },
+  // Quinto y último. Con este el carrusel queda entero de Atlas: ya no queda
+  // ningún proyecto del autor de la plantilla. El año, como en Fluxa, es
+  // suposición: la captura no lleva fecha por ningún lado.
   {
-    title: "Terraflow Platform",
-    image: "/project/terraflowplatform1.webp",
-    category: "IoT & Embedded",
-    year: "2025",
-    description: "Enterprise IoT solution for precision agriculture.",
-    slug: "terraflow-platform"
+    title: "Perú Travel",
+    image: "/project/peru-travel1.webp",
+    category: "Turismo",
+    year: "2026",
+    description: "Guía de destinos del Perú, con noticias, blog y buscador.",
+    slug: "peru-travel"
   },
 ];
 
@@ -333,7 +347,7 @@ export function ArgentLoopInfiniteSlider() {
                                 href={`/projects/${data.slug}`} 
                                 className="pointer-events-auto font-medium text-[10px] opacity-60 hover:opacity-100 hover:text-black transition-all duration-300 text-right group/link"
                             >
-                              <span className="border-b border-black/10 group-hover/link:border-black pb-1">View More</span>
+                              <span className="border-b border-black/10 group-hover/link:border-black pb-1">Ver más</span>
                             </Link>
                           </div>
                         </div>
@@ -367,7 +381,7 @@ export function ArgentLoopInfiniteSlider() {
                   <MagneticEffect>
                     <div className="group-projects flex items-center gap-2">
                       <Link href="/projects" className="custom-btn group-hover:scale-105 active:scale-95 group-hover:shadow-[0_0_30px_rgba(193,228,74,0.3)]">
-                        View More
+                        Ver más
                       </Link>
                       <Link href="/projects" className="custom-btn-arrow group-hover:scale-110 active:scale-95 transition-transform shadow-xl">
                         <ArrowUpRight className="w-6 h-6 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />

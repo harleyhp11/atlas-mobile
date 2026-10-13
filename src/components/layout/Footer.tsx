@@ -19,10 +19,7 @@ import {
     Copy,
     Check,
     X,
-    Gamepad2,
-    Music,
-    Bot,
-    Focus
+    MessageCircle
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useIsMobile } from '@/hooks/useIsMobile';
@@ -31,12 +28,11 @@ import { portfolioData } from '@/data/portfolio';
 type SocialIconComponent = typeof Github;
 
 const socialIcons: { [key: string]: SocialIconComponent } = {
-    github: Github,
     linkedin: Linkedin,
-    twitter: Bot, // Replaced Twitter logo with AI Bot logo
     instagram: Instagram,
-    discord: Gamepad2,
-    spotify: Music,
+    /* lucide no trae marcas comerciales, asi que WhatsApp va con el icono
+       generico de mensaje. Es lo que hay sin meter otra libreria de iconos. */
+    whatsapp: MessageCircle,
 };
 
 const marqueeKeys = ['0', '1', '2', '3', '4', '5'];
@@ -216,38 +212,25 @@ export function Footer() {
                             <div className="flex items-center justify-end gap-4 md:gap-8 z-10 ml-auto">
                                 <div className="flex items-center gap-1.5 sm:gap-2">
                                     {/* Social Icons */}
+                                    {/* Se fue el caso especial de 'Twitter', que hacia
+                                        dos cosas ajenas a Atlas: pintaba un enlace extra
+                                        a arfazrllworkspace.vercel.app (el sitio personal
+                                        del autor de la plantilla) y convertia el propio
+                                        icono en el disparador del chatbot. Ahora cada
+                                        perfil es simplemente un enlace. */}
                                     {previewSocials.map((social: SocialLink) => {
                                         const Icon = socialIcons[social.icon];
                                         return (
-                                            <Fragment key={social.platform}>
-                                                {social.platform === 'Twitter' && (
-                                                    <motion.a
-                                                        href="https://arfazrllworkspace.vercel.app/"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="p-1.5 rounded-full hover:bg-foreground/5 transition-all text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95"
-                                                        aria-label="Workspace"
-                                                    >
-                                                        <Focus className="w-4 h-4" />
-                                                    </motion.a>
-                                                )}
-                                                <motion.a
-                                                    key={social.platform}
-                                                    href={social.platform === 'Twitter' ? undefined : social.url}
-                                                    onClick={social.platform === 'Twitter' ? (e) => {
-                                                        e.preventDefault();
-                                                        window.dispatchEvent(new CustomEvent('portfolio:toggle-chatbot', {
-                                                            detail: { x: window.innerWidth / 2, y: window.innerHeight / 2 }
-                                                        }));
-                                                    } : undefined}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="p-1.5 rounded-full hover:bg-foreground/5 transition-all text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95"
-                                                    aria-label={social.platform}
-                                                >
-                                                    {Icon && <Icon className="w-4 h-4" />}
-                                                </motion.a>
-                                            </Fragment>
+                                            <motion.a
+                                                key={social.platform}
+                                                href={social.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="p-1.5 rounded-full hover:bg-foreground/5 transition-all text-muted-foreground hover:text-foreground hover:scale-110 active:scale-95"
+                                                aria-label={social.platform}
+                                            >
+                                                {Icon && <Icon className="w-4 h-4" />}
+                                            </motion.a>
                                         );
                                     })}
                                 </div>
@@ -459,9 +442,8 @@ function AboutHoverMenu({ tNav, onExpandChange }: { tNav: (key: string) => strin
     const [isOpen, setIsOpen] = useState(false);
 
     const subLinks = [
-        { href: '/achievements', label: tNav('achievements') },
+        { href: '/servicios', label: tNav('servicios') },
         { href: '/skills', label: tNav('skills') },
-        { href: '/experience', label: tNav('experience') },
         { href: '/projects', label: tNav('projects') },
         { href: '/blog', label: tNav('blog') },
         { href: '/gallery', label: tNav('gallery') },

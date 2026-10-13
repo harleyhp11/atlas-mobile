@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { portfolioData } from "@/data/portfolio";
-import { cn } from "@/lib/utils";
 
 const techStackItems = [
     // 5 AI & Data
@@ -15,38 +14,56 @@ const techStackItems = [
 
 const toolItems = portfolioData.tools.slice(0, 10);
 
+/* Las dos cintas viven ahora DENTRO de la tarjeta oscura del stack, al pie de
+   la foto de neon, asi que van pequenas y en blanco.
+
+   El blanco de los logos no es un color: es `brightness(0) invert(1)`. Cada
+   logo trae su propia marca —el verde de Node, el azul de Docker, el naranja
+   de TensorFlow— y en fila eso es justo el ruido que sobraba. brightness(0)
+   aplana todo pixel opaco a negro conservando el alfa, e invert(1) lo sube a
+   blanco: quedan siluetas limpias de la forma real del logo, sin recortar
+   nada a mano ni pedir una version monocroma de cada marca.
+
+   Los rotulos van al 85% y no al 100%: a plena opacidad competian con los
+   titulares de la tarjeta de vidrio que tienen encima. */
 const ScrollerItem = ({ name, icon }: { name: string; icon: string }) => (
-    <div className="flex items-center gap-4 px-12 py-4 transition-all duration-300 group">
-        <div className="relative w-10 h-10 flex-shrink-0 transition-all duration-500">
+    <div className="flex items-center gap-2.5 px-6 py-1">
+        <div className="relative h-5 w-5 flex-shrink-0">
             <Image
                 src={icon}
                 alt={name}
                 fill
-                className="object-contain"
+                className="object-contain [filter:brightness(0)_invert(1)]"
                 unoptimized
             />
         </div>
-        <p className="text-xl font-bold text-zinc-600 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white transition-colors duration-500 whitespace-nowrap">
+        <p className="whitespace-nowrap text-[12.5px] font-semibold tracking-[-0.01em] text-white/85">
             {name}
         </p>
     </div>
 );
 
+/* El degradado de los bordes se cierra antes que en la version anterior (8% y
+   no 10%): la cinta mide ahora el ancho de una tarjeta, no el de la pagina, y
+   con el fundido largo se comia media fila de logos. */
+const CINTA =
+    "relative flex w-full overflow-hidden " +
+    "[mask-image:linear-gradient(to_right,_rgba(0,0,0,0),rgba(0,0,0,1)_8%,rgba(0,0,0,1)_92%,rgba(0,0,0,0))]";
+
+/* 40s y no 30: la lista es la misma pero los items son mas cortos, asi que a
+   la velocidad de antes el bucle se sentia nervioso. La seccion busca lo
+   contrario. */
+const DURACION = 40;
+
 export const BrandScroller = () => {
     return (
-        <div className="relative flex overflow-hidden py-2 w-full px-8 md:px-16 lg:px-24 [mask-image:linear-gradient(to_right,_rgba(0,_0,_0,_0),rgba(0,_0,_0,_1)_10%,rgba(0,_0,_0,_1)_90%,rgba(0,_0,_0,_0))]">
+        <div className={CINTA}>
             <motion.div
-                animate={{
-                    x: ["-50%", "0%"],
-                }}
-                transition={{
-                    duration: 30,
-                    ease: "linear",
-                    repeat: Infinity,
-                }}
+                animate={{ x: ["-50%", "0%"] }}
+                transition={{ duration: DURACION, ease: "linear", repeat: Infinity }}
                 className="flex whitespace-nowrap"
             >
-                {/* Render twice for seamless loop */}
+                {/* Dos copias para que el bucle cierre sin costura */}
                 <div className="flex shrink-0">
                     {techStackItems.map((item, idx) => (
                         <ScrollerItem key={`tech-1-${idx}`} name={item.name} icon={item.icon} />
@@ -64,19 +81,12 @@ export const BrandScroller = () => {
 
 export const BrandScrollerReverse = () => {
     return (
-        <div className="relative flex overflow-hidden py-2 w-full px-8 md:px-16 lg:px-24 [mask-image:linear-gradient(to_right,_rgba(0,_0,_0,_0),rgba(0,_0,_0,_1)_10%,rgba(0,_0,_0,_1)_90%,rgba(0,_0,_0,_0))]">
+        <div className={CINTA}>
             <motion.div
-                animate={{
-                    x: ["0%", "-50%"],
-                }}
-                transition={{
-                    duration: 30,
-                    ease: "linear",
-                    repeat: Infinity,
-                }}
+                animate={{ x: ["0%", "-50%"] }}
+                transition={{ duration: DURACION, ease: "linear", repeat: Infinity }}
                 className="flex whitespace-nowrap"
             >
-                {/* Render twice for seamless loop */}
                 <div className="flex shrink-0">
                     {toolItems.map((item, idx) => (
                         <ScrollerItem key={`tool-1-${idx}`} name={item.name} icon={item.icon} />

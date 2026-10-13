@@ -25,6 +25,22 @@ import { getProjectImages } from '@/app/actions/getProjectImages';
 
 type FilterType = 'all' | 'ongoing' | 'completed';
 
+// Los rotulos visibles viven aca y no sueltos en el JSX.
+// ETIQUETA_CATEGORIA solo traduce lo que se PINTA: las claves siguen siendo los
+// valores crudos de portfolio.ts, que son con los que filtra la grilla. Si se
+// traducen alla, el filtro deja de encontrar nada.
+const ETIQUETA_CATEGORIA: Record<string, string> = {
+    'AI & Machine Learning': 'IA y machine learning',
+    'Software Engineering': 'Desarrollo de software',
+    'Data Science': 'Datos y analítica',
+    'IoT & Embedded': 'IoT y hardware',
+    'Creative Tech': 'Tecnología creativa',
+    'EdTech Platform': 'Plataforma educativa',
+    'Blockchain': 'Blockchain',
+};
+
+const ESTADO_CHIP = { ongoing: 'en curso', completed: 'cerrado' } as const;
+
 // ─── Magnetic Fill-Invert Button ─────────────────────────────────────────────
 function MagneticFillButton({
     children,
@@ -230,7 +246,7 @@ function ProjectListItem({
                                     ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 dark:border-emerald-500/20"
                                     : "bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/30 dark:border-blue-500/20"
                             )}>
-                                {isOngoing ? 'ongoing' : 'done'}
+                                {isOngoing ? ESTADO_CHIP.ongoing : ESTADO_CHIP.completed}
                             </span>
                         </div>
                         <p className="text-muted-foreground text-sm sm:text-base truncate max-w-2xl hidden sm:block">
@@ -247,7 +263,7 @@ function ProjectListItem({
                         animate={{ x: isHovered ? -5 : 0, opacity: isHovered ? 1 : 0.4 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">view</span>
+                        <span className="text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">ver</span>
                         <motion.div animate={{ x: isHovered ? 5 : 0 }} transition={{ duration: 0.3 }}>
                             <ArrowRight className={cn("w-5 h-5 transition-colors", isHovered ? (isOngoing ? "text-emerald-500 dark:text-emerald-400" : "text-blue-500 dark:text-blue-400") : "text-muted-foreground")} />
                         </motion.div>
@@ -824,7 +840,7 @@ function ProjectCard({ project, onClick, index, isLowPowerMode }: { project: Pro
                         </h3>
                         <div className="shrink-0 mt-1 sm:mt-2">
                             {(() => {
-                                const categoryText = project.category || (isOngoing ? 'In Development' : 'Completed');
+                                const categoryText = (project.category && ETIQUETA_CATEGORIA[project.category]) || project.category || (isOngoing ? 'En desarrollo' : 'Terminado');
                                 const color = getBadgeColor(categoryText, index);
                                 return (
                                     <span
@@ -972,17 +988,35 @@ export default function ProjectsPage() {
     const pathname = usePathname();
 
     const products = useMemo(() => {
+        /* Las diez del parallax. Antes eran paisajes de anime que venían con la
+           plantilla y no decían nada de lo que hace Atlas. Ahora son pantallas,
+           maquetas y mesas de trabajo: oscuras y casi sin color, que es la
+           paleta del sitio.
+
+           Nueve vienen de Unsplash (licencia Unsplash: uso comercial libre,
+           sin atribución obligatoria) y están DESCARGADAS, no enlazadas, para
+           que la página no dependa de un servidor ajeno. La décima
+           (`trabajo10`) ya es una maqueta propia, y la idea es que las otras
+           nueve se vayan sustituyendo igual.
+
+           Recortadas a 1200x960 a propósito: la tarjeta mide 480x384, o sea
+           1.25:1, y así `object-cover` no tiene que recortar nada.
+
+           Y se llaman `trabajo*`, no `image*`: al sustituir los archivos sin
+           cambiar la ruta, el navegador seguía sirviendo las de antes de su
+           propia caché. Cambiando el nombre cambia la URL, y una URL que nunca
+           ha visto no la puede tener guardada. */
         const techImages = [
-            "/project/parallax/image1.webp",
-            "/project/parallax/image2.webp",
-            "/project/parallax/image3.webp",
-            "/project/parallax/image4.webp",
-            "/project/parallax/image5.webp",
-            "/project/parallax/image6.webp",
-            "/project/parallax/image7.webp",
-            "/project/parallax/image8.webp",
-            "/project/parallax/image9.webp",
-            "/project/parallax/image10.webp",
+            "/project/parallax/trabajo1.webp",
+            "/project/parallax/trabajo2.webp",
+            "/project/parallax/trabajo3.webp",
+            "/project/parallax/trabajo4.webp",
+            "/project/parallax/trabajo5.webp",
+            "/project/parallax/trabajo6.webp",
+            "/project/parallax/trabajo7.webp",
+            "/project/parallax/trabajo8.webp",
+            "/project/parallax/trabajo9.webp",
+            "/project/parallax/trabajo10.webp",
         ];
 
         const baseProducts = portfolioData.projects.map((p, i) => ({
@@ -1019,10 +1053,10 @@ export default function ProjectsPage() {
     const [selectedCategory, setSelectedCategory] = useState('All');
 
     const categories = [
-        { id: 'All', label: 'All Realms', icon: Globe },
-        { id: 'AI & Machine Learning', label: 'Artificial Intelligence', icon: Brain },
-        { id: 'Software Engineering', label: 'Software Architecture', icon: Database },
-        { id: 'More', label: 'More', icon: Layers },
+        { id: 'All', label: 'Todo', icon: Globe },
+        { id: 'AI & Machine Learning', label: 'Inteligencia artificial', icon: Brain },
+        { id: 'Software Engineering', label: 'Desarrollo de software', icon: Database },
+        { id: 'More', label: 'Otros', icon: Layers },
     ];
 
     const [projects, setProjects] = useState(portfolioData.projects);
@@ -1156,7 +1190,7 @@ export default function ProjectsPage() {
                                 <div className="flex items-center gap-3">
                                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                                     <h2 className="text-sm font-mono uppercase tracking-[0.2em] text-muted-foreground">
-                                        Projects Archive
+                                        Archivo de proyectos
                                     </h2>
                                     <span className="px-2 py-0.5 rounded-md bg-white/5 text-[10px] font-mono text-muted-foreground border border-white/5">
                                         {String(filteredProjects.length).padStart(2, '0')}
@@ -1170,7 +1204,7 @@ export default function ProjectsPage() {
                                         <Search className="absolute left-3 w-4 h-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
                                         <input
                                             type="text"
-                                            placeholder="Search projects..."
+                                            placeholder={t('search')}
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
                                             className="w-full pl-9 pr-8 py-2.5 bg-transparent text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none"
@@ -1248,7 +1282,7 @@ export default function ProjectsPage() {
                                                     ? "bg-foreground text-background shadow-sm"
                                                     : "text-muted-foreground hover:text-foreground hover:bg-foreground/10 dark:hover:bg-white/10"
                                             )}
-                                            title="List View"
+                                            title="Vista en lista"
                                         >
                                             <List className="w-4 h-4" />
                                         </button>
@@ -1260,7 +1294,7 @@ export default function ProjectsPage() {
                                                     ? "bg-foreground text-background shadow-sm"
                                                     : "text-muted-foreground hover:text-foreground hover:bg-foreground/10 dark:hover:bg-white/10"
                                             )}
-                                            title="Grid View"
+                                            title="Vista en cuadrícula"
                                         >
                                             <LayoutGrid className="w-4 h-4" />
                                         </button>
@@ -1327,7 +1361,7 @@ export default function ProjectsPage() {
                                     onClick={() => setVisibleCount(visibleCount < filteredProjects.length ? filteredProjects.length : 10)}
                                     showArrowFlip={visibleCount >= filteredProjects.length}
                                 >
-                                    {visibleCount < filteredProjects.length ? 'View All Projects' : 'View Less'}
+                                    {visibleCount < filteredProjects.length ? t('viewAll') : t('sections.viewLess')}
                                 </MagneticFillButton>
                             </motion.div>
                         )
@@ -1337,7 +1371,7 @@ export default function ProjectsPage() {
                         filteredProjects.length === 0 && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
                                 <Layers className="w-16 h-16 mx-auto text-white/20 mb-4" />
-                                <p className="text-lg text-white/50">No projects found</p>
+                                <p className="text-lg text-white/50">{t('empty')}</p>
                             </motion.div>
                         )
                     }

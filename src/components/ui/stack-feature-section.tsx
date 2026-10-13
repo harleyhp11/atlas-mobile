@@ -12,6 +12,7 @@ import {
 } from "react-icons/si";
 import { portfolioData } from "@/data/portfolio";
 import MagneticEffect from "@/components/ui/MagneticEffect";
+import AnodizedInk from "@/components/ui/anodized-ink";
 
 const fallbackUrls = [
   "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=100&h=100&fit=crop&fm=webp", // coding image
@@ -45,7 +46,28 @@ export default function FeatureSection() {
 
   return (
     <section className="relative w-full max-w-[1500px] mx-auto px-4 sm:px-6 my-16 md:my-32 z-10">
-      <div className="group flex flex-col md:flex-row items-center justify-between min-h-[auto] md:min-h-[35rem] border border-gray-200 dark:border-white/10 bg-white dark:bg-black overflow-hidden rounded-[2.5rem] shadow-sm relative transition-all duration-700 hover:shadow-[0_0_40px_rgba(0,0,0,0.1)] dark:hover:shadow-[0_0_40px_rgba(255,255,255,0.05)] hover:border-gray-300 dark:hover:border-white/20">
+      {/* LA TARJETA LLEVA TINTA ROJA EN MOVIMIENTO DE FONDO (anodized-ink), solo
+          dentro de ella: la tarjeta la recorta con su propio borde redondeado.
+
+          Tres decisiones al montarla:
+            · El contenido va COMO HIJO del sombreador y no encima como hermano.
+              El sombreador lee el puntero desde su propio contenedor; como hijo,
+              el raton mueve la luz en toda la tarjeta, texto incluido, sin
+              romper los efectos de hover del titular.
+            · La clase `dark` fuerza el tema oscuro dentro. La tinta es negra
+              siempre, y en tema claro el titular salia en gris casi negro: se
+              habria leido negro sobre negro.
+            · Un velo negro a la izquierda, detras del texto. La bajada es gris
+              (gray-400): sobre una banda roja pura daba 1.86:1, ilegible. Con el
+              velo, medido en una captura: mediana 7.7:1 y el 99% del fondo por
+              encima de 4.6:1 (AA). Solo algun destello suelto de la tinta baja
+              de ahi, y se mueve. A la derecha, donde estan las orbitas, la tinta
+              queda a pleno.
+          La tinta usa el rojo de Atlas (#E11D3A) en vez del carmesi del preset. */}
+      <div className="dark group relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-black shadow-sm transition-all duration-700 hover:border-white/20 hover:shadow-[0_0_40px_rgba(255,255,255,0.05)]">
+        <AnodizedInk height="auto" colors={{ ink: "#E11D3A" }}>
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/75 via-black/45 via-[55%] to-transparent" />
+        <div className="relative flex flex-col md:flex-row items-center justify-between min-h-[auto] md:min-h-[35rem]">
         
         {/* Shine overlay that triggers on group-hover */}
         <div className="absolute inset-0 z-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300 overflow-hidden rounded-[2.5rem]">
@@ -54,20 +76,23 @@ export default function FeatureSection() {
         {/* Left side: Heading and Text */}
         <div className="w-full md:w-[55%] z-20 p-6 sm:p-8 md:p-14 lg:p-20 group/text">
           <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-4 md:mb-6 text-gray-900 dark:text-white tracking-tight leading-[1.1] transition-all duration-500 group-hover/text:tracking-[0.05em] group-hover/text:drop-shadow-[0_0_15px_rgba(0,0,0,0.1)] dark:group-hover/text:drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">
-            Engineering <br className="hidden md:block" /> the Future
+            Construyamos <br className="hidden md:block" /> lo que sigue
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mb-10 max-w-xl text-base md:text-lg leading-relaxed transition-colors duration-500 group-hover/text:text-gray-900 dark:group-hover/text:text-gray-200">
-            {portfolioData.personal.subtitle}
+            {/* Antes salia de portfolioData.personal.subtitle, que es el
+                titular del portfolio original ("AI Engineer • Software Engineer
+                | Bridging Technical Innovation..."). Aqui va texto de Atlas. */}
+            Diseño y desarrollo web desde Lima, para marcas que quieren crecer. Cuéntanos tu proyecto y te respondemos en menos de 24 horas.
           </p>
           <div className="flex flex-wrap items-center gap-3 md:gap-4 relative z-30">
             <MagneticEffect strength={0.8} stiffness={120} damping={10}>
               <Button variant="default" asChild className="rounded-full px-6 md:px-8 py-5 md:py-6 font-semibold text-sm md:text-base bg-primary text-primary-foreground border border-transparent hover:!bg-white hover:!text-black dark:hover:!bg-black dark:hover:!text-white hover:!border-black dark:hover:!border-white transition-all duration-300 w-full sm:w-auto text-center justify-center">
-                <Link href="/projects">View Projects</Link>
+                <Link href="/projects">Ver proyectos</Link>
               </Button>
             </MagneticEffect>
             <MagneticEffect strength={0.8} stiffness={120} damping={10}>
               <Button variant="outline" asChild className="rounded-full px-6 md:px-8 py-5 md:py-6 font-semibold text-sm md:text-base bg-transparent border border-gray-200 dark:border-white/20 text-foreground hover:!bg-black hover:!text-white dark:hover:!bg-white dark:hover:!text-black transition-all duration-300 w-full sm:w-auto text-center justify-center">
-                <Link href="/resume">My Resume</Link>
+                <Link href="/contact">Agendar una llamada</Link>
               </Button>
             </MagneticEffect>
           </div>
@@ -140,6 +165,8 @@ export default function FeatureSection() {
             })}
           </div>
         </div>
+        </div>
+        </AnodizedInk>
       </div>
 
       <style dangerouslySetInnerHTML={{

@@ -3,7 +3,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useAnimationFrame, useMotionValue } from 'framer-motion';
 import { useTranslations } from 'next-intl';
-import { portfolioData } from '@/data/portfolio';
 import { SplineScene } from '@/components/ui/SplineScene';
 import { TextPressure } from '@/components/ui/TextPressure';
 import { KineticTechGrid } from '@/components/ui/KineticTechGrid';
@@ -15,25 +14,43 @@ import FeatureSection from '@/components/ui/stack-feature-section';
 import { cn } from '@/lib/utils';
 import { DeferredMount } from '@/components/ui/DeferredMount';
 
-const techLogos: Record<string, string> = {
-    'TypeScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg',
-    'JavaScript': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg',
-    'Python': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg',
-    'React': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
-    'Next.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg',
-    'Node.js': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg',
-    'Tailwind CSS': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg',
-    'PostgreSQL': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg',
-    'MongoDB': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg',
-    'Docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-    'Git': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-    'Solidity': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/solidity/solidity-original.svg',
-    'TensorFlow': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg',
-    'PyTorch': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pytorch/pytorch-original.svg',
-    'Scikit-learn': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/scikitlearn/scikitlearn-original.svg',
-    'Pandas': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/pandas/pandas-original.svg',
-    'NumPy': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/numpy/numpy-original.svg',
-};
+/* El stack de Atlas, con su icono ya resuelto.
+
+   Vive aqui y NO en portfolioData.techStack a proposito: aquel array lo
+   consumen cinco archivos —entre ellos brand-scroller, que alimenta las cintas
+   de logos de la portada y filtra POR NOMBRE (TensorFlow, PyTorch, LangChain,
+   Scikit-learn, OpenCV)—. Reemplazarlo dejaria esa cinta vacia. Esta lista es
+   solo de /skills.
+
+   Los iconos salen de dos CDN y cada URL esta comprobada: devicon cuando tiene
+   la marca, simpleicons para el resto. Ninguna apunta ya a upload.wikimedia.org,
+   que era la unica fuera de los CDN. */
+const DEVICON = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons';
+const SIMPLE = 'https://cdn.simpleicons.org';
+
+const STACK_ATLAS: { name: string; icon: string }[] = [
+    { name: 'Next.js', icon: `${DEVICON}/nextjs/nextjs-original.svg` },
+    { name: 'React', icon: `${DEVICON}/react/react-original.svg` },
+    { name: 'TypeScript', icon: `${DEVICON}/typescript/typescript-original.svg` },
+    { name: 'JavaScript', icon: `${DEVICON}/javascript/javascript-original.svg` },
+    { name: 'Tailwind CSS', icon: `${DEVICON}/tailwindcss/tailwindcss-original.svg` },
+    { name: 'Astro', icon: `${SIMPLE}/astro` },
+    { name: 'Node.js', icon: `${DEVICON}/nodejs/nodejs-original.svg` },
+    { name: 'PostgreSQL', icon: `${DEVICON}/postgresql/postgresql-original.svg` },
+    { name: 'Supabase', icon: `${DEVICON}/supabase/supabase-original.svg` },
+    { name: 'Prisma', icon: `${DEVICON}/prisma/prisma-original.svg` },
+    { name: 'WordPress', icon: `${DEVICON}/wordpress/wordpress-original.svg` },
+    { name: 'Shopify', icon: `${SIMPLE}/shopify` },
+    { name: 'Stripe', icon: `${SIMPLE}/stripe` },
+    { name: 'Framer Motion', icon: `${SIMPLE}/framer` },
+    { name: 'GSAP', icon: `${SIMPLE}/greensock` },
+    { name: 'Three.js', icon: `${DEVICON}/threejs/threejs-original.svg` },
+    { name: 'Figma', icon: `${DEVICON}/figma/figma-original.svg` },
+    { name: 'Vercel', icon: `${SIMPLE}/vercel` },
+    { name: 'Cloudflare', icon: `${SIMPLE}/cloudflare` },
+    { name: 'Google Analytics', icon: `${SIMPLE}/googleanalytics` },
+];
+
 
 function TechSchematic() {
     return (
@@ -225,7 +242,7 @@ export default function SkillsPage() {
                                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                                 className="relative z-10 text-[9vw] md:text-[7vw] font-semibold uppercase leading-[0.9] tracking-tight text-zinc-800 dark:text-zinc-400 group-hover:text-black dark:group-hover:text-white select-none transition-colors duration-500"
                             >
-                                SKILLS & TOOLS
+                                CAPACIDADES & STACK
 
                                 {/* Crystalline Sheen (Subtle) */}
                                 <div className="absolute inset-x-0 inset-y-0 flex justify-center pointer-events-none overflow-hidden">
@@ -309,7 +326,7 @@ export default function SkillsPage() {
                         <div className="relative w-full flex flex-col justify-center items-center mb-0">
                             <ArchedTechIconsInteractive
                                 key="arched-tech-icons-interactive"
-                                icons={portfolioData.techStack.map(t => techLogos[t.name] || (t.icon?.includes('http') ? t.icon : `https://cdn.simpleicons.org/${t.name.toLowerCase().replace(/[\s.]/g, '')}`))}
+                                icons={STACK_ATLAS.map(t => t.icon)}
                             />
 
                             <motion.div
@@ -326,13 +343,13 @@ export default function SkillsPage() {
                                     transition={{ duration: 0.5, delay: 0.2 }}
                                     className="text-[10px] font-mono uppercase tracking-[0.5em] text-primary/80 font-bold block"
                                 >
-                                    CORE TECHNOLOGIES
+                                    NUESTRO STACK
                                 </motion.span>
                                 <h2 className="text-4xl md:text-6xl font-medium tracking-tight text-foreground">
-                                    The Engineering Foundation
+                                    La base técnica
                                 </h2>
                                 <p className="text-sm md:text-base text-muted-foreground leading-relaxed pt-2">
-                                    Building scalable architectures using modern languages and frameworks optimized for high-performance execution.
+                                    Las tecnologías con las que construimos: elegidas por velocidad, mantenibilidad y porque no te dejan atado a nadie.
                                 </p>
                             </motion.div>
                         </div>
@@ -345,10 +362,7 @@ export default function SkillsPage() {
                             className="mt-16 sm:mt-20 md:mt-24 w-full"
                         >
                             <KineticTechGrid
-                                items={portfolioData.techStack.map(t => ({
-                                    name: t.name,
-                                    icon: techLogos[t.name] || (t.icon?.includes('http') ? t.icon : `https://cdn.simpleicons.org/${t.name.toLowerCase().replace(/[\s.]/g, '')}`)
-                                }))}
+                                items={STACK_ATLAS}
                             />
                         </motion.div>
                     </div>

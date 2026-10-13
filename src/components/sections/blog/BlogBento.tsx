@@ -101,11 +101,10 @@ export const BlogBento = () => {
                     {/* About Block */}
                     <Block className="col-span-12 text-base leading-relaxed">
                         <p>
-                            <span className="text-foreground font-medium">My passion is building innovative solutions.</span>{" "}
+                            <span className="text-foreground font-medium">Construimos cosas que de verdad resuelven algo.</span>{" "}
                             <span className="text-muted-foreground">
-                                An AI Engineer and Full Stack Developer with expertise in architecting intelligent systems that combine Machine Learning, IoT infrastructure, and Web3 technologies.
-                                Currently focused on advancing AI Agent frameworks and exploring decentralized blockchain applications, bridging the gap between cutting-edge research and practical implementation.
-                                Experienced in designing scalable software architectures and engineering complex technical solutions from concept to deployment.
+                                Somos un estudio de diseño y desarrollo web en Lima. Trabajamos sitios y productos digitales a medida: ordenamos la estructura y el mensaje,
+                                diseñamos pantalla por pantalla y escribimos el código. Publicamos, medimos y seguimos acompañando después del lanzamiento.
                             </span>
                         </p>
                     </Block>
@@ -118,21 +117,21 @@ export const BlogBento = () => {
 
                     {/* Newsletter Block */}
                     <Block className="col-span-12 md:col-span-9" id="newsletter">
-                        <p className="mb-3 text-base">Join my mailing list</p>
+                        <p className="mb-3 text-base">Suscríbete a nuestras novedades</p>
                         <form
                             onSubmit={(e) => e.preventDefault()}
                             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2"
                         >
                             <input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder="Tu correo"
                                 className="w-full rounded border border-border bg-card px-3 py-1.5 transition-colors focus:border-primary focus:outline-0"
                             />
                             <button
                                 type="submit"
                                 className="flex items-center justify-center gap-2 whitespace-nowrap rounded bg-foreground px-3 py-2 text-sm font-medium text-background transition-colors hover:bg-foreground/90"
                             >
-                                <FiMail /> Join the list
+                                <FiMail /> Suscribirme
                             </button>
                         </form>
                     </Block>

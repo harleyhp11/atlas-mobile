@@ -25,7 +25,13 @@ extend({ MeshLineGeometry, MeshLineMaterial });
 // Preload assets for faster startup
 useGLTF.preload('/lanyard/card.glb');
 useTexture.preload('/lanyard/lanyard.webp');
-useTexture.preload('/lanyard/desain-kartu.webp');
+/* La cara de la tarjeta (frente y reverso en una sola imagen, segun el UV del
+   modelo). Antes era desain-kartu.webp, con la foto, el nombre y la web
+   personal del autor de la plantilla. La nueva conserva el diseño y las
+   medidas exactas (3750x4219: el mapeado del modelo depende de ellas) y cambia
+   solo lo que identifica a la persona. Nombre nuevo para que ningun navegador
+   sirva la anterior desde su cache. */
+useTexture.preload('/lanyard/tarjeta-atlas.webp');
 
 interface LanyardProps {
     position?: [number, number, number];
@@ -172,7 +178,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false, isDark = false }:
 
     const { nodes, materials } = useGLTF('/lanyard/card.glb') as any;
     const texture = useTexture('/lanyard/lanyard.webp');
-    const customCardTexture = useTexture('/lanyard/desain-kartu.webp');
+    const customCardTexture = useTexture('/lanyard/tarjeta-atlas.webp');
 
     // The GLTF model requires flipY to be false for its UV mapping
     customCardTexture.flipY = false;

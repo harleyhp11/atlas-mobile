@@ -68,17 +68,17 @@ export const ProjectContact = ({ isLowPowerMode }: { isLowPowerMode?: boolean })
             <div className="max-w-[1536px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-16 lg:gap-20">
                 <div className="relative z-10 w-full lg:w-1/2">
                     <BlockInTextCard
-                        tag="/ Let's Connect"
+                        tag="/ Conversemos"
                         isLowPowerMode={isLowPowerMode}
                         text={
                             <>
-                                <strong><Hover3DFlipText text="Ready to build the extraordinary?" /></strong> <Hover3DFlipText text="From intelligent AI solutions to scalable software architectures, let's collaborate on your big idea." />
+                                <strong><Hover3DFlipText text="¿Listos para construir algo fuera de serie?" /></strong> <Hover3DFlipText text="Del diseño de la marca al desarrollo y el soporte, trabajamos tu idea de principio a fin." />
                             </>
                         }
                         examples={[
-                            "Looking for a Software & AI Engineer?",
-                            "Need an AI solution for your business?",
-                            "Just want to say hi?",
+                            "¿Buscan un estudio de diseño y desarrollo web?",
+                            "¿Necesitan una web que traiga clientes?",
+                            "¿Solo quieren saludar?",
                         ]}
                     />
                 </div>
@@ -129,7 +129,7 @@ const BlockInTextCard = ({
                         className="group w-fit relative flex items-center gap-6 py-6 transition-all hover:px-2 border-none ring-0 outline-none"
                     >
                         <span className="relative text-2xl md:text-4xl font-bold uppercase tracking-wide text-foreground pb-1 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-foreground group-hover:after:w-full after:transition-all after:duration-300 after:ease-out">
-                            Send Message
+                            Enviar mensaje
                         </span>
                         <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-foreground text-background transition-all duration-300 ease-out group-hover:-rotate-45 group-hover:scale-110">
                             <ArrowUpRight className="h-6 w-6" />
@@ -164,7 +164,7 @@ const Typewrite = ({ examples, isLowPowerMode }: { examples: string[]; isLowPowe
             <span className={twMerge("mt-1.5 shrink-0 size-2 rounded-full bg-emerald-500", !isLowPowerMode && "animate-pulse")} />
             <div className="flex-1">
                 <p className="text-xs font-mono text-muted-foreground mb-2 uppercase tracking-widest">
-                    DISCUSSION TOPIC:
+                    DE QUÉ HABLAMOS:
                 </p>
                 <div className="min-h-[3rem] text-lg font-medium text-foreground">
                     {isLowPowerMode ? examples[exampleIndex] : examples[exampleIndex].split("").map((l, i) => (

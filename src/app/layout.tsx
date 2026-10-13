@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Playfair_Display, Alex_Brush, Bricolage_Grotesque, Anton } from 'next/font/google';
+import { Inter, JetBrains_Mono, Playfair_Display, Alex_Brush, Bricolage_Grotesque, Anton, Space_Mono } from 'next/font/google';
 import { getMessages, getLocale } from 'next-intl/server';
 import { ThemeProvider, I18nProvider, SmoothScrollProvider } from '@/providers';
 
@@ -47,6 +47,19 @@ const playfair = Playfair_Display({
     display: 'swap',
 });
 
+// Mono con caracter para el titular de la tarjeta del stack. No es la
+// JetBrains que ya carga la pagina: esa es una mono de editor, pensada para
+// leer codigo a 13px sin cansar, y en grande se queda sosa. Space Mono viene
+// de la tradicion de la maquina de escribir —remates marcados, ojo abierto,
+// formas raras en la 'a' y la 'g'— y es justo lo que aguanta a 48px sin
+// adornos. Solo dos pesos, que son los unicos que se usan.
+const spaceMono = Space_Mono({
+    weight: ['400', '700'],
+    subsets: ['latin'],
+    variable: '--font-space-mono',
+    display: 'swap',
+});
+
 const signature = Alex_Brush({
     weight: '400',
     subsets: ['latin'],
@@ -54,29 +67,41 @@ const signature = Alex_Brush({
     display: 'swap',
 });
 
+/* Esto es lo primero que ve Google y lo que sale al compartir el enlace en
+   WhatsApp. Estaba entero en ingles y a nombre del autor de la plantilla
+   —titulo "Arfazrll | AI & Software Engineer", autor "Your Name", dominio
+   "your-domain.com"—, o sea que el sitio se anunciaba como el portfolio de
+   otra persona.
+
+   El dominio sigue siendo un marcador: metadataBase tiene que apuntar al
+   dominio real de Atlas antes de publicar, porque de el cuelgan las URLs
+   absolutas de las imagenes al compartir. */
+const TITULO = 'Atlas — Estudio digital en Lima';
+const DESCRIPCION = 'Diseñamos y construimos sitios web, software a medida y apps para negocios que quieren vender más y verse mejor.';
+
 export const metadata: Metadata = {
     title: {
-        default: 'Arfazrll | AI & Software Engineer',
-        template: '%s | Portfolio',
+        default: TITULO,
+        template: '%s | Atlas',
     },
-    description: 'A passionate developer building digital experiences that inspire. Explore my projects, skills, and professional journey.',
-    keywords: ['developer', 'portfolio', 'web development', 'full stack', 'react', 'nextjs'],
-    authors: [{ name: 'Your Name' }],
-    creator: 'Your Name',
-    metadataBase: new URL('https://your-domain.com'),
+    description: DESCRIPCION,
+    keywords: ['diseño web', 'desarrollo web', 'landing page', 'tienda online', 'software a medida', 'apps', 'Lima', 'Perú'],
+    authors: [{ name: 'Atlas' }],
+    creator: 'Atlas',
+    // TODO: cambiar por el dominio real de Atlas antes de publicar.
+    metadataBase: new URL('https://atlas-estudio.com'),
     openGraph: {
         type: 'website',
-        locale: 'en_US',
-        url: 'https://your-domain.com',
-        title: 'Arfazrll | AI & Software Engineer',
-        description: 'A passionate developer building digital experiences that inspire.',
-        siteName: 'Portfolio',
+        locale: 'es_PE',
+        url: 'https://atlas-estudio.com',
+        title: TITULO,
+        description: DESCRIPCION,
+        siteName: 'Atlas',
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Arfazrll | AI & Software Engineer',
-        description: 'A passionate developer building digital experiences that inspire.',
-        creator: '@yourusername',
+        title: TITULO,
+        description: DESCRIPCION,
     },
     robots: {
         index: true,
@@ -122,7 +147,7 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
-            <body className={`${inter.variable} ${jetbrainsMono.variable} ${display.variable} ${condensed.variable} ${playfair.variable} ${signature.variable} font-sans relative`}>
+            <body className={`${inter.variable} ${jetbrainsMono.variable} ${display.variable} ${condensed.variable} ${playfair.variable} ${signature.variable} ${spaceMono.variable} font-sans relative`}>
                 <ThemeProvider>
                     <I18nProvider locale={locale} messages={messages}>
                         <SmoothScrollProvider>

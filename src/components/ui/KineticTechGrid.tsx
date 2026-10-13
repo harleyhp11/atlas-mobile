@@ -15,28 +15,36 @@ interface KineticTechGridProps {
 }
 
 // Map tech names to descriptions that mimic the professional tone of Image 1
+/* Una linea por tecnologia, en el mismo orden que STACK_ATLAS.
+
+   El fallback de antes componia la frase solo: `Builds cutting-edge ${nombre}
+   architectures.` Sonaba a relleno generado y cuatro tecnologias vivian de el
+   —Matplotlib, Mistral AI, FastAPI y Flask—, que es como acabaron con
+   descripciones a medio escribir. Ahora el fallback es una cadena vacia: si
+   falta una descripcion se nota y se arregla, en vez de taparse. */
 const techDescriptions: Record<string, string> = {
-    'Python': 'High-performance AI modeling and automation.',
-    'TypeScript': 'Type-safe scalable application logic.',
-    'JavaScript': 'Dynamic and interactive web development.',
-    'Solidity': 'Immutable blockchain smart contracts.',
-    'React': 'Interactive component-based user interfaces.',
-    'Next.js': 'Production-grade React application framework.',
-    'Node.js': 'Scalable asynchronous server-side execution.',
-    'TensorFlow': 'Deep learning and neural network architectures.',
-    'Scikit-learn': 'Predictive data analysis and machine learning.',
-    'Pandas': 'High-performance data manipulation and analysis.',
-    'NumPy': 'Fundamental scientific computing capabilities.',
-    'Tailwind CSS': 'Rapid utility-first styling and design.',
-    'Redis': 'In-memory data structure store and caching.',
-    'PostgreSQL': 'Robust relational database architecture.',
-    'Kubernetes': 'Automated container deployment and scaling.',
-    'Docker': 'Standardized containerized environments.',
-    'Terraform': 'Infrastructure as code provisioning.',
-    'LangChain': 'Large language model application orchestration.',
-    'PyTorch': 'Dynamic neural networks for research and production.',
-    'OpenCV': 'Real-time computer vision capabilities.',
+    'Next.js': 'Framework de React para sitios rápidos y listos para SEO.',
+    'React': 'Interfaces por componentes, reutilizables y mantenibles.',
+    'TypeScript': 'Código tipado: menos errores llegando a producción.',
+    'JavaScript': 'La base de toda la interactividad en el navegador.',
+    'Tailwind CSS': 'Estilos consistentes sobre un sistema de diseño ordenado.',
+    'Astro': 'Sitios de contenido ultraligeros cuando no hace falta más.',
+    'Node.js': 'Servidores y APIs para la lógica de tu negocio.',
+    'PostgreSQL': 'Base de datos relacional para información crítica.',
+    'Supabase': 'Autenticación, base de datos y archivos en un solo servicio.',
+    'Prisma': 'Acceso a datos tipado y seguro.',
+    'WordPress': 'Gestor de contenido para que edites sin depender de nosotros.',
+    'Shopify': 'Comercio electrónico con pagos e inventario resueltos.',
+    'Stripe': 'Cobros en línea con tarjeta, seguros y trazables.',
+    'Framer Motion': 'Animaciones de interfaz fluidas y con propósito.',
+    'GSAP': 'Animación avanzada y efectos ligados al scroll.',
+    'Three.js': 'Gráficos 3D y experiencias inmersivas en el navegador.',
+    'Figma': 'Diseño y prototipado antes de programar.',
+    'Vercel': 'Despliegue global con HTTPS y previsualizaciones por rama.',
+    'Cloudflare': 'Dominio, DNS, caché y protección ante picos de tráfico.',
+    'Google Analytics': 'Medición del comportamiento real de tus visitantes.',
 };
+
 
 export const KineticTechGrid = ({ items, className }: KineticTechGridProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -62,7 +70,7 @@ export const KineticTechGrid = ({ items, className }: KineticTechGridProps) => {
 const TechCard = ({ tech, idx, isLowPowerMode }: { tech: TechItem, idx: number, isLowPowerMode?: boolean }) => {
     const cardRef = useRef<HTMLDivElement>(null);
 
-    const description = techDescriptions[tech.name] || `Builds cutting-edge ${tech.name} architectures.`;
+    const description = techDescriptions[tech.name] || '';
 
     return (
         <motion.div

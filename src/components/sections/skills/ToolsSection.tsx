@@ -1,27 +1,41 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { portfolioData } from '@/data/portfolio';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-// Logo mapping - keeping the existing refined mappings
-const toolLogos: Record<string, string> = {
-    'VS Code': 'https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg',
-    'Figma': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg',
-    'Postman': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postman/postman-original.svg',
-    'GitHub': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg',
-    'Linux': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg',
-    'Jupyter': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jupyter/jupyter-original.svg',
-    'Docker': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg',
-    'Git': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg',
-    'Conda': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/anaconda/anaconda-original.svg',
-    'Google Colab': 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/googlecolab/googlecolab-original.svg',
-};
+/* Las herramientas de Atlas y su icono.
+
+   Vive aqui y no en portfolioData.tools porque esa lista es del portfolio
+   original (Jupyter, Google Colab, Conda, Linux, Postman: instrumental de
+   ciencia de datos) y la comparte la portada.
+
+   El icono de VS Code apuntaba a upload.wikimedia.org, el unico fuera de los
+   CDN de iconos. Ahora sale de devicon como el resto. */
+const DEVICON = 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons';
+const SIMPLE = 'https://cdn.simpleicons.org';
+
+interface Herramienta { name: string; icon: string }
+
+const FILA_SUPERIOR: Herramienta[] = [
+    { name: 'Figma', icon: `${DEVICON}/figma/figma-original.svg` },
+    { name: 'VS Code', icon: `${DEVICON}/vscode/vscode-original.svg` },
+    { name: 'GitHub', icon: `${DEVICON}/github/github-original.svg` },
+    { name: 'Vercel', icon: `${SIMPLE}/vercel` },
+    { name: 'Notion', icon: `${SIMPLE}/notion` },
+];
+
+const FILA_INFERIOR: Herramienta[] = [
+    { name: 'Git', icon: `${DEVICON}/git/git-original.svg` },
+    { name: 'Supabase', icon: `${DEVICON}/supabase/supabase-original.svg` },
+    { name: 'Stripe', icon: `${SIMPLE}/stripe` },
+    { name: 'Cloudflare', icon: `${SIMPLE}/cloudflare` },
+    { name: 'Google Analytics', icon: `${SIMPLE}/googleanalytics` },
+];
 
 export const ToolsSection = () => {
-    const topRow = portfolioData.tools.slice(0, 5);
-    const bottomRow = portfolioData.tools.slice(5, 10);
+    const topRow = FILA_SUPERIOR;
+    const bottomRow = FILA_INFERIOR;
 
     return (
         <section
@@ -46,13 +60,13 @@ export const ToolsSection = () => {
                     transition={{ duration: 0.8, delay: 0.2 }}
                     className="text-xs font-bold uppercase tracking-[0.4em] text-foreground block mb-6"
                 >
-                    WORKFLOW & INFRASTRUCTURE
+                    FLUJO DE TRABAJO
                 </motion.span>
                 <h2 className="text-5xl md:text-8xl font-bold tracking-tighter text-foreground mb-8 max-w-4xl mx-auto leading-[1.1]">
-                    Professional Tooling
+                    Nuestras herramientas
                 </h2>
                 <p className="max-w-3xl mx-auto text-lg md:text-xl text-foreground/60 leading-relaxed font-medium px-4">
-                    Leveraging industrial-grade platforms for development, design, and deployment to ensure rapid and reliable software delivery.
+                    Las plataformas con las que diseñamos, versionamos y publicamos. Nada exótico: herramientas probadas que hacen el trabajo predecible.
                 </p>
             </motion.div>
 
@@ -113,8 +127,10 @@ const MarqueeRow = ({ items, direction, speed }: { items: any[], direction: 'lef
     );
 };
 
-const ToolPill = ({ tool }: { tool: any }) => {
-    const iconUrl = toolLogos[tool.name] || tool.icon;
+const ToolPill = ({ tool }: { tool: Herramienta }) => {
+    /* El icono ya viene resuelto en la lista; el mapa toolLogos que habia aqui
+       sobraba en cuanto las herramientas dejaron de venir de portfolioData. */
+    const iconUrl = tool.icon;
 
     return (
         <div className="flex items-center gap-6 px-10 py-5 bg-[#0a0a0a]/10 dark:bg-white/5 backdrop-blur-xl border border-black/10 dark:border-white/10 rounded-full transition-all duration-300 hover:scale-105 hover:bg-black/20 dark:hover:bg-white/10 group select-none">

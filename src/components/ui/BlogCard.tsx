@@ -72,7 +72,7 @@ export function BlogCard({ post, index, isHovered, isLowPowerMode }: BlogCardPro
                                 {t(`categories.${post.category}`)}
                             </span>
                             <span className="text-[10px] font-bold text-white/60 uppercase tracking-widest">
-                                {new Date(post.date).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                {new Date(post.date).toLocaleDateString('es-PE', { day: '2-digit', month: 'long', year: 'numeric' })}
                             </span>
                         </div>
                     </div>

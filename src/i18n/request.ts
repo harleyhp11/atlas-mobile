@@ -24,6 +24,8 @@ export default getRequestConfig(async () => {
     return {
         locale,
         messages: (await import(`../../messages/${locale}.json`)).default,
-        timeZone: 'Asia/Jakarta'
+        // Atlas esta en Lima. Estaba en Asia/Jakarta, de la plantilla, y eso
+        // desfasaba el reloj de "HORA LOCAL" del navbar 12 horas.
+        timeZone: 'America/Lima'
     };
 });

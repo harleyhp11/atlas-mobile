@@ -115,7 +115,7 @@ export function ArchedTechIconsInteractive({ icons }: ArchedIconsProps) {
           }}
           transition={{ type: "spring", damping: 25, stiffness: 400 }}
         >
-          <span className="text-[10px] font-bold text-black dark:text-white tracking-[0.4em] uppercase whitespace-nowrap">DRAG</span>
+          <span className="text-[10px] font-bold text-black dark:text-white tracking-[0.4em] uppercase whitespace-nowrap">ARRASTRA</span>
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-black/5 dark:via-white/5 to-transparent -translate-x-full animate-[move-x_3s_infinite]" />
         </motion.div>
 

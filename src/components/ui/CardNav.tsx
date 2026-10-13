@@ -3,8 +3,35 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronDown, Trophy, Navigation, Briefcase, Rocket, BookOpen, ImageIcon, FileText, MessageCircle } from 'lucide-react';
+import { ChevronDown, Navigation, Rocket, BookOpen, ImageIcon, FileText, MessageCircle, Layers } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+/* EL ACENTO DEL PANEL: ROJO DE ATLAS EN VEZ DEL VERDE DE LA PLANTILLA.
+
+   Van DOS tonos, no uno, porque ningún rojo pasa AA contra blanco y contra el
+   panel oscuro (#161616) a la vez: sobre blanco hace falta luminancia ≤0.183
+   y sobre el panel ≥0.211. Son requisitos opuestos.
+
+       tema      antes              ahora              contraste
+       oscuro    #D1FF4D (15.6:1)   #FF4D5E            5.58:1 sobre #161616
+       claro     #8cb815 ( 2.34:1)  #E11D3A            4.73:1 sobre blanco
+
+   El #E11D3A es el rojo que ya usa el resto del sitio. El tema claro, de paso,
+   queda arreglado: el verde oscuro que traía la plantilla daba 2.34:1, o sea
+   suspendía AA de calle. */
+
+// Los rotulos del panel desplegable. Estaban sueltos en el JSX y ademas en
+// primera persona ("my latest builds", "my CV"), que es la voz del autor de la
+// plantilla, no la nuestra.
+const PANEL = {
+    servicios:   { titulo: 'Servicios',    desc: 'Los planes y sus precios' },
+    proyectos:   { titulo: 'Proyectos',    desc: 'Lo último que construimos' },
+    capacidades: { titulo: 'Capacidades',  desc: 'Qué hacemos y con qué' },
+    notas:       { titulo: 'Notas',        desc: 'Ideas y apuntes' },
+    galeria:     { titulo: 'Galería',      desc: 'Archivo visual' },
+    curriculum:  { titulo: 'Currículum',   desc: 'CV del fundador' },
+    chat:        { titulo: 'Chat',         desc: 'Muy pronto' },
+} as const;
 
 interface NavLink {
     label: string;
@@ -21,6 +48,12 @@ interface CardNavProps {
     items: NavItem[];
     theme?: 'light' | 'dark';
     pathname?: string;
+    /* Paleta SOLO del disparador, que vive sobre la pastilla de la barra y
+       tiene que seguirla: la barra cambia de piel segun el suelo que tenga
+       debajo, no segun el tema. El panel desplegable NO usa esto: ese se sigue
+       mandando por `theme`, porque se abre fuera de la pastilla y sobre el
+       fondo de la pagina. */
+    paletaDisparador?: 'clara' | 'oscura';
 }
 
 function GridSnake({ theme }: { theme: string }) {
@@ -87,11 +120,16 @@ function GridSnake({ theme }: { theme: string }) {
 }
 
 function ActiveDot({ theme }: { theme: string }) {
+    /* El punto va pegado al titular de la tarjeta, así que tiene que llevar su
+       mismo tono o se verían dos rojos distintos uno al lado del otro. El color
+       va en `style` y no en clase arbitraria porque Tailwind resuelve
+       `bg-[#...]` leyendo el texto del fuente: un valor calculado no lo vería. */
+    const tono = theme === 'dark' ? '#FF4D5E' : '#E11D3A';
     return (
         <span className="inline-flex ml-2 -translate-y-px align-middle">
             <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-[#D1FF4D]"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#D1FF4D] shadow-[0_0_5px_rgba(209,255,77,0.8)]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: tono }}></span>
+                <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: tono, boxShadow: `0 0 5px ${tono}cc` }}></span>
             </span>
         </span>
     );
@@ -104,8 +142,8 @@ function MegaBoxBig({ href, icon: Icon, title, desc, theme, pathname }: any) {
         <Link href={href} className={cn(
             "group relative flex flex-col justify-between rounded-2xl border p-5 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 h-40 overflow-hidden",
             theme === 'dark'
-                ? cn("bg-[#161616] hover:bg-[#1f1f1f] hover:shadow-xl hover:shadow-black/50", isActive ? "border-[#D1FF4D]/50 shadow-[0_0_15px_rgba(209,255,77,0.05)]" : "border-white/10 hover:border-white/20")
-                : cn("hover:bg-white hover:shadow-xl hover:shadow-black/10", isActive ? "bg-white border-[#D1FF4D]/80 shadow-md shadow-[#D1FF4D]/10" : "bg-black/[0.02] border-black/10 hover:border-black/20")
+                ? cn("bg-[#161616] hover:bg-[#1f1f1f] hover:shadow-xl hover:shadow-black/50", isActive ? "border-[#FF4D5E]/50 shadow-[0_0_15px_rgba(255,77,94,0.05)]" : "border-white/10 hover:border-white/20")
+                : cn("hover:bg-white hover:shadow-xl hover:shadow-black/10", isActive ? "bg-white border-[#E11D3A]/80 shadow-md shadow-[#E11D3A]/10" : "bg-black/[0.02] border-black/10 hover:border-black/20")
         )}>
             {/* Subtle Grid Background */}
             <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: 'linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
@@ -113,10 +151,10 @@ function MegaBoxBig({ href, icon: Icon, title, desc, theme, pathname }: any) {
             {/* Random Snake Animation */}
             <GridSnake theme={theme} />
 
-            <Icon className={cn("w-6 h-6 relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3", theme === 'dark' ? (isActive ? "text-[#D1FF4D]" : "text-white/70 group-hover:text-white") : (isActive ? "text-[#8cb815]" : "text-black/70 group-hover:text-black"))} />
+            <Icon className={cn("w-6 h-6 relative z-10 transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3", theme === 'dark' ? (isActive ? "text-[#FF4D5E]" : "text-white/70 group-hover:text-white") : (isActive ? "text-[#E11D3A]" : "text-black/70 group-hover:text-black"))} />
 
             <div className="relative z-10 mt-auto">
-                <h4 className={cn("font-bold text-[15px] mb-1.5 transition-colors duration-300 flex items-center", theme === 'dark' ? (isActive ? "text-[#D1FF4D]" : "text-white") : (isActive ? "text-[#8cb815]" : "text-black"))}>
+                <h4 className={cn("font-bold text-[15px] mb-1.5 transition-colors duration-300 flex items-center", theme === 'dark' ? (isActive ? "text-[#FF4D5E]" : "text-white") : (isActive ? "text-[#E11D3A]" : "text-black"))}>
                     {title}
                     {isActive && <ActiveDot theme={theme} />}
                 </h4>
@@ -139,19 +177,19 @@ function MegaBoxSmall({ href, icon: Icon, title, desc, theme, pathname }: any) {
         <Link href={href} className={cn(
             "group relative flex flex-col justify-center rounded-2xl border p-4 transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1 overflow-hidden",
             theme === 'dark'
-                ? cn("bg-[#161616] hover:bg-[#1f1f1f] hover:shadow-xl hover:shadow-black/50", isActive ? "border-[#D1FF4D]/50 shadow-[0_0_15px_rgba(209,255,77,0.05)]" : "border-white/10 hover:border-white/20")
-                : cn("hover:bg-white hover:shadow-xl hover:shadow-black/10", isActive ? "bg-white border-[#D1FF4D]/80 shadow-md shadow-[#D1FF4D]/10" : "bg-black/[0.02] border-black/10 hover:border-black/20")
+                ? cn("bg-[#161616] hover:bg-[#1f1f1f] hover:shadow-xl hover:shadow-black/50", isActive ? "border-[#FF4D5E]/50 shadow-[0_0_15px_rgba(255,77,94,0.05)]" : "border-white/10 hover:border-white/20")
+                : cn("hover:bg-white hover:shadow-xl hover:shadow-black/10", isActive ? "bg-white border-[#E11D3A]/80 shadow-md shadow-[#E11D3A]/10" : "bg-black/[0.02] border-black/10 hover:border-black/20")
         )}>
             <div className="flex items-start justify-between relative z-10">
                 <div>
-                    <h4 className={cn("font-bold text-sm mb-1.5 transition-colors duration-300 flex items-center", theme === 'dark' ? (isActive ? "text-[#D1FF4D]" : "text-white") : (isActive ? "text-[#8cb815]" : "text-black"))}>
+                    <h4 className={cn("font-bold text-sm mb-1.5 transition-colors duration-300 flex items-center", theme === 'dark' ? (isActive ? "text-[#FF4D5E]" : "text-white") : (isActive ? "text-[#E11D3A]" : "text-black"))}>
                         {title}
                         {isActive && <ActiveDot theme={theme} />}
                     </h4>
                     <p className={cn("text-[11px] font-medium leading-relaxed transition-colors duration-300", theme === 'dark' ? "text-white/60 group-hover:text-white/80" : "text-black/60 group-hover:text-black/80")}>{desc}</p>
                 </div>
                 <div className={cn("p-1.5 rounded-xl transition-colors duration-300", theme === 'dark' ? "group-hover:bg-white/10" : "group-hover:bg-black/5")}>
-                    <Icon className={cn("w-4 h-4 mt-0.5 flex-shrink-0 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12", theme === 'dark' ? (isActive ? "text-[#D1FF4D]" : "text-white/40 group-hover:text-white/80") : (isActive ? "text-[#8cb815]" : "text-black/40 group-hover:text-black/80"))} />
+                    <Icon className={cn("w-4 h-4 mt-0.5 flex-shrink-0 transition-transform duration-500 group-hover:scale-125 group-hover:rotate-12", theme === 'dark' ? (isActive ? "text-[#FF4D5E]" : "text-white/40 group-hover:text-white/80") : (isActive ? "text-[#E11D3A]" : "text-black/40 group-hover:text-black/80"))} />
                 </div>
             </div>
         </Link>
@@ -165,21 +203,21 @@ function SidebarLink({ href, icon: Icon, title, desc, theme, pathname }: any) {
     const className = cn(
         "group flex items-center gap-4 rounded-2xl border p-4 transition-all duration-500 overflow-hidden relative",
         theme === 'dark'
-            ? cn("bg-[#161616] hover:bg-[#1f1f1f]", isActive ? "border-[#D1FF4D]/50 shadow-[0_0_15px_rgba(209,255,77,0.05)]" : "border-white/10 hover:border-white/20")
-            : cn("hover:bg-white", isActive ? "bg-white border-[#D1FF4D]/80 shadow-sm shadow-[#D1FF4D]/10" : "bg-black/[0.02] border-black/10 hover:border-black/20"),
+            ? cn("bg-[#161616] hover:bg-[#1f1f1f]", isActive ? "border-[#FF4D5E]/50 shadow-[0_0_15px_rgba(255,77,94,0.05)]" : "border-white/10 hover:border-white/20")
+            : cn("hover:bg-white", isActive ? "bg-white border-[#E11D3A]/80 shadow-sm shadow-[#E11D3A]/10" : "bg-black/[0.02] border-black/10 hover:border-black/20"),
         isChat ? "cursor-not-allowed opacity-70" : "cursor-pointer hover:scale-[1.02] hover:-translate-x-1 hover:shadow-xl"
     );
 
     const content = (
         <>
             <div className="flex-1 relative z-10">
-                <h4 className={cn("font-bold text-sm mb-1.5 transition-colors duration-300 flex items-center", theme === 'dark' ? (isActive ? "text-[#D1FF4D]" : "text-white") : (isActive ? "text-[#8cb815]" : "text-black"))}>
+                <h4 className={cn("font-bold text-sm mb-1.5 transition-colors duration-300 flex items-center", theme === 'dark' ? (isActive ? "text-[#FF4D5E]" : "text-white") : (isActive ? "text-[#E11D3A]" : "text-black"))}>
                     {title}
                     {isActive && <ActiveDot theme={theme} />}
                 </h4>
                 <p className={cn("text-[11px] font-medium transition-colors duration-300", theme === 'dark' ? "text-white/60 group-hover:text-white/80" : "text-black/60 group-hover:text-black/80")}>{desc}</p>
             </div>
-            <Icon className={cn("w-5 h-5 relative z-10 transition-transform duration-500 group-hover:scale-125 group-hover:-rotate-6", theme === 'dark' ? (isActive ? "text-[#D1FF4D]" : "text-white/40 group-hover:text-white/80") : (isActive ? "text-[#8cb815]" : "text-black/40 group-hover:text-black/80"))} />
+            <Icon className={cn("w-5 h-5 relative z-10 transition-transform duration-500 group-hover:scale-125 group-hover:-rotate-6", theme === 'dark' ? (isActive ? "text-[#FF4D5E]" : "text-white/40 group-hover:text-white/80") : (isActive ? "text-[#E11D3A]" : "text-black/40 group-hover:text-black/80"))} />
             
             {/* Subtle highlight */}
             {!isChat && (
@@ -209,7 +247,8 @@ function SidebarLink({ href, icon: Icon, title, desc, theme, pathname }: any) {
 export default function CardNav({
     items,
     theme = "dark",
-    pathname = "/"
+    pathname = "/",
+    paletaDisparador
 }: CardNavProps) {
     const [isExpanded, setIsExpanded] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -226,7 +265,7 @@ export default function CardNav({
     }, []);
 
     const aboutItem = items.find(i => i.label === "About") || items[0];
-    const allHrefs = ['/projects', '/experience', '/skills', '/achievements', '/blog', '/gallery', '/resume'];
+    const allHrefs = ['/servicios', '/projects', '/skills', '/blog', '/gallery', '/resume'];
     const isActive = useMemo(() => {
         return allHrefs.some(href => pathname === href || pathname.startsWith(`${href}/`));
     }, [pathname]);
@@ -237,10 +276,14 @@ export default function CardNav({
                 onMouseEnter={() => setIsExpanded(true)}
                 onClick={() => setIsExpanded(!isExpanded)}
                 className={cn(
-                    "relative px-5 py-2 text-sm font-bold transition-all duration-300 rounded-full flex items-center gap-2 group",
-                    isActive
-                        ? (theme === 'dark' ? "text-white bg-white/10" : "text-black bg-black/5")
-                        : (theme === 'dark' ? "text-white/70 hover:text-white" : "text-black/70 hover:text-black")
+                    "relative px-4 py-1.5 text-[13px] font-bold transition-all duration-300 rounded-full flex items-center gap-1.5 group",
+                    paletaDisparador === 'clara'
+                        ? (isActive ? "bg-white/15 text-white" : "text-white/60 hover:text-white")
+                        : paletaDisparador === 'oscura'
+                        ? (isActive ? "bg-black/[0.07] text-neutral-900" : "text-neutral-500 hover:text-neutral-900")
+                        : isActive
+                            ? (theme === 'dark' ? "text-white bg-white/10" : "text-black bg-black/5")
+                            : (theme === 'dark' ? "text-white/70 hover:text-white" : "text-black/70 hover:text-black")
                 )}
             >
                 <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-full" />
@@ -254,7 +297,7 @@ export default function CardNav({
                             <motion.span
                                 animate={{ opacity: [1, 0.4, 1], scale: [1, 1.3, 1] }}
                                 transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                                className="w-1.5 h-1.5 rounded-full bg-[#D1FF4D] shadow-[0_0_8px_rgba(209,255,77,0.6)]"
+                                className="w-1.5 h-1.5 rounded-full bg-[#E11D3A] shadow-[0_0_8px_rgba(225,29,58,0.6)]"
                             />
                         </motion.div>
                     )}
@@ -265,7 +308,7 @@ export default function CardNav({
                     transition={{ duration: 0.3 }}
                     className="relative z-10"
                 >
-                    <ChevronDown className="w-4 h-4 opacity-50" />
+                    <ChevronDown className="w-3.5 h-3.5 opacity-50" />
                 </motion.div>
             </motion.button>
 
@@ -290,14 +333,13 @@ export default function CardNav({
                             <div className="flex-1 p-5 flex flex-col gap-4">
                                 {/* Top 2 big boxes */}
                                 <div className="grid grid-cols-2 gap-4">
-                                    <MegaBoxBig href="/projects" icon={Rocket} title="Project" desc="Discover my latest builds" theme={theme} pathname={pathname} />
-                                    <MegaBoxBig href="/experience" icon={Briefcase} title="Experience" desc="My professional journey" theme={theme} pathname={pathname} />
+                                    <MegaBoxBig href="/servicios" icon={Layers} title={PANEL.servicios.titulo} desc={PANEL.servicios.desc} theme={theme} pathname={pathname} />
+                                    <MegaBoxBig href="/projects" icon={Rocket} title={PANEL.proyectos.titulo} desc={PANEL.proyectos.desc} theme={theme} pathname={pathname} />
                                 </div>
-                                {/* Bottom 3 small boxes */}
-                                <div className="grid grid-cols-3 gap-4">
-                                    <MegaBoxSmall href="/skills" icon={Navigation} title="Skill" desc="Technical expertise" theme={theme} pathname={pathname} />
-                                    <MegaBoxSmall href="/achievements" icon={Trophy} title="Achievement" desc="Milestones reached" theme={theme} pathname={pathname} />
-                                    <MegaBoxSmall href="/blog" icon={BookOpen} title="Blog" desc="Insights and docs" theme={theme} pathname={pathname} />
+                                {/* Fila de abajo: dos cajas. Eran tres; Credenciales se retiro del sitio. */}
+                                <div className="grid grid-cols-2 gap-4">
+                                    <MegaBoxSmall href="/skills" icon={Navigation} title={PANEL.capacidades.titulo} desc={PANEL.capacidades.desc} theme={theme} pathname={pathname} />
+                                    <MegaBoxSmall href="/blog" icon={BookOpen} title={PANEL.notas.titulo} desc={PANEL.notas.desc} theme={theme} pathname={pathname} />
                                 </div>
                             </div>
 
@@ -306,9 +348,9 @@ export default function CardNav({
                                 "w-[280px] p-4 flex flex-col justify-center gap-4 border-l",
                                 theme === 'dark' ? "border-white/5" : "border-black/5"
                             )}>
-                                <SidebarLink href="/gallery" icon={ImageIcon} title="Gallery" desc="Visual portfolio & moments" theme={theme} pathname={pathname} />
-                                <SidebarLink href="/resume" icon={FileText} title="Resume" desc="View or download my CV" theme={theme} pathname={pathname} />
-                                <SidebarLink href="#" icon={MessageCircle} title="Chat" desc="Coming soon to connect" theme={theme} pathname={pathname} />
+                                <SidebarLink href="/gallery" icon={ImageIcon} title={PANEL.galeria.titulo} desc={PANEL.galeria.desc} theme={theme} pathname={pathname} />
+                                <SidebarLink href="/resume" icon={FileText} title={PANEL.curriculum.titulo} desc={PANEL.curriculum.desc} theme={theme} pathname={pathname} />
+                                <SidebarLink href="#" icon={MessageCircle} title={PANEL.chat.titulo} desc={PANEL.chat.desc} theme={theme} pathname={pathname} />
                             </div>
                         </div>
                     </motion.div>

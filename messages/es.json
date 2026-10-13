@@ -1,0 +1,479 @@
+{
+  "navigation": {
+    "home": "Inicio",
+    "servicios": "Servicios",
+    "about": "Estudio",
+    "projects": "Proyectos",
+    "experience": "Experiencia",
+    "skills": "Capacidades",
+    "blog": "Notas",
+    "gallery": "Galería",
+    "contact": "Contacto",
+    "resume": "Currículum",
+    "tools": "Herramientas",
+    "menu": {
+      "servicios": "Servicios",
+      "serviciosDesc": "Los planes, con precio y plazo",
+      "skills": "Capacidades",
+      "skillsDesc": "Tecnologías y herramientas con las que trabajamos",
+      "experience": "Experiencia",
+      "experienceDesc": "Nuestro recorrido profesional",
+      "projects": "Proyectos",
+      "projectsDesc": "Una muestra de todo nuestro trabajo",
+      "blog": "Notas",
+      "blogDesc": "Ideas y exploraciones técnicas",
+      "gallery": "Galería",
+      "galleryDesc": "Archivo visual de piezas y proyectos"
+    },
+    "shortcuts": {
+      "volume1": "Volumen I: Identidad",
+      "volume2": "Volumen II: Trayectoria",
+      "volume3": "Volumen III: Capacidades",
+      "volume4": "Volumen IV: Trabajo",
+      "preview": "Vista previa",
+      "idRef": "REF_ID"
+    }
+  },
+  "hero": {
+    "greeting": "Bienvenido a nuestro estudio digital",
+    "subtitle": "Diseño web • Software a medida • Apps y e-commerce",
+    "cta": {
+      "primary": "Ver proyectos",
+      "secondary": "Hablemos",
+      "exploreMore": "Ver más"
+    },
+    "badge": "Disponibles para proyectos",
+    "scroll": "Desplázate",
+    "role": "Estudio digital",
+    "description": "Construimos sitios y plataformas en el cruce del <span class='text-primary font-semibold'>diseño</span>, la <span class='text-secondary font-semibold'>ingeniería</span> y la <span class='text-accent font-semibold'>arquitectura que escala</span>."
+  },
+  "about": {
+    "title": "El estudio",
+    "subtitle": "Diseño y desarrollo con intención",
+    "description": "Somos un estudio digital en Lima. Diseñamos y construimos sitios, apps y software a medida para negocios que quieren vender más y verse mejor.",
+    "stats": {
+      "experience": "Años",
+      "projects": "Proyectos",
+      "certifications": "Certificaciones",
+      "competitions": "Sectores"
+    },
+    "identity": "Identidad verificada",
+    "architecting": "Construimos",
+    "digitalReality": "Presencia digital",
+    "leadIn": {
+      "label": "QUÉ HACEMOS",
+      "tagline": "NUESTRO ENFOQUE",
+      "headlineAI": "Diseño con intención.",
+      "headlineData": "Tecnología sólida.",
+      "headlineSoftware": "resultados medibles",
+      "thesis": "Creamos sitios, apps y plataformas que convierten visitas en clientes reales. <span class='text-primary italic font-serif-elegant font-normal'>Venden por ti, 24/7.</span>",
+      "scope": "Páginas corporativas, landing pages y software a medida, pensados para crecer contigo.",
+      "bridging": "Del boceto al lanzamiento.",
+      "integration": "Estrategia, diseño y desarrollo en un solo equipo: definimos metas, damos forma a la experiencia y construimos para escalar.",
+      "signature": "Harley",
+      "signatureRole": "Fundador de Atlas",
+      "role": "Estudio Digital — Lima",
+      "aboutMe": "El estudio",
+      "scroll": "Desplázate para explorar",
+      "shortStory": "Nuestra historia"
+    },
+    "coreEngineering": {
+      "label": "Ingeniería",
+      "title": "Stack <span class='text-primary italic font-serif font-light lowercase'>probado.</span> <br /> Resultados <span class='italic font-serif font-light text-foreground'>medibles.</span>",
+      "p1": "Construimos con la tecnología que mejor le sirve a cada proyecto, no con la que nos resulta cómoda.",
+      "p2": "Sitios y plataformas sobre Next.js y Node, con bases de datos que aguantan crecer.",
+      "p3": "Todo con control de versiones, entornos reproducibles y pensado para publicarse sin sobresaltos.",
+      "gpa": "Satisfacción",
+      "projects": "Proyectos",
+      "years": "Años"
+    },
+    "emergingResearch": {
+      "label": "En qué estamos",
+      "title": "LO QUE VIENE <span class='italic font-serif font-light text-primary lowercase'>&</span> EXPLORAMOS",
+      "agentic": {
+        "title": "AUTOMATIZACIÓN",
+        "desc": "Integramos automatizaciones e inteligencia artificial donde de verdad ahorran trabajo: atención, seguimiento de clientes y tareas repetitivas."
+      },
+      "web3": {
+        "title": "PLATAFORMAS A MEDIDA",
+        "desc": "Paneles, reservas y gestión interna construidos según cómo trabaja cada equipo, no según una plantilla."
+      }
+    },
+    "profile": {
+      "title": "Construimos sistemas que escalan <br /> donde el diseño se encuentra con la ingeniería.",
+      "narrativeLabel": "Nuestra forma de trabajar",
+      "narrative": "Somos un estudio digital que acompaña a negocios desde la idea hasta el lanzamiento: definimos objetivos, damos forma a la experiencia y construimos para crecer.",
+      "narrative2": "Combinamos estrategia, diseño y desarrollo en un solo equipo, para entregar soluciones claras, rápidas y sostenibles en el tiempo.",
+      "pillars": {
+        "reliable": {
+          "title": "Sólido por diseño",
+          "desc": "Pensado para aguantar tráfico real y crecer sin romperse."
+        },
+        "optimized": {
+          "title": "Listo para producción",
+          "desc": "Del prototipo al lanzamiento con disciplina de ingeniería."
+        },
+        "maintainable": {
+          "title": "Preparado para evolucionar",
+          "desc": "Diseñado para crecer y adaptarse contigo a largo plazo."
+        },
+        "evolvable": {
+          "title": "Decisiones con datos",
+          "desc": "Medimos lo que pasa para saber qué mejorar, no para adivinar."
+        }
+      }
+    },
+    "closing": {
+      "experience": {
+        "label": "TRAYECTORIA",
+        "title1": "NUESTRA",
+        "title2": "EXPERIENCIA",
+        "viewMore": "Ver todo"
+      },
+      "projects": {
+        "label": "PORTAFOLIO",
+        "title1": "PROYECTOS",
+        "title2": "DESTACADOS",
+        "viewMore": "Ver todos"
+      },
+      "experiencesList": [
+        {
+          "company": "Dicoding Academy",
+          "role": "MACHINE LEARNING CODE REVIEWER",
+          "desc": "Technical evaluation and quality assurance of ML project submissions. Validating logical correctness, efficiency, and enforcing industry best practices for learners."
+        },
+        {
+          "company": "Advanced Software Engineering Laboratory",
+          "role": "SYSTEM ANALYST INTERN",
+          "desc": "Translating complex requirements into SRS documentation and designing system architectures using UML diagrams. focused on software design."
+        },
+        {
+          "company": "Cyber Physical System Laboratory",
+          "role": "RESEARCH ASSISTANT (CONTRACT)",
+          "desc": "Developing AI-driven research products and designing learning materials for Deep Learning and Computer Vision. Contributing to intelligent systems."
+        },
+        {
+          "company": "HUMIC Engineering Research Center",
+          "role": "AI DEVELOPER INTERN",
+          "desc": "Built Transformer-based attack detection models for cybersecurity applications. Managed large-scale datasets through the full ML pipeline."
+        },
+        {
+          "company": "Cyber Physical System Laboratory",
+          "role": "COMPUTER VISION RESEARCHER INTERN",
+          "desc": "End-to-end development of intelligent models using state-of-the-art Deep Learning architectures. Implemented ML algorithms for real-world applications."
+        }
+      ],
+      "projectsList": [
+        {
+          "title": "Creative Portfolio Website",
+          "desc": "Modern, animated portfolio with 3D elements, physics-simulated interactions, and shader-based warp effects. Engineered for high performance & optimization."
+        },
+        {
+          "title": "SNBTIn - Platform Persiapan SNBT 2025",
+          "desc": "Leading EdTech platform in Indonesia for exam preparation. Featuring a comprehensive learning ecosystem with interactive and real-time analytics."
+        },
+        {
+          "title": "TerraFlow Platform",
+          "desc": "Enterprise IoT solution for precision agriculture. ESP32 sensor nodes communicate with Firebase via a Go (Gin), with a Next.js dashboard for real-time monitoring"
+        },
+        {
+          "title": "DocsInsight Engine",
+          "desc": "Private RAG platform for intelligent document analysis. Powered by local LLMs through Ollama, with LangChain orchestration and ChromaDB vector search."
+        },
+        {
+          "title": "POLABDC Dental Management",
+          "desc": "AI-powered dental clinic SaaS with disease prediction, real-time queue management, and a Monorepo architecture Next.js, Express.js, and Python"
+        }
+      ],
+      "discoverMore": "Descubre más"
+    }
+  },
+  "projects": {
+    "title": "Proyectos",
+    "subtitle": "Una muestra de nuestro trabajo",
+    "search": "Buscar proyectos…",
+    "empty": "No encontramos proyectos con ese criterio",
+    "viewAll": "Ver todos los proyectos",
+    "viewProject": "Ver proyecto",
+    "liveDemo": "Ver en vivo",
+    "sourceCode": "Código fuente",
+    "techStack": "Tecnologías",
+    "tools": "Herramientas",
+    "highlights": "Destacados",
+    "challenges": "Retos",
+    "filters": {
+      "all": "Todos",
+      "ongoing": "En curso",
+      "completed": "Terminados"
+    },
+    "sections": {
+      "missionBrief": "El encargo",
+      "keyFeatures": "Características",
+      "engineeringChronicles": "Bitácora técnica",
+      "visualGallery": "Galería",
+      "installation": "Instalación",
+      "projectAccess": "Acceso al proyecto",
+      "technologies": "Tecnologías",
+      "contents": "Contenido",
+      "moreProjects": "Más proyectos",
+      "backToProjects": "Volver a proyectos",
+      "viewMore": "Ver más",
+      "viewLess": "Ver menos",
+      "solution": "Solución",
+      "liveDemo": "Ver en vivo",
+      "sourceCode": "Código fuente"
+    },
+    "status": {
+      "ongoing": "En desarrollo",
+      "completed": "Proyecto terminado"
+    },
+    "metadata": {
+      "role": "Rol",
+      "timeline": "Plazo",
+      "team": "Equipo",
+      "techStack": "Tecnologías",
+      "roleValue": "Diseño y desarrollo",
+      "teamValue": "Atlas",
+      "techStackValue": "{count} tecnologías"
+    }
+  },
+  "experience": {
+    "title": "Experiencia",
+    "subtitle": "Nuestro recorrido y crecimiento",
+    "showDetail": "Ver detalle",
+    "hideDetail": "Hide Detail",
+    "tasks": "TASKS",
+    "learned": "WHAT I LEARNED",
+    "impact": "IMPACT",
+    "present": "Present",
+    "responsibilities": "Responsibilities",
+    "skills": "Tecnologías usadas",
+    "month": "month",
+    "months": "months",
+    "year": "year",
+    "years": "años",
+    "type": {
+      "full-time": "Tiempo completo",
+      "part-time": "Part-time",
+      "internship": "Internship",
+      "freelance": "Freelance",
+      "contract": "Contract",
+      "apprenticeship": "Apprenticeship",
+      "volunteer": "Volunteer"
+    },
+    "filters": {
+      "all": "Todo",
+      "latest": "Recientes",
+      "oldest": "Oldest",
+      "ongoing": "En curso"
+    },
+    "education": {
+      "title": "Education"
+    }
+  },
+  "expertise": {
+    "title": "Lo que dominamos",
+    "subtitle": "Especializados en la tecnología que sostiene una presencia digital moderna",
+    "dragHint": "Arrastra o desplázate para explorar"
+  },
+  "skills": {
+    "title": "Capacidades y herramientas",
+    "subtitle": "Tecnologías y herramientas con las que trabajamos",
+    "hard": "Técnicas",
+    "soft": "De equipo",
+    "technical": "Technical Proficiency",
+    "tools": "Tools & Software",
+    "pillars": "Pilares",
+    "achievements": "Verified Achievements",
+    "level": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced",
+      "expert": "Expert"
+    }
+  },
+  "contact": {
+    "title": "Hablemos",
+    "subtitle": "Construyamos algo que funcione",
+    "form": {
+      "name": "Tu nombre",
+      "email": "Tu email",
+      "subject": "Asunto",
+      "message": "Tu mensaje",
+      "messagePlaceholder": "Cuéntanos sobre tu proyecto…",
+      "send": "Enviar mensaje",
+      "submit": "ENVIAR MENSAJE",
+      "sending": "ENVIANDO…",
+      "sent": "¡ENVIADO!",
+      "success": "¡Mensaje enviado!",
+      "error": "Algo salió mal. Inténtalo de nuevo.",
+      "whatsapp": "Tu WhatsApp",
+      "projectType": "Tipo de proyecto",
+      "businessType": "Tipo de negocio",
+      "businessPlaceholder": "Ej. Restaurante",
+      "budget": "Presupuesto aproximado",
+      "opening": "ABRIENDO WHATSAPP…",
+      "note": "Se abre WhatsApp con tu mensaje ya armado. Solo te queda darle a enviar.",
+      "via": "Te lleva a WhatsApp con el mensaje ya listo"
+    },
+    "social": {
+      "title": "Encuéntranos en redes"
+    },
+    "info": {
+      "email": "Email",
+      "phone": "Teléfono",
+      "location": "Ubicación",
+      "availability": "Disponibles para proyectos"
+    },
+    "hero": {
+      "title": "HABLEMOS",
+      "subtitle": "¿Tienes una idea? Construyámosla juntos.",
+      "ticker": {
+        "build": "Construyamos algo que funcione · ",
+        "freelance": "Disponibles para proyectos · "
+      }
+    }
+  },
+  "footer": {
+    "copyright": "Todos los derechos reservados.",
+    "madeWith": "Hecho con",
+    "more": "Más",
+    "marquee": [
+      "Diseño web",
+      "Landing pages",
+      "Tiendas online",
+      "Software a medida",
+      "Apps móviles",
+      "Mantenimiento web"
+    ],
+    "cta": {
+      "title": "Construyamos",
+      "titleHighlight": "juntos",
+      "subtitle": "¿Tienes un proyecto en mente? Cuéntanos y lo convertimos en algo que funcione."
+    },
+    "links": "ENLACES",
+    "socials": "REDES",
+    "localTime": "HORA LOCAL",
+    "version": "VERSIÓN",
+    "versionEdition": "Edición 2026 ©"
+  },
+  "ctaSection": {
+    "title": "Construyamos algo",
+    "together": "juntos",
+    "subtitle": "Trabajamos con negocios que quieren vender más y verse mejor. Cuéntanos tu idea y la convertimos en algo que funcione.",
+    "start": "Escríbenos",
+    "work": "Ver portafolio",
+    "words": {
+      "amazing": "increíble",
+      "innovative": "memorable",
+      "intelligent": "que venda",
+      "creative": "con propósito"
+    },
+    "ribbon1": "Next.js • React • TypeScript • Node.js • Tailwind • WordPress • Shopify • PostgreSQL • React Native • Figma",
+    "ribbon2": "Diseño Web • Landing Pages • Tiendas Online • Menús Digitales • Software a Medida • Apps Móviles • Automatizaciones • Mantenimiento Web"
+  },
+  "stats": {
+    "systemStatus": "Estado del sistema: analítica activa",
+    "portfolio": "Métricas de ingeniería",
+    "totalPulse": "Pulso total",
+    "peakActivity": "Pico de actividad",
+    "dailyAverage": "Promedio diario",
+    "currentSprint": "Sprint actual",
+    "engageFlow": "Flujo de trabajo",
+    "weeklyEffort": "Esfuerzo semanal",
+    "processSpeed": "Velocidad de proceso",
+    "avgPerf": "Rendimiento medio",
+    "latency": "LATENCIA: 14MS",
+    "system": "SISTEMA: DARWIN_X64_ESTABLE",
+    "scanning": "ESCANEANDO_RECURSOS",
+    "engineering": "INGENIERÍA",
+    "metrics": "MÉTRICAS",
+    "analyticsSub": "ANALÍTICA / INFRAESTRUCTURA / DATOS DE RENDIMIENTO",
+    "statusOnline": "ESTADO: EN LÍNEA",
+    "loadStable": "CARGA_DEL_SISTEMA: ESTABLE"
+  },
+  "projectHeader": {
+    "title": "Damos forma a lo digital",
+    "subtitle": "Una selección de trabajo técnico y creativo. Exploramos los límites del <span class='font-bold text-foreground'>diseño de producto</span>, los datos y la web inmersiva."
+  },
+  "common": {
+    "loading": "Cargando…",
+    "error": "Algo salió mal",
+    "notFound": "Página no encontrada",
+    "backHome": "Volver al inicio",
+    "viewMore": "Ver más",
+    "readMore": "Leer más",
+    "close": "Cerrar",
+    "download": "Descargar",
+    "share": "Compartir",
+    "scrollAudit": "Desplázate para explorar"
+  },
+  "technical": {
+    "github": {
+      "title": "GitHub Contributions",
+      "description": "Actividad en GitHub durante el último año.",
+      "total": "Total",
+      "thisWeek": "Esta semana",
+      "best": "Best",
+      "average": "Average",
+      "less": "Less",
+      "more": "Más"
+    },
+    "wakatime": {
+      "title": "WakaTime Stats",
+      "description": "Actividad de desarrollo en los últimos 7 días.",
+      "lastUpdate": "Last Updated",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "dailyAverage": "Daily Average",
+      "totalWeek": "Total de la semana",
+      "bestDay": "Best Day",
+      "totalSince": "Total Since Joined",
+      "topLanguages": "Top Languages"
+    }
+  },
+  "blog": {
+    "title": "Notas y apuntes",
+    "subtitle": "Cerramos la distancia entre la complejidad técnica y lo que de verdad sirve a un negocio. Ideas sobre diseño, web y producto.",
+    "sectionBadge": "El archivo",
+    "search": "Buscar artículos…",
+    "readTime": "min de lectura",
+    "readMore": "Leer nota",
+    "back": "Volver a las notas",
+    "noResults": "No encontramos ninguna nota.",
+    "categories": {
+      "applied-ai": "IA aplicada",
+      "software-development": "Desarrollo",
+      "about-me": "El estudio",
+      "more": "Más"
+    }
+  },
+  "gallery": {
+    "title": "Archivo visual",
+    "subtitle": "Una selección de piezas, documentación técnica y exploraciones visuales.",
+    "filter": {
+      "all": "Todo",
+      "image": "Fotos",
+      "video": "Videos"
+    },
+    "viewMedia": "Ver pieza"
+  },
+  "chatbot": {
+    "title": "AI Assistant",
+    "subtitle": "Pregúntanos sobre Atlas",
+    "placeholder": "Escribe un mensaje…",
+    "greeting": "¡Hola! Soy el asistente de **{name}**. 👋",
+    "suggestions": [
+      "¿Qué servicios ofrecen?",
+      "Cuéntame sobre un proyecto suyo",
+      "¿Cuánto tarda una web?",
+      "¿Con qué tecnologías trabajan?"
+    ],
+    "error": "Ocurrió un error. Inténtalo de nuevo.",
+    "invalidResponse": "Respuesta no válida del servidor.",
+    "unknownError": "Ocurrió un error desconocido.",
+    "retry": "Try again",
+    "inputHint": "Enter para enviar, Shift+Enter para salto de línea",
+    "close": "Cerrar chat"
+  }
+}

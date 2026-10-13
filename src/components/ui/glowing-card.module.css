@@ -1,0 +1,164 @@
+/* TARJETA CON PUNTO VIAJERO.
+
+   El componente que llego solo traia la animacion `moveDot`; todo lo demas
+   (marco, rayo, lineas, texto con brillo) se reconstruyo del diseño original.
+
+   Va en un CSS Module y no en globals.css porque sus clases —.card, .line,
+   .outer, .text— son genericas y chocarian con otras del sitio. Aqui se
+   renombran solas.
+
+   Dos variables para ajustarla desde fuera sin tocar este archivo:
+     --gc-texto   tamaño del texto grande          (por defecto 4rem)
+     --gc-sombra  color de los extremos del brillo (por defecto negro) */
+
+.outer {
+    position: relative;
+    display: block;
+    width: 300px;
+    height: 250px;
+    padding: 1px;
+    border-radius: 10px;
+    /* El marco de 1px que se enciende arriba a la izquierda. */
+    background: radial-gradient(circle 230px at 0% 0%, #ffffff, #0c0d0d);
+}
+
+.dot {
+    position: absolute;
+    z-index: 2;
+    top: 10%;
+    right: 10%;
+    width: 5px;
+    aspect-ratio: 1;
+    border-radius: 100px;
+    background-color: #fff;
+    box-shadow: 0 0 10px #ffffff;
+    animation: moveDot 6s linear infinite;
+}
+
+.card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: solid 1px #202222;
+    border-radius: 9px;
+    background: radial-gradient(circle 280px at 0% 0%, #444444, #0c0d0d);
+    color: #fff;
+}
+
+.ray {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 45px;
+    border-radius: 100px;
+    background-color: #c7c7c7;
+    opacity: 0.4;
+    box-shadow: 0 0 50px #fff;
+    filter: blur(10px);
+    transform-origin: 10%;
+    transform: rotate(40deg);
+    transition: opacity 0.4s ease;
+}
+
+.text {
+    position: relative;
+    font-weight: 800;
+    font-size: var(--gc-texto, 4rem);
+    line-height: 1.05;
+    background: linear-gradient(45deg, var(--gc-sombra, #000000) 4%, #fff, var(--gc-sombra, #000));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.label {
+    position: relative;
+    margin-top: 0.35rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.62);
+}
+
+.line {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #2c2c2c;
+}
+.topl {
+    top: 10%;
+    background: linear-gradient(90deg, #888888 30%, #1d1f1f 70%);
+}
+.bottoml {
+    bottom: 10%;
+}
+.leftl {
+    left: 10%;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, #747474 30%, #222424 70%);
+}
+.rightl {
+    right: 10%;
+    width: 1px;
+    height: 100%;
+}
+
+/* VARIANTE BOTON. La tarjeta original es un adorno; como boton necesita lo que
+   todo boton necesita: ocupar su sitio, cursor, foco visible desde teclado y
+   respuesta al pasar y al pulsar. El rayo se aviva al pasar el raton, y la
+   tarjeta recorta su brillo para que no se derrame fuera del boton. */
+.boton {
+    width: 100%;
+    height: 150px;
+    border: 0;
+    cursor: pointer;
+    font: inherit;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+.boton .card {
+    overflow: hidden;
+}
+.boton:hover .ray {
+    opacity: 0.65;
+}
+.boton:active {
+    transform: scale(0.985);
+}
+.boton:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+}
+.boton:disabled {
+    cursor: default;
+    opacity: 0.6;
+}
+
+/* El punto recorre el marco interior. Anima top/right, que no es lo ideal,
+   pero es un solo elemento de 5px y asi funciona a cualquier tamaño de
+   tarjeta. Con movimiento reducido lo para la regla global de globals.css. */
+@keyframes moveDot {
+    0%,
+    100% {
+        top: 10%;
+        right: 10%;
+    }
+    25% {
+        top: 10%;
+        right: calc(100% - 35px);
+    }
+    50% {
+        top: calc(100% - 30px);
+        right: calc(100% - 35px);
+    }
+    75% {
+        top: calc(100% - 30px);
+        right: 10%;
+    }
+}

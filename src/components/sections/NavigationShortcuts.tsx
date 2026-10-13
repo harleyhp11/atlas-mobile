@@ -10,21 +10,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useTranslations } from 'next-intl';
 
 const GALLERY_IMAGES = [
-    '/gallery/Foto Utama.webp',
-    '/gallery/FotoSC1.webp',
-    '/gallery/FotoSC2.webp',
-    '/gallery/FotoSC3.webp',
-    '/gallery/FotoSC4.webp',
-    '/gallery/FotoSC5.webp',
-    '/gallery/academicaffairsdivision1.webp',
-    '/gallery/computernetworkpracticumassistant2.webp',
-    '/gallery/dataentryassistant1.webp',
-    '/gallery/delegateaiesecfutureleaders20241.webp',
-    '/gallery/environmentalhygieneteam1.webp',
-    '/gallery/environmentalhygieneteam2.webp',
-    '/gallery/logisticsoperatorcampusexpo20242.webp',
-    '/gallery/researchassistant1.webp',
-    '/gallery/researchassistant2.webp',
+    "/obra/obra-01.webp",
+    "/obra/obra-02.webp",
+    "/obra/obra-03.webp",
+    "/obra/obra-04.webp",
+    "/obra/obra-05.webp",
+    "/obra/obra-06.webp",
 ];
 
 export const NavigationShortcuts = () => {
@@ -92,25 +83,23 @@ export const NavigationShortcuts = () => {
         {
             title: t('shortcuts.volume2'),
             items: [
-                { id: '04', title: t('experience'), href: '/experience' },
-                { id: '05', title: t('menu.experience'), href: '/experience' }, // Education? Original was Experience too in href
-                { id: '06', title: t('projects'), href: '/projects' },
-                { id: '07', title: t('achievements'), href: '/achievements' },
+                { id: '04', title: t('projects'), href: '/projects' },
+                { id: '05', title: t('servicios'), href: '/servicios' },
             ]
         },
         {
             title: t('shortcuts.volume3'),
             items: [
-                { id: '08', title: t('skills'), href: '/skills#hard-skills' },
-                { id: '09', title: t('menu.skills'), href: '/skills#soft-skills' },
-                { id: '10', title: t('tools'), href: '/skills#tools' },
+                { id: '06', title: t('skills'), href: '/skills#hard-skills' },
+                { id: '07', title: t('menu.skills'), href: '/skills#soft-skills' },
+                { id: '08', title: t('tools'), href: '/skills#tools' },
             ]
         },
         {
             title: t('shortcuts.volume4'),
             items: [
-                { id: '11', title: t('blog'), href: '/blog' },
-                { id: '12', title: t('gallery'), href: '/gallery' },
+                { id: '09', title: t('blog'), href: '/blog' },
+                { id: '10', title: t('gallery'), href: '/gallery' },
             ]
         }
     ], [t]);
