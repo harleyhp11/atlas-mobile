@@ -97,7 +97,7 @@ export default function LabA() {
                         <p className="m-p a-intro" data-rv>
                             Toca un servicio para verlo funcionar.
                         </p>
-                        <Servicios variante="indice" tema="oscuro" />
+                        <Servicios variante="indice" tema="oscuro" inicial={0} />
                     </div>
                 </section>
 

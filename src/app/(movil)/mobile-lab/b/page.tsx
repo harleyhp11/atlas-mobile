@@ -7,7 +7,7 @@ import { PROBLEMA, PROMESAS, WHATSAPP, whatsapp } from '@/components/movil/datos
 import { Revelador } from '@/components/movil/Revelador';
 import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
-import { CarruselPerdidas } from '@/components/movil/lab/CarruselPerdidas';
+import { CarruselPerdidas } from '@/components/movil/home/CarruselPerdidas';
 import { HeroProducto } from '@/components/movil/lab/HeroProducto';
 import { Cifra, LabPie } from '@/components/movil/lab/LabPie';
 import { ENLACES_LAB } from '../enlaces';
@@ -91,7 +91,7 @@ export default function LabB() {
                         <p className="m-p b-intro" data-rv>
                             Toca una tarjeta para verla funcionar.
                         </p>
-                        <Servicios variante="mosaico" tema="oscuro" />
+                        <Servicios variante="mosaico" tema="oscuro" inicial={0} />
                     </div>
                 </section>
 

@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 import { WhatsApp } from '../iconos';
-import './escenas.css';
+import './escenas-base.css';
 import './perdidas.css';
 
 /* Mini-interfaces de "Lo que pierdes sin web": tres escenas cortas, solo

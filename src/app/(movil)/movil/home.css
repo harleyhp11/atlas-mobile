@@ -1,0 +1,42 @@
+/* =====================================================================
+   HOME MÓVIL — lo que une las secciones: las cintas cruzando el borde de la
+   isla clara de servicios, y la isla misma.
+   ===================================================================== */
+
+.home-movil {
+    background: var(--negro);
+    padding-bottom: 10px;
+}
+
+.home-cintas {
+    position: relative;
+    z-index: 3;
+    margin: -96px 0 -86px;
+}
+
+.home-isla {
+    position: relative;
+    z-index: 2;
+    margin: 0 8px;
+    padding: 104px 0 40px;
+    border-radius: var(--isla);
+    background: var(--papel);
+    color: var(--tinta);
+}
+.home-isla .m-p {
+    color: rgba(11, 11, 12, 0.72);
+}
+.home-h2 {
+    margin-top: 18px;
+    color: var(--tinta);
+}
+.home-intro {
+    margin: 16px 0 24px;
+}
+
+@media (min-width: 768px) {
+    .home-isla {
+        max-width: 760px;
+        margin-inline: auto;
+    }
+}

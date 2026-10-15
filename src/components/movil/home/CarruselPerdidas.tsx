@@ -4,15 +4,19 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { PERDIDAS } from '../datos';
 import { UI_PERDIDA } from '../escenas/Perdidas';
 import { Flecha } from '../iconos';
+import './carrusel.css';
 
-/* DIRECCION B — "Lo que pierdes sin web" como carrusel de producto: tres
-   tarjetas con su mini-interfaz, la siguiente asomando por la derecha y el
-   indicador "01 / 03". Scroll nativo con snap; las flechas solo ayudan. */
+/* "Lo que pierdes sin web" como carrusel de producto: tres tarjetas con su
+   mini-interfaz, la siguiente asomando por la derecha y el indicador
+   "01 / 03". Scroll nativo con snap; las flechas solo ayudan.
+
+   `textos={false}` deja cada tarjeta en etiqueta + titulo: la animacion ya
+   cuenta la historia (asi lo pidio Harley para la home). */
 
 const dos = (n: number) => String(n).padStart(2, '0');
 
-export function CarruselPerdidas() {
-    const pista = useRef<HTMLUListElement>(null);
+export function CarruselPerdidas({ textos = true }: { textos?: boolean }) {
+    const pista = useRef<HTMLDivElement>(null);
     const [i, setI] = useState(0);
 
     useEffect(() => {
@@ -45,12 +49,12 @@ export function CarruselPerdidas() {
     };
 
     return (
-        <div className="b-carrusel" role="region" aria-roledescription="carrusel" aria-label="Lo que pierdes sin web">
-            <ul ref={pista} className="b-carrusel-pista">
+        <div className={`b-carrusel${textos ? '' : ' b-carrusel--titulos'}`} role="region" aria-roledescription="carrusel" aria-label="Lo que pierdes sin web">
+            <div ref={pista} className="b-carrusel-pista">
                 {PERDIDAS.map((p, k) => {
                     const Ui = UI_PERDIDA[p.clave];
                     return (
-                        <li
+                        <div
                             key={p.clave}
                             className="b-carta"
                             role="group"
@@ -66,12 +70,12 @@ export function CarruselPerdidas() {
                                     {p.label}
                                 </span>
                                 <h3 className="b-carta-t">{p.titulo}</h3>
-                                <p>{p.texto}</p>
+                                {textos && <p>{p.texto}</p>}
                             </div>
-                        </li>
+                        </div>
                     );
                 })}
-            </ul>
+            </div>
             <div className="b-carrusel-pie">
                 <span className="m-mono b-carrusel-n" aria-live="polite">
                     {dos(i + 1)} / {dos(PERDIDAS.length)}

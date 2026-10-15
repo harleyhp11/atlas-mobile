@@ -1,0 +1,217 @@
+/* =====================================================================
+   HOME MÓVIL · (02) Por qué Atlas — bento de tarjetas mixtas
+   ===================================================================== */
+
+.h-ventajas {
+    position: relative;
+    isolation: isolate;
+    padding: 56px 0 132px;
+    overflow: hidden;
+}
+/* resplandor rojo que sube desde abajo, hacia las cintas */
+.h-ventajas::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 50%;
+    bottom: -230px;
+    width: 170%;
+    height: 560px;
+    translate: -50% 0;
+    background: radial-gradient(closest-side, rgba(225, 29, 58, 0.55), rgba(225, 29, 58, 0.12) 55%, rgba(225, 29, 58, 0) 75%);
+    pointer-events: none;
+}
+.h-ventajas-h2 {
+    margin-top: 18px;
+}
+.h-bento {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.08fr 1fr;
+    gap: 10px;
+    margin-top: 40px;
+}
+.h-bt {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0;
+    padding: 16px;
+    border-radius: 26px;
+    background: linear-gradient(180deg, #1c1d20, #131416);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+.h-bt-lbl {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--t2);
+}
+.h-bt strong {
+    font-family: var(--f-display);
+    font-weight: 650;
+    font-size: 32px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+.h-bt-txt {
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--t2);
+}
+.h-bt--foto {
+    grid-row: 1 / 3;
+    min-height: 320px;
+    padding: 0;
+    background: #050505;
+}
+.h-bt--foto img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 40%;
+}
+.h-bt-chip {
+    position: absolute;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 14px;
+    background: rgba(12, 12, 13, 0.62);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.h-bt--blanca {
+    background: var(--blanco);
+    color: var(--tinta);
+    box-shadow: none;
+}
+.h-bt--blanca .h-bt-lbl,
+.h-bt--blanca .h-bt-txt {
+    color: rgba(11, 11, 12, 0.66);
+}
+.h-bt--blanca strong {
+    font-size: 40px;
+}
+.h-barras {
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    height: 70px;
+    margin-top: 6px;
+}
+.h-barras i {
+    flex: 1;
+    height: var(--h);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.16);
+    transform-origin: 50% 100%;
+    transition: scale 1s var(--ease) calc(var(--k) * 0.09s + 0.35s);
+}
+.h-barras i:last-child {
+    background: linear-gradient(180deg, var(--rojo-a), var(--rojo));
+    box-shadow: 0 10px 24px -8px rgba(225, 29, 58, 0.8);
+}
+.m-js .h-bt--barras:not(.is-in) .h-barras i {
+    scale: 1 0.08;
+}
+.h-barras-pie {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--t2);
+}
+.h-bt--insignia {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 18px;
+}
+.h-bt--insignia > span:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.h-bt--insignia strong {
+    font-size: 22px;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+}
+/* insignia 3D roja con la estrella de cuatro puntas */
+.h-insignia {
+    position: relative;
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 66px;
+    height: 66px;
+    border-radius: 22px;
+    background: linear-gradient(150deg, var(--rojo-a) 0%, var(--rojo-b) 45%, var(--rojo-c) 100%);
+    box-shadow:
+        inset 0 2px 1px rgba(255, 255, 255, 0.45),
+        inset 0 -6px 12px rgba(80, 0, 0, 0.45),
+        0 16px 30px -12px rgba(225, 29, 58, 0.85);
+    color: var(--blanco);
+    rotate: -8deg;
+}
+.h-insignia::after {
+    content: '';
+    position: absolute;
+    inset: 6px 10px auto;
+    height: 40%;
+    border-radius: 16px 16px 40% 40%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0));
+}
+.h-insignia svg {
+    position: relative;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+    filter: drop-shadow(0 2px 2px rgba(90, 0, 0, 0.45));
+}
+
+/* ------------------------------------------------------------- problema
+   "Lo que pierdes sin web" como carrusel de producto: tarjetas al 80 %,
+   la siguiente asomando, indicador 01 / 03 y flechas de 44 px. */
+.b-problema {
+    padding: 64px 0 36px;
+}
+.b-problema-frase {
+    margin-top: 18px;
+    max-width: 34ch;
+}
+.b-problema-carrusel.m-wrap {
+    max-width: none;
+    margin-top: 28px;
+    padding-inline: 0;
+}
+.b-problema-cta {
+    margin-top: 26px;
+}
+
+@media (min-width: 768px) {
+    .h-bento {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .h-bt--insignia {
+        grid-column: 2 / -1;
+    }
+}

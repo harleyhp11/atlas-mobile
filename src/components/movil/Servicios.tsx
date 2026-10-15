@@ -1,11 +1,16 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { flushSync } from 'react-dom';
 import { Boton } from './Boton';
 import { SERVICIOS, whatsapp } from './datos';
-import { Escena } from './escenas/Escenas';
 import './servicios.css';
+
+/* Las escenas (su JS y su CSS, que incluye el del FAQ del escritorio) se
+   cargan aparte, despues del primer pintado: no bloquean el render del hero.
+   El escenario tiene alto fijo, asi que montarlas no mueve nada. */
+const Escena = dynamic(() => import('./escenas/Escenas').then((m) => m.Escena), { ssr: false, loading: () => null });
 
 /* Los cinco servicios. Cada uno se abre SOLO al tocarlo —nunca con el
    scroll— y al abrirse monta su mini-interfaz, que arranca de cero cada vez.
@@ -24,14 +29,16 @@ import './servicios.css';
 type Props = {
     variante: 'indice' | 'mosaico' | 'filas';
     tema?: 'claro' | 'oscuro';
-    inicial?: number;
+    /* Servicio abierto al cargar. Por defecto ninguno: la escena (y su CSS)
+       se descarga al primer toque, y no le cuesta nada a la carga inicial. */
+    inicial?: number | null;
 };
 
 const dos = (n: number) => String(n).padStart(2, '0');
 
-export function Servicios({ variante, tema = 'oscuro', inicial = 0 }: Props) {
+export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) {
     const unico = variante === 'mosaico';
-    const [abiertos, setAbiertos] = useState<number[]>([inicial]);
+    const [abiertos, setAbiertos] = useState<number[]>(inicial === null ? [] : [inicial]);
     const [vueltas, setVueltas] = useState<number[]>(() => SERVICIOS.map(() => 0));
     const [visibles, setVisibles] = useState<number[]>([]);
     const [reducido, setReducido] = useState(false);

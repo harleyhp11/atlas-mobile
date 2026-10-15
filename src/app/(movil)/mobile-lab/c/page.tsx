@@ -7,7 +7,7 @@ import { PERDIDAS, PROBLEMA, PROMESAS, whatsapp } from '@/components/movil/datos
 import { Revelador } from '@/components/movil/Revelador';
 import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
-import { HeroCine } from '@/components/movil/lab/HeroCine';
+import { HeroInicio as HeroCine } from '@/components/movil/home/HeroInicio';
 import { Cifra, LabPie } from '@/components/movil/lab/LabPie';
 import { ENLACES_LAB } from '../enlaces';
 import './c.css';
@@ -105,7 +105,7 @@ export default function LabC() {
                         <p className="m-p c-intro" data-rv>
                             Toca un servicio para verlo funcionar.
                         </p>
-                        <Servicios variante="filas" tema="oscuro" />
+                        <Servicios variante="filas" tema="oscuro" inicial={0} />
                     </div>
                 </section>
 

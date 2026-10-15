@@ -1,0 +1,107 @@
+/* =====================================================================
+   ATLAS · MÓVIL — base de las mini-interfaces (.mx-ui, telefono, dedo).
+   Va aparte para que el carrusel de perdidas no arrastre el CSS de todas
+   las escenas de servicios, que se carga recien al abrir uno.
+   ===================================================================== */
+
+/* ------------------------------------------------------------- comunes */
+.mx-ui {
+    --fg: #fff;
+    --mut: rgba(255, 255, 255, 0.62);
+    --line: rgba(255, 255, 255, 0.14);
+    --fondo: #1c1d20;
+    --tel: #0b0b0c;
+    --pantalla: #f4f4f1;
+    --ink: #0b0b0c;
+    --gris: #8d8d92;
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background:
+        radial-gradient(120% 70% at 50% 110%, rgba(225, 29, 58, 0.22), transparent 60%),
+        var(--fondo);
+    color: var(--fg);
+    font-family: var(--f-texto);
+    -webkit-font-smoothing: antialiased;
+    container-type: inline-size;
+}
+.mx-ui[data-tema='claro'] {
+    --fg: #0b0b0c;
+    --mut: rgba(11, 11, 12, 0.6);
+    --line: rgba(11, 11, 12, 0.14);
+    --fondo: #e4e4e0;
+    background:
+        radial-gradient(120% 70% at 50% 115%, rgba(225, 29, 58, 0.14), transparent 60%),
+        var(--fondo);
+}
+.mx-ui *,
+.mx-ui *::before,
+.mx-ui *::after {
+    box-sizing: border-box;
+}
+.mx-ui.is-off,
+.mx-ui.is-off *,
+.mx-ui.is-off *::before,
+.mx-ui.is-off *::after {
+    animation-play-state: paused !important;
+}
+
+/* telefono */
+.mx-tel {
+    position: absolute;
+    border-radius: 24px;
+    background: var(--tel);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.1),
+        0 30px 50px -22px rgba(0, 0, 0, 0.7);
+}
+.mx-tel::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 19px;
+    background: var(--pantalla);
+}
+.mx-tel-isla {
+    position: absolute;
+    z-index: 4;
+    top: 11px;
+    left: 50%;
+    width: 40px;
+    height: 11px;
+    margin-left: -20px;
+    border-radius: 8px;
+    background: #0b0b0c;
+}
+
+/* dedo que toca */
+.mx-dedo {
+    position: absolute;
+    z-index: 6;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(11, 11, 12, 0.22);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.9),
+        0 6px 14px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+}
+
+@keyframes mx-entra {
+    from {
+        opacity: 0;
+        translate: 0 26px;
+    }
+    to {
+        opacity: 1;
+        translate: 0 0;
+    }
+}
+@keyframes mx-gira {
+    to {
+        rotate: 360deg;
+    }
+}

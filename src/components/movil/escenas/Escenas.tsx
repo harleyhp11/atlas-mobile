@@ -4,6 +4,7 @@ import { UiNavegador, UiPanel } from '@/components/sections/faq/escenas';
 import type { EscenaServicio } from '../datos';
 import { Check, Estrella, WhatsApp } from '../iconos';
 import '@/components/sections/faq/AtlasFAQ.css';
+import './escenas-base.css';
 import './escenas.css';
 
 /* Mini-interfaces de los servicios: cada una es una pelicula corta en bucle,

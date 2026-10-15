@@ -554,7 +554,20 @@ ol {
     display: inline-block;
     animation: m-escribe 1.25s cubic-bezier(0.55, 0.05, 0.25, 1) both var(--d, 0.15s);
 }
+/* Dos keyframes iguales: alternar el nombre reinicia el trazo sin montar
+   un elemento nuevo (data-par, ver Firma.tsx). */
+.m-firma[data-par='1'] > span {
+    animation-name: m-escribe-b;
+}
 @keyframes m-escribe {
+    from {
+        clip-path: inset(-40% 100% -40% -8%);
+    }
+    to {
+        clip-path: inset(-40% -8% -40% -8%);
+    }
+}
+@keyframes m-escribe-b {
     from {
         clip-path: inset(-40% 100% -40% -8%);
     }

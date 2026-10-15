@@ -10,7 +10,10 @@ import '@/styles/globals.css';
    los estilos globales, la Inter y el tema oscuro fijo (no hay next-themes
    que lo ponga). Por fuera se ve igual que el 404 de dentro del sitio. */
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
+// Sin precarga: con globalNotFound, Next mete las fuentes de este archivo
+// en el <head> de TODAS las rutas, y la home movil bajaba 48 KB de Inter que
+// nunca usa. El 404 la pide al pintarse, que es cuando hace falta.
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap', preload: false });
 
 export const metadata: Metadata = {
     title: 'Página no encontrada | Atlas',

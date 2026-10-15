@@ -1,0 +1,129 @@
+/* =====================================================================
+   Carrusel "Lo que pierdes sin web": tarjetas al 80 %, la siguiente
+   asomando, indicador 01 / 03 y flechas de 44 px.
+   ===================================================================== */
+
+.b-carrusel-pista {
+    --orilla: max(var(--g), calc((100% - var(--ancho)) / 2));
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--orilla);
+    padding: 0 var(--orilla) 4px;
+    scrollbar-width: none;
+}
+.b-carrusel-pista::-webkit-scrollbar {
+    display: none;
+}
+.b-carta {
+    flex: 0 0 min(80%, 340px);
+    display: flex;
+    flex-direction: column;
+    scroll-snap-align: start;
+    border-radius: 26px;
+    background: linear-gradient(180deg, #1c1d20, #131416);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+}
+.b-carta-ui {
+    position: relative;
+    height: 272px;
+    margin: 8px 8px 0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.b-carta-txt {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 16px 20px;
+}
+.b-carta-lbl {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--t2);
+}
+.b-carta-t {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+}
+.b-carta-txt p {
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--t2);
+}
+.b-carrusel-pie {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    max-width: calc(var(--ancho) + var(--g) * 2);
+    margin-inline: auto;
+    padding: 18px var(--g) 0;
+}
+.b-carrusel-n {
+    color: var(--t2);
+    font-variant-numeric: tabular-nums;
+}
+.b-carrusel-barra {
+    position: relative;
+    flex: 1;
+    height: 2px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.14);
+    overflow: hidden;
+}
+.b-carrusel-barra i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(100% / var(--n));
+    height: 100%;
+    background: var(--blanco);
+    translate: calc(var(--k) * 100%) 0;
+    transition: translate 0.5s var(--ease);
+}
+.b-carrusel-flechas {
+    display: flex;
+    gap: 8px;
+}
+.b-carrusel-flechas button {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--linea);
+    transition:
+        opacity 0.3s,
+        background-color 0.3s;
+}
+.b-carrusel-flechas button svg {
+    width: 16px;
+    height: 16px;
+    rotate: 45deg;
+}
+.b-carrusel-flechas button:first-child svg {
+    rotate: -135deg;
+}
+.b-carrusel-flechas button:disabled {
+    opacity: 0.32;
+    cursor: default;
+}
+.b-carrusel-flechas button:not(:disabled):active {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Solo titulos: la tarjeta queda en etiqueta + titulo y el texto respira. */
+.b-carrusel--titulos .b-carta-txt {
+    padding-bottom: 18px;
+}
+.b-carrusel--titulos .b-carta-t {
+    font-size: 21px;
+}
