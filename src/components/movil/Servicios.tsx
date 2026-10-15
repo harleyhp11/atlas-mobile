@@ -20,9 +20,11 @@ const Escena = dynamic(() => import('./escenas/Escenas').then((m) => m.Escena), 
      · 'mosaico' — baldosas de dos columnas; la abierta ocupa el ancho;
      · 'filas'   — filas de 68 px con colores alternos sobre una isla clara.
 
-   En 'indice' y 'filas' cada fila se abre y cierra por su cuenta: asi abrir
-   una no cierra otra de mas arriba y la pagina no salta. En 'mosaico' solo
-   hay una abierta, y el cambio se anima con View Transitions donde existen.
+   Solo hay uno abierto a la vez: al abrir otro, el anterior se cierra (asi
+   lo pidio Harley). Si el que se cierra esta mas arriba, la fila tocada
+   subiria de golpe; mientras dura la animacion se compensa el scroll para
+   que se quede quieta bajo el dedo. En 'mosaico' el cambio se anima con
+   View Transitions donde existen.
 
    La escena solo corre si su panel esta abierto Y en pantalla. */
 
@@ -36,8 +38,33 @@ type Props = {
 
 const dos = (n: number) => String(n).padStart(2, '0');
 
+/* Mantiene `el` en la misma altura de pantalla mientras el acordeon se
+   reacomoda (~la duracion de la transicion). Se corta si el usuario empieza
+   a hacer scroll por su cuenta. */
+function anclar(el: HTMLElement, ms = 820) {
+    const y0 = el.getBoundingClientRect().top;
+    const t0 = performance.now();
+    let vivo = true;
+    const soltar = () => {
+        vivo = false;
+    };
+    window.addEventListener('touchstart', soltar, { passive: true, once: true });
+    window.addEventListener('wheel', soltar, { passive: true, once: true });
+    const paso = () => {
+        if (!vivo) return;
+        const d = el.getBoundingClientRect().top - y0;
+        if (Math.abs(d) > 0.5) window.scrollBy({ top: d, behavior: 'instant' as ScrollBehavior });
+        if (performance.now() - t0 < ms) requestAnimationFrame(paso);
+        else {
+            window.removeEventListener('touchstart', soltar);
+            window.removeEventListener('wheel', soltar);
+        }
+    };
+    requestAnimationFrame(paso);
+}
+
 export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) {
-    const unico = variante === 'mosaico';
+    const conTransicion = variante === 'mosaico';
     const [abiertos, setAbiertos] = useState<number[]>(inicial === null ? [] : [inicial]);
     const [vueltas, setVueltas] = useState<number[]>(() => SERVICIOS.map(() => 0));
     const [visibles, setVisibles] = useState<number[]>([]);
@@ -63,15 +90,16 @@ export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) 
         return () => io.disconnect();
     }, []);
 
-    const tocar = (i: number) => {
+    const tocar = (i: number, boton: HTMLElement) => {
         const cambiar = () => {
-            setAbiertos((a) => (a.includes(i) ? a.filter((x) => x !== i) : unico ? [i] : [...a, i]));
+            setAbiertos((a) => (a.includes(i) ? [] : [i]));
             setVueltas((v) => v.map((n, k) => (k === i ? n + 1 : n)));
         };
         const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
-        if (unico && doc.startViewTransition && !reducido) {
+        if (conTransicion && doc.startViewTransition && !reducido) {
             doc.startViewTransition(() => flushSync(cambiar));
         } else {
+            anclar(boton);
             cambiar();
         }
     };
@@ -84,7 +112,7 @@ export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) 
                     <li
                         key={s.slug}
                         className={`m-srv-item m-srv-item--${i}${abierto ? ' is-open' : ''}`}
-                        style={{ '--i': i, viewTransitionName: unico ? `srv-${s.slug}` : undefined } as CSSProperties}
+                        style={{ '--i': i, viewTransitionName: conTransicion ? `srv-${s.slug}` : undefined } as CSSProperties}
                         data-rv
                     >
                         <h3 className="m-srv-h">
@@ -94,7 +122,7 @@ export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) 
                                 className="m-srv-btn"
                                 aria-expanded={abierto}
                                 aria-controls={`srv-p-${s.slug}`}
-                                onClick={() => tocar(i)}
+                                onClick={(e) => tocar(i, e.currentTarget)}
                             >
                                 <span className="m-srv-n">{dos(i + 1)}</span>
                                 <span className="m-srv-corto" aria-hidden="true">
