@@ -19,8 +19,8 @@ import './herramientas.css';
    aparecian de golpe.
 
    Space Mono es una quinta familia (el brief del movil pide cuatro): va
-   porque Harley pidio la tarjeta "tal cual". No se precarga, y la seccion
-   usa content-visibility, asi que la fuente se pide recien al acercarse. */
+   porque Harley pidio la tarjeta "tal cual". No se precarga: el navegador la
+   pide al maquetar el titulo del vidrio, sin competir con el hero. */
 
 const spaceMono = Space_Mono({ weight: '700', subsets: ['latin'], display: 'swap', preload: false, variable: '--font-space-mono' });
 

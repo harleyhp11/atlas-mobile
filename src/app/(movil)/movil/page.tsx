@@ -8,6 +8,7 @@ import { Titular } from '@/components/movil/Titular';
 import { Herramientas } from '@/components/movil/home/Herramientas';
 import { HeroInicio } from '@/components/movil/home/HeroInicio';
 import { Problema } from '@/components/movil/home/Problema';
+import { Trabajos } from '@/components/movil/home/Trabajos';
 import { Ventajas } from '@/components/movil/home/Ventajas';
 import './home.css';
 
@@ -21,10 +22,12 @@ import './home.css';
      · (02) el bento de "Producto": monolito, desde S/ 400, entrega y
        respuesta en 24 h;
      · cintas cruzando hacia (03) los servicios de "Cine", en isla clara;
-     · (04) Herramientas en la misma isla: la tarjeta del stack del
-       escritorio (foto, vidrio "Lo que dominamos" y cintas de logos).
-   Faltan Trabajos, nota del fundador, Proceso, Precios, Testimonio +
-   Preguntas y el CTA final con el pie. */
+     · (04) Con que trabajamos, en la misma isla: la tarjeta del stack del
+       escritorio y la cita del fundador;
+     · (05) Trabajos sobre negro: muro de portadas en dos columnas que se
+       desplazan en sentidos opuestos con el scroll.
+   Faltan Proceso, Precios, Testimonio + Preguntas y el CTA final con el
+   pie. */
 
 export const metadata: Metadata = {
     alternates: { canonical: '/' },
@@ -35,7 +38,7 @@ const MENU_HOME = [
     { n: '01', label: 'Servicios', href: '#servicios' },
     { n: '02', label: 'Por qué Atlas', href: '#ventajas' },
     { n: '03', label: 'Herramientas', href: '#herramientas' },
-    { n: '04', label: 'Trabajos', href: '/projects' },
+    { n: '04', label: 'Trabajos', href: '#trabajos' },
     { n: '05', label: 'Precios', href: '/servicios' },
     { n: '06', label: 'Contacto', href: '/contact' },
 ];
@@ -48,7 +51,7 @@ export default function HomeMovil() {
             </a>
             <Cabecera enlaces={MENU_HOME} />
             <main id="m-contenido" className="home-movil">
-                <HeroInicio />
+                <HeroInicio trabajos="#trabajos" />
                 <Problema />
                 <Ventajas />
 
@@ -68,6 +71,8 @@ export default function HomeMovil() {
 
                     <Herramientas />
                 </div>
+
+                <Trabajos />
             </main>
             <Revelador />
         </>

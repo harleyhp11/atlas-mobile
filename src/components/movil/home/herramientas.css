@@ -4,14 +4,13 @@
    mascara de la palabra y duracion de las cintas.
    ===================================================================== */
 
-/* content-visibility: el navegador no maqueta ni pinta la seccion hasta que
-   se acerca, y por eso tampoco pide Space Mono en la carga inicial. */
+/* Sin content-visibility a proposito: con el alto reservado a ojo, los
+   saltos a una ancla de mas abajo (#trabajos) caian corridos cuando la
+   seccion se pintaba, sobre todo en Safari, que no compensa el scroll. */
 .h-tools {
     position: relative;
     padding: 72px 0 8px;
     overflow-x: clip;
-    content-visibility: auto;
-    contain-intrinsic-size: auto 1150px;
 }
 
 /* Titular como el de servicios (Titular.tsx: palabras que suben y caja roja

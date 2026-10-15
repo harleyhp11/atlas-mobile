@@ -1,0 +1,144 @@
+/* =====================================================================
+   HOME MÓVIL · (05) Trabajos — muro de portadas en dos columnas que se
+   desplazan en sentidos opuestos con el scroll.
+   ===================================================================== */
+
+.h-trabajos {
+    position: relative;
+    padding: 84px 0 72px;
+    background: var(--negro);
+    overflow: clip;
+}
+.h-trab-h2 {
+    margin-top: 18px;
+}
+
+.h-trab-grilla {
+    --d: 140px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 10px;
+    width: 100%;
+    max-width: calc(var(--ancho) + var(--g) * 2);
+    margin: 34px auto 0;
+    padding: 30px var(--g);
+    /* Los bordes se funden en el negro: lo que se sale al desplazarse no
+       se corta en seco. */
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+.h-trab-col {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+/* desfase de partida, como en la referencia: las columnas no arrancan
+   alineadas */
+.h-trab-col--b {
+    margin-top: 64px;
+}
+
+/* La columna A sube y la B baja mientras la seccion cruza la pantalla. */
+@supports (animation-timeline: view()) {
+    .h-trab-col {
+        animation: h-trab-sube linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 100%;
+    }
+    .h-trab-col--b {
+        animation-name: h-trab-baja;
+    }
+}
+@supports not (animation-timeline: view()) {
+    .h-trab-col--a {
+        translate: 0 calc((0.5 - var(--p, 0.5)) * 2 * var(--d));
+    }
+    .h-trab-col--b {
+        translate: 0 calc((var(--p, 0.5) - 0.5) * 2 * var(--d));
+    }
+}
+@keyframes h-trab-sube {
+    from {
+        translate: 0 var(--d);
+    }
+    to {
+        translate: 0 calc(var(--d) * -1);
+    }
+}
+@keyframes h-trab-baja {
+    from {
+        translate: 0 calc(var(--d) * -1);
+    }
+    to {
+        translate: 0 var(--d);
+    }
+}
+
+/* tarjeta: marco oscuro, portada y pie con el nombre */
+.h-trab-carta {
+    display: block;
+    padding: 6px;
+    border-radius: 24px;
+    background: #111214;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    transition: transform 0.3s var(--ease);
+    -webkit-tap-highlight-color: transparent;
+}
+.h-trab-carta:active {
+    transform: scale(0.98);
+}
+.h-trab-img {
+    display: block;
+    border-radius: 18px;
+    overflow: hidden;
+    background: #1a1b1e;
+}
+.h-trab-img img {
+    width: 100%;
+    height: auto;
+    filter: grayscale(1) contrast(1.06);
+    transition:
+        filter 0.9s ease,
+        scale 1.2s var(--ease);
+}
+.h-trab-carta.is-color .h-trab-img img {
+    filter: none;
+    scale: 1.03;
+}
+.h-trab-pie {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 8px 6px;
+}
+.h-trab-pie b {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--blanco);
+}
+.h-trab-pie small {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--t2);
+}
+
+@media (min-width: 768px) {
+    .h-trab-grilla {
+        --d: 180px;
+        gap: 16px;
+    }
+    .h-trab-col {
+        gap: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .h-trab-col {
+        animation: none !important;
+        translate: none !important;
+    }
+}
