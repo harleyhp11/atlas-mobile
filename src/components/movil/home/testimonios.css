@@ -1,0 +1,201 @@
+/* =====================================================================
+   HOME MÓVIL · (06) Testimonios — cinta continua, ligeramente oblicua.
+   Compacta: la cinta mide lo que mide una tarjeta, no la pantalla.
+   ===================================================================== */
+
+.h-testi {
+    --inclina: 3.5deg;
+    --ancho-carta: min(78vw, 300px);
+    position: relative;
+    padding: 76px 0 64px;
+    background: var(--negro);
+    overflow: clip;
+}
+.h-testi-h2 {
+    margin-top: 18px;
+}
+
+/* El marco recorta; la capa inclinada lleva la cinta en diagonal y cada
+   tarjeta se endereza, asi el texto se lee recto. */
+.h-testi-marco {
+    position: relative;
+    margin-top: 40px;
+    padding: 34px 0 46px;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%);
+}
+.h-testi-inclinada {
+    rotate: var(--inclina);
+    margin-inline: -8%;
+}
+.h-testi-pista {
+    display: flex;
+    width: max-content;
+    animation: h-testi-cinta 46s linear infinite;
+}
+.h-testi-marco.is-off .h-testi-pista,
+.h-testi-marco:active .h-testi-pista {
+    animation-play-state: paused;
+}
+@media (hover: hover) {
+    .h-testi-marco:hover .h-testi-pista {
+        animation-play-state: paused;
+    }
+}
+@keyframes h-testi-cinta {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+.h-testi-grupo {
+    display: flex;
+}
+.h-testi-hueco {
+    padding: 0 22px;
+}
+
+/* ------------------------------------------------- la tarjeta (testimonials-3) */
+.h-testi-carta {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 22px;
+    width: var(--ancho-carta);
+    min-height: 228px;
+    margin: 0;
+    padding: 26px 22px 20px;
+    rotate: calc(var(--inclina) * -1);
+    background: radial-gradient(50% 80% at 25% 0%, rgba(255, 255, 255, 0.1), transparent);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+/* lineas del marco que se pasan 16 px de cada esquina */
+.h-testi-linea {
+    position: absolute;
+    background: var(--linea);
+}
+.h-testi-linea--izq,
+.h-testi-linea--der {
+    top: -16px;
+    bottom: -16px;
+    width: 1px;
+}
+.h-testi-linea--izq {
+    left: -1px;
+}
+.h-testi-linea--der {
+    right: -1px;
+}
+.h-testi-linea--arr,
+.h-testi-linea--aba {
+    left: -16px;
+    right: -16px;
+    height: 1px;
+}
+.h-testi-linea--arr {
+    top: -1px;
+}
+.h-testi-linea--aba {
+    bottom: -1px;
+}
+.h-testi-cruz {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    width: 14px;
+    height: 14px;
+    translate: calc(-50% - 0.5px) calc(-50% - 0.5px);
+    stroke-width: 1;
+    color: var(--t3);
+}
+
+.h-testi-cita {
+    display: flex;
+    gap: 14px;
+    margin: 0;
+}
+.h-testi-comillas {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    stroke-width: 1;
+    color: var(--t3);
+}
+.h-testi-cita p {
+    flex: 1;
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+
+.h-testi-quien {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.h-testi-avatar {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #1d1e21;
+    color: var(--blanco);
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 16px;
+    /* anillo con separacion, como el ring + ring-offset del original */
+    box-shadow:
+        0 0 0 2px var(--negro),
+        0 0 0 4px var(--linea);
+}
+.h-testi-datos {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.3;
+}
+.h-testi-datos cite {
+    font-style: normal;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--blanco);
+}
+.h-testi-datos span {
+    font-size: 12px;
+    color: var(--t2);
+}
+.h-testi-datos b {
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.86);
+}
+
+@media (min-width: 768px) {
+    .h-testi {
+        --ancho-carta: 320px;
+    }
+}
+
+/* Sin movimiento: la cinta se queda quieta y se desplaza con el dedo. */
+@media (prefers-reduced-motion: reduce) {
+    .h-testi-inclinada {
+        rotate: none;
+        margin-inline: 0;
+        overflow-x: auto;
+    }
+    .h-testi-pista {
+        animation: none;
+    }
+    .h-testi-grupo + .h-testi-grupo {
+        display: none;
+    }
+    .h-testi-carta {
+        rotate: none;
+    }
+}

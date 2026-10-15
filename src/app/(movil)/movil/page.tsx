@@ -8,6 +8,7 @@ import { Titular } from '@/components/movil/Titular';
 import { Herramientas } from '@/components/movil/home/Herramientas';
 import { HeroInicio } from '@/components/movil/home/HeroInicio';
 import { Problema } from '@/components/movil/home/Problema';
+import { Testimonios } from '@/components/movil/home/Testimonios';
 import { Trabajos } from '@/components/movil/home/Trabajos';
 import { Ventajas } from '@/components/movil/home/Ventajas';
 import './home.css';
@@ -24,10 +25,10 @@ import './home.css';
      · cintas cruzando hacia (03) los servicios de "Cine", en isla clara;
      · (04) Con que trabajamos, en la misma isla: la tarjeta del stack del
        escritorio y la cita del fundador;
-     · (05) Trabajos sobre negro: muro de portadas en dos columnas que se
-       desplazan en sentidos opuestos con el scroll.
-   Faltan Proceso, Precios, Testimonio + Preguntas y el CTA final con el
-   pie. */
+     · (05) Trabajos sobre negro: muro de piezas en dos columnas en bucle,
+       con el titular al centro y parallax con el scroll;
+     · (06) Testimonios: cinta continua y ligeramente oblicua.
+   Faltan Proceso, Precios, Preguntas y el CTA final con el pie. */
 
 export const metadata: Metadata = {
     alternates: { canonical: '/' },
@@ -73,6 +74,7 @@ export default function HomeMovil() {
                 </div>
 
                 <Trabajos />
+                <Testimonios />
             </main>
             <Revelador />
         </>
