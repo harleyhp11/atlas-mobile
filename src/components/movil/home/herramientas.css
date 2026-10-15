@@ -161,7 +161,7 @@
     height: 0.5em;
     font-family: var(--f-display);
     font-weight: 700;
-    font-size: 84px;
+    font-size: 64px;
     line-height: 0.9;
     color: var(--rojo);
     transition:
@@ -174,9 +174,9 @@
 .h-cita-txt p {
     font-family: var(--f-display);
     font-weight: 500;
-    font-size: clamp(23px, 6.6vw, 28px);
-    line-height: 1.2;
-    letter-spacing: -0.022em;
+    font-size: clamp(18px, 5.1vw, 21px);
+    line-height: 1.3;
+    letter-spacing: -0.015em;
     color: var(--tinta);
     text-wrap: pretty;
 }
@@ -266,26 +266,13 @@
 .m-js .h-cita:not(.is-in) .h-cita-quien .m-mono {
     opacity: 0;
 }
-.h-cita-cta {
-    display: flex;
-    margin-top: 22px;
-    transition:
-        opacity 0.6s ease 1.8s,
-        translate 0.8s var(--ease) 1.8s;
-}
-.m-js .h-cita:not(.is-in) .h-cita-cta {
-    opacity: 0;
-    translate: 0 10px;
-}
-
 @media (prefers-reduced-motion: reduce) {
     .h-tools-pista {
         animation: none;
     }
     .m-js .h-cita:not(.is-in) .h-cita-txt p > span > span,
     .m-js .h-cita:not(.is-in) .h-cita-comillas,
-    .m-js .h-cita:not(.is-in) .h-cita-quien .m-mono,
-    .m-js .h-cita:not(.is-in) .h-cita-cta {
+    .m-js .h-cita:not(.is-in) .h-cita-quien .m-mono {
         opacity: 1;
         filter: none;
         translate: none;

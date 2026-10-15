@@ -1,8 +1,6 @@
 import { Space_Mono } from 'next/font/google';
 import type { CSSProperties } from 'react';
-import { Boton } from '../Boton';
 import { Ceja } from '../Ceja';
-import { whatsapp } from '../datos';
 import { Firma } from '../Firma';
 import { Titular } from '../Titular';
 import './herramientas.css';
@@ -81,7 +79,7 @@ function Cinta({ logos, sentido, etiqueta }: { logos: Logo[]; sentido: 'der' | '
    de Atlas se arma —la rampa sube, el cuadro cae en su sitio— y "Harley" se
    escribe en rojo. Todo arranca cuando la cita entra en pantalla (data-in →
    .is-in, ver Revelador). */
-const FRASE = 'Ninguna tecnología nos limita: elegimos la adecuada para tu negocio y construimos con ella.';
+const FRASE = 'Ninguna tecnología nos limita: elegimos la adecuada para tu negocio.';
 
 function Cita() {
     const palabras = FRASE.split(' ');
@@ -111,11 +109,6 @@ function Cita() {
                     <span className="m-mono">Fundador de Atlas</span>
                 </span>
             </figcaption>
-            <div className="h-cita-cta">
-                <Boton href={whatsapp('Hola Harley 👋 Quiero reservar una llamada con Atlas.')} variante="tinta" chico externo>
-                    Reservar una llamada
-                </Boton>
-            </div>
         </figure>
     );
 }
