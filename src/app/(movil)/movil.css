@@ -463,6 +463,29 @@ ol {
         transform: none;
     }
 }
+.m-btn--tinta {
+    /* respaldo y primer pintado: la misma tinta, quieta, en CSS; el canvas
+       la cubre cuando arranca */
+    --relleno: rgba(0, 0, 0, 0.35);
+    background:
+        radial-gradient(60% 140% at 22% 30%, rgba(225, 29, 58, 0.95), transparent 70%),
+        radial-gradient(50% 120% at 78% 75%, rgba(225, 29, 58, 0.6), transparent 70%),
+        #070001;
+}
+.m-btn-tinta {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    pointer-events: none;
+}
+.m-btn-tinta[data-listo='1'] {
+    opacity: 1;
+}
 .m-btn--claro {
     --bg: var(--blanco);
     --fg: var(--tinta);

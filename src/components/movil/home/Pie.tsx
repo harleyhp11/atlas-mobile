@@ -72,7 +72,7 @@ export function Pie() {
                     Cuéntanos tu idea por WhatsApp. Te respondemos en menos de 24 horas, con el precio cerrado por escrito.
                 </p>
                 <div className="h-pie-ctas" data-rv>
-                    <Boton href={WHATSAPP} externo>
+                    <Boton href={WHATSAPP} externo tinta>
                         Escríbenos por WhatsApp
                     </Boton>
                     <a href="/servicios" className="h-pie-txt">

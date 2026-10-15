@@ -33,7 +33,7 @@ export function Problema() {
             </div>
 
             <div className="m-wrap h-problema-cta" data-rv>
-                <Boton href={whatsapp(PROBLEMA.whatsapp)} externo>
+                <Boton href={whatsapp(PROBLEMA.whatsapp)} externo tinta>
                     {PROBLEMA.cta}
                 </Boton>
             </div>
