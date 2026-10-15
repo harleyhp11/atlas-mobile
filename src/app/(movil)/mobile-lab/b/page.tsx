@@ -3,10 +3,11 @@ import { Boton } from '@/components/movil/Boton';
 import { Cabecera } from '@/components/movil/Cabecera';
 import { Ceja } from '@/components/movil/Ceja';
 import { Cintas } from '@/components/movil/Cintas';
-import { PROMESAS, WHATSAPP } from '@/components/movil/datos';
+import { PROBLEMA, PROMESAS, WHATSAPP, whatsapp } from '@/components/movil/datos';
 import { Revelador } from '@/components/movil/Revelador';
 import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
+import { CarruselPerdidas } from '@/components/movil/lab/CarruselPerdidas';
 import { HeroProducto } from '@/components/movil/lab/HeroProducto';
 import { Cifra, LabPie } from '@/components/movil/lab/LabPie';
 import { ENLACES_LAB } from '../enlaces';
@@ -35,12 +36,31 @@ export default function LabB() {
             <main id="m-contenido" className="lab-b">
                 <HeroProducto />
 
+                {/* Lo que pierdes sin web: carrusel de tres escenas con su interfaz. */}
+                <section id="problema" className="b-problema" data-tono="oscuro" aria-labelledby="problema-t">
+                    <div className="m-wrap">
+                        <Ceja n="01">{PROBLEMA.ceja}</Ceja>
+                        <Titular id="problema-t" className="m-h2 b-h2" texto={PROBLEMA.titular} destacar={PROBLEMA.destacar} />
+                        <p className="m-p b-problema-frase" data-rv>
+                            {PROBLEMA.frase}
+                        </p>
+                    </div>
+                    <div className="m-wrap b-problema-carrusel" data-rv>
+                        <CarruselPerdidas />
+                    </div>
+                    <div className="m-wrap b-problema-cta" data-rv>
+                        <Boton href={whatsapp(PROBLEMA.whatsapp)} externo>
+                            {PROBLEMA.cta}
+                        </Boton>
+                    </div>
+                </section>
+
                 <Cintas className="b-cintas" />
 
                 <section id="promesa" className="b-promesa" data-tono="oscuro" aria-labelledby="promesa-t">
                     <div className="m-wrap">
                         <div className="b-cabeza">
-                            <Ceja n="01">Por qué Atlas</Ceja>
+                            <Ceja n="02">Por qué Atlas</Ceja>
                             <Titular id="promesa-t" className="m-h2 b-h2" texto="Rápido. Impecable. Puntual." destacar="Puntual." modo="marco" />
                             <div className="b-cabeza-lado" data-rv>
                                 <p className="m-p">La fecha de lanzamiento queda fijada desde la primera reunión.</p>
@@ -66,7 +86,7 @@ export default function LabB() {
 
                 <section id="servicios" className="b-servicios" data-tono="oscuro" aria-labelledby="servicios-t">
                     <div className="m-wrap">
-                        <Ceja n="02">Servicios</Ceja>
+                        <Ceja n="03">Servicios</Ceja>
                         <Titular id="servicios-t" className="m-h2 b-h2" texto="Lo que construimos." destacar="construimos." />
                         <p className="m-p b-intro" data-rv>
                             Toca una tarjeta para verla funcionar.

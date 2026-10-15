@@ -68,6 +68,46 @@ export const PROMESAS: Promesa[] = [
     { cat: 'Propiedad', cuenta: 100, despues: ' %', unidad: 'tuyo', texto: 'El código y el dominio son tuyos.' },
 ];
 
+/* Lo que pierde un negocio sin web. Sin cifras: escenas que cualquier
+   dueño reconoce. El titular y la frase larga son los del bloque "(El
+   problema)" del escritorio ("Te buscan, no apareces."). */
+export const PROBLEMA = {
+    ceja: 'Lo que pierdes sin web',
+    titular: 'Te buscan, no apareces.',
+    destacar: 'no',
+    frase: 'Cada día sin presencia digital es un cliente que compara, duda y compra en otro lado.',
+    cta: 'Quiero aparecer',
+    whatsapp: 'Hola Atlas 👋 Quiero que mi negocio aparezca en internet.',
+};
+
+export type Perdida = {
+    clave: 'clientes' | 'plata' | 'tiempo';
+    label: string;
+    titulo: string;
+    texto: string;
+};
+
+export const PERDIDAS: Perdida[] = [
+    {
+        clave: 'clientes',
+        label: 'Clientes',
+        titulo: 'Te buscan y aparece tu competencia.',
+        texto: 'Alguien busca lo que vendes en Google o en Maps, no te encuentra y le escribe al primero que sí aparece.',
+    },
+    {
+        clave: 'plata',
+        label: 'Plata',
+        titulo: 'Fuera de tu horario, nadie te compra.',
+        texto: 'Si solo vendes por chat, vendes solo cuando contestas. De noche y los domingos, la venta se va a otro lado.',
+    },
+    {
+        clave: 'tiempo',
+        label: 'Tiempo',
+        titulo: 'Respondes lo mismo todos los días.',
+        texto: 'Precios, horarios, catálogo, ubicación: las mismas preguntas, una por una, por chat. Horas que no vuelven.',
+    },
+];
+
 export type EscenaServicio = 'navegador' | 'catalogo' | 'apps' | 'panel' | 'flujo';
 
 export type Servicio = {

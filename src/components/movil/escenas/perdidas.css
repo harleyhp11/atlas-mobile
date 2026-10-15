@@ -1,0 +1,560 @@
+/* =====================================================================
+   ATLAS · MÓVIL — mini-interfaces de "Lo que pierdes sin web"
+   Busqueda (clientes), Noche (plata) y Chats (tiempo). Un ciclo por
+   escena; .is-off las pausa fuera de pantalla.
+   ===================================================================== */
+
+/* ============================================================ BUSQUEDA */
+.px-busca {
+    --ciclo: 9s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 14px;
+}
+.px-busca-barra {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    height: 40px;
+    padding: 0 14px;
+    border-radius: 20px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 12.5px;
+    box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.6);
+}
+.px-busca-barra svg {
+    flex: none;
+    width: 15px;
+    height: 15px;
+    color: #6b6b70;
+}
+.px-busca-q {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: px-teclea var(--ciclo) steps(22, end) infinite;
+}
+.px-busca-cursor {
+    flex: none;
+    width: 1.5px;
+    height: 15px;
+    margin-left: -6px;
+    background: var(--ink);
+    animation: m-parpadeo 1s steps(1) infinite;
+}
+@keyframes px-teclea {
+    0%,
+    4% {
+        max-width: 0;
+    }
+    20%,
+    100% {
+        max-width: 190px;
+    }
+}
+.px-busca-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.px-busca-fila {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 10px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px var(--line);
+    color: var(--fg);
+    opacity: 0;
+    translate: 0 10px;
+    animation: px-fila var(--ciclo) var(--ease) infinite;
+    animation-delay: calc(var(--k) * 0.28s);
+}
+.mx-ui[data-tema='claro'] .px-busca-fila {
+    background: rgba(255, 255, 255, 0.75);
+}
+.px-busca-fila > i {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 9px;
+    background: linear-gradient(135deg, #6f6a64, #2b2927);
+}
+.px-busca-fila > span {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.px-busca-fila b {
+    font-size: 12px;
+    font-weight: 600;
+}
+.px-busca-fila small {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    color: var(--mut);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.px-busca-fila em {
+    flex: none;
+    padding: 5px 9px;
+    border-radius: 99px;
+    background: var(--fg);
+    color: var(--fondo);
+    font-style: normal;
+    font-size: 9.5px;
+    font-weight: 600;
+}
+@keyframes px-fila {
+    0%,
+    23% {
+        opacity: 0;
+        translate: 0 10px;
+    }
+    28%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    100% {
+        opacity: 0;
+        translate: 0 0;
+    }
+}
+.px-busca-fila--tuya {
+    background: transparent;
+    box-shadow: none;
+    outline: 1.5px dashed var(--line);
+    outline-offset: -1.5px;
+    animation-name: px-tuya;
+    animation-delay: 0s;
+}
+.mx-ui[data-tema='claro'] .px-busca-fila--tuya {
+    background: transparent;
+}
+.px-busca-fila--tuya > i {
+    background: transparent;
+    outline: 1.5px dashed var(--line);
+    outline-offset: -1.5px;
+}
+.px-busca-fila--tuya b,
+.px-busca-fila--tuya small {
+    opacity: 0.5;
+}
+.px-busca-cero {
+    background: var(--rojo) !important;
+    color: #fff !important;
+    animation: px-cero var(--ciclo) var(--muelle) infinite;
+}
+@keyframes px-tuya {
+    0%,
+    38% {
+        opacity: 0;
+        translate: 0 10px;
+    }
+    43%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-cero {
+    0%,
+    44% {
+        scale: 0.4;
+        opacity: 0;
+    }
+    49% {
+        scale: 1.12;
+        opacity: 1;
+    }
+    53%,
+    94% {
+        scale: 1;
+        opacity: 1;
+    }
+    100% {
+        scale: 1;
+        opacity: 0;
+    }
+}
+
+/* =============================================================== NOCHE */
+.px-noche {
+    --ciclo: 9s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 14px 14px;
+    background:
+        radial-gradient(90% 60% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 70%),
+        radial-gradient(120% 70% at 50% 115%, rgba(225, 29, 58, 0.22), transparent 60%),
+        #111214;
+}
+.mx-ui[data-tema='claro'].px-noche {
+    color: #fff;
+    --fg: #fff;
+    --mut: rgba(255, 255, 255, 0.62);
+    --line: rgba(255, 255, 255, 0.14);
+}
+.px-noche-hora {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    margin-bottom: 14px;
+}
+.px-noche-hora small {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mut);
+}
+.px-noche-hora b {
+    margin-top: 4px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 46px;
+    letter-spacing: -0.04em;
+}
+.px-noche-avisos {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+.px-noche-aviso {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 11px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    opacity: 0;
+    translate: 0 -12px;
+    scale: 0.96;
+}
+.px-noche-aviso > span:last-child {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    line-height: 1.25;
+}
+.px-noche-aviso small {
+    font-family: var(--f-mono);
+    font-size: 9px;
+    color: var(--mut);
+}
+.px-noche-aviso b {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.px-noche-app {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+}
+.px-noche-app svg {
+    width: 15px;
+    height: 15px;
+}
+.px-noche-aviso--0 {
+    animation: px-aviso0 var(--ciclo) var(--muelle) infinite;
+}
+.px-noche-aviso--1 {
+    animation: px-aviso1 var(--ciclo) var(--muelle) infinite;
+}
+.px-noche-aviso--2 {
+    animation: px-aviso2 var(--ciclo) var(--muelle) infinite;
+    box-shadow: inset 0 0 0 1.5px var(--rojo);
+}
+@keyframes px-aviso0 {
+    0%,
+    10% {
+        opacity: 0;
+        translate: 0 -12px;
+        scale: 0.96;
+    }
+    15%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-aviso1 {
+    0%,
+    26% {
+        opacity: 0;
+        translate: 0 -12px;
+        scale: 0.96;
+    }
+    31%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-aviso2 {
+    0%,
+    46% {
+        opacity: 0;
+        translate: 0 -12px;
+        scale: 0.96;
+    }
+    51%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+        scale: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+.px-noche-perdida {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: auto;
+    padding: 7px 12px;
+    border-radius: 99px;
+    background: var(--rojo);
+    color: #fff;
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: px-cero var(--ciclo) var(--muelle) infinite;
+    animation-delay: 1.4s;
+}
+.px-noche-perdida i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* =============================================================== CHATS */
+.px-chats {
+    --ciclo: 10s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px 14px;
+}
+.px-chats-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.px-chats-top > b {
+    font-family: var(--f-display);
+    font-weight: 650;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+}
+.px-chats-cont {
+    display: grid;
+    padding: 5px 10px;
+    border-radius: 99px;
+    background: var(--rojo);
+    color: #fff;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 500;
+}
+.px-chats-cont > span {
+    grid-area: 1 / 1;
+    opacity: 0;
+}
+.px-chats-cont > span:nth-child(1) {
+    animation: px-cont1 var(--ciclo) steps(1) infinite;
+}
+.px-chats-cont > span:nth-child(2) {
+    animation: px-cont2 var(--ciclo) steps(1) infinite;
+}
+.px-chats-cont > span:nth-child(3) {
+    animation: px-cont3 var(--ciclo) steps(1) infinite;
+}
+.px-chats-cont > span:nth-child(4) {
+    animation: px-cont4 var(--ciclo) steps(1) infinite;
+}
+@keyframes px-cont1 {
+    0%,
+    19% {
+        opacity: 1;
+    }
+    20%,
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-cont2 {
+    0%,
+    19% {
+        opacity: 0;
+    }
+    20%,
+    34% {
+        opacity: 1;
+    }
+    35%,
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-cont3 {
+    0%,
+    34% {
+        opacity: 0;
+    }
+    35%,
+    49% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-cont4 {
+    0%,
+    49% {
+        opacity: 0;
+    }
+    50%,
+    100% {
+        opacity: 1;
+    }
+}
+.px-chats-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.px-chats-fila {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 9px;
+    border-radius: 13px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px var(--line);
+    opacity: 0;
+    translate: 0 -10px;
+    animation: px-chat var(--ciclo) var(--ease) infinite;
+    animation-delay: calc(var(--k) * 0.75s);
+}
+.mx-ui[data-tema='claro'] .px-chats-fila {
+    background: rgba(255, 255, 255, 0.75);
+}
+.px-chats-fila > i {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--fg);
+    color: var(--fondo);
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 600;
+}
+.px-chats-fila > span {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.px-chats-fila b {
+    font-size: 11.5px;
+    font-weight: 600;
+}
+.px-chats-fila small {
+    font-size: 11px;
+    color: var(--mut);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.px-chats-fila em {
+    flex: none;
+    display: grid;
+    place-items: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    border-radius: 10px;
+    background: var(--rojo);
+    color: #fff;
+    font-style: normal;
+    font-family: var(--f-mono);
+    font-size: 10px;
+}
+@keyframes px-chat {
+    0%,
+    6% {
+        opacity: 0;
+        translate: 0 -10px;
+    }
+    10%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    100% {
+        opacity: 0;
+        translate: 0 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .px-busca-q {
+        max-width: none;
+    }
+    .px-busca-fila,
+    .px-noche-aviso,
+    .px-chats-fila,
+    .px-noche-perdida,
+    .px-busca-cero {
+        opacity: 1;
+        translate: none;
+        scale: 1;
+    }
+    .px-chats-cont > span:last-child {
+        opacity: 1;
+    }
+}

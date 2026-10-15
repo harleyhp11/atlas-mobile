@@ -325,3 +325,77 @@
         margin: 12px 0 0;
     }
 }
+
+/* ------------------------------------------------------------- problema
+   "Lo que pierdes sin web": la frase del escritorio y tres palabras
+   gigantes —clientes, plata, tiempo— que una linea roja tacha al entrar. */
+.a-problema {
+    padding: 64px 0 44px;
+}
+.a-problema-frase {
+    margin-top: 22px;
+    max-width: 22ch;
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(21px, 6vw, 26px);
+    line-height: 1.18;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+}
+.a-perdidas {
+    margin-top: 40px;
+    border-top: 1px solid var(--linea);
+}
+.a-perdida {
+    display: grid;
+    padding: 24px 0 28px;
+    border-bottom: 1px solid var(--linea);
+}
+.a-perdida-n {
+    color: var(--t3);
+}
+.a-perdida-palabra {
+    position: relative;
+    justify-self: start;
+    margin-top: 12px;
+    padding-bottom: 0.04em;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(64px, 21vw, 104px);
+    line-height: 0.82;
+    letter-spacing: -0.055em;
+    color: #c4c4c8;
+}
+.a-perdida-palabra i {
+    position: absolute;
+    left: -3%;
+    right: -4%;
+    top: 50%;
+    height: max(4px, 0.075em);
+    border-radius: 4px;
+    background: var(--rojo);
+    box-shadow: 0 6px 18px -4px rgba(225, 29, 58, 0.6);
+    rotate: -4deg;
+    transform-origin: 0 50%;
+    transition: transform 0.9s var(--ease-io) 0.45s;
+}
+.m-js .a-perdida:not(.is-in) .a-perdida-palabra i {
+    transform: scaleX(0);
+}
+.a-perdida-t {
+    margin-top: 20px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+}
+.a-perdida-txt {
+    margin-top: 8px;
+    font-size: 16px;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+.a-problema-cta {
+    margin-top: 28px;
+}
