@@ -31,7 +31,7 @@
 .h-testi-pista {
     display: flex;
     width: max-content;
-    animation: h-testi-cinta 46s linear infinite;
+    animation: h-testi-cinta 38s linear infinite;
 }
 .h-testi-marco.is-off .h-testi-pista,
 .h-testi-marco:active .h-testi-pista {
