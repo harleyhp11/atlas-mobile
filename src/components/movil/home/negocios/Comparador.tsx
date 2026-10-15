@@ -12,18 +12,19 @@ import {
     useVelocity,
 } from 'motion/react';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from 'react';
-import { Estrella } from '../../iconos';
 import { ESCENARIOS, cifra, cuenta, foto, type Cifra, type Escenario } from './escenarios';
+import { EscenaAntes, EscenaDespues } from './escenas';
 import { ChipContenido, dos, FlechasAsa, Info, MetricaAntes, MetricaDespues, Pildora } from './partes';
 
 /* El comparador antes/despues, con Motion (motion/react). Llega con
    import() cuando la seccion se acerca: Motion no pesa en la carga de la
    home. Como en la referencia (Reachwise, "Case studies"):
 
-     · cada rubro arranca con la linea casi a la derecha —se ve el "antes":
-       el chat que nadie contesta— y la linea barre hacia la izquierda
-       destapando el "despues" mientras la cifra cuenta, la grafica se
-       dibuja y llega el aviso de lo que hace el sistema;
+     · cada rubro arranca con la linea casi a la derecha —se ve el "antes",
+       con su escena propia (escenas.tsx): la carta en fotos sueltas, la
+       agencia cerrada, la lista de papel...— y la linea barre hacia la
+       izquierda destapando el "despues" mientras la cifra cuenta, la
+       grafica se dibuja y corre la escena de lo que construimos;
      · los rubros pasan solos (barra roja en la pildora activa) mientras la
        tarjeta esta en pantalla; al tocar algo, mandas tu y ya no pasan;
      · la linea se arrastra con el dedo (un toque la lleva hasta ahi), o con
@@ -33,14 +34,15 @@ import { ChipContenido, dos, FlechasAsa, Info, MetricaAntes, MetricaDespues, Pil
    touch-action: pan-y y el arrastre solo empieza si el gesto es horizontal.
    Sin rebotes: las curvas son las de la marca (--ease, --ease-io, --pop). */
 
-const SEG = 7.5; // segundos por rubro cuando pasan solos
+const SEG = 8; // segundos por rubro cuando pasan solos
 const ARRANQUE = 0.86; // la linea arranca aqui: casi todo es "antes"
 const FINAL = 0.14; // y termina aqui: casi todo es "despues"
 const EASE = [0.2, 0.85, 0.15, 1] as const;
 const EASE_IO = [0.7, 0, 0.2, 1] as const;
 const POP = [0.16, 1, 0.3, 1] as const;
-// la coreografia de cada rubro, en segundos desde que se activa
-const T = { barrido: 1.7, dura: 1.6, cifra: 1.85, linea: 1.8, aviso: 2.45 };
+// la coreografia de cada rubro, en segundos desde que se activa: la escena
+// del antes corre primero, luego la linea barre y destapa la del despues
+const T = { antes: 0.3, barrido: 2.0, dura: 1.6, cifra: 2.15, linea: 2.1, despues: 2.2 };
 
 const limitar = (v: number) => Math.min(1, Math.max(0, v));
 
@@ -368,7 +370,13 @@ export function Comparador() {
                                     }
                                 />
                             </motion.div>
-                            <AnimatePresence>{visto && <Aviso key={`${e.id}-${vuelta}`} e={e} reducido={reducido} />}</AnimatePresence>
+                            <AnimatePresence>
+                                {visto && (
+                                    <motion.div key={`${e.id}-${vuelta}`} className="h-neg-esc h-neg-esc--despues" exit={{ opacity: 0, transition: { duration: 0.25 } }}>
+                                        <EscenaDespues e={e} base={reducido ? 0 : T.despues} reducido={reducido} />
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
 
                         {/* antes: la misma foto en gris, y el chat sin contestar */}
@@ -395,16 +403,35 @@ export function Comparador() {
                             <svg className="h-neg-graf" viewBox="0 0 100 56" aria-hidden="true">
                                 <path className="h-neg-graf-plana" d="M-1,50 C18,49 30,51 48,50 S80,49 101,50" />
                             </svg>
-                            <motion.div
-                                key={`a-${e.id}`}
-                                className="h-neg-met h-neg-met--antes"
-                                initial={reducido ? false : { opacity: 0, y: 14 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.7, ease: EASE, delay: 0.15 }}
-                            >
-                                <MetricaAntes e={e} />
-                            </motion.div>
-                            {visto && <Chat key={`${e.id}-${vuelta}`} e={e} reducido={reducido} />}
+                            {/* la cifra y la escena, en una columna: nunca se pisan */}
+                            <div className="h-neg-col-antes">
+                                <motion.div
+                                    key={`a-${e.id}`}
+                                    className="h-neg-met h-neg-met--antes"
+                                    initial={reducido ? false : { opacity: 0, y: 14 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ duration: 0.7, ease: EASE, delay: 0.15 }}
+                                >
+                                    <MetricaAntes e={e} />
+                                </motion.div>
+                                {visto && (
+                                    <div key={`${e.id}-${vuelta}`} className="h-neg-esc h-neg-esc--antes">
+                                        <EscenaAntes e={e} base={reducido ? 0 : T.antes} reducido={reducido} />
+                                        <motion.p
+                                            className="h-neg-estado"
+                                            initial={reducido ? false : { opacity: 0, y: 6 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ delay: reducido ? 0 : T.antes + 1.3, duration: 0.45, ease: POP }}
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                                                <circle cx="12" cy="12" r="8.5" />
+                                                <path d="M12 7.5V12l3 2" />
+                                            </svg>
+                                            {e.antes.estado}
+                                        </motion.p>
+                                    </div>
+                                )}
+                            </div>
                         </motion.div>
 
                         {/* el filo rojo que deja la linea al moverse */}
@@ -441,8 +468,7 @@ export function Comparador() {
                         </AnimatePresence>
 
                         <p className="sr-only">
-                            Antes: “{e.antes.mensaje}”, {e.antes.estado}; {cifra(e.metrica.antes)} {e.metrica.que}. Después: {e.despues.titulo}, {e.despues.detalle};{' '}
-                            {cifra(e.metrica.despues)} {e.metrica.que}.
+                            Antes: {e.antes.resumen} {cifra(e.metrica.antes)} {e.metrica.que}. Después: {e.despues.resumen} {cifra(e.metrica.despues)} {e.metrica.que}.
                         </p>
                     </div>
 
@@ -450,95 +476,6 @@ export function Comparador() {
                 </div>
             </div>
         </div>
-    );
-}
-
-/* ------------------------------------------------------------- el antes */
-
-/* El cliente que escribe y nadie le contesta: primero los tres puntos de
-   "escribiendo", luego el mensaje, luego lo que pasa con el. */
-function Chat({ e, reducido }: { e: Escenario; reducido: boolean }) {
-    const [escrito, setEscrito] = useState(reducido);
-    useEffect(() => {
-        if (reducido) return;
-        const t = window.setTimeout(() => setEscrito(true), 950);
-        return () => window.clearTimeout(t);
-    }, [reducido]);
-    return (
-        <div className="h-neg-chat">
-            <motion.div
-                layout
-                className="h-neg-burbuja"
-                initial={reducido ? false : { opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: reducido ? 0 : 0.3, duration: 0.45, ease: POP, layout: { duration: 0.4, ease: POP } }}
-            >
-                <AnimatePresence mode="popLayout" initial={false}>
-                    {escrito ? (
-                        <motion.span key="txt" className="h-neg-burbuja-txt" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, delay: 0.1 }}>
-                            {e.antes.mensaje}
-                        </motion.span>
-                    ) : (
-                        <motion.span key="puntos" className="h-neg-escribe" exit={{ opacity: 0, transition: { duration: 0.15 } }} aria-hidden="true">
-                            <i />
-                            <i />
-                            <i />
-                        </motion.span>
-                    )}
-                </AnimatePresence>
-            </motion.div>
-            <motion.p
-                className="h-neg-estado"
-                initial={reducido ? false : { opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: reducido ? 0 : 1.25, duration: 0.45, ease: POP }}
-            >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                    <circle cx="12" cy="12" r="8.5" />
-                    <path d="M12 7.5V12l3 2" />
-                </svg>
-                {e.antes.estado}
-            </motion.p>
-        </div>
-    );
-}
-
-/* ----------------------------------------------------------- el despues */
-
-/* El aviso que manda el sistema cuando ya trabaja solo. */
-function Aviso({ e, reducido }: { e: Escenario; reducido: boolean }) {
-    return (
-        <motion.div
-            className="h-neg-aviso"
-            initial={reducido ? false : { opacity: 0, y: -12, scale: 0.94, filter: 'blur(6px)' }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, transition: { duration: 0.25 } }}
-            transition={{ delay: reducido ? 0 : T.aviso, duration: 0.7, ease: POP }}
-        >
-            <span className="h-neg-aviso-ico" aria-hidden="true">
-                <Icono tipo={e.despues.icono} />
-            </span>
-            <span className="h-neg-aviso-txt">
-                <b>{e.despues.titulo}</b>
-                <span>{e.despues.detalle}</span>
-            </span>
-            <span className="h-neg-aviso-hora">{e.despues.hora}</span>
-        </motion.div>
-    );
-}
-
-function Icono({ tipo }: { tipo: Escenario['despues']['icono'] }) {
-    if (tipo === 'ia') return <Estrella />;
-    const trazos = {
-        pedido: 'M6 8h12l-1 12H7L6 8Zm3 0a3 3 0 0 1 6 0',
-        reserva: 'M5 6h14v14H5zM9 3.5V8m6-4.5V8M5 11h14m-9.5 4.5 2 2 4-4',
-        clase: 'M7 8v8m10-8v8M4 10v4m16-4v4M7 12h10',
-        reporte: 'M6 20v-8m6 8V5m6 15v-5',
-    } as const;
-    return (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
-            <path d={trazos[tipo]} />
-        </svg>
     );
 }
 

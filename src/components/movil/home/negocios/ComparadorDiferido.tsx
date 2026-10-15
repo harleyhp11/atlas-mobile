@@ -80,8 +80,10 @@ function Quieto() {
                             <img className="h-neg-foto" src={foto(e)} alt="" width={800} height={1000} loading="lazy" decoding="async" />
                         </span>
                         <span className="h-neg-velo h-neg-velo--antes" />
-                        <div className="h-neg-met h-neg-met--antes">
-                            <MetricaAntes e={e} />
+                        <div className="h-neg-col-antes">
+                            <div className="h-neg-met h-neg-met--antes">
+                                <MetricaAntes e={e} />
+                            </div>
                         </div>
                     </div>
                     <div className="h-neg-asa" aria-hidden="true">

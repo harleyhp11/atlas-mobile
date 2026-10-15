@@ -7,11 +7,12 @@ import './negocios.css';
 /* (07) Tu negocio — antes y despues, rubro por rubro.
 
    La seccion "Case studies" de Reachwise pasada a Atlas: pildoras de
-   rubros, una tarjeta con foto real que compara el antes (en gris, con el
-   chat sin contestar) y el despues (a color, con la cifra, la grafica y el
-   aviso del sistema), y debajo que construimos y cuanto cuesta. Pero sin
-   casos inventados: son EJEMPLOS por rubro y asi lo dicen la tarjeta y la
-   nota del pie (ver negocios/escenarios.ts). Lo real esta a un toque, en
+   rubros, una tarjeta con foto real que compara el antes (en gris) y el
+   despues (a color, con la cifra y la grafica), cada uno con una escena
+   propia del rubro, y debajo que construimos y cuanto cuesta. Pero sin
+   casos inventados: son EJEMPLOS por rubro y la pildora de la tarjeta lo
+   dice ("Tu restaurante · ejemplo"; ver negocios/escenarios.ts). La nota
+   del pie que lo repetia la quito Harley. Lo real esta a un toque, en
    "Ver proyectos reales". */
 
 export function Negocios() {
@@ -21,7 +22,7 @@ export function Negocios() {
                 <Ceja n="07">Tu negocio</Ceja>
                 <Titular id="negocios-t" className="m-h2 h-neg-h2" texto="Tu negocio, después de Atlas." destacar="después" />
                 <p className="m-p h-neg-intro" data-rv>
-                    Elige un rubro y desliza la línea: a la izquierda, cómo se trabaja hoy; a la derecha, con lo que construimos.
+                    Atlas es para cualquier rubro de negocio. Así podemos mejorar tus procesos, con tecnología que se adapta a ti.
                 </p>
                 <div className="h-neg-ver" data-rv>
                     <Boton href="/projects" variante="fantasma">
@@ -31,10 +32,6 @@ export function Negocios() {
             </div>
 
             <ComparadorDiferido />
-
-            <div className="m-wrap">
-                <p className="h-neg-nota">Ejemplos ilustrativos de lo que construimos: no son resultados de clientes.</p>
-            </div>
         </section>
     );
 }

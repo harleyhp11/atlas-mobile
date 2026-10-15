@@ -4,8 +4,8 @@ import { SERVICIOS, whatsapp } from '../../datos';
 
    OJO, son EJEMPLOS: muestran el cambio que hace cada servicio en un rubro
    tipico, no son clientes ni resultados medidos (el brief prohibe inventar
-   cifras). Por eso la pildora de la tarjeta dice "ejemplo", la seccion lo
-   aclara al pie y las cifras salen de lo que construimos, no de un caso:
+   cifras). Por eso la pildora de la tarjeta dice "ejemplo" y las cifras
+   salen de lo que construimos, no de un caso:
      · 40 platos   → el plan de menus digitales incluye hasta 40 productos;
      · 24 h        → una web vende a toda hora; el local, en su horario;
      · 100 %       → con la app, las reservas no pasan por tu chat;
@@ -42,10 +42,12 @@ export type Escenario = {
         /** El resumen de la pildora: "0 → 40 platos". */
         chip: string;
     };
-    /** El chat de antes: el mensaje que llega y lo que pasa con el. */
-    antes: { mensaje: string; estado: string };
-    /** El aviso de despues, como una notificacion del sistema. */
-    despues: { icono: 'pedido' | 'reserva' | 'clase' | 'ia' | 'reporte'; titulo: string; detalle: string; hora: string };
+    /** El antes de este rubro. Cada uno tiene su propia escena animada
+        (negocios/escenas.tsx); aqui va lo que dice la pildora de estado y
+        el resumen para el lector de pantalla. */
+    antes: { estado: string; resumen: string };
+    /** El despues: su escena tambien es propia; aqui, solo el resumen. */
+    despues: { resumen: string };
     titular: string;
     texto: string;
     incluye: string[];
@@ -86,8 +88,8 @@ export const ESCENARIOS: Escenario[] = [
         servicio: 'Menú digital',
         precio: precio('ecommerce'),
         metrica: { antes: { n: 0 }, despues: { n: 40 }, que: 'platos con foto y precio', chip: '0 → 40 platos' },
-        antes: { mensaje: '¿Me pasas la carta? 🙏', estado: 'Sin responder · 40 min' },
-        despues: { icono: 'pedido', titulo: 'Pedido nuevo · Mesa 6', detalle: '2 ceviches y 1 chicha morada', hora: 'ahora' },
+        antes: { estado: 'Tu carta: 12 fotos por chat', resumen: 'La carta va por chat, en 12 fotos sueltas.' },
+        despues: { resumen: 'Carta digital por QR: el cliente arma su pedido y llega listo a tu WhatsApp.' },
         titular: 'Tu carta entera, a un toque de cada mesa.',
         texto: 'Carta digital con fotos y precios, código QR en las mesas y pedidos que llegan armados a tu WhatsApp.',
         incluye: ['Carta digital', 'QR en mesas', 'Pedidos a WhatsApp'],
@@ -101,8 +103,8 @@ export const ESCENARIOS: Escenario[] = [
         servicio: 'Web con reservas',
         precio: precio('webs'),
         metrica: { antes: { n: 10, u: 'h' }, despues: { n: 24, u: 'h' }, que: 'al día vendiendo tours', chip: '10 h → 24 h' },
-        antes: { mensaje: 'Hi! Is the tour available tomorrow?', estado: 'Lo lees mañana. Ya reservó en otra.' },
-        despues: { icono: 'reserva', titulo: 'Reserva confirmada', detalle: 'Machu Picchu · 2 personas', hora: '3:12 a. m.' },
+        antes: { estado: 'Te escribieron de Madrid · sin respuesta', resumen: 'Son las 3:12 a. m. en Lima: la agencia está cerrada mientras en Madrid y Tokio es de día.' },
+        despues: { resumen: 'La web toma reservas en español e inglés a cualquier hora: Machu Picchu, 2 personas, confirmada a las 3:12 a. m.' },
         titular: 'Vende tus tours mientras duermes.',
         texto: 'Una web rápida, en español e inglés, con tus tours, fechas y precios. El turista reserva a la hora que sea, desde cualquier país.',
         incluye: ['Reservas en línea', 'Español e inglés', 'Lista para Google'],
@@ -116,8 +118,8 @@ export const ESCENARIOS: Escenario[] = [
         servicio: 'App para socios',
         precio: precio('apps'),
         metrica: { antes: { n: 0, u: '%' }, despues: { n: 100, u: '%' }, que: 'de reservas sin pasar por tu chat', chip: '0 % → 100 %' },
-        antes: { mensaje: '¿Hay cupo en spinning a las 7?', estado: '23 chats por responder' },
-        despues: { icono: 'clase', titulo: 'Clase reservada', detalle: 'Spinning · mañana, 7:00', hora: 'ahora' },
+        antes: { estado: '3 pagos pendientes', resumen: 'Las reservas se anotan en una lista de papel y no se sabe quién pagó.' },
+        despues: { resumen: 'En la app cada socio reserva su cupo y paga: la clase de spinning se llena sola.' },
         titular: 'Tus socios reservan, pagan y entrenan desde la app.',
         texto: 'Reservas de clases, pago de la membresía y asistencia en una app con tu marca. Tú lo ves todo en un panel, sin perseguir a nadie por chat.',
         incluye: ['Reservas', 'Pagos', 'Panel'],
@@ -131,8 +133,8 @@ export const ESCENARIOS: Escenario[] = [
         servicio: 'Asistente con IA',
         precio: precio('ia'),
         metrica: { antes: { n: 3, u: 'h' }, despues: { n: 5, u: 's' }, que: 'para responder cada consulta', chip: '3 h → 5 s' },
-        antes: { mensaje: '¿El depa tiene cochera? ¿Precio?', estado: 'Lo respondes en 3 h' },
-        despues: { icono: 'ia', titulo: 'Asistente IA', detalle: '“Sí, tiene cochera. ¿Agendo tu visita?”', hora: 'en 5 s' },
+        antes: { estado: 'Los respondes en 3 h', resumen: 'Se acumulan 27 mensajes sin leer de interesados en un departamento.' },
+        despues: { resumen: 'El asistente con IA responde en segundos si tiene cochera y agenda la visita del sábado.' },
         titular: 'Cada consulta respondida, aunque estés en una visita.',
         texto: 'Un asistente con IA que responde precios, fotos y disponibilidad en segundos, agenda visitas y te pasa solo a los interesados de verdad.',
         incluye: ['Atiende 24/7', 'Agenda visitas', 'Filtra interesados'],
@@ -146,8 +148,8 @@ export const ESCENARIOS: Escenario[] = [
         servicio: 'Sistema a medida',
         precio: precio('software'),
         metrica: { antes: { n: 4 }, despues: { n: 30 }, que: 'reportes al mes', chip: '4 → 30 reportes' },
-        antes: { mensaje: '¿Cuánto stock queda del arroz?', estado: 'Buscando en el Excel…' },
-        despues: { icono: 'reporte', titulo: 'Reporte del día listo', detalle: 'Ventas, stock y cobranzas', hora: '7:00 a. m.' },
+        antes: { estado: 'Buscando el stock en el Excel…', resumen: 'El stock está en un Excel con errores: stock_final_v3.' },
+        despues: { resumen: 'Un panel en vivo con ventas, pedidos y una alerta de stock bajo antes de que se acabe.' },
         titular: 'Tu negocio en un panel, en tiempo real.',
         texto: 'Pedidos, stock y cobranzas en un solo sistema hecho a tu medida. Los reportes se arman solos y las alertas llegan antes del problema.',
         incluye: ['Stock en vivo', 'Reportes automáticos', 'Alertas'],
