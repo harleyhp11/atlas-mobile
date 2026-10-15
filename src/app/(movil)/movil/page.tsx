@@ -5,6 +5,7 @@ import { Cintas } from '@/components/movil/Cintas';
 import { Revelador } from '@/components/movil/Revelador';
 import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
+import { Herramientas } from '@/components/movil/home/Herramientas';
 import { HeroInicio } from '@/components/movil/home/HeroInicio';
 import { Problema } from '@/components/movil/home/Problema';
 import { Ventajas } from '@/components/movil/home/Ventajas';
@@ -19,7 +20,9 @@ import './home.css';
        apareces."— con el carrusel de "Producto", solo titulos;
      · (02) el bento de "Producto": monolito, desde S/ 400, entrega y
        respuesta en 24 h;
-     · cintas cruzando hacia (03) los servicios de "Cine", en isla clara.
+     · cintas cruzando hacia (03) los servicios de "Cine", en isla clara;
+     · (04) Herramientas en la misma isla: la tarjeta del stack del
+       escritorio (foto, vidrio "Lo que dominamos" y cintas de logos).
    Faltan Trabajos, nota del fundador, Proceso, Precios, Testimonio +
    Preguntas y el CTA final con el pie. */
 
@@ -31,9 +34,10 @@ export const metadata: Metadata = {
 const MENU_HOME = [
     { n: '01', label: 'Servicios', href: '#servicios' },
     { n: '02', label: 'Por qué Atlas', href: '#ventajas' },
-    { n: '03', label: 'Trabajos', href: '/projects' },
-    { n: '04', label: 'Precios', href: '/servicios' },
-    { n: '05', label: 'Contacto', href: '/contact' },
+    { n: '03', label: 'Herramientas', href: '#herramientas' },
+    { n: '04', label: 'Trabajos', href: '/projects' },
+    { n: '05', label: 'Precios', href: '/servicios' },
+    { n: '06', label: 'Contacto', href: '/contact' },
 ];
 
 export default function HomeMovil() {
@@ -50,16 +54,20 @@ export default function HomeMovil() {
 
                 <Cintas className="home-cintas" />
 
-                <section id="servicios" className="home-isla m-claro" data-tono="claro" aria-labelledby="servicios-t">
-                    <div className="m-wrap">
-                        <Ceja n="03">Servicios</Ceja>
-                        <Titular id="servicios-t" className="m-h2 home-h2" texto="Lo que construimos." destacar="construimos." />
-                        <p className="m-p home-intro" data-rv>
-                            Toca un servicio para verlo funcionar.
-                        </p>
-                        <Servicios variante="filas" tema="oscuro" />
-                    </div>
-                </section>
+                <div className="home-isla m-claro" data-tono="claro">
+                    <section id="servicios" aria-labelledby="servicios-t">
+                        <div className="m-wrap">
+                            <Ceja n="03">Servicios</Ceja>
+                            <Titular id="servicios-t" className="m-h2 home-h2" texto="Lo que construimos." destacar="construimos." />
+                            <p className="m-p home-intro" data-rv>
+                                Toca un servicio para verlo funcionar.
+                            </p>
+                            <Servicios variante="filas" tema="oscuro" />
+                        </div>
+                    </section>
+
+                    <Herramientas />
+                </div>
             </main>
             <Revelador />
         </>

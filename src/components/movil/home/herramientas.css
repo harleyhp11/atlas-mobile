@@ -1,0 +1,168 @@
+/* =====================================================================
+   HOME MÓVIL · (04) Herramientas — sobre la isla clara, despues de
+   servicios. Valores del escritorio (IdentitySequence): velo, vidrio,
+   mascara de la palabra y duracion de las cintas.
+   ===================================================================== */
+
+/* content-visibility: el navegador no maqueta ni pinta la seccion hasta que
+   se acerca, y por eso tampoco pide Space Mono en la carga inicial. Recorta
+   ademas lo que se sale: la palabra fantasma desborda a la derecha. */
+.h-tools {
+    position: relative;
+    padding: 72px 0 8px;
+    overflow-x: clip;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 760px;
+}
+
+/* La palabra gigante se disuelve hacia abajo y la tarjeta se le monta
+   encima. Color plano + mascara (no texto con degradado). */
+.h-tools-fantasma {
+    position: relative;
+    z-index: 0;
+    margin: 10px 0 -0.24em;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(76px, 23vw, 120px);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    white-space: nowrap;
+    color: #bdbdbb;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0, 0, 0, 0.62) 82%, transparent 98%);
+    mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0, 0, 0, 0.62) 82%, transparent 98%);
+    user-select: none;
+}
+
+/* La tarjeta: mas alta que ancha, foto del pasillo rojo a sangre. */
+.h-tools-tarjeta {
+    position: relative;
+    z-index: 1;
+    aspect-ratio: 4 / 5;
+    border-radius: 34px;
+    overflow: hidden;
+    background: #120406;
+    isolation: isolate;
+}
+.h-tools-tarjeta > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.h-tools-velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.05) 34%, rgba(0, 0, 0, 0.48) 76%, rgba(0, 0, 0, 0.86) 100%);
+}
+
+/* El vidrio va centrado sobre la tarjeta ENTERA, como en el escritorio. */
+.h-tools-centro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px 78px;
+}
+.h-tools-vidrio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: min(74%, 262px);
+    min-height: 150px;
+    padding: 24px 18px;
+    border-radius: 42px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: linear-gradient(158deg, rgba(255, 255, 255, 0.17) 0%, rgba(255, 255, 255, 0.06) 52%, rgba(255, 255, 255, 0.025) 100%);
+    -webkit-backdrop-filter: blur(26px) saturate(1.6) brightness(1.08);
+    backdrop-filter: blur(26px) saturate(1.6) brightness(1.08);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.28),
+        0 30px 70px rgba(0, 0, 0, 0.45);
+    text-align: center;
+}
+.h-tools-vidrio h2 {
+    font-family: var(--font-space-mono), 'Space Mono', var(--f-mono);
+    font-weight: 700;
+    font-size: clamp(24px, 7.2vw, 32px);
+    line-height: 1.12;
+    letter-spacing: 0;
+    color: var(--blanco);
+}
+
+/* Las dos cintas, al pie y dentro de la tarjeta: la de arriba corre a la
+   derecha y la de abajo a la izquierda. */
+.h-tools-cintas {
+    position: absolute;
+    inset: auto 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 26px;
+}
+.h-tools-cinta {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.h-tools-pista {
+    display: flex;
+    flex: none;
+    animation: h-tools-izq 40s linear infinite;
+}
+.h-tools-cinta--der .h-tools-pista {
+    animation-name: h-tools-der;
+}
+.h-tools-cintas.is-off .h-tools-pista {
+    animation-play-state: paused;
+}
+@keyframes h-tools-izq {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+@keyframes h-tools-der {
+    from {
+        transform: translateX(-50%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+.h-tools-grupo {
+    display: flex;
+    flex: none;
+}
+.h-tools-item {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 4px 18px;
+    white-space: nowrap;
+    font-family: var(--f-texto);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.85);
+}
+/* fill aqui y no en el sprite: lo que clona <use> hereda del <svg> que lo
+   usa, no de la raiz del archivo del sprite. */
+.h-tools-ico {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    color: var(--blanco);
+    fill: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .h-tools-pista {
+        animation: none;
+    }
+}
