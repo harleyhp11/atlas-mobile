@@ -5,38 +5,27 @@
    ===================================================================== */
 
 /* content-visibility: el navegador no maqueta ni pinta la seccion hasta que
-   se acerca, y por eso tampoco pide Space Mono en la carga inicial. Recorta
-   ademas lo que se sale: la palabra fantasma desborda a la derecha. */
+   se acerca, y por eso tampoco pide Space Mono en la carga inicial. */
 .h-tools {
     position: relative;
     padding: 72px 0 8px;
     overflow-x: clip;
     content-visibility: auto;
-    contain-intrinsic-size: auto 760px;
+    contain-intrinsic-size: auto 1150px;
 }
 
-/* La palabra gigante se disuelve hacia abajo y la tarjeta se le monta
-   encima. Color plano + mascara (no texto con degradado). */
-.h-tools-fantasma {
-    position: relative;
-    z-index: 0;
-    margin: 10px 0 -0.24em;
-    font-family: var(--f-display);
-    font-weight: 700;
-    font-size: clamp(76px, 23vw, 120px);
-    line-height: 0.9;
-    letter-spacing: -0.045em;
-    white-space: nowrap;
-    color: #bdbdbb;
-    -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0, 0, 0, 0.62) 82%, transparent 98%);
-    mask-image: linear-gradient(to bottom, #000 0%, #000 62%, rgba(0, 0, 0, 0.62) 82%, transparent 98%);
-    user-select: none;
+/* Titular como el de servicios (Titular.tsx: palabras que suben y caja roja
+   que barre detras de "trabajamos."). */
+.h-tools-h2 {
+    margin-top: 18px;
+    color: var(--tinta);
 }
 
 /* La tarjeta: mas alta que ancha, foto del pasillo rojo a sangre. */
 .h-tools-tarjeta {
     position: relative;
     z-index: 1;
+    margin-top: 28px;
     aspect-ratio: 4 / 5;
     border-radius: 34px;
     overflow: hidden;
@@ -82,7 +71,7 @@
         0 30px 70px rgba(0, 0, 0, 0.45);
     text-align: center;
 }
-.h-tools-vidrio h2 {
+.h-tools-vidrio h3 {
     font-family: var(--font-space-mono), 'Space Mono', var(--f-mono);
     font-weight: 700;
     font-size: clamp(24px, 7.2vw, 32px);
@@ -161,8 +150,150 @@
     fill: currentColor;
 }
 
+/* ------------------------------------------------------------------ cita */
+.h-cita {
+    position: relative;
+    margin: 40px 0 0;
+    padding: 4px 2px 0;
+}
+.h-cita-comillas {
+    display: block;
+    height: 0.5em;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 84px;
+    line-height: 0.9;
+    color: var(--rojo);
+    transition:
+        opacity 0.6s ease,
+        translate 0.9s var(--ease);
+}
+.h-cita-txt {
+    margin: 0;
+}
+.h-cita-txt p {
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: clamp(23px, 6.6vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.022em;
+    color: var(--tinta);
+    text-wrap: pretty;
+}
+/* Cada palabra aparece (opacidad + desenfoque) y luego se oscurece de gris
+   a tinta, una tras otra. Antes de entrar van a opacidad 0, no en gris: asi
+   ningun texto queda a medio contraste esperando. */
+.h-cita-txt p > span > span {
+    display: inline-block;
+    transition:
+        opacity 0.5s ease calc(var(--i) * 55ms + 0.15s),
+        filter 0.6s var(--ease) calc(var(--i) * 55ms + 0.15s),
+        color 0.9s ease calc(var(--i) * 55ms + 0.55s);
+}
+.m-js .h-cita:not(.is-in) .h-cita-txt p > span > span {
+    opacity: 0;
+    filter: blur(6px);
+    color: #a7a7a3;
+}
+.m-js .h-cita:not(.is-in) .h-cita-comillas {
+    opacity: 0;
+    translate: 0 14px;
+}
+
+.h-cita-pie {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px solid var(--linea-tinta);
+}
+.h-cita-logo {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 16px;
+    background: var(--tinta);
+    color: var(--blanco);
+}
+.h-cita-logo svg {
+    width: 30px;
+    overflow: visible;
+}
+/* El simbolo se arma: la rampa sube desde abajo a la izquierda y el cuadro
+   cae en su sitio un instante despues. */
+.h-cita-rampa,
+.h-cita-cuadro {
+    transform-box: fill-box;
+    transition:
+        transform 0.9s var(--ease) 0.9s,
+        opacity 0.5s ease 0.9s;
+}
+.h-cita-cuadro {
+    transform-origin: 50% 100%;
+    transition-delay: 1.25s;
+}
+.m-js .h-cita:not(.is-in) .h-cita-rampa {
+    opacity: 0;
+    transform: translate(-30%, 30%);
+}
+.m-js .h-cita:not(.is-in) .h-cita-cuadro {
+    opacity: 0;
+    transform: translateY(-120%) scale(0.6);
+}
+.h-cita-quien {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    color: rgba(11, 11, 12, 0.66);
+}
+.h-cita-quien .m-firma {
+    transform-origin: 0 60%;
+    margin: -10px 0 -6px -2px;
+}
+/* La firma se escribe al entrar la cita, no al cargar la pagina. */
+.h-cita-quien .m-firma > span {
+    animation-delay: 1.35s;
+}
+.m-js .h-cita:not(.is-in) .m-firma > span {
+    animation-play-state: paused;
+}
+.h-cita-quien .m-mono {
+    transition: opacity 0.6s ease 1.6s;
+}
+.m-js .h-cita:not(.is-in) .h-cita-quien .m-mono {
+    opacity: 0;
+}
+.h-cita-cta {
+    display: flex;
+    margin-top: 22px;
+    transition:
+        opacity 0.6s ease 1.8s,
+        translate 0.8s var(--ease) 1.8s;
+}
+.m-js .h-cita:not(.is-in) .h-cita-cta {
+    opacity: 0;
+    translate: 0 10px;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .h-tools-pista {
         animation: none;
+    }
+    .m-js .h-cita:not(.is-in) .h-cita-txt p > span > span,
+    .m-js .h-cita:not(.is-in) .h-cita-comillas,
+    .m-js .h-cita:not(.is-in) .h-cita-quien .m-mono,
+    .m-js .h-cita:not(.is-in) .h-cita-cta {
+        opacity: 1;
+        filter: none;
+        translate: none;
+        color: inherit;
+    }
+    .m-js .h-cita:not(.is-in) .h-cita-rampa,
+    .m-js .h-cita:not(.is-in) .h-cita-cuadro {
+        opacity: 1;
+        transform: none;
     }
 }

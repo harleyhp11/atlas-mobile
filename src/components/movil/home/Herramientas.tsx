@@ -1,12 +1,20 @@
 import { Space_Mono } from 'next/font/google';
+import type { CSSProperties } from 'react';
+import { Boton } from '../Boton';
 import { Ceja } from '../Ceja';
+import { whatsapp } from '../datos';
+import { Firma } from '../Firma';
+import { Titular } from '../Titular';
 import './herramientas.css';
 
-/* (04) Herramientas — la tarjeta del stack del escritorio
-   (IdentitySequence), pasada al celular tal cual: la palabra fantasma
-   "Herramientas" que se disuelve hacia abajo, la foto del pasillo rojo, el
-   vidrio liquido con "Lo que dominamos" en Space Mono y, al pie, las dos
-   cintas de logos en blanco corriendo en sentidos opuestos. Mismos logos y
+/* (04) Con que trabajamos — la tarjeta del stack del escritorio
+   (IdentitySequence), pasada al celular: la foto del pasillo rojo, el vidrio
+   liquido con "Lo que dominamos" en Space Mono y, al pie, las dos cintas de
+   logos en blanco corriendo en sentidos opuestos. El titular es el de las
+   demas secciones (palabras que suben y caja roja), no la palabra fantasma
+   del escritorio. Debajo, la cita del fundador: la frase de la tarjeta de
+   cita del escritorio, el simbolo de Atlas que se arma y la firma de
+   Harley que se escribe. Mismos logos y
    mismo orden que alla (Simple Icons; VS Code, de Wikimedia), juntos en un
    solo sprite en blanco: /assets/movil/stack.svg. Con un <img> diferido por
    logo, los que estaban fuera de la cinta no bajaban hasta asomar y
@@ -69,14 +77,55 @@ function Cinta({ logos, sentido, etiqueta }: { logos: Logo[]; sentido: 'der' | '
     );
 }
 
+/* La cita: la frase entra palabra por palabra (de gris a tinta), el simbolo
+   de Atlas se arma —la rampa sube, el cuadro cae en su sitio— y "Harley" se
+   escribe en rojo. Todo arranca cuando la cita entra en pantalla (data-in →
+   .is-in, ver Revelador). */
+const FRASE = 'Ninguna tecnología nos limita: elegimos la adecuada para tu negocio y construimos con ella.';
+
+function Cita() {
+    const palabras = FRASE.split(' ');
+    return (
+        <figure className="h-cita" data-in>
+            <span className="h-cita-comillas" aria-hidden="true">
+                &ldquo;
+            </span>
+            <blockquote className="h-cita-txt">
+                <p>
+                    {palabras.map((p, i) => (
+                        <span key={i}>
+                            <span style={{ '--i': i } as CSSProperties}>{p}</span>{' '}
+                        </span>
+                    ))}
+                </p>
+            </blockquote>
+            <figcaption className="h-cita-pie">
+                <span className="h-cita-logo" aria-hidden="true">
+                    <svg viewBox="0 0 464 328" fill="currentColor">
+                        <path className="h-cita-rampa" d="M0 328 L326 0 L326 194 L189 328 Z" />
+                        <rect className="h-cita-cuadro" x="328" y="194" width="136" height="134" />
+                    </svg>
+                </span>
+                <span className="h-cita-quien">
+                    <Firma texto="Harley" ancho={40} max={46} />
+                    <span className="m-mono">Fundador de Atlas</span>
+                </span>
+            </figcaption>
+            <div className="h-cita-cta">
+                <Boton href={whatsapp('Hola Harley 👋 Quiero reservar una llamada con Atlas.')} variante="tinta" chico externo>
+                    Reservar una llamada
+                </Boton>
+            </div>
+        </figure>
+    );
+}
+
 export function Herramientas() {
     return (
         <section id="herramientas" className={`h-tools ${spaceMono.variable}`} aria-labelledby="herramientas-t">
             <div className="m-wrap">
                 <Ceja n="04">Tecnología</Ceja>
-                <p className="h-tools-fantasma" aria-hidden="true">
-                    Herramientas
-                </p>
+                <Titular id="herramientas-t" className="m-h2 h-tools-h2" texto="Con qué trabajamos." destacar="trabajamos." />
 
                 <div className="h-tools-tarjeta" data-rv>
                     <img src="/assets/movil/stack-rojo.webp" width={720} height={900} alt="" loading="lazy" decoding="async" />
@@ -84,11 +133,11 @@ export function Herramientas() {
 
                     <div className="h-tools-centro">
                         <div className="h-tools-vidrio">
-                            <h2 id="herramientas-t">
+                            <h3>
                                 Lo que
                                 <br />
                                 dominamos
-                            </h2>
+                            </h3>
                         </div>
                     </div>
 
@@ -97,6 +146,8 @@ export function Herramientas() {
                         <Cinta logos={FILA_HERRAMIENTAS} sentido="izq" etiqueta="Herramientas de trabajo" />
                     </div>
                 </div>
+
+                <Cita />
             </div>
         </section>
     );
