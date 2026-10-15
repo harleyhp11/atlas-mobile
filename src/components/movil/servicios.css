@@ -1,0 +1,324 @@
+/* =====================================================================
+   ATLAS · MÓVIL — servicios (base comun + las tres variantes)
+   ===================================================================== */
+
+.m-srv {
+    display: flex;
+    flex-direction: column;
+}
+.m-srv-h {
+    font: inherit;
+}
+.m-srv-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 72px;
+    text-align: left;
+    touch-action: manipulation;
+}
+.m-srv-n {
+    flex: none;
+    width: 26px;
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--t3);
+}
+.m-srv-nombre {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: clamp(22px, 6.3vw, 28px);
+    line-height: 1.02;
+    letter-spacing: -0.032em;
+}
+.m-srv-precio-mini,
+.m-srv-corto {
+    display: none;
+}
+.m-srv-mas {
+    position: relative;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--linea);
+    transition:
+        background-color 0.4s,
+        box-shadow 0.4s,
+        rotate 0.6s var(--ease);
+}
+.m-srv-mas i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 1.6px;
+    margin: -0.8px 0 0 -7px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: rotate 0.55s var(--ease);
+}
+.m-srv-mas i:last-child {
+    rotate: 90deg;
+}
+.is-open .m-srv-mas {
+    background: var(--rojo);
+    color: var(--blanco);
+    box-shadow: none;
+}
+.is-open .m-srv-mas i:last-child {
+    rotate: 0deg;
+}
+.m-srv-btn:active .m-srv-mas {
+    scale: 0.92;
+}
+
+.m-srv-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.7s var(--ease);
+}
+.is-open > .m-srv-panel {
+    grid-template-rows: 1fr;
+}
+.m-srv-panel-in {
+    min-height: 0;
+    overflow: hidden;
+}
+.m-srv-panel-in > * {
+    transition:
+        opacity 0.6s var(--ease) 0.12s,
+        translate 0.8s var(--ease) 0.12s;
+}
+.m-srv-item:not(.is-open) .m-srv-panel-in > * {
+    opacity: 0;
+    translate: 0 12px;
+    transition-delay: 0s;
+}
+.m-srv-escena {
+    position: relative;
+    height: 300px;
+    margin-bottom: 18px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #1c1d20;
+    isolation: isolate;
+}
+.m-srv-texto {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+.m-srv-chips {
+    margin-top: 14px;
+}
+.m-srv-pie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 18px;
+    padding-bottom: 24px;
+}
+.m-srv-precio {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: -0.025em;
+    line-height: 1;
+}
+
+/* --------------------------------------------------- 'indice' (negro, filas finas) */
+.m-srv--indice .m-srv-item {
+    border-top: 1px solid var(--linea);
+}
+.m-srv--indice .m-srv-item:last-child {
+    border-bottom: 1px solid var(--linea);
+}
+.m-srv--indice .m-srv-btn {
+    min-height: 76px;
+}
+.m-srv--indice .is-open .m-srv-n {
+    color: var(--rojo);
+}
+
+/* ------------------------------------------- 'filas' (isla clara, colores alternos) */
+.m-srv--filas {
+    gap: 8px;
+}
+.m-srv--filas .m-srv-item {
+    --fila: var(--blanco);
+    --tx: var(--tinta);
+    --tx2: rgba(11, 11, 12, 0.72);
+    --ln: rgba(11, 11, 12, 0.16);
+    border-radius: 22px;
+    background: var(--fila);
+    color: var(--tx);
+    overflow: hidden;
+}
+.m-srv--filas .m-srv-item--1 {
+    --fila: var(--niebla);
+}
+.m-srv--filas .m-srv-item--2 {
+    --fila: var(--tinta);
+    --tx: var(--blanco);
+    --tx2: rgba(255, 255, 255, 0.74);
+    --ln: rgba(255, 255, 255, 0.18);
+}
+.m-srv--filas .m-srv-item--3 {
+    --fila: #cfcfca;
+}
+.m-srv--filas .m-srv-item--4 {
+    --fila: var(--grafito);
+    --tx: var(--blanco);
+    --tx2: rgba(255, 255, 255, 0.74);
+    --ln: rgba(255, 255, 255, 0.18);
+}
+.m-srv--filas .m-srv-btn {
+    min-height: 68px;
+    padding: 0 12px 0 16px;
+}
+.m-srv--filas .m-srv-n {
+    color: var(--tx2);
+}
+.m-srv--filas .m-srv-nombre {
+    font-size: clamp(20px, 5.8vw, 25px);
+}
+.m-srv--filas .m-srv-mas {
+    box-shadow: inset 0 0 0 1px var(--ln);
+}
+.m-srv--filas .m-srv-panel-in {
+    padding: 0 12px;
+}
+.m-srv--filas .m-srv-escena {
+    border-radius: 16px;
+}
+.m-srv--filas .m-srv-texto {
+    color: var(--tx2);
+    padding-inline: 4px;
+}
+.m-srv--filas .m-srv-chips {
+    padding-inline: 4px;
+}
+.m-srv--filas .m-chip {
+    border-color: var(--ln);
+    color: var(--tx2);
+}
+.m-srv--filas .m-srv-pie {
+    padding: 0 0 14px 4px;
+}
+
+/* ------------------------------------------------ 'mosaico' (baldosas de producto) */
+.m-srv--mosaico {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-flow: dense;
+    gap: 10px;
+}
+.m-srv--mosaico .m-srv-item {
+    position: relative;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #1b1c1f, #121315);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.09);
+    overflow: hidden;
+}
+.m-srv--mosaico .m-srv-item.is-open {
+    grid-column: 1 / -1;
+    background: #141517;
+}
+.m-srv--mosaico:not(:has(.is-open)) .m-srv-item:last-child {
+    grid-column: 1 / -1;
+}
+.m-srv--mosaico .m-srv-btn {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 6px;
+    min-height: 156px;
+    padding: 16px 16px 15px;
+}
+.m-srv--mosaico .m-srv-n {
+    position: absolute;
+    left: 16px;
+    top: 18px;
+}
+.m-srv--mosaico .m-srv-mas {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+/* Baldosa cerrada: el nombre corto en grande ("IA") y el completo debajo,
+   en texto. Abierta: solo el completo, como titular. */
+.m-srv--mosaico .m-srv-corto {
+    display: block;
+    font-family: var(--f-display);
+    font-weight: 650;
+    font-size: 30px;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+}
+.m-srv--mosaico .m-srv-nombre {
+    flex: none;
+    font-family: var(--f-texto);
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.3;
+    letter-spacing: 0;
+    color: var(--t2);
+    text-wrap: balance;
+}
+.m-srv--mosaico .is-open .m-srv-corto {
+    display: none;
+}
+.m-srv--mosaico .m-srv-precio-mini {
+    display: block;
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.04em;
+    color: var(--t2);
+}
+.m-srv--mosaico .is-open .m-srv-btn {
+    min-height: 0;
+    padding-top: 64px;
+}
+.m-srv--mosaico .is-open .m-srv-nombre {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: clamp(26px, 7.4vw, 32px);
+    line-height: 1.02;
+    letter-spacing: -0.032em;
+    color: var(--blanco);
+}
+.m-srv--mosaico .m-srv-panel-in {
+    padding: 0 10px;
+}
+.m-srv--mosaico .m-srv-escena {
+    border-radius: 18px;
+}
+.m-srv--mosaico .m-srv-texto,
+.m-srv--mosaico .m-srv-chips {
+    padding-inline: 6px;
+}
+.m-srv--mosaico .m-srv-pie {
+    padding: 0 0 12px 6px;
+}
+::view-transition-group(*) {
+    animation-duration: 0.55s;
+    animation-timing-function: cubic-bezier(0.2, 0.85, 0.15, 1);
+}
+
+@media (min-width: 768px) {
+    .m-srv--mosaico {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .m-srv--mosaico:not(:has(.is-open)) .m-srv-item:last-child {
+        grid-column: auto / span 2;
+    }
+}
