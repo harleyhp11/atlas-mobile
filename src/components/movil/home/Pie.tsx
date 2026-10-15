@@ -6,7 +6,7 @@ import { Titular } from '../Titular';
 import { EsculturaAtlas } from './pie/EsculturaAtlas';
 import './pie.css';
 
-/* (08) El pie — "Sculpture Hero" (guglielmogiannattasio.it, 21st.dev)
+/* (09) El pie — "Sculpture Hero" (guglielmogiannattasio.it, 21st.dev)
    pasado a Atlas y a la home movil, en isla clara como servicios:
      · arriba, la marca y "Volver arriba" (donde el original tenia la nav);
      · al medio, la escultura liquida: el simbolo de Atlas en metal, siempre
@@ -66,7 +66,7 @@ export function Pie() {
             <EsculturaAtlas />
 
             <div className="m-wrap h-pie-cierre">
-                <Ceja n="08">Contacto</Ceja>
+                <Ceja n="09">Contacto</Ceja>
                 <Titular id="pie-t" className="m-h2 h-pie-h2" texto="Construyamos lo que viene." destacar="viene." />
                 <p className="m-p h-pie-p" data-rv>
                     Cuéntanos tu idea por WhatsApp. Te respondemos en menos de 24 horas, con el precio cerrado por escrito.

@@ -1,0 +1,790 @@
+/* =====================================================================
+   HOME MÓVIL · (07) Tu negocio — comparador antes/después sobre negro.
+   Capas de la tarjeta, de atrás hacia adelante:
+     .h-neg-capa--despues → foto a color, velo, gráfica, cifra roja, aviso
+     .h-neg-capa--antes   → la misma foto en gris, cifra hueca, chat
+                            (recortada a la izquierda de la línea)
+     .h-neg-estela        → el filo rojo que deja la línea al moverse
+     .h-neg-asa           → la línea y su perilla (slider)
+     .h-neg-pildora       → "● Tu restaurante · ejemplo"
+   La posición de la línea es --pos en la versión quieta; en la animada la
+   escribe Motion en línea (clip-path y left).
+   ===================================================================== */
+
+.h-neg {
+    position: relative;
+    padding: 76px 0 64px;
+    background: var(--negro);
+    overflow: clip;
+}
+.h-neg-h2 {
+    margin-top: 18px;
+}
+.h-neg-intro {
+    margin-top: 16px;
+    max-width: 36ch;
+}
+.h-neg-ver {
+    margin-top: 22px;
+}
+.h-neg-ver .m-btn {
+    display: inline-flex;
+}
+
+/* ------------------------------------------------------------ los rubros */
+.h-neg-comp {
+    margin-top: 30px;
+}
+.h-neg-chips {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    /* aire para el doble anillo de la activa, que sale 5 px del borde */
+    padding: 8px max(var(--g), calc((100% - var(--ancho)) / 2));
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent);
+}
+.h-neg-chips::-webkit-scrollbar {
+    display: none;
+}
+.h-neg-chip {
+    position: relative;
+    isolation: isolate;
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    height: 64px;
+    padding: 6px 20px 6px 6px;
+    border-radius: 999px;
+    background: #111214;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    color: var(--blanco);
+    text-align: left;
+    scroll-snap-align: center;
+    touch-action: manipulation;
+    transition: color 0.35s ease;
+}
+.h-neg-chip.is-activo {
+    color: var(--tinta);
+}
+/* El fondo blanco con doble anillo: cada pildora tiene el suyo y se
+   enciende en su sitio. (Viajando de una a otra, como un layoutId, pasaba
+   por encima de la pildora vecina y le tapaba el texto un instante.) */
+.h-neg-chip-fondo {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 999px;
+    background: var(--blanco);
+    box-shadow:
+        0 0 0 3px var(--negro),
+        0 0 0 5px var(--blanco);
+    opacity: 0;
+    scale: 0.9;
+    transition:
+        opacity 0.35s ease,
+        scale 0.55s var(--pop);
+}
+.h-neg-chip.is-activo .h-neg-chip-fondo {
+    opacity: 1;
+    scale: 1;
+}
+.h-neg-chip-img {
+    flex: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #1d1e21;
+}
+.h-neg-chip-txt {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    white-space: nowrap;
+}
+.h-neg-chip-txt b {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+.h-neg-chip-txt small {
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    color: var(--t3);
+    transition: color 0.35s ease;
+}
+.h-neg-chip.is-activo small {
+    color: rgba(11, 11, 12, 0.62);
+}
+/* cuánto falta para el siguiente rubro */
+.h-neg-chip-barra {
+    position: absolute;
+    left: 26px;
+    right: 26px;
+    bottom: 5px;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--rojo);
+    transform-origin: left center;
+}
+
+/* ------------------------------------------------- pista e índice */
+.h-neg-pista {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 24px;
+    margin: 16px 0 12px;
+    color: var(--t3);
+}
+.h-neg-pista-txt {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.h-neg-pista-txt svg {
+    width: 16px;
+    height: 16px;
+    animation: h-neg-vaiven 2.4s var(--ease-io) infinite;
+}
+@keyframes h-neg-vaiven {
+    0%,
+    100% {
+        translate: -2px 0;
+    }
+    50% {
+        translate: 2px 0;
+    }
+}
+.h-neg-indice {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+}
+.h-neg-indice-ventana {
+    position: relative;
+    display: inline-block;
+    height: 1.3em;
+    min-width: 2ch;
+    overflow: hidden;
+}
+.h-neg-indice-ventana b {
+    display: block;
+    font-weight: 500;
+    color: var(--blanco);
+}
+
+/* ------------------------------------------------------------ la tarjeta */
+.h-neg-carta {
+    position: relative;
+    isolation: isolate;
+    aspect-ratio: 4 / 5;
+    border-radius: 28px;
+    overflow: hidden;
+    background: #0e0f11;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    /* el dedo vertical hace scroll; el horizontal mueve la línea */
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    cursor: ew-resize;
+}
+.h-neg-capa {
+    position: absolute;
+    inset: 0;
+}
+.h-neg-capa--despues {
+    z-index: 1;
+}
+.h-neg-capa--antes {
+    z-index: 2;
+    clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0);
+}
+/* las dos fotos respiran a la vez: si no, la línea dejaría ver un salto */
+.h-neg-lienzo {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    animation: h-neg-respira 16s ease-in-out infinite alternate;
+}
+@keyframes h-neg-respira {
+    from {
+        scale: 1;
+    }
+    to {
+        scale: 1.06;
+    }
+}
+.h-neg-foto {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    pointer-events: none;
+}
+.h-neg-capa--antes .h-neg-foto {
+    filter: grayscale(1) contrast(1.08) brightness(0.62);
+}
+.h-neg-velo {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.42) 0%, rgba(0, 0, 0, 0) 26%, rgba(0, 0, 0, 0) 44%, rgba(0, 0, 0, 0.82) 100%);
+    pointer-events: none;
+}
+.h-neg-velo--antes {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.22) 45%, rgba(0, 0, 0, 0.62) 100%);
+}
+
+/* la gráfica: sube a color, plana en gris */
+.h-neg-graf {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    pointer-events: none;
+}
+.h-neg-graf-linea {
+    fill: none;
+    stroke: var(--rojo);
+    stroke-width: 1.1;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 0 2px rgba(225, 29, 58, 0.9)) drop-shadow(0 0 7px rgba(225, 29, 58, 0.55));
+}
+.h-neg-graf-plana {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.55);
+    stroke-width: 0.6;
+    stroke-dasharray: 2 2.4;
+    stroke-linecap: round;
+}
+
+/* -------------------------------------------------------------- cifras */
+.h-neg-met {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    pointer-events: none;
+}
+.h-neg-met--antes {
+    top: 62px;
+    left: 16px;
+    align-items: flex-start;
+}
+.h-neg-met--despues {
+    right: 16px;
+    bottom: 16px;
+    align-items: flex-end;
+    text-align: right;
+}
+.h-neg-etq {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    height: 26px;
+    padding: 0 11px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+}
+.h-neg-etq--antes {
+    color: var(--blanco);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    background: rgba(0, 0, 0, 0.3);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+.h-neg-etq--despues {
+    padding-left: 10px;
+    background: var(--rojo);
+    color: var(--blanco);
+}
+.h-neg-etq--despues i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blanco);
+    animation: h-neg-late 1.6s ease-in-out infinite;
+}
+@keyframes h-neg-late {
+    50% {
+        opacity: 0.35;
+    }
+}
+.h-neg-num {
+    display: flex;
+    align-items: baseline;
+    gap: 0.06em;
+    font-family: var(--f-display);
+    font-weight: 700;
+    line-height: 0.86;
+    letter-spacing: -0.05em;
+    font-variant-numeric: tabular-nums;
+}
+.h-neg-num small {
+    font-size: 0.4em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+.h-neg-num--antes {
+    font-size: clamp(54px, 16vw, 76px);
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.92);
+}
+.h-neg-num--despues {
+    font-size: clamp(80px, 26vw, 118px);
+    color: var(--rojo);
+    text-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+.h-neg-que {
+    max-width: 17ch;
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.82);
+    text-wrap: balance;
+}
+
+/* la cifra que rueda (tragamonedas) */
+.h-neg-rodar {
+    display: inline-flex;
+}
+.h-neg-rodar-col {
+    display: inline-block;
+    height: 0.86em;
+    overflow: hidden;
+}
+.h-neg-rodar-tira {
+    display: flex;
+    flex-direction: column;
+}
+.h-neg-rodar-tira span {
+    display: block;
+    height: 0.86em;
+    line-height: 0.86;
+}
+
+/* ------------------------------------------------------- el chat de antes */
+.h-neg-chat {
+    position: absolute;
+    z-index: 2;
+    left: 16px;
+    top: 48%;
+    max-width: 74%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    pointer-events: none;
+}
+.h-neg-burbuja {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 10px 14px;
+    border-radius: 18px 18px 18px 6px;
+    background: rgba(255, 255, 255, 0.94);
+    color: var(--tinta);
+    font-size: 14px;
+    line-height: 1.3;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+}
+.h-neg-escribe {
+    display: inline-flex;
+    gap: 4px;
+    padding: 2px 0;
+}
+.h-neg-escribe i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(11, 11, 12, 0.5);
+    animation: h-neg-escribe 1.1s ease-in-out infinite;
+}
+.h-neg-escribe i:nth-child(2) {
+    animation-delay: 0.15s;
+}
+.h-neg-escribe i:nth-child(3) {
+    animation-delay: 0.3s;
+}
+@keyframes h-neg-escribe {
+    0%,
+    100% {
+        opacity: 0.25;
+    }
+    40% {
+        opacity: 1;
+    }
+}
+.h-neg-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    color: rgba(255, 255, 255, 0.86);
+}
+.h-neg-estado svg {
+    width: 12px;
+    height: 12px;
+    flex: none;
+}
+
+/* ------------------------------------------------------ el aviso de después */
+.h-neg-aviso {
+    position: absolute;
+    z-index: 3;
+    top: 60px;
+    right: 14px;
+    width: min(76%, 270px);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px 10px 10px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.95);
+    color: var(--tinta);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.42);
+    pointer-events: none;
+}
+.h-neg-aviso-ico {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 11px;
+    background: var(--rojo);
+    color: var(--blanco);
+}
+.h-neg-aviso-ico svg {
+    width: 17px;
+    height: 17px;
+}
+.h-neg-aviso-txt {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.h-neg-aviso-txt b {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+.h-neg-aviso-txt span {
+    font-size: 12px;
+    line-height: 1.3;
+    color: rgba(11, 11, 12, 0.66);
+}
+.h-neg-aviso-hora {
+    align-self: start;
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    color: rgba(11, 11, 12, 0.55);
+}
+
+/* ------------------------------------------------------- la línea y su perilla */
+.h-neg-estela {
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    left: var(--pos, 50%);
+    width: 70px;
+    background: linear-gradient(90deg, rgba(225, 29, 58, 0.42), rgba(225, 29, 58, 0));
+    opacity: 0;
+    pointer-events: none;
+}
+.h-neg-asa {
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    bottom: 0;
+    left: var(--pos, 50%);
+    width: 64px;
+    margin-left: -32px;
+    display: grid;
+    place-items: center;
+    outline: none;
+    touch-action: pan-y;
+}
+.h-neg-asa-linea {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    margin-left: -1px;
+    background: var(--blanco);
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.5);
+}
+.h-neg-asa-circ {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    color: var(--blanco);
+    background: rgba(12, 12, 14, 0.55);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow:
+        inset 0 0 0 2px var(--rojo),
+        0 10px 30px rgba(0, 0, 0, 0.45);
+    transition: scale 0.35s var(--pop);
+}
+/* la onda roja que invita a tocarla */
+.h-neg-asa-circ::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px rgba(225, 29, 58, 0.6);
+    animation: h-neg-onda 2.2s var(--ease) infinite;
+}
+@keyframes h-neg-onda {
+    from {
+        scale: 0.86;
+        opacity: 1;
+    }
+    to {
+        scale: 1.4;
+        opacity: 0;
+    }
+}
+.h-neg-asa-circ svg {
+    width: 22px;
+    height: 22px;
+}
+.h-neg-carta[data-arrastre='1'] .h-neg-asa-circ {
+    scale: 1.12;
+}
+.h-neg-asa:focus-visible .h-neg-asa-circ {
+    outline: 2px solid var(--blanco);
+    outline-offset: 5px;
+}
+
+.h-neg-pildora {
+    position: absolute;
+    z-index: 5;
+    top: 14px;
+    left: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 14px 0 12px;
+    border-radius: 999px;
+    background: var(--blanco);
+    color: var(--tinta);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+}
+.h-neg-pildora i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--rojo);
+}
+
+/* los bucles de CSS, quietos fuera de pantalla (Revelador pone .is-off) */
+.h-neg-carta.is-off *,
+.h-neg-carta.is-off *::before {
+    animation-play-state: paused;
+}
+
+/* ------------------------------------------------------- qué construimos */
+.h-neg-info {
+    display: grid;
+    margin-top: 24px;
+}
+.h-neg-art {
+    grid-area: 1 / 1;
+    visibility: hidden;
+    transition: visibility 0s linear 0.3s;
+}
+.h-neg-art.is-activo {
+    visibility: visible;
+    transition-delay: 0s;
+}
+.h-neg-art > * {
+    opacity: 0;
+    translate: 0 14px;
+    filter: blur(6px);
+    transition:
+        opacity 0.3s ease,
+        translate 0.3s ease,
+        filter 0.3s ease;
+}
+.h-neg-art.is-activo > * {
+    opacity: 1;
+    translate: none;
+    filter: none;
+    transition:
+        opacity 0.6s var(--ease) calc(0.15s + var(--i, 0) * 70ms),
+        translate 0.8s var(--ease) calc(0.15s + var(--i, 0) * 70ms),
+        filter 0.6s var(--ease) calc(0.15s + var(--i, 0) * 70ms);
+}
+.h-neg-art-cab {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    color: var(--t3);
+}
+.h-neg-art-precio {
+    color: var(--blanco);
+    white-space: nowrap;
+}
+.h-neg-art-t {
+    margin: 12px 0 10px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: clamp(25px, 7vw, 30px);
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+    color: var(--blanco);
+    text-wrap: balance;
+}
+.h-neg-art-pie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 18px;
+}
+.h-neg-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    flex: 1 1 200px;
+}
+.h-neg-tags li {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 11px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--linea);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--t2);
+}
+.h-neg-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 6px 0 20px;
+    border-radius: 999px;
+    background: var(--rojo);
+    color: var(--blanco);
+    font-weight: 600;
+    font-size: 15px;
+    touch-action: manipulation;
+    transition: scale 0.3s var(--ease);
+}
+.h-neg-cta:active {
+    scale: 0.97;
+}
+.h-neg-cta-chip {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--blanco);
+    color: var(--rojo);
+}
+.h-neg-cta-chip svg {
+    width: 15px;
+    height: 15px;
+}
+
+.h-neg-nota {
+    margin-top: 26px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    color: var(--t3);
+}
+
+/* -------------------------------------------------------------- tablet */
+@media (min-width: 768px) {
+    .h-neg-carta {
+        aspect-ratio: 5 / 4;
+    }
+    .h-neg-met--antes {
+        top: 70px;
+        left: 24px;
+    }
+    .h-neg-met--despues {
+        right: 24px;
+        bottom: 22px;
+    }
+    .h-neg-chat {
+        left: 24px;
+        max-width: 46%;
+    }
+    .h-neg-aviso {
+        right: 22px;
+        top: 66px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .h-neg-chip,
+    .h-neg-chip-txt small,
+    .h-neg-chip-fondo {
+        transition: none;
+    }
+    .h-neg-lienzo,
+    .h-neg-asa-circ::before,
+    .h-neg-etq--despues i,
+    .h-neg-escribe i,
+    .h-neg-pista-txt svg {
+        animation: none;
+    }
+    .h-neg-art > *,
+    .h-neg-art.is-activo > * {
+        transition: none;
+        translate: none;
+        filter: none;
+    }
+}

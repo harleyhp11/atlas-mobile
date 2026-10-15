@@ -6,7 +6,7 @@ import { Ceja } from '../Ceja';
 import { Titular } from '../Titular';
 import './preguntas.css';
 
-/* (07) Preguntas — el FAQ de Reachwise ("Questions, answered.") sobre negro.
+/* (08) Preguntas — el FAQ de Reachwise ("Questions, answered.") sobre negro.
 
    A la izquierda, un riel vertical que se llena de rojo con el scroll: la
    punta del relleno sigue una linea a media pantalla y brilla; cada punto se
@@ -110,7 +110,7 @@ export function Preguntas() {
     return (
         <section id="preguntas" className="h-faq" data-tono="oscuro" aria-labelledby="preguntas-t">
             <div className="m-wrap">
-                <Ceja n="07">Preguntas</Ceja>
+                <Ceja n="08">Preguntas</Ceja>
                 <Titular id="preguntas-t" className="m-h2 h-faq-h2" texto="Preguntas, respondidas." destacar="respondidas." />
 
                 <div ref={lista} className="h-faq-lista" data-lleno="vacio">

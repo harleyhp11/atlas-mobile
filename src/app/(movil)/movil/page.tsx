@@ -7,6 +7,7 @@ import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
 import { Herramientas } from '@/components/movil/home/Herramientas';
 import { HeroInicio } from '@/components/movil/home/HeroInicio';
+import { Negocios } from '@/components/movil/home/Negocios';
 import { Pie } from '@/components/movil/home/Pie';
 import { Preguntas } from '@/components/movil/home/Preguntas';
 import { Problema } from '@/components/movil/home/Problema';
@@ -30,8 +31,10 @@ import './home.css';
      · (05) Trabajos sobre negro: muro de piezas en dos columnas en bucle,
        con el titular al centro y parallax con el scroll;
      · (06) Testimonios: cinta continua y ligeramente oblicua;
-     · (07) Preguntas: riel que se llena con el scroll y acordeon;
-     · (08) el pie en isla clara: la escultura liquida de Atlas (el simbolo
+     · (07) Tu negocio: comparador antes/despues por rubro, con Motion
+       (cargado con import() al acercarse) y fotos reales CC0;
+     · (08) Preguntas: riel que se llena con el scroll y acordeon;
+     · (09) el pie en isla clara: la escultura liquida de Atlas (el simbolo
        en metal, siempre en movimiento) y el cierre con WhatsApp.
    Faltan Proceso y Precios. */
 
@@ -80,6 +83,7 @@ export default function HomeMovil() {
 
                 <Trabajos />
                 <Testimonios />
+                <Negocios />
                 <Preguntas />
             </main>
             <Pie />
