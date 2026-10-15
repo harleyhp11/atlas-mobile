@@ -76,8 +76,6 @@
     object-fit: cover;
     border-radius: 18px;
     background: #141517;
-    /* blanco y negro, como las mismas piezas en el mosaico del escritorio */
-    filter: grayscale(1) contrast(1.05);
 }
 @keyframes h-trab-bucle-sube {
     from {
