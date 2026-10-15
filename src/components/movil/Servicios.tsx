@@ -45,6 +45,11 @@ export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) 
     const [vueltas, setVueltas] = useState<number[]>(() => SERVICIOS.map(() => 0));
     const [visibles, setVisibles] = useState<number[]>([]);
     const [reducido, setReducido] = useState(false);
+    /* Filas que Revelador ya hizo aparecer. Va en el className de React: si
+       no, al abrir o cerrar una fila React reescribe sus clases, le borra el
+       .is-in, la fila vuelve a su estado de entrada (26 px abajo y
+       transparente) y Revelador la hace aparecer de nuevo: un rebote. */
+    const [revelados, setRevelados] = useState<number[]>([]);
     const lista = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
@@ -63,7 +68,19 @@ export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) 
             });
         });
         ul.querySelectorAll<HTMLElement>('.m-srv-escena').forEach((el) => io.observe(el));
-        return () => io.disconnect();
+        const filas = Array.from(ul.querySelectorAll<HTMLElement>(':scope > .m-srv-item'));
+        const alAparecer = (e: Event) => {
+            const i = Number((e.currentTarget as HTMLElement).dataset.i);
+            setRevelados((r) => (r.includes(i) ? r : [...r, i]));
+        };
+        filas.forEach((li) => {
+            if (li.classList.contains('is-in')) setRevelados((r) => (r.includes(Number(li.dataset.i)) ? r : [...r, Number(li.dataset.i)]));
+            li.addEventListener('m-in', alAparecer);
+        });
+        return () => {
+            io.disconnect();
+            filas.forEach((li) => li.removeEventListener('m-in', alAparecer));
+        };
     }, []);
 
     const tocar = (i: number, boton: HTMLElement) => {
@@ -87,7 +104,8 @@ export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) 
                 return (
                     <li
                         key={s.slug}
-                        className={`m-srv-item m-srv-item--${i}${abierto ? ' is-open' : ''}`}
+                        className={`m-srv-item m-srv-item--${i}${abierto ? ' is-open' : ''}${revelados.includes(i) ? ' is-in' : ''}`}
+                        data-i={i}
                         style={{ '--i': i, viewTransitionName: conTransicion ? `srv-${s.slug}` : undefined } as CSSProperties}
                         data-rv
                     >
