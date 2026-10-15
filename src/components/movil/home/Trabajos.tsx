@@ -1,84 +1,53 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { Boton } from '../Boton';
 import { Ceja } from '../Ceja';
 import { Titular } from '../Titular';
 import './trabajos.css';
 
-/* (05) Trabajos — un muro de portadas en dos columnas, sobre negro y sin
-   texto bajo el titular. Al hacer scroll, una columna sube y la otra baja:
-   solo es un desplazamiento (translate), no fija la seccion ni secuestra el
-   scroll.
+/* (05) Trabajos — un muro de piezas en dos columnas, sobre negro, con el
+   titular en el centro.
 
-     · Donde existe, lo mueve el propio navegador con animation-timeline:
-       view() (CSS, en el compositor). Si no, un rAF por scroll escribe --p.
-     · Las portadas van en blanco y negro y pasan a color al cruzar el centro
-       de la pantalla.
-     · Solo trabajo real: los recortes salen de las portadas de los cinco
-       proyectos de Atlas (dos por proyecto) y cada tarjeta abre su ficha. */
+   Dos movimientos que se suman, cada uno en su propia capa:
+     · bucle continuo: una columna sube y la otra baja sin parar (CSS,
+       pausado fuera de pantalla con data-loop);
+     · parallax con el scroll: las columnas se separan en sentidos opuestos y
+       el titular va a otro ritmo. Lo mueve animation-timeline: view() donde
+       existe y un rAF por scroll donde no. Solo translate: nada se fija ni
+       secuestra el scroll.
 
-type Proyecto = { nombre: string; cat: string; slug: string };
+   Las imagenes son las piezas de la galeria de Atlas (las mismas del
+   mosaico del escritorio) mas las portadas de Utopp y REGO, en blanco y
+   negro como alla. Son decorativas: el boton del centro lleva a los
+   proyectos. */
 
-const P: Record<string, Proyecto> = {
-    rego: { nombre: 'REGO Premium', cat: 'Hotelería', slug: 'rego-premium' },
-    workup: { nombre: 'WorkUP', cat: 'IA & empleo', slug: 'workup' },
-    fluxa: { nombre: 'Fluxa', cat: 'Fintech', slug: 'fluxa' },
-    utopp: { nombre: 'Utopp', cat: 'Comunidad universitaria', slug: 'utopp' },
-    peru: { nombre: 'Perú Travel', cat: 'Turismo', slug: 'peru-travel' },
-};
+const COLUMNA_A = ['rego', 'obra-02', 'app-golf', 'obra-06', 'sitio-web'];
+const COLUMNA_B = ['obra-01', 'obra-04', 'utopp', 'obra-05', 'laboratorio', 'obra-03'];
 
-// [proyecto, recorte, alto de la imagen a 480 de ancho]
-type Carta = [keyof typeof P, 'a' | 'b', number];
-
-const COLUMNA_A: Carta[] = [
-    ['rego', 'a', 600],
-    ['fluxa', 'a', 480],
-    ['peru', 'a', 600],
-    ['utopp', 'b', 480],
-    ['workup', 'b', 600],
-];
-const COLUMNA_B: Carta[] = [
-    ['workup', 'a', 480],
-    ['utopp', 'a', 600],
-    ['fluxa', 'b', 600],
-    ['peru', 'b', 480],
-    ['rego', 'b', 480],
-];
-
-function Columna({ cartas, lado }: { cartas: Carta[]; lado: 'a' | 'b' }) {
+function Columna({ piezas, lado }: { piezas: string[]; lado: 'a' | 'b' }) {
     return (
         <div className={`h-trab-col h-trab-col--${lado}`}>
-            {cartas.map(([clave, recorte, alto]) => {
-                const p = P[clave];
-                return (
-                    <a key={`${clave}-${recorte}`} className="h-trab-carta" href={`/projects/${p.slug}`}>
-                        <span className="h-trab-img">
-                            <img
-                                src={`/assets/movil/trabajos/${clave}-${recorte}.webp`}
-                                width={480}
-                                height={alto}
-                                alt={`Portada de la web de ${p.nombre}`}
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </span>
-                        <span className="h-trab-pie">
-                            <b>{p.nombre}</b>
-                            <small>{p.cat}</small>
-                        </span>
-                    </a>
-                );
-            })}
+            <div className="h-trab-pista">
+                {/* dos copias: el bucle cierra sin costura */}
+                {[0, 1].map((copia) => (
+                    <div key={copia} className="h-trab-grupo">
+                        {piezas.map((p) => (
+                            <img key={p} src={`/assets/movil/trabajos/${p}.webp`} width={480} height={720} alt="" loading="lazy" decoding="async" />
+                        ))}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
 
 export function Trabajos() {
-    const grilla = useRef<HTMLDivElement>(null);
+    const seccion = useRef<HTMLElement>(null);
 
-    // Respaldo del desplazamiento para navegadores sin animation-timeline.
+    // Respaldo del parallax para navegadores sin animation-timeline.
     useEffect(() => {
-        const el = grilla.current;
+        const el = seccion.current;
         if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         if (typeof CSS !== 'undefined' && CSS.supports('animation-timeline: view()')) return;
         let pedido = false;
@@ -104,29 +73,21 @@ export function Trabajos() {
         };
     }, []);
 
-    // Blanco y negro → color al cruzar la franja central de la pantalla.
-    useEffect(() => {
-        const el = grilla.current;
-        if (!el) return;
-        const io = new IntersectionObserver(
-            (es) => {
-                for (const e of es) e.target.classList.toggle('is-color', e.isIntersecting);
-            },
-            { rootMargin: '-36% 0px -36% 0px' }
-        );
-        el.querySelectorAll('.h-trab-carta').forEach((c) => io.observe(c));
-        return () => io.disconnect();
-    }, []);
-
     return (
-        <section id="trabajos" className="h-trabajos" data-tono="oscuro" aria-labelledby="trabajos-t">
-            <div className="m-wrap">
-                <Ceja n="05">Trabajos</Ceja>
-                <Titular id="trabajos-t" className="m-h2 h-trab-h2" texto="Lo que hemos construido." destacar="construido." />
+        <section ref={seccion} id="trabajos" className="h-trabajos" data-tono="oscuro" aria-labelledby="trabajos-t">
+            <div className="h-trab-muro" data-loop aria-hidden="true">
+                <Columna piezas={COLUMNA_A} lado="a" />
+                <Columna piezas={COLUMNA_B} lado="b" />
             </div>
-            <div ref={grilla} className="h-trab-grilla">
-                <Columna cartas={COLUMNA_A} lado="a" />
-                <Columna cartas={COLUMNA_B} lado="b" />
+
+            <div className="h-trab-centro">
+                <div className="h-trab-centro-in">
+                    <Ceja n="05">Trabajos</Ceja>
+                    <Titular id="trabajos-t" className="m-h2 h-trab-h2" texto="Lo que hemos construido." destacar="construido." />
+                    <Boton href="/projects" variante="claro" chico>
+                        Ver proyectos
+                    </Boton>
+                </div>
             </div>
         </section>
     );
