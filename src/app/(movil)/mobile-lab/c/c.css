@@ -376,7 +376,7 @@
     line-height: 1.3;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    transition: rotate 1s var(--muelle) 0.35s;
+    transition: rotate 1s var(--pop) 0.35s;
 }
 .c-metrica-chip--a {
     rotate: 4deg;

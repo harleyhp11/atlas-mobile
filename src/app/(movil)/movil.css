@@ -35,7 +35,9 @@
 
     --ease: cubic-bezier(0.2, 0.85, 0.15, 1);
     --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
-    --muelle: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Entrada de piezas chicas (avisos, chips, tiradores): arranca rapida y
+       frena exponencial, sin rebote. Antes era un muelle con sobrepaso. */
+    --pop: cubic-bezier(0.16, 1, 0.3, 1);
 
     --g: 20px;
     --cab: 68px;
@@ -601,7 +603,7 @@ ol {
     height: 8px;
     border: 1.5px solid var(--mc);
     background: var(--mf);
-    transition: scale 0.5s var(--muelle) 1s;
+    transition: scale 0.5s var(--pop) 1s;
 }
 .m-marco-caja > i:nth-child(1) {
     left: -5px;

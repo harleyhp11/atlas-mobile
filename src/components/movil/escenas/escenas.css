@@ -138,10 +138,10 @@
     scale: 0.3;
 }
 .mx-cat-item--0 .mx-cat-mas span:last-child {
-    animation: mx-cat-q0 var(--ciclo) var(--muelle) infinite;
+    animation: mx-cat-q0 var(--ciclo) var(--pop) infinite;
 }
 .mx-cat-item--1 .mx-cat-mas span:last-child {
-    animation: mx-cat-q1 var(--ciclo) var(--muelle) infinite;
+    animation: mx-cat-q1 var(--ciclo) var(--pop) infinite;
 }
 .mx-cat-item--0 {
     animation: mx-cat-h0 var(--ciclo) ease infinite;
@@ -309,7 +309,7 @@
     color: var(--ink);
     box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.6);
     opacity: 0;
-    animation: mx-cat-msg var(--ciclo) var(--muelle) infinite;
+    animation: mx-cat-msg var(--ciclo) var(--pop) infinite;
     transform-origin: 0 100%;
 }
 .mx-cat-msg-de {
@@ -399,7 +399,7 @@
     text-transform: uppercase;
     color: var(--fg);
     opacity: 0;
-    animation: mx-cat-qr var(--ciclo) var(--muelle) infinite;
+    animation: mx-cat-qr var(--ciclo) var(--pop) infinite;
 }
 .mx-ui[data-tema='claro'] .mx-cat-qr {
     background: rgba(255, 255, 255, 0.7);
@@ -818,7 +818,7 @@
     background: rgba(11, 11, 12, 0.92);
     color: #fff;
     translate: 0 -150%;
-    animation: mx-apps-noti var(--ciclo) var(--muelle) infinite;
+    animation: mx-apps-noti var(--ciclo) var(--pop) infinite;
 }
 .mx-apps-noti i {
     flex: none;
@@ -871,12 +871,12 @@
 .mx-apps-chip--a {
     left: 12px;
     top: 18px;
-    animation: mx-entra 0.8s var(--muelle) 0.6s both;
+    animation: mx-entra 0.8s var(--pop) 0.6s both;
 }
 .mx-apps-chip--b {
     right: 12px;
     bottom: 18px;
-    animation: mx-entra 0.8s var(--muelle) 0.8s both;
+    animation: mx-entra 0.8s var(--pop) 0.8s both;
 }
 
 /* =============================================================== FLUJO */
@@ -953,7 +953,7 @@
     background: #fff;
     color: var(--ink);
     box-shadow: 0 16px 30px -18px rgba(0, 0, 0, 0.55);
-    animation: mx-flujo-in var(--ciclo) var(--muelle) infinite;
+    animation: mx-flujo-in var(--ciclo) var(--pop) infinite;
 }
 .mx-flujo-in p {
     font-size: 11.5px;
@@ -1137,11 +1137,11 @@
 }
 .mx-flujo-nodo--a {
     left: 25.3%;
-    animation: mx-flujo-n var(--ciclo) var(--muelle) infinite;
+    animation: mx-flujo-n var(--ciclo) var(--pop) infinite;
 }
 .mx-flujo-nodo--b {
     left: 74.7%;
-    animation: mx-flujo-n2 var(--ciclo) var(--muelle) infinite;
+    animation: mx-flujo-n2 var(--ciclo) var(--pop) infinite;
 }
 @keyframes mx-flujo-n {
     0%,

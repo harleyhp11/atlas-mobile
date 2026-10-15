@@ -150,7 +150,7 @@
 .px-busca-cero {
     background: var(--rojo) !important;
     color: #fff !important;
-    animation: px-cero var(--ciclo) var(--muelle) infinite;
+    animation: px-cero var(--ciclo) var(--pop) infinite;
 }
 @keyframes px-tuya {
     0%,
@@ -280,13 +280,13 @@
     height: 15px;
 }
 .px-noche-aviso--0 {
-    animation: px-aviso0 var(--ciclo) var(--muelle) infinite;
+    animation: px-aviso0 var(--ciclo) var(--pop) infinite;
 }
 .px-noche-aviso--1 {
-    animation: px-aviso1 var(--ciclo) var(--muelle) infinite;
+    animation: px-aviso1 var(--ciclo) var(--pop) infinite;
 }
 .px-noche-aviso--2 {
-    animation: px-aviso2 var(--ciclo) var(--muelle) infinite;
+    animation: px-aviso2 var(--ciclo) var(--pop) infinite;
     box-shadow: inset 0 0 0 1.5px var(--rojo);
 }
 @keyframes px-aviso0 {
@@ -355,7 +355,7 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     opacity: 0;
-    animation: px-cero var(--ciclo) var(--muelle) infinite;
+    animation: px-cero var(--ciclo) var(--pop) infinite;
     animation-delay: 1.4s;
 }
 .px-noche-perdida i {
