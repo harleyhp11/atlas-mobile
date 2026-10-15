@@ -7,6 +7,7 @@ import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
 import { Herramientas } from '@/components/movil/home/Herramientas';
 import { HeroInicio } from '@/components/movil/home/HeroInicio';
+import { Preguntas } from '@/components/movil/home/Preguntas';
 import { Problema } from '@/components/movil/home/Problema';
 import { Testimonios } from '@/components/movil/home/Testimonios';
 import { Trabajos } from '@/components/movil/home/Trabajos';
@@ -27,8 +28,9 @@ import './home.css';
        escritorio y la cita del fundador;
      · (05) Trabajos sobre negro: muro de piezas en dos columnas en bucle,
        con el titular al centro y parallax con el scroll;
-     · (06) Testimonios: cinta continua y ligeramente oblicua.
-   Faltan Proceso, Precios, Preguntas y el CTA final con el pie. */
+     · (06) Testimonios: cinta continua y ligeramente oblicua;
+     · (07) Preguntas: riel que se llena con el scroll y acordeon.
+   Faltan Proceso, Precios y el CTA final con el pie. */
 
 export const metadata: Metadata = {
     alternates: { canonical: '/' },
@@ -75,6 +77,7 @@ export default function HomeMovil() {
 
                 <Trabajos />
                 <Testimonios />
+                <Preguntas />
             </main>
             <Revelador />
         </>

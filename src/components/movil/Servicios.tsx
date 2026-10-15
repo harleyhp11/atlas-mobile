@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { flushSync } from 'react-dom';
+import { anclar } from './anclar';
 import { Boton } from './Boton';
 import { SERVICIOS, whatsapp } from './datos';
 import './servicios.css';
@@ -37,31 +38,6 @@ type Props = {
 };
 
 const dos = (n: number) => String(n).padStart(2, '0');
-
-/* Mantiene `el` en la misma altura de pantalla mientras el acordeon se
-   reacomoda (~la duracion de la transicion). Se corta si el usuario empieza
-   a hacer scroll por su cuenta. */
-function anclar(el: HTMLElement, ms = 820) {
-    const y0 = el.getBoundingClientRect().top;
-    const t0 = performance.now();
-    let vivo = true;
-    const soltar = () => {
-        vivo = false;
-    };
-    window.addEventListener('touchstart', soltar, { passive: true, once: true });
-    window.addEventListener('wheel', soltar, { passive: true, once: true });
-    const paso = () => {
-        if (!vivo) return;
-        const d = el.getBoundingClientRect().top - y0;
-        if (Math.abs(d) > 0.5) window.scrollBy({ top: d, behavior: 'instant' as ScrollBehavior });
-        if (performance.now() - t0 < ms) requestAnimationFrame(paso);
-        else {
-            window.removeEventListener('touchstart', soltar);
-            window.removeEventListener('wheel', soltar);
-        }
-    };
-    requestAnimationFrame(paso);
-}
 
 export function Servicios({ variante, tema = 'oscuro', inicial = null }: Props) {
     const conTransicion = variante === 'mosaico';
