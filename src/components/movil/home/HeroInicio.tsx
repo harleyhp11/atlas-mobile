@@ -78,7 +78,7 @@ export function HeroInicio({ trabajos = '/projects' }: { trabajos?: string }) {
                 <p className="h-sub m-p">{SUBTITULO}</p>
 
                 <div className="h-ctas">
-                    <Boton href={WHATSAPP} externo tinta>
+                    <Boton href={WHATSAPP} externo>
                         Empezar un proyecto
                     </Boton>
                     <Boton href={trabajos} variante="fantasma" abajo>
