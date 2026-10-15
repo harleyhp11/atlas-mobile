@@ -260,7 +260,8 @@
     display: block;
     font-family: var(--f-display);
     font-weight: 650;
-    font-size: 30px;
+    font-size: 24px;
+    white-space: nowrap;
     line-height: 0.95;
     letter-spacing: -0.04em;
 }
