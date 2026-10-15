@@ -57,7 +57,7 @@ export function HeroInicio({ trabajos = '/projects' }: { trabajos?: string }) {
             <div className="m-wrap h-hero-in">
                 <p className="h-badge">
                     <i className="m-ping m-ping--siempre" data-loop aria-hidden="true" />
-                    Disponibles para proyectos · Lima, Perú
+                    Disponibles para proyectos<span className="h-badge-lugar"> · Lima, Perú</span>
                 </p>
 
                 <div className="h-titulo" aria-hidden="true">

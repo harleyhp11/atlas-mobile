@@ -71,6 +71,14 @@
     text-transform: uppercase;
 }
 
+/* Por debajo de ~390 px la etiqueta no entra en una linea y "PERU" quedaba
+   sola abajo: ahi se queda solo "Disponibles para proyectos". */
+@media (max-width: 388px) {
+    .h-badge-lugar {
+        display: none;
+    }
+}
+
 .h-titulo {
     position: relative;
     display: flex;
