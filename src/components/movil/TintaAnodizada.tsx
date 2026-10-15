@@ -204,10 +204,11 @@ export function TintaAnodizada() {
         };
 
         // despues del pintado y con el navegador libre
-        const w = window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number };
+        // (Safari no tiene requestIdleCallback: ahi espera un poco y listo)
+        const ocioso = 'requestIdleCallback' in window;
         let espera = 0;
         const agendar = () => {
-            espera = w.requestIdleCallback ? w.requestIdleCallback(arrancar, { timeout: 2500 }) : window.setTimeout(arrancar, 1200);
+            espera = ocioso ? window.requestIdleCallback(arrancar, { timeout: 2500 }) : window.setTimeout(arrancar, 1200);
         };
         if (document.readyState === 'complete') agendar();
         else window.addEventListener('load', agendar, { once: true });
@@ -215,7 +216,7 @@ export function TintaAnodizada() {
         return () => {
             cancelado = true;
             window.removeEventListener('load', agendar);
-            if (w.requestIdleCallback) (window as Window & { cancelIdleCallback?: (n: number) => void }).cancelIdleCallback?.(espera);
+            if (ocioso) window.cancelIdleCallback(espera);
             else window.clearTimeout(espera);
             limpiar();
         };
