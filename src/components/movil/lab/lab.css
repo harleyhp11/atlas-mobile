@@ -1,0 +1,47 @@
+/* Pie del laboratorio movil (temporal). */
+.lab-pie {
+    padding: 56px 0 calc(48px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--linea);
+    background: var(--negro);
+}
+.lab-pie-t {
+    color: var(--t3);
+}
+.lab-pie-lista {
+    display: grid;
+    gap: 8px;
+    margin-top: 18px;
+}
+.lab-pie-lista a {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    column-gap: 10px;
+    align-items: baseline;
+    min-height: 64px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: inset 0 0 0 1px var(--linea);
+}
+.lab-pie-lista a[aria-current='page'] {
+    background: var(--blanco);
+    color: var(--tinta);
+}
+.lab-pie-lista small {
+    grid-row: 1 / 3;
+    color: var(--rojo);
+    font-size: 12px;
+}
+.lab-pie-lista b {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+}
+.lab-pie-lista span {
+    font-size: 15px;
+    color: var(--t2);
+}
+.lab-pie-lista a[aria-current='page'] span {
+    color: rgba(11, 11, 12, 0.7);
+}

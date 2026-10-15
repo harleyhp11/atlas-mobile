@@ -1,0 +1,305 @@
+/* =====================================================================
+   DIRECCION C · "Cine"
+   ===================================================================== */
+
+.lab-c {
+    background: var(--negro);
+}
+
+/* ------------------------------------------------------------------ hero */
+.c-hero {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: max(100svh, 680px);
+    padding: calc(var(--cab) + 24px) 0 112px;
+    overflow: hidden;
+    isolation: isolate;
+}
+.c-hero-media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: #050505;
+}
+.c-hero-media img,
+.c-hero-media video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.c-hero-velo {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 22%),
+        linear-gradient(0deg, rgba(0, 0, 0, 0.94) 0%, rgba(0, 0, 0, 0.82) 38%, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
+}
+.c-hero-in > * {
+    animation: c-sube 1s var(--ease) both;
+}
+.c-hero-in > .c-titulo {
+    animation: none;
+}
+.c-hero-in > .c-sub {
+    animation-delay: 0.22s;
+}
+.c-hero-in > .c-ctas {
+    animation-delay: 0.32s;
+}
+.c-hero-in > .c-chips {
+    animation-delay: 0.42s;
+}
+@keyframes c-sube {
+    from {
+        opacity: 0;
+        translate: 0 16px;
+    }
+}
+
+.c-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    min-height: 34px;
+    padding: 0 14px 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.c-titulo {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 22px;
+}
+.c-pre {
+    display: grid;
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: -0.035em;
+    color: var(--t2);
+}
+.c-pre > span {
+    grid-area: 1 / 1;
+    opacity: 0;
+    translate: 0 -40%;
+    transition:
+        opacity 0.5s,
+        translate 0.7s var(--ease);
+}
+.c-pre > span.is-on {
+    opacity: 1;
+    translate: 0 0;
+}
+.c-palabras {
+    display: grid;
+    margin-top: 4px;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: min(24vw, 118px);
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+}
+.c-palabras > span {
+    grid-area: 1 / 1;
+    padding-bottom: 0.08em;
+    white-space: nowrap;
+    opacity: 0;
+    filter: blur(14px);
+    scale: 1.04;
+    transform-origin: 0 100%;
+    transition:
+        opacity 0.5s ease,
+        filter 0.8s var(--ease),
+        scale 0.9s var(--ease);
+}
+.c-palabras > span.is-on {
+    opacity: 1;
+    filter: none;
+    scale: 1;
+    transition-delay: 0.1s;
+}
+.c-palabras > span:nth-child(3) {
+    font-size: 0.74em;
+    align-self: end;
+}
+.c-firma {
+    position: relative;
+    z-index: 2;
+    display: block;
+    min-height: 58px;
+    margin: -20px 0 0 18%;
+}
+.c-sub {
+    margin-top: 8px;
+    max-width: 34ch;
+}
+.c-ctas {
+    display: grid;
+    gap: 10px;
+    margin-top: 22px;
+}
+.c-chips {
+    margin-top: 18px;
+}
+.c-chips .m-chip {
+    background: rgba(0, 0, 0, 0.35);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+/* las cintas cruzan el borde de la primera isla */
+.c-cintas {
+    position: relative;
+    z-index: 3;
+    margin: -96px 0 -86px;
+}
+
+/* ----------------------------------------------------------------- islas */
+.c-isla {
+    position: relative;
+    z-index: 2;
+    margin: 0 8px;
+    padding: 104px 0 56px;
+    border-radius: var(--isla);
+    background: var(--papel);
+    color: var(--tinta);
+}
+.c-isla--srv {
+    margin-top: 10px;
+    padding-top: 64px;
+}
+.c-isla .m-p {
+    color: rgba(11, 11, 12, 0.72);
+}
+.c-h2 {
+    margin-top: 18px;
+    color: var(--tinta);
+}
+.c-isla .m-marco {
+    --mc: var(--tinta);
+    --mf: var(--papel);
+}
+
+.c-foto {
+    position: relative;
+    margin: 40px 0 10px;
+    border-radius: 22px;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background: #0b0b0c;
+}
+.c-foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.c-foto figcaption {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: rgba(12, 12, 13, 0.6);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    color: var(--blanco);
+    font-size: 15px;
+    line-height: 1.35;
+}
+
+.c-metricas {
+    margin-top: 18px;
+}
+.c-metrica {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 30px 0 28px;
+    border-bottom: 1px solid var(--linea-tinta);
+}
+.c-metrica-cifra {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(88px, 27vw, 128px);
+    line-height: 0.8;
+    letter-spacing: -0.065em;
+    font-variant-numeric: tabular-nums;
+}
+/* El chip va encima de la cifra, pegado a la derecha y un poco montado:
+   asi nunca tapa los digitos, por ancha que sea la cifra ("100 %"). */
+.c-metrica-chip {
+    position: relative;
+    z-index: 1;
+    order: -1;
+    align-self: flex-end;
+    margin-bottom: -4px;
+    max-width: 62%;
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: var(--blanco);
+    color: var(--tinta);
+    box-shadow: 0 16px 30px -16px rgba(0, 0, 0, 0.35);
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    line-height: 1.3;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: rotate 1s var(--muelle) 0.35s;
+}
+.c-metrica-chip--a {
+    rotate: 4deg;
+}
+.c-metrica-chip--b {
+    rotate: -4deg;
+}
+.m-js .c-metrica:not(.is-in) .c-metrica-chip {
+    rotate: 0deg;
+}
+.c-metrica-txt {
+    font-size: 16px;
+    color: rgba(11, 11, 12, 0.72);
+}
+.c-metrica.is-roja {
+    margin: 14px -10px 0;
+    padding: 30px 14px 26px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--rojo);
+    color: var(--blanco);
+    box-shadow: 0 30px 60px -30px rgba(225, 29, 58, 0.75);
+}
+.c-metrica.is-roja .c-metrica-txt {
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.c-intro {
+    margin: 16px 0 24px;
+}
+
+@media (min-width: 768px) {
+    .c-isla {
+        margin-inline: auto;
+        max-width: 760px;
+    }
+    .c-metricas {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 24px;
+    }
+}

@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono, Playfair_Display, Alex_Brush, Bricolage_Grotesque, Anton, Space_Mono } from 'next/font/google';
 import { getMessages, getLocale } from 'next-intl/server';
 import { ThemeProvider, I18nProvider, SmoothScrollProvider } from '@/providers';
+import { DESCRIPCION, DOMINIO, ICONOS, IMAGEN_OG, TITULO } from '@/lib/metadatos';
+import { scriptVista } from '@/lib/vista';
 
 import '@/styles/globals.css';
 
@@ -71,37 +73,32 @@ const signature = Alex_Brush({
    WhatsApp. Estaba entero en ingles y a nombre del autor de la plantilla
    —titulo "Arfazrll | AI & Software Engineer", autor "Your Name", dominio
    "your-domain.com"—, o sea que el sitio se anunciaba como el portfolio de
-   otra persona.
-
-   El dominio sigue siendo un marcador: metadataBase tiene que apuntar al
-   dominio real de Atlas antes de publicar, porque de el cuelgan las URLs
-   absolutas de las imagenes al compartir. */
-const TITULO = 'Atlas — Estudio digital en Lima';
-const DESCRIPCION = 'Diseñamos y construimos sitios web, software a medida y apps para negocios que quieren vender más y verse mejor.';
-
+   otra persona. Titulo, descripcion, iconos e imagen para compartir viven
+   en src/lib/metadatos.ts: los comparte con el layout de la home movil. */
 export const metadata: Metadata = {
     title: {
         default: TITULO,
         template: '%s | Atlas',
     },
     description: DESCRIPCION,
-    keywords: ['diseño web', 'desarrollo web', 'landing page', 'tienda online', 'software a medida', 'apps', 'Lima', 'Perú'],
+    keywords: ['diseño web', 'desarrollo web', 'landing page', 'tienda online', 'software a medida', 'apps', 'inteligencia artificial', 'Lima', 'Perú'],
     authors: [{ name: 'Atlas' }],
     creator: 'Atlas',
-    // TODO: cambiar por el dominio real de Atlas antes de publicar.
-    metadataBase: new URL('https://atlas-estudio.com'),
+    metadataBase: new URL(DOMINIO),
     openGraph: {
         type: 'website',
         locale: 'es_PE',
-        url: 'https://atlas-estudio.com',
+        url: DOMINIO,
         title: TITULO,
         description: DESCRIPCION,
         siteName: 'Atlas',
+        images: [IMAGEN_OG],
     },
     twitter: {
         card: 'summary_large_image',
         title: TITULO,
         description: DESCRIPCION,
+        images: [IMAGEN_OG.url],
     },
     robots: {
         index: true,
@@ -114,12 +111,7 @@ export const metadata: Metadata = {
             'max-snippet': -1,
         },
     },
-    icons: {
-        icon: [
-            { url: '/Arfazrll_light.svg', media: '(prefers-color-scheme: light)' },
-            { url: '/Arfazrll_dark.svg', media: '(prefers-color-scheme: dark)' },
-        ],
-    },
+    icons: ICONOS,
 };
 
 export const viewport: Viewport = {
@@ -147,6 +139,10 @@ export default async function RootLayout({
 
     return (
         <html lang={locale} data-scroll-behavior="smooth" suppressHydrationWarning>
+            <head>
+                {/* Por debajo de 1024 px la home es otra (ver src/proxy.ts). */}
+                <script dangerouslySetInnerHTML={{ __html: scriptVista('escritorio') }} />
+            </head>
             <body className={`${inter.variable} ${jetbrainsMono.variable} ${display.variable} ${condensed.variable} ${playfair.variable} ${signature.variable} ${spaceMono.variable} font-sans relative`}>
                 <ThemeProvider>
                     <I18nProvider locale={locale} messages={messages}>
