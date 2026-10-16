@@ -11,7 +11,9 @@ import { useEffect } from 'react';
      · [data-loop]: bucles de CSS (cintas, pings, escenas) — .is-off fuera de
        pantalla, que los pausa;
      · video[data-src]: carga diferida, play solo en pantalla, y nunca con
-       movimiento reducido ni con ahorro de datos (se queda el poster).
+       movimiento reducido ni con ahorro de datos (se queda el poster);
+     · [data-activa]: .is-activa mientras cruza la franja central de la
+       pantalla (las tarjetas de proyectos pasan de gris a color).
 
    Ademas pone .is-tap en los botones al tocarlos, para la animacion. */
 
@@ -75,11 +77,19 @@ export function Revelador() {
             { rootMargin: '120px 0px' }
         );
 
+        const activas = new IntersectionObserver(
+            (es) => {
+                for (const e of es) (e.target as HTMLElement).classList.toggle('is-activa', e.isIntersecting);
+            },
+            { rootMargin: '-32% 0px -32% 0px' }
+        );
+
         const observar = () => {
             document
                 .querySelectorAll<HTMLElement>('[data-rv]:not(.is-in), [data-in]:not(.is-in)')
                 .forEach((el) => entradas.observe(el));
             document.querySelectorAll<HTMLElement>('[data-loop], video[data-src]').forEach((el) => bucles.observe(el));
+            document.querySelectorAll<HTMLElement>('[data-activa]').forEach((el) => activas.observe(el));
         };
         observar();
 
@@ -107,6 +117,7 @@ export function Revelador() {
         return () => {
             entradas.disconnect();
             bucles.disconnect();
+            activas.disconnect();
             mo.disconnect();
             window.clearTimeout(pendiente);
             document.removeEventListener('pointerdown', tap);

@@ -1,0 +1,533 @@
+/* =====================================================================
+   CASO · MÓVIL — /projects/[slug] por debajo de 1024 px.
+   Hero negro con la captura → ficha → el proyecto → isla clara con lo
+   que construimos → retos → stack → el siguiente caso → pie.
+   (El navegador de la captura viene de proyectos.css.)
+   ===================================================================== */
+
+.caso {
+    background: var(--negro);
+    padding-bottom: 72px;
+}
+
+/* ------------------------------------------------------------- el hero */
+.caso-hero {
+    padding-top: calc(var(--cab) + 26px);
+}
+.caso-volver {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 18px 0 13px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--linea);
+    background: rgba(255, 255, 255, 0.04);
+    font-size: 14.5px;
+    font-weight: 600;
+    touch-action: manipulation;
+    transition: background-color 0.3s;
+}
+.caso-volver svg {
+    width: 17px;
+    height: 17px;
+    transition: translate 0.35s var(--ease);
+}
+.caso-volver:active {
+    background: rgba(255, 255, 255, 0.1);
+}
+.caso-volver:active svg {
+    translate: -3px 0;
+}
+.caso-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 34px;
+    color: var(--t3);
+}
+.caso-t {
+    margin-top: 14px;
+    font-size: clamp(52px, 16vw, 80px);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+}
+.caso-linea {
+    margin-top: 18px;
+    max-width: 30ch;
+    font-size: 19px;
+    line-height: 1.42;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+.caso-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.caso-chips li {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 30px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--linea);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--t2);
+}
+.caso-chips li.is-etiqueta {
+    background: var(--blanco);
+    box-shadow: none;
+    color: var(--tinta);
+}
+.caso-chips li i {
+    position: relative;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+}
+.caso-chips li.is-vivo i {
+    background: var(--rojo);
+}
+.caso-chips li.is-vivo i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--rojo);
+    animation: m-ping 1.9s var(--ease) infinite;
+}
+
+/* la captura, casi a sangre */
+.caso-foto {
+    margin: 32px 8px 0;
+}
+.caso-foto .pry-marco {
+    border-radius: 22px;
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 30px 80px rgba(0, 0, 0, 0.6);
+}
+.caso-acciones {
+    margin-top: 22px;
+}
+
+/* -------------------------------------------------------------- la ficha */
+.caso-ficha {
+    margin-top: 40px;
+}
+.caso-ficha dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 0;
+}
+.caso-dato {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-height: 92px;
+    padding: 16px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.035);
+    box-shadow: inset 0 0 0 1px var(--linea);
+}
+/* si quedan impares, el ultimo ocupa el ancho: sin hueco en la grilla */
+.caso-dato:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    min-height: 0;
+}
+.caso-dato dt {
+    color: var(--t3);
+}
+.caso-dato dd {
+    margin: 0;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 17px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--blanco);
+    text-wrap: balance;
+}
+
+/* ------------------------------------------------------------ secciones */
+.caso-seccion {
+    padding-top: 76px;
+}
+.caso-h2 {
+    margin-top: 18px;
+}
+.caso-resumen {
+    margin-top: 20px;
+    font-family: var(--f-display);
+    font-size: clamp(20px, 5.6vw, 25px);
+    font-weight: 500;
+    line-height: 1.32;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.9);
+    text-wrap: pretty;
+}
+
+/* ---------------------------------------- isla: lo que construimos */
+.caso-isla {
+    position: relative;
+    margin: 76px 8px 0;
+    padding: 72px 0 40px;
+    border-radius: var(--isla);
+    background: var(--papel);
+    color: var(--tinta);
+}
+.caso-isla .caso-h2 {
+    color: var(--tinta);
+}
+.caso-destacados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 22px 0 26px;
+    padding: 0;
+    list-style: none;
+}
+.caso-destacados li {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--tinta);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    letter-spacing: 0.03em;
+    color: var(--blanco);
+}
+
+/* el acordeon */
+.caso-grupos {
+    border-top: 1px solid var(--linea-tinta);
+}
+.caso-grupo {
+    border-bottom: 1px solid var(--linea-tinta);
+}
+.caso-grupo-h {
+    font: inherit;
+}
+.caso-grupo-btn {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) 44px;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 72px;
+    padding: 12px 0;
+    text-align: left;
+    touch-action: manipulation;
+}
+.caso-grupo-n {
+    color: rgba(11, 11, 12, 0.66);
+}
+.caso-grupo-t {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+}
+.caso-grupo-mas {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--linea-tinta);
+    transition:
+        background-color 0.4s,
+        box-shadow 0.4s,
+        rotate 0.55s var(--ease);
+}
+.caso-grupo-mas i {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 14px;
+    height: 1.6px;
+    margin: -0.8px 0 0 -7px;
+    border-radius: 2px;
+    background: currentColor;
+}
+.caso-grupo-mas i:last-child {
+    rotate: 90deg;
+}
+.caso-grupo.is-open .caso-grupo-mas {
+    background: var(--tinta);
+    box-shadow: none;
+    color: var(--blanco);
+    rotate: 45deg;
+}
+.caso-grupo-btn:active .caso-grupo-mas {
+    scale: 0.94;
+}
+.caso-grupo-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.6s var(--ease);
+}
+.caso-grupo.is-open .caso-grupo-panel {
+    grid-template-rows: 1fr;
+}
+.caso-grupo-in {
+    min-height: 0;
+    overflow: hidden;
+}
+.caso-grupo-in ul {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 0;
+    padding: 0 0 24px 38px;
+    list-style: none;
+}
+.caso-grupo-in li {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    transition:
+        opacity 0.5s ease 0.1s,
+        translate 0.6s var(--ease) 0.1s;
+}
+.caso-grupo-in li::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--rojo);
+}
+.caso-grupo:not(.is-open) .caso-grupo-in li {
+    opacity: 0;
+    translate: 0 8px;
+    transition-delay: 0s;
+}
+.caso-grupo-in b {
+    font-size: 15.5px;
+    font-weight: 600;
+    color: var(--tinta);
+}
+.caso-grupo-in span {
+    font-size: 15px;
+    line-height: 1.5;
+    color: rgba(11, 11, 12, 0.72);
+}
+
+/* --------------------------------------------------------------- retos */
+.caso-retos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 30px 0 0;
+    padding: 0;
+    list-style: none;
+}
+.caso-reto {
+    padding: 22px 20px 20px;
+    border-radius: 22px;
+    background: linear-gradient(180deg, #121316, #0c0d0f);
+    box-shadow: inset 0 0 0 1px var(--linea);
+}
+.caso-reto-n {
+    color: var(--t3);
+}
+.caso-reto-t {
+    margin-top: 10px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 21px;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    color: var(--blanco);
+    text-wrap: balance;
+}
+.caso-reto-sol {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--linea);
+}
+.caso-reto-sol .m-mono {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--t2);
+}
+.caso-reto-sol i {
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--rojo);
+}
+.caso-reto-sol p + p {
+    margin-top: 8px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+
+/* --------------------------------------------------------------- stack */
+.caso-stack {
+    margin-top: 26px;
+}
+.caso-stack .m-mono {
+    color: var(--t3);
+}
+.caso-stack ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 22px;
+    padding: 0;
+    list-style: none;
+}
+.caso-stack li {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    box-shadow: inset 0 0 0 1px var(--linea);
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
+    color: var(--t2);
+}
+.caso-codigo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.35);
+    text-underline-offset: 6px;
+    touch-action: manipulation;
+}
+.caso-codigo svg {
+    width: 13px;
+    height: 13px;
+}
+
+/* ---------------------------------------------------- el siguiente caso */
+.caso-sig-ceja {
+    color: var(--t3);
+}
+.caso-sig-a {
+    display: block;
+    margin-top: 14px;
+    touch-action: manipulation;
+}
+.caso-sig-a .pry-marco-vista img {
+    filter: grayscale(1);
+    scale: 1.05;
+    transition:
+        filter 0.9s var(--ease),
+        scale 1.4s var(--ease);
+}
+.caso-sig-a.is-activa .pry-marco-vista img {
+    filter: none;
+    scale: 1;
+}
+.caso-sig-cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-top: 16px;
+}
+.caso-sig-cab > span:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.caso-sig-cab b {
+    font-family: var(--f-display);
+    font-weight: 650;
+    font-size: clamp(32px, 10vw, 44px);
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+}
+.caso-sig-cab small {
+    font-size: 10.5px;
+    color: var(--t3);
+}
+.caso-sig-chip {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--rojo);
+    color: var(--blanco);
+    transition: rotate 0.45s var(--ease);
+}
+.caso-sig-chip svg {
+    width: 18px;
+    height: 18px;
+}
+.caso-sig-a:active .caso-sig-chip {
+    rotate: 45deg;
+}
+.caso-todos {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-top: 18px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.35);
+    text-underline-offset: 6px;
+}
+
+@media (min-width: 768px) {
+    .caso-isla {
+        max-width: 760px;
+        margin-inline: auto;
+    }
+    .caso-foto {
+        max-width: 760px;
+        margin-inline: auto;
+    }
+    .caso-ficha dl {
+        grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+        grid-auto-flow: column;
+    }
+    .caso-dato:last-child:nth-child(odd) {
+        grid-column: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .caso-chips li.is-vivo i::after {
+        animation: none;
+    }
+    .caso-grupo-panel,
+    .caso-grupo-in li,
+    .caso-sig-a .pry-marco-vista img {
+        transition: none;
+    }
+    .caso-sig-a .pry-marco-vista img {
+        filter: none;
+        scale: 1;
+    }
+}
