@@ -50,11 +50,7 @@ function Columna({ titulo, enlaces }: { titulo: string; enlaces: Enlace[] }) {
     );
 }
 
-/* `base`: desde otra pagina (los proyectos), los enlaces a las secciones de
-   la home llevan "/" delante. `n`: el numero de la ceja; en las paginas
-   que no numeran sus secciones, sin numero. */
-export function Pie({ base = '', n = '09' }: { base?: string; n?: string | null }) {
-    const explorar = EXPLORAR.map((e) => ({ ...e, href: `${base}${e.href}` }));
+export function Pie() {
     return (
         <footer id="contacto" className="h-pie m-claro" data-tono="claro">
             <div className="m-wrap h-pie-barra">
@@ -70,7 +66,7 @@ export function Pie({ base = '', n = '09' }: { base?: string; n?: string | null 
             <EsculturaAtlas />
 
             <div className="m-wrap h-pie-cierre">
-                <Ceja n={n ?? undefined}>Contacto</Ceja>
+                <Ceja n="09">Contacto</Ceja>
                 <Titular id="pie-t" className="m-h2 h-pie-h2" texto="Construyamos lo que viene." destacar="viene." />
                 <p className="m-p h-pie-p" data-rv>
                     Cuéntanos tu idea por WhatsApp. Te respondemos en menos de 24 horas, con el precio cerrado por escrito.
@@ -87,7 +83,7 @@ export function Pie({ base = '', n = '09' }: { base?: string; n?: string | null 
             </div>
 
             <nav className="m-wrap h-pie-nav" aria-label="Pie de página">
-                <Columna titulo="Explorar" enlaces={explorar} />
+                <Columna titulo="Explorar" enlaces={EXPLORAR} />
                 <Columna titulo="Estudio" enlaces={ESTUDIO} />
             </nav>
 

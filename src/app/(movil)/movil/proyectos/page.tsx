@@ -4,9 +4,9 @@ import { Ceja } from '@/components/movil/Ceja';
 import { Cintas } from '@/components/movil/Cintas';
 import { Revelador } from '@/components/movil/Revelador';
 import { Titular } from '@/components/movil/Titular';
-import { Pie } from '@/components/movil/home/Pie';
 import { Indice } from '@/components/movil/proyectos/Indice';
 import { Lista } from '@/components/movil/proyectos/Lista';
+import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
 import { MENU_PROYECTOS } from '@/components/movil/proyectos/proyectos';
 import '@/components/movil/proyectos/proyectos.css';
 
@@ -22,7 +22,7 @@ import '@/components/movil/proyectos/proyectos.css';
      · las cintas cruzando hacia una isla clara;
      · la lista, con filtro por servicio (el buscador sobra con cinco) y
        tarjetas con la captura en un navegador que pasa de gris a color;
-     · el pie de siempre. */
+     · un pie propio, mas corto que el de la home. */
 
 export const metadata: Metadata = {
     title: 'Proyectos',
@@ -53,7 +53,7 @@ export default function ProyectosMovil() {
 
                 <Lista />
             </main>
-            <Pie base="/" n={null} />
+            <PieCompacto />
             <Revelador />
         </>
     );

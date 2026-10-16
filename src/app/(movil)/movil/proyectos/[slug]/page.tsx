@@ -5,9 +5,9 @@ import { Ceja } from '@/components/movil/Ceja';
 import { Flecha } from '@/components/movil/iconos';
 import { Revelador } from '@/components/movil/Revelador';
 import { Titular } from '@/components/movil/Titular';
-import { Pie } from '@/components/movil/home/Pie';
 import { Construimos } from '@/components/movil/proyectos/Construimos';
 import { Marco } from '@/components/movil/proyectos/Marco';
+import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
 import { MENU_PROYECTOS, numero, PROYECTOS } from '@/components/movil/proyectos/proyectos';
 import '@/components/movil/proyectos/proyectos.css';
 import '@/components/movil/proyectos/caso.css';
@@ -232,7 +232,7 @@ export default async function CasoMovil({ params }: Props) {
                     </div>
                 </section>
             </main>
-            <Pie base="/" n={null} />
+            <PieCompacto />
             <Revelador />
         </>
     );
