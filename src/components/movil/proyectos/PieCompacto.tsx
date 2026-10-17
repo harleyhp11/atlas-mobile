@@ -1,32 +1,125 @@
-import { Boton } from '../Boton';
-import { WHATSAPP } from '../datos';
-import { Flecha, FlechaAbajo } from '../iconos';
+'use client';
 
-/* El pie de las paginas de proyectos: mas corto que el de la home y sin la
-   escultura (Harley lo pidio asi). Una isla grafito —ni negra ni clara—
-   con el cierre a WhatsApp, los enlaces en una fila y la linea legal. */
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { WHATSAPP } from '../datos';
+import { Flecha, SimboloAtlas } from '../iconos';
+
+/* El pie de las paginas de proyectos: una billetera.
+
+   Tres tarjetas premium asoman de un bolsillo de cuero (negro que se
+   enciende en rojo, con costura). Son los accesos: escribir por WhatsApp,
+   cotizar y ver los servicios. Cuando el pie entra en pantalla las
+   tarjetas suben y se abren en abanico, el monto del bolsillo cuenta hasta
+   S/ 400 —el precio de entrada real— y los hologramas brillan. Tocar el
+   bolsillo las guarda o las vuelve a sacar. Con movimiento reducido salen
+   abiertas y quietas. */
+
+const TARJETAS = [
+    { clase: 'is-azul', etiqueta: 'Servicios', detalle: 'Webs, apps, software e IA', href: '/#servicios' },
+    { clase: 'is-plata', etiqueta: 'WhatsApp', detalle: '+51 985 149 671', href: WHATSAPP, externo: true },
+    { clase: 'is-grafito', etiqueta: 'Cotizar', detalle: 'Precio por escrito', href: '/contact' },
+];
 
 const ENLACES = [
     { label: 'Inicio', href: '/' },
-    { label: 'Servicios', href: '/#servicios' },
     { label: 'Proyectos', href: '/projects' },
     { label: 'Precios', href: '/servicios' },
     { label: 'Contacto', href: '/contact' },
 ];
 
 export function PieCompacto() {
+    const escena = useRef<HTMLDivElement>(null);
+    const monto = useRef<HTMLSpanElement>(null);
+    const [abierta, setAbierta] = useState(false);
+    const tocada = useRef(false);
+
+    // se abre sola al entrar en pantalla, y se guarda al irse (si nadie la toco)
+    useEffect(() => {
+        const el = escena.current;
+        if (!el) return;
+        const io = new IntersectionObserver(
+            ([e]) => {
+                if (!tocada.current) setAbierta(e.isIntersecting);
+            },
+            { threshold: 0.55 }
+        );
+        io.observe(el);
+        return () => io.disconnect();
+    }, []);
+
+    // el monto cuenta hasta 400 cada vez que se abre
+    useEffect(() => {
+        const el = monto.current;
+        if (!el) return;
+        const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!abierta || reducido) {
+            el.textContent = '400';
+            return;
+        }
+        let raf = 0;
+        const t0 = performance.now();
+        const paso = (t: number) => {
+            const p = Math.min(1, (t - t0) / 1100);
+            el.textContent = String(Math.round(400 * (1 - (1 - p) ** 4)));
+            if (p < 1) raf = requestAnimationFrame(paso);
+        };
+        raf = requestAnimationFrame(paso);
+        return () => cancelAnimationFrame(raf);
+    }, [abierta]);
+
     return (
         <footer className="pry-pie" data-tono="oscuro">
             <div className="m-wrap">
-                <div className="pry-pie-cta">
-                    <p className="pry-pie-ceja m-mono">
-                        <i aria-hidden="true" />
-                        ¿El siguiente es el tuyo?
-                    </p>
-                    <h2 className="pry-pie-t">Hablemos de lo que quieres construir.</h2>
-                    <Boton href={WHATSAPP} externo>
-                        Escríbenos por WhatsApp
-                    </Boton>
+                <p className="pry-pie-ceja m-mono">
+                    <i aria-hidden="true" />
+                    ¿El siguiente es el tuyo?
+                </p>
+                <h2 className="pry-pie-t">Todo para empezar, en un bolsillo.</h2>
+
+                <div ref={escena} className="pry-bill" data-abierta={abierta ? '' : undefined}>
+                    <div className="pry-bill-caja" aria-hidden="true">
+                        <span>Atlas</span>
+                    </div>
+
+                    <ul className="pry-bill-tarjetas">
+                        {TARJETAS.map((t, i) => (
+                            <li key={t.etiqueta} className={`pry-bill-t ${t.clase}`} style={{ '--i': i } as CSSProperties}>
+                                <a href={t.href} {...(t.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})} tabIndex={abierta ? 0 : -1}>
+                                    {/* el nombre arriba, grande, como el VISA de una tarjeta: es lo
+                                        que se ve de las de atras en el abanico */}
+                                    <span className="pry-bill-marca">{t.etiqueta}</span>
+                                    <span className="pry-bill-chip" aria-hidden="true" />
+                                    <span className="pry-bill-dato">
+                                        <SimboloAtlas />
+                                        <small>{t.detalle}</small>
+                                    </span>
+                                    <span className="pry-bill-ir" aria-hidden="true">
+                                        <Flecha />
+                                    </span>
+                                    {t.externo && <span className="sr-only"> (abre WhatsApp)</span>}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <button
+                        type="button"
+                        className="pry-bill-bolsillo"
+                        aria-pressed={abierta}
+                        aria-label={abierta ? 'Guardar las tarjetas' : 'Sacar las tarjetas'}
+                        onClick={() => {
+                            tocada.current = true;
+                            setAbierta((a) => !a);
+                        }}
+                    >
+                        <span className="pry-bill-costura" aria-hidden="true" />
+                        <span className="pry-bill-label">Tu web, desde</span>
+                        <span className="pry-bill-monto">
+                            S/ <span ref={monto}>400</span>
+                            <small>.00</small>
+                        </span>
+                        <span className="pry-bill-pista m-mono">{abierta ? 'Toca una tarjeta · o el bolsillo para guardarlas' : 'Toca el bolsillo para sacarlas'}</span>
+                    </button>
                 </div>
 
                 <nav className="pry-pie-nav" aria-label="Pie de página">
@@ -38,22 +131,9 @@ export function PieCompacto() {
                         ))}
                     </ul>
                 </nav>
-
-                <div className="pry-pie-base">
-                    <a href="/" className="pry-pie-logo" aria-label="Atlas, inicio">
-                        <img src="/brand/atlas-logo-movil.webp" width={97} height={22} alt="" loading="lazy" decoding="async" />
-                    </a>
-                    <a href="#m-contenido" className="pry-pie-arriba m-mono">
-                        Arriba
-                        <FlechaAbajo />
-                    </a>
-                </div>
                 <p className="pry-pie-legal">
                     <span>© {new Date().getFullYear()} Atlas · Lima, Perú</span>
-                    <a href="/contact">
-                        Cotiza en 1 minuto
-                        <Flecha />
-                    </a>
+                    <a href="#m-contenido">Volver arriba</a>
                 </p>
             </div>
         </footer>

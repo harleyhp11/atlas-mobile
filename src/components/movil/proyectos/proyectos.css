@@ -625,15 +625,10 @@
 }
 
 /* ------------------------------------------------- el pie de proyectos
-   Mas corto que el de la home: isla grafito, sin escultura. */
+   Una billetera: tres tarjetas premium que asoman de un bolsillo de cuero
+   y se abren en abanico al entrar en pantalla (data-abierta). */
 .pry-pie {
-    margin: 0 8px 8px;
-    padding: 30px 0 18px;
-    border-radius: var(--isla);
-    background:
-        radial-gradient(120% 70% at 100% 0%, rgba(225, 29, 58, 0.16), transparent 60%),
-        var(--grafito);
-    box-shadow: inset 0 0 0 1px var(--linea);
+    padding: 56px 0 18px;
     color: var(--blanco);
 }
 .pry-pie-ceja {
@@ -649,18 +644,281 @@
     background: var(--rojo);
 }
 .pry-pie-t {
-    margin: 14px 0 22px;
-    max-width: 14ch;
+    margin-top: 14px;
+    max-width: 13ch;
     font-family: var(--f-display);
     font-weight: 650;
-    font-size: clamp(28px, 8.4vw, 38px);
-    line-height: 1;
-    letter-spacing: -0.035em;
+    font-size: clamp(30px, 9vw, 42px);
+    line-height: 0.98;
+    letter-spacing: -0.04em;
     text-wrap: balance;
 }
+
+/* el escenario */
+.pry-bill {
+    --ancho: min(100%, 360px);
+    position: relative;
+    width: var(--ancho);
+    height: 470px;
+    margin: 24px auto 0;
+}
+.pry-bill-caja {
+    position: absolute;
+    left: 4%;
+    right: 4%;
+    bottom: 0;
+    height: 290px;
+    border-radius: 34px;
+    background: #2a2b2e;
+    box-shadow:
+        0 0 0 6px #b9b9b6,
+        0 0 0 7px rgba(255, 255, 255, 0.35),
+        0 30px 60px rgba(0, 0, 0, 0.6);
+    transition: translate 0.8s var(--pop);
+}
+.pry-bill-caja span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 16px;
+    text-align: center;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.45);
+}
+
+/* las tarjetas */
+.pry-bill-tarjetas {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.pry-bill-t {
+    position: absolute;
+    left: 8%;
+    width: 84%;
+    aspect-ratio: 1.586;
+    bottom: 120px;
+    z-index: calc(1 + var(--i));
+    transition:
+        translate 0.9s var(--pop) calc(var(--i) * 0.07s),
+        rotate 0.9s var(--pop) calc(var(--i) * 0.07s);
+}
+/* guardadas: apenas asoman, como en la billetera cerrada */
+.pry-bill-t:nth-child(1) {
+    translate: 0 -40px;
+    rotate: 7deg;
+}
+.pry-bill-t:nth-child(2) {
+    translate: -6px -14px;
+    rotate: -3deg;
+}
+.pry-bill-t:nth-child(3) {
+    translate: 0 8px;
+    rotate: 0deg;
+}
+/* abiertas: en abanico, fuera del bolsillo */
+.pry-bill[data-abierta] .pry-bill-t:nth-child(1) {
+    translate: -7% -168px;
+    rotate: -10deg;
+}
+.pry-bill[data-abierta] .pry-bill-t:nth-child(2) {
+    translate: 2% -110px;
+    rotate: 2deg;
+}
+.pry-bill[data-abierta] .pry-bill-t:nth-child(3) {
+    translate: 8% -48px;
+    rotate: 9deg;
+}
+.pry-bill[data-abierta] .pry-bill-caja {
+    translate: 0 6px;
+}
+.pry-bill-t a {
+    position: relative;
+    display: block;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow:
+        inset 0 0 0 1.5px rgba(255, 255, 255, 0.55),
+        0 18px 40px rgba(0, 0, 0, 0.5);
+    background-size: 220% 100%;
+    animation: pry-holo 7s ease-in-out infinite alternate;
+    touch-action: manipulation;
+}
+@keyframes pry-holo {
+    from {
+        background-position: 0% 50%;
+    }
+    to {
+        background-position: 100% 50%;
+    }
+}
+/* un brillo que cruza la tarjeta */
+.pry-bill-t a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.28) 48%, transparent 60%);
+    translate: -100% 0;
+    animation: pry-brillo 5.5s ease-in-out infinite;
+    animation-delay: calc(var(--i) * 0.9s);
+    pointer-events: none;
+}
+@keyframes pry-brillo {
+    0%,
+    55% {
+        translate: -100% 0;
+    }
+    100% {
+        translate: 100% 0;
+    }
+}
+.pry-bill-t.is-azul a {
+    background-image: linear-gradient(110deg, #1c2747 0%, #2b3c6b 32%, #6d5a5c 52%, #d8c48c 62%, #a9d6c9 74%, #79b6d8 86%, #2b3c6b 100%);
+    color: var(--blanco);
+}
+.pry-bill-t.is-plata a {
+    background-image: linear-gradient(100deg, #e7e2d6 0%, #f6f6f3 20%, #d9d9dd 36%, #efe6ae 46%, #c27a32 54%, #6b4ea3 62%, #57cfe7 72%, #b88f86 84%, #ececea 100%);
+    color: var(--tinta);
+}
+.pry-bill-t.is-grafito a {
+    background-image: linear-gradient(160deg, #55565d 0%, #36373c 35%, #222327 70%, #3d3e44 100%);
+    color: var(--blanco);
+}
+.pry-bill-marca {
+    position: absolute;
+    left: 18px;
+    top: 13px;
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-style: italic;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+.pry-bill-chip {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 38px;
+    height: 28px;
+    border-radius: 6px;
+    background:
+        linear-gradient(90deg, transparent 45%, rgba(0, 0, 0, 0.18) 45% 55%, transparent 55%),
+        linear-gradient(0deg, transparent 45%, rgba(0, 0, 0, 0.18) 45% 55%, transparent 55%),
+        linear-gradient(135deg, #e9d8a0, #b8995a);
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+.pry-bill-dato {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    right: 64px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+.pry-bill-dato svg {
+    width: 30px;
+    height: auto;
+}
+.pry-bill-dato small {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    opacity: 0.75;
+}
+.pry-bill-ir {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: currentColor;
+}
+.pry-bill-ir svg {
+    width: 15px;
+    height: 15px;
+    color: #1d1e22;
+}
+.pry-bill-t.is-plata .pry-bill-ir svg {
+    color: var(--blanco);
+}
+
+/* el bolsillo */
+.pry-bill-bolsillo {
+    position: absolute;
+    left: 2%;
+    right: 2%;
+    bottom: -6px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 206px;
+    border-radius: 30px;
+    background:
+        radial-gradient(130% 120% at 100% 100%, #9a1f26 0%, #6b1b22 30%, #2a1c1f 62%, #1c1c1f 85%),
+        #1c1c1f;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.14),
+        inset 0 -14px 30px rgba(0, 0, 0, 0.35),
+        0 -10px 30px rgba(0, 0, 0, 0.45),
+        0 24px 50px rgba(0, 0, 0, 0.6);
+    color: var(--blanco);
+    text-align: center;
+    touch-action: manipulation;
+    transition: scale 0.3s var(--ease);
+}
+.pry-bill-bolsillo:active {
+    scale: 0.985;
+}
+.pry-bill-costura {
+    position: absolute;
+    inset: 12px;
+    border-radius: 22px;
+    border: 1.5px dashed rgba(255, 255, 255, 0.22);
+    pointer-events: none;
+}
+.pry-bill-label {
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.78);
+}
+.pry-bill-monto {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+.pry-bill-monto small {
+    font-size: 0.5em;
+    color: rgba(255, 255, 255, 0.55);
+}
+.pry-bill-pista {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 22px;
+    font-size: 9.5px;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* enlaces y linea legal */
 .pry-pie-nav {
-    margin-top: 26px;
-    padding-top: 10px;
+    margin-top: 34px;
+    padding-top: 6px;
     border-top: 1px solid var(--linea);
 }
 .pry-pie-nav ul {
@@ -678,69 +936,20 @@
     font-size: 15px;
     font-weight: 500;
     color: var(--t2);
-    transition: color 0.3s;
-}
-.pry-pie-nav a:active {
-    color: var(--blanco);
-}
-.pry-pie-base {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 10px;
-    padding-top: 14px;
-    border-top: 1px solid var(--linea);
-}
-.pry-pie-logo {
-    display: flex;
-    align-items: center;
-    min-height: 44px;
-}
-.pry-pie-logo img {
-    width: 88px;
-    height: 20px;
-}
-.pry-pie-arriba {
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-    min-height: 44px;
-    padding: 0 14px;
-    border-radius: 999px;
-    box-shadow: inset 0 0 0 1px var(--linea);
-    color: var(--t2);
-}
-.pry-pie-arriba svg {
-    width: 13px;
-    height: 13px;
-    rotate: 180deg;
 }
 .pry-pie-legal {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 6px;
     font-size: 12.5px;
     color: var(--t3);
 }
 .pry-pie-legal a {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
     min-height: 44px;
     color: var(--t2);
-}
-.pry-pie-legal svg {
-    width: 11px;
-    height: 11px;
-}
-@media (min-width: 768px) {
-    .pry-pie {
-        max-width: 760px;
-        margin-inline: auto;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -758,7 +967,13 @@
     }
     .pry-logo path,
     .pry-reel-l1,
-    .pry-reel-l2 > * {
+    .pry-reel-l2 > *,
+    .pry-bill-t,
+    .pry-bill-caja {
         transition: none;
+    }
+    .pry-bill-t a,
+    .pry-bill-t a::after {
+        animation: none;
     }
 }
