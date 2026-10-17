@@ -4,6 +4,7 @@ import { Ceja } from '@/components/movil/Ceja';
 import { Cintas } from '@/components/movil/Cintas';
 import { Revelador } from '@/components/movil/Revelador';
 import { Titular } from '@/components/movil/Titular';
+import { Disenos } from '@/components/movil/proyectos/Disenos';
 import { Indice } from '@/components/movil/proyectos/Indice';
 import { Lista } from '@/components/movil/proyectos/Lista';
 import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
@@ -22,6 +23,7 @@ import '@/components/movil/proyectos/proyectos.css';
      · las cintas cruzando hacia una isla clara;
      · la lista, con filtro por servicio (el buscador sobra con cinco) y
        tarjetas con la captura en un navegador que pasa de gris a color;
+     · sobre negro, el reel curvo de diseños de la galeria (Figma × Framer);
      · un pie propio, mas corto que el de la home. */
 
 export const metadata: Metadata = {
@@ -52,6 +54,8 @@ export default function ProyectosMovil() {
                 <Cintas className="pry-cintas" />
 
                 <Lista />
+
+                <Disenos />
             </main>
             <PieCompacto />
             <Revelador />
