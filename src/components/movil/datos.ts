@@ -25,7 +25,7 @@ export const ROTATIVAS = [
 export const H1_ESTABLE = 'Atlas: webs, apps, software e IA para negocios que quieren crecer';
 
 export const SUBTITULO =
-    'Diseñamos y desarrollamos webs, apps, software a medida y automatizaciones con IA para negocios que quieren crecer.';
+    'Diseñamos y desarrollamos webs, apps, sistemas a medida y automatizaciones para negocios que quieren crecer.';
 
 export const CHIPS_CONFIANZA = ['Precio cerrado por escrito', 'Respuesta en menos de 24 h', 'Desde S/ 400'];
 
