@@ -1,7 +1,7 @@
 /* =====================================================================
    HOME MÓVIL · (08) Pie — isla clara con la escultura liquida de Atlas.
    Capas de la banda, de atras hacia adelante:
-     .h-pie-cinta      → cinta tenue (atlas · sistemas · webs · IA · negocios)
+     .h-pie-cinta      → cinta tenue (atlas atlas atlas…)
      .h-pie-escenario  → imagen fija + canvas (se pasan 56 px por arriba y
                          por abajo: el polvo puede volar fuera de la banda)
      .h-pie-pista      → "Toca la forma"
@@ -115,8 +115,8 @@
     display: flex;
     flex: none;
     align-items: center;
-    gap: 0.22em;
-    padding-right: 0.22em;
+    gap: 0.28em;
+    padding-right: 0.28em;
     font-family: var(--f-display);
     font-weight: 650;
     font-size: min(30vw, 210px);
@@ -124,11 +124,6 @@
     letter-spacing: -0.06em;
     white-space: nowrap;
     color: rgba(11, 11, 12, 0.06);
-}
-.h-pie-cinta-sep {
-    flex: none;
-    width: 0.42em;
-    height: auto;
 }
 @keyframes h-pie-cinta {
     to {
@@ -242,8 +237,9 @@
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    grid-template-columns: auto auto;
+    justify-content: center;
+    column-gap: 40px;
     margin-top: 34px;
     text-align: center;
 }
@@ -260,10 +256,13 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    min-height: 44px;
+    /* lista apretada, como un pie de marca: el toque sigue holgado (34 px,
+       sobre el minimo de 24 px de WCAG 2.2) */
+    min-height: 34px;
     font-family: var(--f-display);
     font-weight: 550;
     font-size: 18px;
+    line-height: 1;
     letter-spacing: -0.02em;
     color: var(--tinta);
     touch-action: manipulation;

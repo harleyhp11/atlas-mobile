@@ -1,7 +1,6 @@
 'use client';
 
-import { Fragment, useEffect, useRef } from 'react';
-import { SimboloAtlas } from '../../iconos';
+import { useEffect, useRef } from 'react';
 
 /* La escultura del pie: el simbolo de Atlas (rampa + cuadrado) en metal
    grafito cepillado, rehecho con decenas de miles de particulas en la GPU.
@@ -12,12 +11,12 @@ import { SimboloAtlas } from '../../iconos';
    acerca a la pantalla. Hasta entonces, y si no hay WebGL2 o el celular
    esta en ahorro de datos, se ve la imagen fija: la misma pieza, quieta.
 
-   Detras corre una cinta tenue con lo que hace Atlas, que se difumina en
+   Detras corre una cinta tenue que repite "atlas", y se difumina en
    los bordes. Va duplicada para que el bucle no tenga costura, y se pausa
    fuera de pantalla (data-loop). */
 
 const SRC = '/assets/movil/pie-escultura.webp';
-const CINTA = ['atlas', 'sistemas', 'webs', 'IA', 'negocios'];
+const CINTA = Array.from({ length: 4 }, () => 'atlas');
 
 export function EsculturaAtlas() {
     const escena = useRef<HTMLDivElement>(null);
@@ -62,11 +61,8 @@ export function EsculturaAtlas() {
                 <div className="h-pie-cinta-pista">
                     {[0, 1].map((copia) => (
                         <span key={copia} className="h-pie-cinta-grupo">
-                            {CINTA.map((p) => (
-                                <Fragment key={p}>
-                                    <span>{p}</span>
-                                    <SimboloAtlas className="h-pie-cinta-sep" />
-                                </Fragment>
+                            {CINTA.map((p, i) => (
+                                <span key={i}>{p}</span>
                             ))}
                         </span>
                     ))}
