@@ -7,7 +7,8 @@ import { Titular } from '../../Titular';
 
 /* La firma del pie: "ESTUDIO DIGITAL" enorme, con stickers encima de las
    letras —el sello rojo de Atlas, Framer, Figma y una manito de cursor en
-   pixeles— y "hecho con intencion" escrito a mano debajo, como la firma
+   pixeles— y "empieza con un hola" escrito a mano debajo, que invita al
+   WhatsApp de mas abajo; va como la firma
    roja del hero. Arriba, una pildora con la hora real de Lima.
 
    Al entrar (Revelador pone .is-in) las palabras suben, los stickers caen
@@ -85,7 +86,7 @@ export function Firmado() {
                 </span>
             </div>
 
-            <Firma texto="hecho con intención" ancho={72} max={52} className="h-pie-firma" />
+            <Firma texto="empieza con un hola" ancho={72} max={52} className="h-pie-firma" />
         </div>
     );
 }

@@ -8,8 +8,8 @@ import './pie.css';
 /* El pie de la home, en isla clara con una pestaña arriba al centro.
    De arriba abajo, como un pie de marca deportiva:
      · dos columnas centradas: las secciones de la pagina y las redes;
-     · la firma: "ESTUDIO DIGITAL" enorme con stickers encima y "hecho con
-       intencion" escrito a mano (pie/Firmado);
+     · la firma: "ESTUDIO DIGITAL" enorme con stickers encima y "empieza con
+       un hola" escrito a mano (pie/Firmado);
      · la escultura liquida: el simbolo de Atlas en metal, siempre en
        movimiento, con una cinta tenue detras (atlas · sistemas · webs ·
        IA · negocios) que se difumina en los bordes;
