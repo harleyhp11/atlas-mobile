@@ -106,7 +106,7 @@
 .h-pie-cinta-pista {
     display: flex;
     width: max-content;
-    animation: h-pie-cinta 38s linear infinite;
+    animation: h-pie-cinta 20s linear infinite;
 }
 .h-pie-cinta.is-off .h-pie-cinta-pista {
     animation-play-state: paused;
@@ -214,8 +214,8 @@
     text-align: center;
 }
 .h-pie-h2 {
-    font-size: clamp(44px, 13vw, 64px);
-    line-height: 0.92;
+    font-size: clamp(34px, 9.6vw, 48px);
+    line-height: 0.95;
     color: var(--tinta);
 }
 .h-pie-cierre + .h-pie-escena {
@@ -239,7 +239,7 @@
     display: grid;
     grid-template-columns: auto auto;
     justify-content: center;
-    column-gap: 40px;
+    column-gap: 24px;
     margin-top: 34px;
     text-align: center;
 }
@@ -256,9 +256,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    /* lista apretada, como un pie de marca: el toque sigue holgado (34 px,
-       sobre el minimo de 24 px de WCAG 2.2) */
-    min-height: 34px;
+    /* lista apretada, como un pie de marca: el toque queda en 28 px, sobre
+       el minimo de 24 px de WCAG 2.2 */
+    min-height: 28px;
     font-family: var(--f-display);
     font-weight: 550;
     font-size: 18px;
