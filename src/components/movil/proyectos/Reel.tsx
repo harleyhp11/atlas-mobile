@@ -6,13 +6,13 @@ import { useEffect, useRef } from 'react';
    corre y se curva como una pantalla concava (la referencia "Reel Flux").
 
    Como en el video de referencia:
-     · quieta, la tira es un arco hondo y simetrico: baja al centro y alta
-       a los lados;
-     · en movimiento se deforma como algo elastico: se inclina hacia donde
-       va (mas alta de un lado) y vuelve al arco al frenar;
-     · se mueve sola, con el scroll (cuanto mas rapido, mas corre) y con el
-       dedo, con inercia;
-     · la curva se acentua al llegar al centro de la pantalla.
+     · quieta, la tira es un arco suave y simetrico: un poco mas baja al
+       centro que a los lados;
+     · en movimiento se inclina apenas hacia donde va y vuelve al arco al
+       frenar;
+     · se mueve sola, despacio; el scroll y el dedo la empujan, con
+       inercia (el scroll, con mesura: Harley la queria mas lenta);
+     · la curva se acentua un poco al llegar al centro de la pantalla.
 
    Se dibuja en la GPU (WebGL2): un shader calcula cada pixel sobre la curva
    y lee las piezas de un mosaico con mipmaps, asi la imagen sale nitida y
@@ -24,6 +24,7 @@ const PIEZAS = ['sitio-web', 'obra-02', 'app-golf', 'obra-05', 'obra-01', 'labor
 const COLS = 3; // el mosaico es de 3 × 3
 const CW = 900; // cada pieza, en px
 const CH = 600;
+const BASE = 26; // lo que corre sola, en px/s
 
 const VERT = `#version 300 es
 in vec2 a;
@@ -93,7 +94,7 @@ export function Reel() {
         let desplazado = 0;
         let empuje = 0; // velocidad extra (scroll y dedo), px/s
         let vel = 0; // velocidad suavizada, para la inclinacion
-        let curva = reducido ? 1.2 : 0.4;
+        let curva = reducido ? 0.55 : 0.2;
         let lado = 0;
         let ultimo = performance.now();
         let raf = 0;
@@ -104,13 +105,13 @@ export function Reel() {
             const r = el.getBoundingClientRect();
             const vh = window.innerHeight;
             const centro = 1 - Math.min(1, Math.abs(r.top + r.height / 2 - vh / 2) / (vh * 0.8));
-            const meta = reducido ? 1.2 : 0.35 + 1.1 * centro;
+            const meta = reducido ? 0.55 : 0.18 + 0.42 * centro;
             curva += (meta - curva) * Math.min(1, dt * 3);
-            const v = (reducido ? 0 : 38) + empuje;
+            const v = (reducido ? 0 : BASE) + empuje;
             desplazado += v * dt;
             empuje *= Math.pow(0.05, dt);
             vel += (v - vel) * Math.min(1, dt * 6);
-            const metaLado = Math.max(-0.42, Math.min(0.42, (vel - (reducido ? 0 : 38)) / 1300));
+            const metaLado = Math.max(-0.14, Math.min(0.14, (vel - (reducido ? 0 : BASE)) / 3200));
             lado += (metaLado - lado) * Math.min(1, dt * 5);
         };
 
@@ -179,10 +180,10 @@ export function Reel() {
                     gl.uniform2f(U.res, W, H);
                     gl.uniform1f(U.dpr, dpr);
                     gl.uniform1f(U.off, desplazado);
-                    gl.uniform1f(U.p, Math.round(W * 0.58));
+                    gl.uniform1f(U.p, Math.round(W * 0.7));
                     gl.uniform1f(U.g, 8);
                     gl.uniform1f(U.n, PIEZAS.length);
-                    gl.uniform1f(U.h0, H * 0.31);
+                    gl.uniform1f(U.h0, H * 0.46);
                     gl.uniform1f(U.curva, curva);
                     gl.uniform1f(U.lado, lado);
                     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -207,9 +208,9 @@ export function Reel() {
             : [];
         const dibujar2D = () => {
             if (!cx) return;
-            const P = Math.round(W * 0.58);
+            const P = Math.round(W * 0.7);
             const L = PIEZAS.length * (P + 8);
-            const h0 = H * 0.31;
+            const h0 = H * 0.46;
             cx.setTransform(dpr, 0, 0, dpr, 0, 0);
             cx.clearRect(0, 0, W, H);
             for (let x = 0; x < W; x += 1) {
@@ -261,7 +262,7 @@ export function Reel() {
         const alScroll = () => {
             const dy = window.scrollY - ultimoScroll;
             ultimoScroll = window.scrollY;
-            if (visible) empuje = Math.max(-1600, Math.min(1600, empuje + dy * 7));
+            if (visible) empuje = Math.max(-520, Math.min(520, empuje + dy * 2.2));
         };
         window.addEventListener('scroll', alScroll, { passive: true });
 

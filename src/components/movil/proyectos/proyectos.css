@@ -607,7 +607,7 @@
 
 .pry-reel-tira {
     position: relative;
-    height: clamp(260px, 84vw, 460px);
+    height: clamp(230px, 70vw, 400px);
     margin-top: 18px;
     touch-action: pan-y;
     cursor: grab;
