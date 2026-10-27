@@ -1,15 +1,15 @@
 import { Boton } from '../Boton';
 import { WHATSAPP } from '../datos';
-import { Flecha, FlechaAbajo } from '../iconos';
-import { Titular } from '../Titular';
+import { Flecha } from '../iconos';
 import { EsculturaAtlas } from './pie/EsculturaAtlas';
+import { Firmado } from './pie/Firmado';
 import './pie.css';
 
 /* El pie de la home, en isla clara con una pestaña arriba al centro.
    De arriba abajo, como un pie de marca deportiva:
-     · la marca y "Volver arriba";
      · dos columnas centradas: las secciones de la pagina y las redes;
-     · el titular de cierre;
+     · la firma: "ESTUDIO DIGITAL" enorme con stickers encima y "hecho con
+       intencion" escrito a mano (pie/Firmado);
      · la escultura liquida: el simbolo de Atlas en metal, siempre en
        movimiento, con una cinta tenue detras (atlas · sistemas · webs ·
        IA · negocios) que se difumina en los bordes;
@@ -56,24 +56,12 @@ function Columna({ titulo, enlaces }: { titulo: string; enlaces: Enlace[] }) {
 export function Pie() {
     return (
         <footer id="contacto" className="h-pie m-claro" data-tono="claro">
-            <div className="m-wrap h-pie-barra">
-                <a href="/" className="h-pie-logo" aria-label="Atlas, inicio">
-                    <img src="/brand/atlas-logo-movil.webp" width={97} height={22} alt="" loading="lazy" decoding="async" />
-                </a>
-                <a href="#m-contenido" className="h-pie-arriba m-mono">
-                    Volver arriba
-                    <FlechaAbajo className="h-pie-arriba-ico" />
-                </a>
-            </div>
-
             <nav className="m-wrap h-pie-nav" aria-label="Pie de página">
                 <Columna titulo="Explorar" enlaces={EXPLORAR} />
                 <Columna titulo="Redes" enlaces={REDES} />
             </nav>
 
-            <div className="m-wrap h-pie-cierre">
-                <Titular id="pie-t" className="m-h2 h-pie-h2" texto="Construyamos lo que viene." destacar="viene." />
-            </div>
+            <Firmado />
 
             <EsculturaAtlas />
 
