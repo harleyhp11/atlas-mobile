@@ -333,59 +333,44 @@ export const PROYECTOS: Proyecto[] = [
         etiqueta: 'Cliente',
         estado: { texto: 'En curso' },
         servicios: ['webs'],
-        linea: 'Pollería líder de Abancay: dos locales y más de 20 años de sabor a la leña.',
+        linea: 'La pollería líder de Abancay, con dos locales y más de 20 años.',
         resumen:
-            'La landing de Pollería La Leña, la pollería líder de Abancay (Apurímac), con dos locales y más de veinte años en el mercado. El encargo no era una página más de comida: queríamos llevar a lo digital la experiencia de ir a La Leña, con su fuego, su madera y su historia. El reto fue sostener todo eso —intro animada, scroll suave, galerías, secciones que se fijan— y que la página fuera fluida en cualquier equipo, desde una laptop sin tarjeta gráfica hasta un celular de gama media. Además del inicio, tiene la historia de la pollería y una página por cada local.',
+            'Una landing que lleva a lo digital la experiencia de ir a La Leña: fuego, madera y su historia. Tiene la carta con pedido por WhatsApp, una página por local y la historia de la pollería, y corre fluida hasta en un celular de gama media.',
         rol: 'Diseño, desarrollo y rendimiento',
         direccion: 'Pollería La Leña',
-        destacados: ['Diseño con fuego y madera', 'Carta con pedido por WhatsApp', 'Fluida en cualquier equipo'],
+        destacados: ['Fuego y madera', 'Pedido por WhatsApp', 'Fluida en cualquier equipo'],
         construimos: [
             {
-                titulo: 'Una experiencia, no una plantilla',
+                titulo: 'La experiencia',
                 items: [
-                    { t: 'Intro de carga con fuego', d: 'el nombre se abre en una ventana con destellos de brasas y la foto del pollo crece hasta llenar la pantalla.' },
-                    { t: 'Madera y fuego hechos en el navegador', d: 'tablas de madera roja con bordes astillados (filtros SVG), pizarras y una cinta entre secciones.' },
-                    { t: 'Tipografía con carácter', d: 'letras gastadas, una firma a mano y versalitas mezcladas como en un afiche.' },
-                    { t: 'La cita de los dueños', d: 'se enciende palabra por palabra con el scroll.' },
+                    { t: 'Intro con fuego', d: 'el nombre se abre entre brasas y el pollo llena la pantalla.' },
+                    { t: 'Madera hecha en el navegador', d: 'tablas rojas con bordes astillados, hechas con filtros SVG.' },
                 ],
             },
             {
-                titulo: 'Carta y pedidos',
+                titulo: 'Carta y locales',
                 items: [
-                    { t: 'La carta real del local', d: 'por categorías, con una barra de pestañas que acompaña el scroll.' },
-                    { t: 'Pedido en un toque', d: 'cada plato se suma a un pedido que se envía armado por WhatsApp o se resuelve con una llamada.' },
-                    { t: 'Tamaños y precios por plato', d: 'de 1/8 a pollo entero, con el total a la vista.' },
-                ],
-            },
-            {
-                titulo: 'Locales, horarios e historia',
-                items: [
-                    { t: 'Horarios en vivo', d: 'cada local dice si está abierto ahora o a qué hora abre, con el descanso de los martes por turnos.' },
-                    { t: 'Una página por local', d: 'galería, cómo llegar con mapa y delivery.' },
-                    { t: 'Nuestra historia', d: 'una línea del tiempo tipo álbum familiar, desde una casa con un horno simple hasta los dos locales de hoy.' },
+                    { t: 'Pedido en un toque', d: 'armas el pedido con la carta real y sale listo por WhatsApp.' },
+                    { t: 'Horarios en vivo', d: 'cada local dice si está abierto ahora.' },
+                    { t: 'Una página por local', d: 'galería, mapa y delivery.' },
                 ],
             },
             {
                 titulo: 'Rendimiento',
                 items: [
-                    { t: 'Scroll suave sin trabas', d: 'con la CPU ralentizada 6 veces y sin tarjeta gráfica, los fotogramas lentos al bajar pasaron de 27 a 9.' },
-                    { t: 'Primera pintura más rápida', d: 'de 580 a 384 ms, y la intro arranca casi 400 ms antes.' },
-                    { t: 'Imágenes en AVIF', d: 'el inicio en celular pasó de 2,9 MB a 1,9 MB sin cambios visibles.' },
+                    { t: 'Scroll sin trabas', d: 'fotogramas lentos de 27 a 9 en un equipo modesto.' },
+                    { t: 'Más liviana', d: 'el inicio en celular bajó de 2,9 a 1,9 MB con AVIF.' },
                 ],
             },
         ],
         retos: [
             {
-                problema: 'Animaciones pesadas que tenían que ir fluidas en cualquier equipo.',
-                solucion: 'Medimos antes de tocar nada, con la CPU ralentizada y sin GPU. La madera astillada y las sombras se volvían a dibujar en cada fotograma: las pasamos a capas propias del compositor, quitamos sombras que no se veían y pausamos lo que queda fuera de pantalla.',
+                problema: 'Animaciones pesadas en equipos modestos.',
+                solucion: 'Medimos con la CPU ralentizada, pasamos la madera y las sombras a capas propias y pausamos lo que no se ve.',
             },
             {
-                problema: 'Un solo archivo de JavaScript hacía más lenta la carga.',
-                solucion: 'Un build propio con esbuild minifica y versiona cada script por separado; las fuentes, GSAP y Lenis van alojados en el propio sitio, con caché de un año para lo que no cambia.',
-            },
-            {
-                problema: 'Safari en Mac no daba la talla con las animaciones.',
-                solucion: 'En Safari de escritorio el sitio entra en un modo sin animaciones: sin intro ni scroll suave, con el mismo contenido y el mismo diseño.',
+                problema: 'Safari en Mac no daba la talla.',
+                solucion: 'Ahí el sitio entra en un modo sin animaciones, con el mismo contenido y diseño.',
             },
         ],
         stack: {
