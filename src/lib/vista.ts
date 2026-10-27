@@ -15,10 +15,10 @@ export type Vista = 'movil' | 'escritorio';
 export const CORTE_MOVIL = 1024;
 
 /* Las rutas con dos versiones y a donde va cada una en el arbol movil: la
-   home, la lista de proyectos y la ficha de los cinco proyectos de Atlas
+   home, la lista de proyectos y la ficha de los seis proyectos de Atlas
    (los del autor de la plantilla no tienen version movil: siguen en la del
    escritorio). El proxy reescribe con esto. */
-export const PROYECTOS_MOVIL = ['workup', 'rego-premium', 'utopp', 'fluxa', 'peru-travel'];
+export const PROYECTOS_MOVIL = ['workup', 'rego-premium', 'utopp', 'fluxa', 'peru-travel', 'polleria-la-lena'];
 
 export function rutaMovil(ruta: string): string | null {
     if (ruta === '/') return '/movil';

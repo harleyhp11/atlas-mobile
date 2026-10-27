@@ -5,7 +5,7 @@ import { Flecha } from '../iconos';
 import { Marco } from './Marco';
 import { numero, PROYECTOS, SERVICIOS_FILTRO, type Proyecto, type Servicio } from './proyectos';
 
-/* Los cinco proyectos en tarjetas, con filtro por servicio.
+/* Los proyectos en tarjetas, con filtro por servicio.
 
    Cada tarjeta es un solo enlace (el titulo, estirado sobre toda la
    tarjeta): asi el lector de pantalla no oye tres veces el mismo destino.

@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { FlechaAbajo } from '../iconos';
 import { miniatura, numero, PROYECTOS } from './proyectos';
 
-/* El indice del hero: los cinco de un vistazo, como una tabla de contenidos.
+/* El indice del hero: los seis de un vistazo, como una tabla de contenidos.
    Cada fila baja a la tarjeta de su proyecto. */
 
 export function Indice() {

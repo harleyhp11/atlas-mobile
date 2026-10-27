@@ -19,16 +19,16 @@ import '@/components/movil/proyectos/proyectos.css';
    proyectos (la mayoria del autor de la plantilla) con buscador, filtros y
    vista de lista o grilla, y su cierre. Aqui queda la misma idea con el
    sistema de la home movil y solo el trabajo de Atlas:
-     · hero tipografico con el indice de los cinco;
+     · hero tipografico con el indice de los seis;
      · las cintas cruzando hacia una isla clara;
-     · la lista, con filtro por servicio (el buscador sobra con cinco) y
+     · la lista, con filtro por servicio (el buscador sobra con seis) y
        tarjetas con la captura en un navegador que pasa de gris a color;
      · sobre negro, el reel curvo de diseños de la galeria (Figma × Framer);
      · un pie propio, mas corto que el de la home. */
 
 export const metadata: Metadata = {
     title: 'Proyectos',
-    description: 'Webs, apps, software e IA hechos por Atlas: cinco proyectos reales en cinco rubros, por dentro.',
+    description: 'Webs, apps, software e IA hechos por Atlas: seis proyectos reales en seis rubros, por dentro.',
     alternates: { canonical: '/projects' },
 };
 
@@ -45,7 +45,7 @@ export default function ProyectosMovil() {
                         <Ceja>Proyectos</Ceja>
                         <Titular as="h1" id="pry-t" className="m-h1 pry-h1" texto="Nuestros proyectos, por dentro." destacar="dentro." />
                         <p className="m-p pry-intro" data-rv>
-                            Cinco proyectos reales en cinco rubros: webs, apps, software e IA. Entra a cada uno y mira qué construimos, cómo y con qué.
+                            Seis proyectos reales en seis rubros: webs, apps, software e IA. Entra a cada uno y mira qué construimos, cómo y con qué.
                         </p>
                         <Indice />
                     </div>

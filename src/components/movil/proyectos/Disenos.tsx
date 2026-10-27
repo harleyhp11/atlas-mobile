@@ -2,7 +2,7 @@ import type { CSSProperties } from 'react';
 import { FIGMA, FRAMER } from '../logos';
 import { Reel } from './Reel';
 
-/* Despues de los cinco proyectos, sobre negro: los diseños de la galeria
+/* Despues de los proyectos, sobre negro: los diseños de la galeria
    de Atlas en el reel curvo, con el titulo "Nuestros diseños en Figma ×
    Framer" y los logos reales de las dos herramientas, que se arman al
    entrar (Revelador pone .is-in): las cinco piezas de Figma caen una por

@@ -18,11 +18,11 @@ import './trabajos.css';
        secuestra el scroll.
 
    Las imagenes son las piezas de la galeria de Atlas (las mismas del
-   mosaico del escritorio) mas las portadas de Utopp y REGO, en blanco y
+   mosaico del escritorio) mas las portadas de Utopp, REGO y La Leña, en blanco y
    negro como alla. Son decorativas: el boton del centro lleva a los
    proyectos. */
 
-const COLUMNA_A = ['rego', 'obra-02', 'app-golf', 'obra-06', 'sitio-web'];
+const COLUMNA_A = ['rego', 'obra-02', 'la-lena', 'app-golf', 'obra-06', 'sitio-web'];
 const COLUMNA_B = ['obra-01', 'obra-04', 'utopp', 'obra-05', 'laboratorio', 'obra-03'];
 
 function Columna({ piezas, lado }: { piezas: string[]; lado: 'a' | 'b' }) {
