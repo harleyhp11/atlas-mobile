@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Cabecera } from '@/components/movil/Cabecera';
 import { Ceja } from '@/components/movil/Ceja';
 import { Cintas } from '@/components/movil/Cintas';
+import { WHATSAPP } from '@/components/movil/datos';
 import { Revelador } from '@/components/movil/Revelador';
 import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
@@ -36,20 +37,22 @@ import './home.css';
      · (08) Preguntas: riel que se llena con el scroll y acordeon;
      · (09) el pie en isla clara: la escultura liquida de Atlas (el simbolo
        en metal, siempre en movimiento) y el cierre con WhatsApp.
-   Faltan Proceso y Precios. */
+     · Precios: por ahora un espacio en negro, despues de la isla clara.
+   Falta Proceso. */
 
 export const metadata: Metadata = {
     alternates: { canonical: '/' },
 };
 
-// Mientras no existan esas secciones, el menu apunta a las paginas que si.
+// Nosotros lleva a la cita del fundador; Precios, a su seccion (por ahora
+// vacia, en negro); Contacto abre WhatsApp.
 const MENU_HOME = [
-    { n: '01', label: 'Servicios', href: '#servicios' },
-    { n: '02', label: 'Por qué Atlas', href: '#ventajas' },
-    { n: '03', label: 'Herramientas', href: '#herramientas' },
-    { n: '04', label: 'Trabajos', href: '#trabajos' },
-    { n: '05', label: 'Precios', href: '/servicios' },
-    { n: '06', label: 'Contacto', href: '/contact' },
+    { n: '01', label: 'Nosotros', href: '#nosotros' },
+    { n: '02', label: 'Servicios', href: '#servicios' },
+    { n: '03', label: 'Precios', href: '#precios' },
+    { n: '04', label: 'Proyectos', href: '/projects' },
+    { n: '05', label: 'Por qué Atlas', href: '#ventajas' },
+    { n: '06', label: 'Contacto', href: WHATSAPP, externo: true },
 ];
 
 export default function HomeMovil() {
@@ -80,6 +83,10 @@ export default function HomeMovil() {
 
                     <Herramientas />
                 </div>
+
+                {/* Precios: seccion por construir. Por ahora es solo el
+                    espacio en negro al que lleva el menu. */}
+                <section id="precios" className="home-precios" data-tono="oscuro" aria-label="Precios" />
 
                 <Trabajos />
                 <Testimonios />

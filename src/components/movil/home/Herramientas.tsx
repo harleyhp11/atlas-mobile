@@ -84,7 +84,7 @@ const FRASE = 'Ninguna tecnología nos limita: elegimos la adecuada para tu nego
 function Cita() {
     const palabras = FRASE.split(' ');
     return (
-        <figure className="h-cita" data-in>
+        <figure id="nosotros" className="h-cita" data-in>
             <span className="h-cita-comillas" aria-hidden="true">
                 &ldquo;
             </span>

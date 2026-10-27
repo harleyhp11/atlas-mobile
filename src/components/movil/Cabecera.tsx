@@ -16,7 +16,7 @@ import { MENU, WHATSAPP } from './datos';
    scroll, deja el resto de la pagina `inert`, enfoca el primer enlace, se
    cierra con Escape y devuelve el foco al boton. */
 
-type Enlace = { n: string; label: string; href: string };
+type Enlace = { n: string; label: string; href: string; externo?: boolean };
 
 type Props = {
     enlaces?: Enlace[];
@@ -198,9 +198,15 @@ export function Cabecera({ enlaces = MENU, inicio = 'arriba', estado = false, ct
                     <ul className="m-menu-links">
                         {enlaces.map((l, i) => (
                             <li key={l.href}>
-                                <a href={l.href} onClick={cerrar} style={{ '--i': i } as React.CSSProperties}>
+                                <a
+                                    href={l.href}
+                                    onClick={cerrar}
+                                    style={{ '--i': i } as React.CSSProperties}
+                                    {...(l.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                                >
                                     <small>{l.n}</small>
                                     {l.label}
+                                    {l.externo && <span className="sr-only"> (abre WhatsApp)</span>}
                                 </a>
                             </li>
                         ))}
