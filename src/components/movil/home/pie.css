@@ -214,7 +214,7 @@
 .h-pie-firma {
     position: relative;
     z-index: 3;
-    margin-top: 0.14em;
+    margin-top: 0.4em;
 }
 /* la firma se escribe recien cuando el bloque entra */
 .h-pie-firma > span {
@@ -306,8 +306,8 @@
 .h-pie-st.is-figma {
     --t: 19%;
     --r: -7deg;
-    right: 2%;
-    bottom: -14%;
+    right: 1%;
+    bottom: -4%;
 }
 .is-figma .h-pie-st-in {
     border-radius: 24%;
