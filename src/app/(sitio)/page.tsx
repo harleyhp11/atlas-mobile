@@ -60,7 +60,7 @@ const MetricCTAHijack = () => {
 
                     <div className="h-[10vh]" />
                     <CTASection />
-                    <div className="h-20" />
+                    <div className="h-6" />
                 </div>
             </section>
         </>

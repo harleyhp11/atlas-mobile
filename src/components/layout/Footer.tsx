@@ -174,9 +174,10 @@ export function Footer() {
                         'relative z-20 mt-auto dark:bg-black',
                 isExpanded && 'opacity-0 pointer-events-none'
             )}>
-                <div className={`max-w-[1600px] mx-auto relative z-10 px-6 md:px-12 lg:px-24 py-6 md:py-8 pointer-events-auto ${isBlog || isGallery ? '!bg-transparent' : ''}`}>
+                {/* Barra compacta: Harley la queria menos ancha y menos alta. */}
+                <div className={`max-w-[1600px] mx-auto relative z-10 px-6 md:px-12 lg:px-24 py-4 md:py-5 pointer-events-auto ${isBlog || isGallery ? '!bg-transparent' : ''}`}>
                     <div className={`
-                        px-6 md:px-8 py-4 md:py-6 transition-all duration-300
+                        max-w-5xl mx-auto px-5 md:px-6 py-3 md:py-3.5 transition-all duration-300
                         ${isBlog || isGallery
                             ? 'bg-card dark:bg-black/40 dark:backdrop-blur-xl border-2 border-foreground/10 dark:border-white/5 rounded-[2rem] shadow-xl dark:shadow-black/20'
                             : 'glass-card'
