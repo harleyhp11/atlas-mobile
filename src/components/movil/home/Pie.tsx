@@ -25,13 +25,6 @@ const EXPLORAR: Enlace[] = [
     { label: 'Preguntas', href: '#preguntas' },
 ];
 
-const ESTUDIO: Enlace[] = [
-    { label: 'Precios', href: '/servicios' },
-    { label: 'Proyectos', href: '/projects' },
-    { label: 'Contacto', href: '/contact' },
-    { label: 'WhatsApp', href: WHATSAPP, externo: true },
-];
-
 function Columna({ titulo, enlaces }: { titulo: string; enlaces: Enlace[] }) {
     return (
         <div className="h-pie-col">
@@ -84,7 +77,6 @@ export function Pie() {
 
             <nav className="m-wrap h-pie-nav" aria-label="Pie de página">
                 <Columna titulo="Explorar" enlaces={EXPLORAR} />
-                <Columna titulo="Estudio" enlaces={ESTUDIO} />
             </nav>
 
             <div className="m-wrap">
