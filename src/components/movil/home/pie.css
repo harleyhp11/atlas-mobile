@@ -15,9 +15,25 @@
     border-radius: var(--isla);
     background: var(--papel);
     color: var(--tinta);
-    /* clip y no hidden: el polvo no se sale de la isla y no se crea un
-       contenedor de scroll */
-    overflow: clip;
+    /* recorta como un overflow: clip (el polvo no se sale de la isla y no
+       se crea un contenedor de scroll), pero deja asomar la pestaña de
+       arriba */
+    clip-path: inset(-15px 0 0 0);
+}
+/* La pestaña: el borde de arriba sube al centro con dos curvas suaves,
+   como la ceja de un sobre. Mide fijo para que las curvas no se
+   deformen; baja 1 px dentro de la isla para que no quede costura. */
+.h-pie::before {
+    content: '';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 132px;
+    height: 15px;
+    translate: -50% 0;
+    background: var(--papel);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 15'%3E%3Cpath d='M0 14C17 14 19 0 36 0H96C113 0 115 14 132 14V15H0Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 132 15'%3E%3Cpath d='M0 14C17 14 19 0 36 0H96C113 0 115 14 132 14V15H0Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
 }
 .h-pie .m-p {
     color: rgba(11, 11, 12, 0.72);
