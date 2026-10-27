@@ -74,11 +74,45 @@ const METRICS = [
     { value: 3, suffix: "sem.", label: "Entrega promedio" },
 ] as const;
 
-// PENDIENTE: testimonios reales (cita, nombre, cargo, empresa, foto).
+// Las tres citas son borradores de Atlas: cada cliente tiene que aprobar la suya.
 const TESTIMONIALS = [
-    { quote: null, name: null, role: null, image: "/assets/testimonial-02.webp" },
-    { quote: null, name: null, role: null, image: "/assets/testimonial-01.webp" },
-    { quote: null, name: null, role: null, image: "/assets/testimonial-01.webp" },
+    /* REGO Premium Apart Hotel. La imagen es la web de REGO en una laptop.
+       OJO: la cita es un BORRADOR redactado por Atlas, no palabras de José.
+       Antes de publicar tiene que leerla y aprobarla (o cambiarla) él. */
+    {
+        quote: "Atlas entendió lo que queríamos transmitir con REGO. Hoy la web es nuestra mejor carta de presentación.",
+        name: "José Reátegui",
+        role: "Dueño de hotel y bienes raíces · REGO Premium",
+        image: "/assets/testimonio-rego.webp",
+    },
+    /* NEFIN, plataforma de finanzas. Misma advertencia: la cita es un
+       BORRADOR de Atlas y tiene que aprobarla Robert antes de publicarse. */
+    {
+        quote: "Atlas convirtió NEFIN en una experiencia inmersiva, con un diseño que se siente vivo.",
+        name: "Robert SC",
+        role: "CEO · NEFIN",
+        image: "/assets/testimonio-nefin.webp",
+    },
+    /* WorkUP, plataforma de empleo con IA. Misma advertencia: la cita es un
+       BORRADOR de Atlas y tiene que aprobarla Luis antes de publicarse. */
+    {
+        quote: "Una estructura rápida, clara y pensada para cada paso del usuario.",
+        name: "Luis P.",
+        role: "Co-Founder · WorkUP",
+        image: "/assets/testimonio-workup.webp",
+        // La pantalla de WorkUP tiene tarjetas blancas justo donde cae la
+        // cita: esta imagen lleva un velo mas oscuro para que se lea.
+        veloFuerte: true,
+    },
+    /* Reachwise, agencia de marketing digital (hecha con un compañero). Misma
+       advertencia: la cita es un BORRADOR de Atlas y tiene que aprobarla
+       Carlos antes de publicarse. */
+    {
+        quote: "Una web clara, moderna y que se siente premium. Justo la imagen que Reachwise necesitaba.",
+        name: "Carlos C.",
+        role: "CEO · Reachwise",
+        image: "/assets/testimonio-reachwise.webp",
+    },
 ] as const;
 
 const PLACEHOLDER_QUOTE = "Aquí irá el testimonio de un cliente real, en sus propias palabras.";
@@ -286,7 +320,9 @@ export default function TestimonialsSection() {
                             className="absolute inset-0"
                             style={{
                                 background:
-                                    "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.35) 100%)",
+                                    "veloFuerte" in active && active.veloFuerte
+                                        ? "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.62) 55%, rgba(0,0,0,0.3) 100%)"
+                                        : "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.35) 100%)",
                             }}
                         />
 

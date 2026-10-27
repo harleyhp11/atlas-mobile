@@ -29,9 +29,9 @@ const SERVICIOS = [
 ];
 
 /* Grano que hierve dentro de las letras. baseFrequency sube el detalle;
-   scale empuja mas lejos los pixeles desplazados. */
+   GRANO_FUERZA es cuanto oscurecen las motas (0 = sin grano). */
 const GRANO_FREQ = 0.9;
-const GRANO_SCALE = 2;
+const GRANO_FUERZA = 0.55;
 const GRANO_CICLO_S = 1.6; // cada cuanto se recicla la semilla
 
 /* Parpadeo del titular. Ciclo largo y saltos duros en instantes irregulares:
@@ -39,25 +39,23 @@ const GRANO_CICLO_S = 1.6; // cada cuanto se recicla la semilla
 const PARPADEO_S = 7;
 const PARPADEO_MIN = 0.55;
 
-/* Glitch de señal al pasar el puntero por el titular: ciclo corto, saltos
-   duros y tirones horizontales. GLITCH_SCALE es cuanto se desplaza el grano
-   durante el fallo — el mismo filtro de reposo pero mucho mas agresivo. */
-/* ── Capas fantasma del titular ──────────────────────────────────────
-   Al pasar el puntero, la palabra se abre en abanico hacia el cursor. */
-const SPREAD = 9;          // px de separacion por capa
-const ECHO_OPACITY = 0.22; // opacidad de las capas eco al entrar
-const ECHO_LAYERS = 5;     // numero de capas eco
-const LERP = 0.12;         // suavizado del seguimiento (0 = no se mueve, 1 = pegado)
-const RETURN_MS = 700;     // duracion del regreso al salir
-const STAGGER_MS = 25;     // retardo entre capas al aparecer
-const CUSTOM_CURSOR = true;
-
-/* El abanico es mas horizontal que vertical a proposito: con el mismo factor
-   en Y se lee como un temblor, no como un desplazamiento. */
-const SPREAD_Y = 0.4;
-
-const GLITCH_S = 1.4;
-const GLITCH_SCALE = 14;
+/* Fallo al pasar el puntero: la palabra se parte en franjas horizontales
+   que saltan a los lados con tirones secos y vuelve a su sitio. Una sola vez
+   por entrada, no en bucle: es un tiron, no un estado.
+   Rendimiento: las franjas estan siempre montadas pero con display:none (no
+   cuestan nada); al entrar se muestran con un atributo y se animan con la
+   Web Animations API solo en transform, que el navegador mueve en la GPU sin
+   tocar el layout ni volver a renderizar React. */
+const CORTE_MS = 320;       // lo que dura el fallo
+const CORTE_PAUSA_MS = 300; // minimo entre dos fallos seguidos
+const CORTE_SALTO = 0.16;   // desvio maximo de una franja, en em
+/* Franjas [arriba %, abajo %] que cubren la palabra entera. Alturas
+   desiguales a proposito: con franjas iguales se lee como una persiana. */
+const FRANJAS: [number, number][] = [
+    [0, 15], [15, 31], [31, 45], [45, 56], [56, 73], [73, 86], [86, 100],
+];
+/* Instantes (0–1) de los tirones; en el ultimo todo ya esta en su sitio. */
+const CORTE_TRAMOS = [0, 0.18, 0.36, 0.55, 0.72];
 
 /* Entrada: barrido de abajo hacia arriba. */
 const ENTRADA_S = 0.9;
@@ -157,11 +155,47 @@ const REDES = [
    el mismo sitio si mezclaba, lo que confirmo la causa.
    Un canvas si participa en la mezcla, asi que copio en el cada frame del
    MISMO video de fondo —sin segunda descarga ni segunda decodificacion— y el
-   canvas es el que se multiplica sobre las letras. Resolucion interna baja a
-   proposito: se estira por CSS y nadie nota la diferencia debajo de un
-   titular, pero el drawImage cuesta una fraccion. */
+   canvas es el que se multiplica sobre las letras.
+   Tamano inicial nada mas: en el primer frame el canvas toma la resolucion
+   real de su rectangulo (ver pintar). Con la resolucion baja de antes la
+   copia salia borrosa y fuera de las letras se veia un panel de "vidrio". */
 const CANVAS_W = 960;
 const CANVAS_H = 320;
+
+/* Dibuja en el canvas el texto de `el` en el mismo sitio y tamano que en la
+   pagina (coordenadas CSS; la transformacion del contexto hace el resto).
+   Mide cada nodo de texto con un Range, que ya incluye los transform de la
+   animacion de relevo, y escala el trazo para que encaje exacto con lo que
+   pinto el navegador. */
+function siluetaTexto(ctx: CanvasRenderingContext2D, el: Element) {
+    const nodos = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const rango = document.createRange();
+    ctx.fillStyle = "#000";
+    ctx.textBaseline = "alphabetic";
+    ctx.textAlign = "left";
+    for (let n = nodos.nextNode(); n; n = nodos.nextNode()) {
+        const padre = n.parentElement;
+        const texto = n.textContent ?? "";
+        if (!padre || !texto.trim()) continue;
+        rango.selectNodeContents(n);
+        const r = rango.getBoundingClientRect();
+        if (!r.width || !r.height) continue;
+        const cs = getComputedStyle(padre);
+        ctx.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+        ctx.letterSpacing = cs.letterSpacing === "normal" ? "0px" : cs.letterSpacing;
+        const t = cs.textTransform === "lowercase" ? texto.toLowerCase() : texto;
+        const m = ctx.measureText(t);
+        const alto = m.fontBoundingBoxAscent + m.fontBoundingBoxDescent;
+        if (!m.width || !alto) continue;
+        const sy = r.height / alto;
+        ctx.save();
+        ctx.translate(r.left, r.top + m.fontBoundingBoxAscent * sy);
+        ctx.scale(r.width / m.width, sy);
+        ctx.fillText(t, 0, 0);
+        ctx.restore();
+    }
+    ctx.letterSpacing = "0px";
+}
 
 function EspejoVideo({ fuente }: { fuente: React.RefObject<HTMLVideoElement | null> }) {
     const canvas = useRef<HTMLCanvasElement>(null);
@@ -178,11 +212,83 @@ function EspejoVideo({ fuente }: { fuente: React.RefObject<HTMLVideoElement | nu
         const pintar = () => {
             const v = fuente.current;
             if (v && v.readyState >= 2 && !document.hidden && enPantalla) {
-                // object-cover a mano: escala por el lado que se quede corto
-                const e = Math.max(CANVAS_W / v.videoWidth, CANVAS_H / v.videoHeight);
-                const w = v.videoWidth * e;
-                const h = v.videoHeight * e;
-                ctx.drawImage(v, (CANVAS_W - w) / 2, (CANVAS_H - h) / 2, w, h);
+                /* La copia va ALINEADA con el video de fondo: mismo recorte
+                   object-cover sobre toda la seccion y misma posicion, solo
+                   que vista a traves del rectangulo del titular. Antes se
+                   recortaba a la medida del titular, quedaba a otra escala y
+                   fuera de las letras se veia un rectangulo con el video
+                   doble: el "panel" que enmarcaba el titulo. Alineada, fuera
+                   de las letras coincide con el fondo y no se nota. */
+                const V = v.getBoundingClientRect();
+                const C = c.getBoundingClientRect();
+                if (V.width && C.width) {
+                    /* Resolucion REAL del rectangulo (hasta 2x en retina). A
+                       960x320 estirado, la copia salia borrosa y se leia como
+                       un panel de vidrio esmerilado sobre el fondo nitido. */
+                    const dpr = Math.min(2, window.devicePixelRatio || 1);
+                    const W = Math.round(C.width * dpr);
+                    const H = Math.round(C.height * dpr);
+                    if (c.width !== W || c.height !== H) {
+                        c.width = W;
+                        c.height = H;
+                    }
+                    const kx = W / C.width;
+                    const ky = H / C.height;
+                    const e = Math.max(V.width / v.videoWidth, V.height / v.videoHeight);
+                    const w = v.videoWidth * e;
+                    const h = v.videoHeight * e;
+                    const ox = V.left + (V.width - w) / 2 - C.left;
+                    const oy = V.top + (V.height - h) / 2 - C.top;
+                    /* El video va SOLO dentro de las letras. Primero se
+                       dibujan las letras (todas juntas, "®" incluido) y despues
+                       el video en modo source-in, que solo pinta donde ya hay
+                       letra. Fuera de ellas el canvas queda transparente: al
+                       30% sobre todo el rectangulo se leia como un panel de
+                       vidrio. Ojo con el orden: recortar letra por letra con
+                       destination-in hacia que el "®" borrase la palabra
+                       entera, y "atlas" salia sin teñir, blanco puro. */
+                    ctx.setTransform(1, 0, 0, 1, 0, 0);
+                    ctx.globalCompositeOperation = "source-over";
+                    ctx.clearRect(0, 0, W, H);
+                    const palabra = c.parentElement?.querySelector(".hero-atlas .hero-palabra");
+                    if (palabra) {
+                        // Sigue la opacidad de la palabra (relevo y parpadeo):
+                        // si no, la silueta teñida se adelantaria a las letras.
+                        const h1 = palabra.closest(".hero-atlas");
+                        // Durante el fallo la base se oculta (visibility) y las
+                        // que se ven son las franjas: sin tinte, o quedaria la
+                        // silueta quieta debajo de las franjas que saltan.
+                        const h1Estilo = h1 ? getComputedStyle(h1) : null;
+                        ctx.globalAlpha =
+                            parseFloat(getComputedStyle(palabra).opacity) *
+                            (h1Estilo ? parseFloat(h1Estilo.opacity) : 1) *
+                            (h1Estilo?.visibility === "hidden" ? 0 : 1);
+                        ctx.setTransform(kx, 0, 0, ky, -C.left * kx, -C.top * ky);
+                        siluetaTexto(ctx, palabra);
+                        ctx.globalAlpha = 1;
+
+                        ctx.setTransform(1, 0, 0, 1, 0, 0);
+                        ctx.globalCompositeOperation = "source-in";
+                        ctx.drawImage(v, ox * kx, oy * ky, w * kx, h * ky);
+
+                        // La misma viñeta que oscurece el fondo (ver [0] mas
+                        // abajo), o las letras de los bordes saldrian mas claras.
+                        ctx.globalCompositeOperation = "source-atop";
+                        ctx.setTransform(
+                            V.width * 1.35 * kx, 0, 0, V.height * 0.95 * ky,
+                            (V.left + V.width * 0.5 - C.left) * kx,
+                            (V.top + V.height * 0.42 - C.top) * ky
+                        );
+                        const g = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+                        g.addColorStop(0, "rgba(0,0,0,0)");
+                        g.addColorStop(0.6, "rgba(0,0,0,0.12)");
+                        g.addColorStop(1, "rgba(0,0,0,0.55)");
+                        ctx.fillStyle = g;
+                        ctx.fillRect(-2, -2, 4, 4);
+                        ctx.globalCompositeOperation = "source-over";
+                    }
+                    ctx.setTransform(1, 0, 0, 1, 0, 0);
+                }
             }
             raf = requestAnimationFrame(pintar);
         };
@@ -253,8 +359,8 @@ function CintaLogos() {
     );
 }
 
-/* La base y los ecos comparten este objeto: si divergen, el abanico se
-   desalinea y se ve como texto mal superpuesto en vez de como un eco. */
+/* La base y las franjas del fallo comparten este objeto: si divergen, las
+   franjas no calzan con la palabra y se ve texto mal superpuesto. */
 const ESTILO_TITULO: React.CSSProperties = {
     fontSize: "clamp(64px, min(39.5vw, 58vh), 660px)",
     letterSpacing: "-0.045em",
@@ -270,21 +376,18 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
     /* El efecto solo existe si hay un puntero fino y el usuario no ha pedido
        menos movimiento. Arranca en false para que servidor y cliente pinten
        lo mismo y no haya aviso de hidratacion; se decide ya montado. */
-    const [ecosActivos, setEcosActivos] = useState(false);
+    const [efectoActivo, setEfectoActivo] = useState(false);
     const [indice, setIndice] = useState(0);
     const pausado = useRef(false);
-    const areaTitulo = useRef<HTMLDivElement>(null);
-    const ecos = useRef<(HTMLSpanElement | null)[]>([]);
-    const cursor = useRef<HTMLDivElement>(null);
-    const dentro = useRef(false);
-    const destino = useRef({ x: 0, y: 0 });
-    const suave = useRef({ x: 0, y: 0 });
-    const raton = useRef({ x: 0, y: 0 });
+    const titular = useRef<HTMLDivElement>(null);
+    const franjas = useRef<(HTMLSpanElement | null)[]>([]);
+    const ecoCorte = useRef<HTMLSpanElement>(null);
+    const ultimoCorte = useRef(0);
 
     useEffect(() => {
         const fino = window.matchMedia("(pointer: fine)").matches;
         const quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        setEcosActivos(fino && !quieto);
+        setEfectoActivo(fino && !quieto);
     }, []);
 
     /* Rotacion del titular. Dos frenos:
@@ -292,9 +395,7 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
            reescribe solo es contenido que cambia sin que nadie lo pida, y ahi
            es donde molesta de verdad.
          - Se para mientras el puntero esta encima. Si alguien se ha quedado
-           leyendo la firma, cambiarsela debajo es lo peor que se puede hacer;
-           ademas el titular tiene su propio juego de ecos al pasar por encima
-           y las dos cosas a la vez se pisan. */
+           leyendo la firma, cambiarsela debajo es lo peor que se puede hacer. */
     useEffect(() => {
         if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
         const id = setInterval(() => {
@@ -304,81 +405,59 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
         return () => clearInterval(id);
     }, []);
 
-    useEffect(() => {
-        if (!ecosActivos) return;
-
-        let raf = 0;
-        const pintar = () => {
-            /* Lerp hacia el objetivo: el abanico se arrastra detras del
-               cursor en vez de pegarse a el. */
-            suave.current.x += (destino.current.x - suave.current.x) * LERP;
-            suave.current.y += (destino.current.y - suave.current.y) * LERP;
-
-            if (dentro.current) {
-                for (let i = 0; i < ECHO_LAYERS; i++) {
-                    const el = ecos.current[i];
-                    if (!el) continue;
-                    const n = i + 1;
-                    const x = suave.current.x * SPREAD * n;
-                    const y = suave.current.y * SPREAD * n * SPREAD_Y;
-                    el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-                }
-            }
-
-            if (CUSTOM_CURSOR && cursor.current) {
-                cursor.current.style.transform =
-                    `translate3d(${raton.current.x}px, ${raton.current.y}px, 0) translate(-50%, -50%)`;
-            }
-
-            raf = requestAnimationFrame(pintar);
-        };
-        raf = requestAnimationFrame(pintar);
-        return () => cancelAnimationFrame(raf);
-    }, [ecosActivos]);
-
     const entrar = () => {
-        /* Antes del guard a proposito: la pausa debe valer aunque los ecos
-           esten apagados (tactil, o movimiento reducido). */
+        /* Antes del guard a proposito: la pausa debe valer aunque el fallo
+           este apagado (tactil, o movimiento reducido). */
         pausado.current = true;
-        if (!ecosActivos) return;
-        dentro.current = true;
-        ecos.current.forEach((el, i) => {
-            if (!el) return;
-            /* Solo transicion de opacidad: el transform lo gobierna el rAF y
-               una transicion encima lo frenaria. */
-            el.style.transition = `opacity 260ms ease ${i * STAGGER_MS}ms`;
-            el.style.opacity = String(ECHO_OPACITY);
-        });
-    };
+        if (!efectoActivo) return;
+        const ahora = performance.now();
+        const t = titular.current;
+        if (!t || ahora - ultimoCorte.current < CORTE_MS + CORTE_PAUSA_MS) return;
+        ultimoCorte.current = ahora;
 
-    const mover = (e: React.PointerEvent<HTMLDivElement>) => {
-        if (!ecosActivos) return;
-        const c = areaTitulo.current?.getBoundingClientRect();
-        if (!c) return;
-        destino.current = {
-            x: (e.clientX - (c.left + c.width / 2)) / (c.width / 2),
-            y: (e.clientY - (c.top + c.height / 2)) / (c.height / 2),
-        };
+        // Paso seco entre tramos: steps(1) en cada keyframe. Algunos tramos
+        // se quedan en su sitio para que no se lea como un temblor parejo.
+        const seco = "steps(1, end)";
+        const tramos = (salto: () => number) => [
+            ...CORTE_TRAMOS.map((offset) => ({
+                transform: `translate3d(${salto().toFixed(3)}em,0,0)`,
+                offset,
+                easing: seco,
+            })),
+            { transform: "translate3d(0,0,0)", offset: 0.86, easing: seco },
+            { transform: "translate3d(0,0,0)", offset: 1 },
+        ];
+        const azar = () => (Math.random() < 0.22 ? 0 : (Math.random() * 2 - 1) * CORTE_SALTO);
+
+        t.dataset.corte = "";
+        const animaciones = franjas.current
+            .filter((el): el is HTMLSpanElement => !!el)
+            .map((el) => el.animate(tramos(azar), { duration: CORTE_MS, fill: "both" }));
+        // La copia apagada: solo en horizontal y corta, para que no se lea
+        // como profundidad.
+        if (ecoCorte.current) {
+            animaciones.push(
+                ecoCorte.current.animate(
+                    [
+                        { transform: "translate3d(0.07em,0,0)", opacity: 0.22, offset: 0, easing: seco },
+                        { transform: "translate3d(-0.05em,0,0)", opacity: 0.16, offset: 0.3, easing: seco },
+                        { transform: "translate3d(0,0,0)", opacity: 0, offset: 0.6 },
+                        { transform: "translate3d(0,0,0)", opacity: 0, offset: 1 },
+                    ],
+                    { duration: CORTE_MS, fill: "both" }
+                )
+            );
+        }
+        Promise.all(animaciones.map((a) => a.finished))
+            .catch(() => {})
+            .finally(() => {
+                delete t.dataset.corte;
+                animaciones.forEach((a) => a.cancel());
+            });
     };
 
     const salir = () => {
         pausado.current = false;
-        if (!ecosActivos) return;
-        dentro.current = false;
-        destino.current = { x: 0, y: 0 };
-        suave.current = { x: 0, y: 0 };
-        ecos.current.forEach((el) => {
-            if (!el) return;
-            /* La vuelta perezosa es medio efecto: aqui si transiciona el
-               transform, y el rAF ya no escribe porque `dentro` es false. */
-            el.style.transition = `transform ${RETURN_MS}ms cubic-bezier(0.16,1,0.3,1), opacity ${RETURN_MS}ms cubic-bezier(0.16,1,0.3,1)`;
-            el.style.transform = "translate3d(0,0,0)";
-            el.style.opacity = "0";
-        });
-    };
-
-    const moverCursor = (e: React.PointerEvent<HTMLElement>) => {
-        raton.current = { x: e.clientX, y: e.clientY };
     };
 
     useEffect(() => {
@@ -394,13 +473,7 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
     }, []);
 
     return (
-        <section
-            onPointerMove={CUSTOM_CURSOR ? moverCursor : undefined}
-            className={cn(
-                "relative min-h-screen w-full overflow-hidden bg-black text-white",
-                CUSTOM_CURSOR && ecosActivos && "hero-sin-cursor"
-            )}
-        >
+        <section className="relative min-h-screen w-full overflow-hidden bg-black text-white">
             {/* [0] VIDEO DE FONDO */}
             <video
                 ref={video}
@@ -436,13 +509,11 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                 }}
             />
 
-            {/* [1] REJILLA — solo las verticales van sueltas. Las horizontales
-                son bordes de sus propias filas: asi no pueden desalinearse del
-                contenido cuando una fila cambia de alto. */}
-            <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-                <span className="absolute inset-y-0 left-1/3 w-px bg-white/[0.07]" />
-                <span className="absolute inset-y-0 left-2/3 w-px bg-white/[0.07]" />
-            </div>
+            {/* [1] REJILLA — retirada a pedido de Harley: las dos verticales,
+                las dos horizontales que cerraban la banda del titular y las
+                marcas de encuadre de los cruces formaban un marco casi
+                invisible alrededor del titulo. Las columnas siguen alineadas
+                a tercios; solo dejaron de dibujarse las lineas. */}
 
             {/* ─────────────── contenido ─────────────── */}
             {/* Sin z-index a proposito: un `z-*` aqui convertiria este div en
@@ -478,8 +549,8 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                     </span>
                 </div>
 
-                {/* [3] SERVICIOS — la linea inferior es el borde de esta fila */}
-                <div className="mt-6 grid grid-cols-3 border-b border-white/[0.07] pb-5 text-[11px] uppercase tracking-[0.08em] lg:text-[12px]">
+                {/* [3] SERVICIOS */}
+                <div className="mt-6 grid grid-cols-3 pb-5 text-[11px] uppercase tracking-[0.08em] lg:text-[12px]">
                     {SERVICIOS.map((s, i) => (
                         <span key={s} className={i === 0 ? "" : "pl-6"}>
                             <span className="text-white/40">
@@ -503,15 +574,14 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                     no es decorativo: el nav flotante ocupa los primeros 100px
                     y con menos margen se solapaban. */}
                 <div
-                    ref={areaTitulo}
+                    ref={titular}
                     onPointerEnter={entrar}
-                    onPointerMove={mover}
                     onPointerLeave={salir}
-                    className="hero-titular relative isolate border-b border-white/[0.07]"
+                    className="hero-titular relative isolate"
                 >
-                    {/* Base y ecos en el mismo apilado. Van los dos DEBAJO del
-                        canvas, asi el multiply del calado les cae igual y no
-                        hay que replicar nada. */}
+                    {/* Base y franjas del fallo en el mismo apilado. Mientras
+                        dura el fallo la base se oculta y lo que se ve son las
+                        franjas, que juntas forman la palabra entera. */}
                     <div className="relative">
                         <h1
                             className="hero-atlas select-text text-center font-sans font-black lowercase"
@@ -531,41 +601,38 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                             </span>
                         </h1>
 
-                        {ecosActivos &&
-                            Array.from({ length: ECHO_LAYERS }).map((_, i) => (
+                        {efectoActivo && (
+                            <>
+                                {/* Copia entera y apagada: el doble contorno
+                                    que deja el fallo en la referencia. */}
                                 <span
-                                    key={i}
+                                    ref={ecoCorte}
                                     aria-hidden="true"
-                                    ref={(el) => {
-                                        ecos.current[i] = el;
-                                    }}
-                                    className="hero-eco pointer-events-none absolute inset-0 text-center font-sans font-black lowercase"
-                                    style={{ ...ESTILO_TITULO, opacity: 0 }}
+                                    className="hero-corte pointer-events-none absolute inset-0 text-center font-sans font-black lowercase"
+                                    style={ESTILO_TITULO}
                                 >
                                     {PALABRAS[indice].palabra}
                                     {PALABRAS[indice].marca && (
-                                        <sup className="align-super text-[0.16em] font-bold tracking-normal">
-                                            ®
-                                        </sup>
+                                        <sup className="align-super text-[0.16em] font-bold tracking-normal">®</sup>
                                     )}
                                 </span>
-                            ))}
-                    </div>
-
-                    {/* Marcas de encuadre en los cruces de la rejilla. Van
-                        dentro de la banda porque sus bordes superior e
-                        inferior SON las dos lineas horizontales; la X de las
-                        verticales se calcula restando el gutter, que es lo
-                        que separa la banda del borde de seccion. */}
-                    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-10">
-                        {["0px", "calc(33.333vw - 3rem)", "calc(66.666vw - 3rem)", "100%"].map((x) =>
-                            ["0%", "100%"].map((y) => (
-                                <span
-                                    key={`${x}-${y}`}
-                                    className="absolute h-[9px] w-[9px] border border-white/25"
-                                    style={{ left: x, top: y, transform: "translate(-50%, -50%)" }}
-                                />
-                            ))
+                                {FRANJAS.map(([a, b], i) => (
+                                    <span
+                                        key={i}
+                                        ref={(el) => {
+                                            franjas.current[i] = el;
+                                        }}
+                                        aria-hidden="true"
+                                        className="hero-corte pointer-events-none absolute inset-0 text-center font-sans font-black lowercase"
+                                        style={{ ...ESTILO_TITULO, clipPath: `inset(${a}% 0 ${100 - b}% 0)` }}
+                                    >
+                                        {PALABRAS[indice].palabra}
+                                        {PALABRAS[indice].marca && (
+                                            <sup className="align-super text-[0.16em] font-bold tracking-normal">®</sup>
+                                        )}
+                                    </span>
+                                ))}
+                            </>
                         )}
                     </div>
 
@@ -668,10 +735,10 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                         </span>
                     </div>
 
-                    {/* Arranca EXACTAMENTE en la guia vertical izquierda: el
-                        offset se mide en vw menos el gutter, igual que las
-                        marcas de encuadre, para que las dos cosas caigan en la
-                        misma linea pase lo que pase con el ancho. */}
+                    {/* Arranca en el primer tercio (donde estaba la guia
+                        vertical de la rejilla): el offset se mide en vw menos
+                        el gutter, para que caiga en la misma columna que el
+                        boton pase lo que pase con el ancho. */}
                     <div
                         className="absolute bottom-7 right-0"
                         style={{ left: "calc(33.333vw - 3rem)" }}
@@ -680,18 +747,6 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                     </div>
                 </div>
             </div>
-
-            {/* Cursor propio: anillo con punto. Solo con puntero fino, y
-                detras del flag CUSTOM_CURSOR. */}
-            {CUSTOM_CURSOR && ecosActivos && (
-                <div
-                    ref={cursor}
-                    aria-hidden="true"
-                    className="pointer-events-none fixed left-0 top-0 z-[60] hidden h-7 w-7 items-center justify-center rounded-full border border-white/60 lg:flex"
-                >
-                    <span className="h-[3px] w-[3px] rounded-full bg-white" />
-                </div>
-            )}
 
             {/* ─────────── filtro de grano de las letras ───────────
                 La semilla se recicla con SMIL y no con JS: no cuesta un rAF
@@ -713,40 +768,24 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                             calcMode="discrete"
                         />
                     </feTurbulence>
-                    <feDisplacementMap
-                        in="SourceGraphic"
-                        in2="ruido"
-                        scale={GRANO_SCALE}
-                        xChannelSelector="R"
-                        yChannelSelector="G"
+                    {/* El grano va DENTRO de las letras como motas oscuras, sin
+                        mover el contorno. Antes era un feDisplacementMap que
+                        empujaba los pixeles del borde y dejaba las letras con
+                        dientes de sierra. Ahora el borde es el del texto,
+                        limpio, y el ruido solo tiñe por dentro. */}
+                    <feColorMatrix
+                        in="ruido"
+                        type="matrix"
+                        values={`0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  ${-GRANO_FUERZA * 1.8} 0 0 0 ${GRANO_FUERZA}`}
+                        result="motas"
                     />
+                    <feComposite in="motas" in2="SourceAlpha" operator="in" result="motasDentro" />
+                    <feMerge>
+                        <feMergeNode in="SourceGraphic" />
+                        <feMergeNode in="motasDentro" />
+                    </feMerge>
                 </filter>
 
-                {/* El mismo grano, reventado, para el momento del fallo. */}
-                <filter id="granoAtlasGlitch">
-                    <feTurbulence
-                        type="fractalNoise"
-                        baseFrequency={GRANO_FREQ}
-                        numOctaves={2}
-                        seed="3"
-                        result="ruidoFuerte"
-                    >
-                        <animate
-                            attributeName="seed"
-                            values="2;17;5;23;9;2"
-                            dur="0.35s"
-                            repeatCount="indefinite"
-                            calcMode="discrete"
-                        />
-                    </feTurbulence>
-                    <feDisplacementMap
-                        in="SourceGraphic"
-                        in2="ruidoFuerte"
-                        scale={GLITCH_SCALE}
-                        xChannelSelector="R"
-                        yChannelSelector="G"
-                    />
-                </filter>
             </svg>
 
             <style jsx global>{`
@@ -803,38 +842,22 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                     97%        { opacity: 1; }
                 }
 
-                /* Fallo de señal en hover. Los saltos son duros (steps) y en
-                   instantes irregulares; si fueran suaves o regulares se
-                   leeria como una animacion, no como una tele perdiendo la
-                   imagen. El clip-path parte el titular en bandas: eso es lo
-                   que da el tiron horizontal. */
-                .hero-titular:hover .hero-atlas {
-                    filter: url(#granoAtlasGlitch);
-                    animation: heroGlitch ${GLITCH_S}s steps(1, end) infinite;
+                /* Franjas del fallo. Ocultas (display:none, coste cero) hasta
+                   que el titular lleva data-corte; mientras dura, la palabra
+                   base se oculta y la forman las franjas. Mismo gris que la
+                   base teñida —no blanco puro, que destellaba— y sin filtro
+                   de grano: ocho capas enormes por un filtro SVG eran lo que
+                   mas pesaba. El movimiento lo pone la Web Animations API. */
+                .hero-corte {
+                    display: none;
+                    color: #bfbfbf;
                 }
-
-                @keyframes heroGlitch {
-                    0%   { transform: translate3d(0,0,0);     clip-path: inset(0 0 0 0);     opacity: 1; }
-                    6%   { transform: translate3d(-12px,0,0); clip-path: inset(16% 0 64% 0); opacity: 0.5; }
-                    11%  { transform: translate3d(9px,0,0);   clip-path: inset(0 0 0 0);     opacity: 1; }
-                    17%  { transform: translate3d(-5px,0,0);  clip-path: inset(56% 0 24% 0); opacity: 0.25; }
-                    22%  { transform: translate3d(7px,0,0);   clip-path: inset(0 0 0 0);     opacity: 1; }
-                    29%  { transform: translate3d(-3px,0,0);  clip-path: inset(36% 0 46% 0); opacity: 0.7; }
-                    34%  { transform: translate3d(0,0,0);     clip-path: inset(0 0 0 0);     opacity: 1; }
-                    41%  { opacity: 0.15; }
-                    44%  { opacity: 1; }
-                    52%  { transform: translate3d(-8px,0,0);  clip-path: inset(72% 0 12% 0); opacity: 0.6; }
-                    56%  { transform: translate3d(0,0,0);     clip-path: inset(0 0 0 0);     opacity: 1; }
-                    100% { transform: translate3d(0,0,0);     clip-path: inset(0 0 0 0);     opacity: 1; }
-                }
-
-                /* Los ecos llevan exactamente el mismo tratamiento que la
-                   base: mismo blanco y mismo grano. El calado se lo da el
-                   canvas que tienen encima, igual que a la base. */
-                .hero-eco {
-                    color: #fff;
-                    filter: url(#granoAtlas);
+                .hero-titular[data-corte] .hero-corte {
+                    display: block;
                     will-change: transform;
+                }
+                .hero-titular[data-corte] .hero-atlas {
+                    visibility: hidden;
                 }
 
                 /* Se desvanece por los dos extremos para que los logos no
@@ -847,9 +870,6 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
                     from { transform: translate3d(0, 0, 0); }
                     to   { transform: translate3d(-50%, 0, 0); }
                 }
-
-                .hero-sin-cursor,
-                .hero-sin-cursor * { cursor: none; }
 
                 .hero-firma {
                     color: var(--hero-accent, #fff);
@@ -864,10 +884,9 @@ export function HeroVisual({ isExiting = false }: { isExiting?: boolean }) {
 
                 @media (prefers-reduced-motion: reduce) {
                     .hero-atlas,
-                    .hero-titular:hover .hero-atlas,
+                    .hero-corte,
                     .hero-cinta > * ,
                     .hero-firma { animation: none !important; }
-                    .hero-titular:hover .hero-atlas { filter: url(#granoAtlas); }
                 }
             `}</style>
         </section>

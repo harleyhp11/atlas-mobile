@@ -1,5 +1,15 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 
+/* Chispas al hacer clic en cualquier parte del sitio.
+
+   El canvas es FIJO y del tamaño de la PANTALLA, no de la página. Antes iba
+   absolute sobre el contenedor de todo el sitio y medía lo que la página
+   entera: en la home, ~1000 × 28.000 px (29 megapíxeles, 110 MB). Cada clic
+   borraba y repintaba ese lienzo en cada fotograma de la animación y la
+   tarjeta gráfica tenía que mover esa capa gigante encima de todo: la página
+   se congelaba uno o dos segundos. Ahora mide la ventana (≈1,5 MP), y fuera
+   de la animación queda oculto, así que tampoco cuesta nada en reposo. */
+
 interface ClickSparkProps {
   sparkColor?: string;
   sparkSize?: number;
@@ -30,40 +40,36 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
-  const startTimeRef = useRef<number | null>(null);
+  const isAnimatingRef = useRef(false);
+  const animationIdRef = useRef<number | null>(null);
 
-  useEffect(() => {
+  // Ajusta el canvas a la ventana (con la densidad de pantalla, hasta 2x).
+  const ajustar = useCallback(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-
-    const parent = canvas.parentElement;
-    if (!parent) return;
-
-    let resizeTimeout: ReturnType<typeof setTimeout>;
-
-    const resizeCanvas = () => {
-      const { width, height } = parent.getBoundingClientRect();
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-      }
-    };
-
-    const handleResize = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
-    };
-
-    const ro = new ResizeObserver(handleResize);
-    ro.observe(parent);
-
-    resizeCanvas();
-
-    return () => {
-      ro.disconnect();
-      clearTimeout(resizeTimeout);
-    };
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const w = Math.round(window.innerWidth * dpr);
+    const h = Math.round(window.innerHeight * dpr);
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+    canvas.getContext('2d')?.setTransform(dpr, 0, 0, dpr, 0, 0);
   }, []);
+
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>;
+    const alRedimensionar = () => {
+      clearTimeout(t);
+      t = setTimeout(ajustar, 100);
+    };
+    window.addEventListener('resize', alRedimensionar);
+    return () => {
+      window.removeEventListener('resize', alRedimensionar);
+      clearTimeout(t);
+      if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
+    };
+  }, [ajustar]);
 
   const easeFunc = useCallback(
     (t: number) => {
@@ -81,16 +87,13 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     [easing]
   );
 
-  const isAnimatingRef = useRef(false);
-  const animationIdRef = useRef<number | null>(null);
-
   const draw = useCallback((timestamp: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
     sparksRef.current = sparksRef.current.filter((spark: Spark) => {
       const elapsed = timestamp - spark.startTime;
@@ -120,28 +123,21 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
     if (sparksRef.current.length > 0) {
       animationIdRef.current = requestAnimationFrame(draw);
     } else {
+      // Sin chispas, el canvas se oculta: ni se compone ni ocupa la GPU.
       isAnimatingRef.current = false;
       animationIdRef.current = null;
+      canvas.style.visibility = 'hidden';
     }
   }, [duration, easeFunc, extraScale, sparkColor, sparkRadius, sparkSize]);
-
-  useEffect(() => {
-    return () => {
-      if (animationIdRef.current) cancelAnimationFrame(animationIdRef.current);
-    };
-  }, []);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>): void => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
 
     const now = performance.now();
     const newSparks: Spark[] = Array.from({ length: sparkCount }, (_, i) => ({
-      x,
-      y,
+      x: e.clientX,
+      y: e.clientY,
       angle: (2 * Math.PI * i) / sparkCount,
       startTime: now
     }));
@@ -150,13 +146,20 @@ const ClickSpark: React.FC<ClickSparkProps> = ({
 
     if (!isAnimatingRef.current) {
       isAnimatingRef.current = true;
+      ajustar();
+      canvas.style.visibility = 'visible';
       animationIdRef.current = requestAnimationFrame(draw);
     }
   };
 
   return (
     <div className="relative w-full h-full" onClick={handleClick}>
-      <canvas ref={canvasRef} className="absolute inset-0 pointer-events-none z-[9999]" />
+      <canvas
+        ref={canvasRef}
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-0 z-[9999] h-screen w-screen"
+        style={{ visibility: 'hidden' }}
+      />
       {children}
     </div>
   );

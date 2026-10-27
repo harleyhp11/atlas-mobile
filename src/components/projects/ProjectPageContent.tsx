@@ -234,9 +234,9 @@ export function ProjectPageContent({ project, isLowPowerMode }: { project: Proje
                         {/* Typewriter Effect (Subtext) */}
                         <div className="font-mono text-sm text-emerald-500/80 mb-8 h-6 flex items-center">
                             <Typewriter examples={[
-                                "Initiating project overview...",
-                                "Loading technical specifications...",
-                                "Decrypting success metrics..."
+                                "Abriendo la ficha del proyecto...",
+                                "Cargando especificaciones técnicas...",
+                                "Revisando cómo se construyó..."
                             ]} />
                         </div>
                     </div>
@@ -569,14 +569,14 @@ export function ProjectPageContent({ project, isLowPowerMode }: { project: Proje
                                                 ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-400"
                                                 : "border-blue-500/30 bg-blue-500/10 text-blue-400"
                                         )}>
-                                            {p.status === 'ongoing' ? 'In Progress' : 'Completed'}
+                                            {p.status === 'ongoing' ? t('status.ongoing') : t('status.completed')}
                                         </span>
                                     </div>
                                     <h3 className="font-bold text-lg leading-tight text-white mb-1 group-hover:text-primary transition-colors line-clamp-1">
                                         {p.title}
                                     </h3>
                                     <p className="text-sm text-zinc-400 line-clamp-1">
-                                        {p.techStack[0]} • {p.category || "Development"}
+                                        {p.techStack[0]} • {p.category || "Desarrollo"}
                                     </p>
                                 </div>
                             </Link>

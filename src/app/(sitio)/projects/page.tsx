@@ -590,7 +590,7 @@ function FeaturedCard({ project, onClick, index, isLowPowerMode }: { project: Pr
                                     whileInView={{ opacity: 1, scale: 1 }}
                                     transition={{ delay: 0.6 }}
                                 >
-                                    +{project.techStack.length - 6} more
+                                    +{project.techStack.length - 6} más
                                 </motion.span>
                             )}
                         </div>

@@ -4,8 +4,9 @@
    ATLAS · PREGUNTAS
 
    Acordeon horizontal de seis paneles, replica de "(02) Services" de
-   Reachwise (el code component RwServices de Framer): el scroll va abriendo
-   los paneles 01 → 06 sin fijar la seccion, y tambien se abren con hover
+   Reachwise (el code component RwServices de Framer): el 01 esta abierto de
+   entrada, y el scroll abre el que toca cuando te detienes en la seccion
+   (pasar de largo no cambia nada), sin fijarla. Tambien se abren con hover
    (140 ms de intencion), clic o teclado. Despues de un clic o un hover, el
    scroll no manda durante 4 s. Todo es transicion de CSS y un solo bucle de
    requestAnimationFrame compartido: ni Framer Motion ni GSAP.
@@ -231,18 +232,23 @@ export default function AtlasFAQ() {
     }, [isH, N, W]);
 
     // SCROLL: p = (vh·0.72 − top) / (alto + vh·0.54), indice = floor(p·N).
-    // Solo se engancha al reloj mientras el acordeon esta a ±20% de la
-    // pantalla: el original dejaba el bucle corriendo en toda la pagina, y
-    // esta home ya tiene bastante (Three.js, GSAP, Lenis) como para sumarle
-    // un fotograma por nada.
+    // A diferencia del original, el panel solo cambia cuando el scroll se
+    // DETIENE con el acordeon a la vista: quien pasa de largo no dispara una
+    // cadena de aperturas (cada una anima flex-grow y monta una escena), y el
+    // panel abierto se queda como esta. Solo se engancha al reloj mientras el
+    // acordeon esta a ±20% de la pantalla: esta home ya tiene bastante
+    // (Three.js, GSAP, Lenis) como para sumarle un fotograma por nada.
     useEffect(() => {
         if (reduced || !accRef.current || N < 2) return;
         const el = accRef.current;
+        const QUIETO_MS = 180; // tanto sin moverse cuenta como "me quedo aqui"
+        const A_LA_VISTA = 0.45; // fraccion de la pantalla que debe ocupar
         let top = 0;
         let h = 1;
         let vh = 1;
-        let last = -1;
-        let lastP = -1;
+        let topPrev = Infinity;
+        let movio = 0;
+        let resuelto = true; // ya se decidio el panel para esta parada
         let off: (() => void) | null = null;
         const leer = () => {
             const r = el.getBoundingClientRect();
@@ -250,17 +256,19 @@ export default function AtlasFAQ() {
             h = r.height;
             vh = innerHeight || 1;
         };
-        const escribir = () => {
+        const escribir = (ahora: number) => {
+            if (Math.abs(top - topPrev) > 0.5) {
+                topPrev = top;
+                movio = ahora;
+                resuelto = false;
+                return;
+            }
+            if (resuelto || ahora - movio < QUIETO_MS) return;
+            resuelto = true;
+            const visible = Math.min(vh, top + h) - Math.max(0, top);
+            if (visible < vh * A_LA_VISTA || performance.now() <= lockUntil.current) return;
             const p = clamp01((vh * 0.72 - top) / (h + vh * 0.54));
-            if (Math.abs(p - lastP) > 0.002) {
-                lastP = p;
-                el.style.setProperty("--ap", p.toFixed(3));
-            }
-            const i = Math.min(N - 1, Math.floor(p * N));
-            if (i !== last) {
-                last = i;
-                if (performance.now() > lockUntil.current) go(i);
-            }
+            go(Math.min(N - 1, Math.floor(p * N)));
         };
         const io = new IntersectionObserver(
             ([e]) => {

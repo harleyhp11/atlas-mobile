@@ -32,11 +32,11 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                     id: `gallery-${index}`,
                     title: img.filename.split('.')[0].replace(/-/g, ' '),
                     type: 'image',
-                    category: 'Gallery',
+                    category: 'Galería',
                     date: '2024',
                     thumbnail: img.src,
                     url: img.src,
-                    description: 'Gallery Image'
+                    description: 'Imagen de la galería'
                 }));
                 setGalleryItems(formattedItems);
             } catch (error) {
@@ -153,10 +153,10 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                 {/* Title */}
                 <div className="flex-1">
                     <span className="text-[11px] md:text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground/80 block mb-3 transition-colors duration-300">
-                        Exhibition Space
+                        Espacio de exhibición
                     </span>
                     <h2 className="text-3xl md:text-5xl font-sans tracking-tight text-foreground/90 font-medium leading-tight transition-colors duration-300">
-                        Selected Works
+                        Trabajos seleccionados
                     </h2>
                 </div>
 
@@ -176,7 +176,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                         : "text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-white/10"
                                 )}
                             >
-                                {f === 'all' ? 'All' : f === 'image' ? 'Photos' : 'Videos'}
+                                {f === 'all' ? 'Todo' : f === 'image' ? 'Fotos' : 'Videos'}
                             </button>
                         ))}
                     </div>
@@ -194,7 +194,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                     ? "bg-white dark:bg-neutral-800 text-foreground shadow-md ring-1 ring-black/5 dark:ring-white/10"
                                     : "text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-white/10"
                             )}
-                            title="Rows View"
+                            title="Vista en filas"
                         >
                             <StretchHorizontal className="w-4 h-4" />
                         </button>
@@ -206,7 +206,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                     ? "bg-white dark:bg-neutral-800 text-foreground shadow-md ring-1 ring-black/5 dark:ring-white/10"
                                     : "text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-white/10"
                             )}
-                            title="Grid View"
+                            title="Vista en cuadrícula"
                         >
                             <LayoutGrid className="w-4 h-4" />
                         </button>
@@ -218,7 +218,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                     ? "bg-white dark:bg-neutral-800 text-foreground shadow-md ring-1 ring-black/5 dark:ring-white/10"
                                     : "text-muted-foreground hover:text-foreground hover:bg-white/50 dark:hover:bg-white/10"
                             )}
-                            title="Infinite Preview"
+                            title="Vista infinita"
                         >
                             <Sparkles className="w-4 h-4" />
                         </button>
@@ -239,7 +239,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                         <div className="border-l border-neutral-500 dark:border-white/20 pl-6 py-2">
                             <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-6 flex items-center gap-2">
                                 <ListFilter className="w-3 h-3" />
-                                Collections
+                                Colecciones
                             </h3>
                             <div className="flex flex-col gap-3">
                                 {categories.map((category, idx) => (
@@ -332,7 +332,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                                 {/* Type Badge */}
                                                 <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-mono uppercase text-white tracking-wider flex items-center gap-1 z-10">
                                                     {item.type === 'video' ? <Video className="w-3 h-3" /> : <ImageIcon className="w-3 h-3" />}
-                                                    <span>{item.type}</span>
+                                                    <span>{item.type === "video" ? "video" : "imagen"}</span>
                                                 </div>
 
                                                 {/* Hover Overlay - Simplified in Low Power Mode */}
@@ -369,7 +369,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                                         {/* {item.date} */}
                                                     </span>
                                                     <span className="text-[10px] text-white/60 uppercase tracking-widest border border-white/20 px-2 py-0.5 rounded-full">
-                                                        View
+                                                        Ver
                                                     </span>
                                                 </div>
                                             </div>
@@ -410,7 +410,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                             {/* Type Badge */}
                                             <div className="absolute top-3 right-3 bg-black/50 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-mono uppercase text-white tracking-wider flex items-center gap-1 z-10">
                                                 {item.type === 'video' ? <Video className="w-3 h-3" /> : <ImageIcon className="w-3 h-3" />}
-                                                <span>{item.type}</span>
+                                                <span>{item.type === "video" ? "video" : "imagen"}</span>
                                             </div>
 
                                             {/* Hover Overlay */}
@@ -443,7 +443,7 @@ export default function CleanFilmGrid({ isLowPowerMode }: { isLowPowerMode?: boo
                                             className="group flex flex-col items-center gap-4 py-4 px-8 relative mt-6"
                                         >
                                             <span className="text-[11px] font-mono uppercase tracking-[3px] font-bold text-foreground opacity-0 -translate-y-4 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 ease-out absolute top-[-10px] whitespace-nowrap">
-                                                Load More
+                                                Ver más
                                             </span>
                                             <div className="w-14 h-14 rounded-full border border-neutral-500 dark:border-white/20 flex items-center justify-center group-hover:bg-foreground group-hover:text-background group-hover:scale-110 transition-all duration-500 ease-out z-10 shadow-sm group-hover:shadow-xl bg-background">
                                                 <ArrowDownUp className="w-5 h-5" />

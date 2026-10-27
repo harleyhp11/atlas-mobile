@@ -7,8 +7,11 @@ import Image from "next/image";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import Link from "next/link";
 import { portfolioData } from "@/data/portfolio";
+import { useTranslations } from "next-intl";
 
 export default function ImpactSection() {
+  // Las categorias de las notas vienen como slug; se muestran en español.
+  const tBlog = useTranslations("blog");
   const [openCard, setOpenCard] = useState(0);
   const containerRef = useRef<HTMLElement>(null);
 
@@ -54,14 +57,14 @@ export default function ImpactSection() {
         <div className="flex items-start justify-between gap-6 mb-12 sm:mb-20">
           <div className="max-w-[720px]">
             <motion.p style={{ y: yLabel }} className="text-[11px] tracking-[3px] uppercase font-mono font-bold text-cyan-400 mb-6">
-              Knowledge Base
+              Notas del estudio
             </motion.p>
             <motion.h2 style={{ y: yTitle }} className="text-5xl md:text-7xl lg:text-[80px] leading-[1.05] font-black tracking-tighter uppercase mb-8">
-              The Engineering <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D1FF4D] via-cyan-300 to-amber-300">Process.</span>
+              Cómo <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D1FF4D] via-cyan-300 to-amber-300">Construimos.</span>
             </motion.h2>
             <motion.p style={{ y: yDesc }} className="text-[15px] sm:text-[16px] text-muted-foreground/80 leading-[1.7] max-w-[560px] font-medium">
-              Documenting the journey from concept to deployment. Read the latest thoughts on AI, engineering, and digital architecture.
+              Lo que aprendemos en cada proyecto, de la primera idea al lanzamiento. Notas sobre diseño, desarrollo y producto digital.
             </motion.p>
           </div>
         </div>
@@ -93,7 +96,7 @@ export default function ImpactSection() {
                     <div className="h-full p-6 sm:p-8 md:p-10 flex flex-col">
                       <div className="max-w-[300px]">
                         <p className="text-[10px] tracking-[1.3px] uppercase font-bold opacity-80">
-                          {card.category.replace("-", " ")}
+                          {tBlog(`categories.${card.category}`)}
                         </p>
                         <h3 className="mt-2 text-[22px] sm:text-[26px] md:text-[30px] leading-[1.08] font-semibold">
                           {card.title}
@@ -106,7 +109,7 @@ export default function ImpactSection() {
                             type="button"
                             className="mt-4 inline-flex items-center gap-2 text-[11px] tracking-[1.4px] uppercase font-bold hover:underline"
                           >
-                            Read Article <ArrowRight size={14} />
+                            Leer nota <ArrowRight size={14} />
                           </button>
                         </Link>
                       </div>
@@ -163,7 +166,7 @@ export default function ImpactSection() {
             className="px-8 sm:px-12 py-4 sm:py-5 border-white/10 bg-white/5 dark:bg-black/20 backdrop-blur-md hover:border-white/20"
           >
             <span className="text-[12px] sm:text-[13px] tracking-[2px] uppercase font-bold relative z-10">
-              Access the Complete Knowledge Base
+              Ver todas las notas
             </span>
           </MagneticButton>
         </div>

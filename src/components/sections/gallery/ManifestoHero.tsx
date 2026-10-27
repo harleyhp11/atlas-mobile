@@ -4,6 +4,30 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
+/* Color del titular: el codigo es frio y la emocion es calida.
+   "Código" queda en gris acero; "El" y "Humana." van en el rojo de Atlas, de
+   un rosado casi blanco arriba a un carmesi profundo abajo, y al entrar se
+   "encienden" de abajo hacia arriba; "Emoción" es acero que se calienta en
+   el borde de abajo, como iluminada por "Humana.".
+
+   El encendido: el degradado mide 260% del alto de la palabra y se desliza
+   hacia abajo; al final se ve solo su tercio de arriba (el degradado bueno)
+   y al principio solo la cola, casi negra (o casi blanca en el tema claro).
+   inline-block + padding con margen negativo: el fondo recortado al texto
+   solo pinta dentro de la caja, y la cursiva y los acentos se salen de ella. */
+const FUEGO = [
+    "inline-block px-[0.08em] -mx-[0.08em] py-[0.14em] -my-[0.14em]",
+    "text-transparent bg-clip-text bg-no-repeat bg-[length:100%_260%]",
+    "bg-[linear-gradient(180deg,#ff5a6e_0%,#E11D3A_12%,#a3122a_26%,#5c0614_38.5%,#f3d3d8_56%,#f3d3d8_100%)]",
+    "dark:bg-[linear-gradient(180deg,#ffe3e7_0%,#ff6b7e_9%,#E11D3A_19%,#a3122a_30%,#6b0817_38.5%,#1c0207_56%,#1c0207_100%)]",
+    "dark:[filter:drop-shadow(0_0_0.2em_rgba(225,29,58,0.3))]",
+].join(" ");
+const ACERO_TIBIO = [
+    "text-transparent bg-clip-text",
+    "bg-[linear-gradient(180deg,#2a2a2c_0%,#55555a_55%,#7a2a36_86%,#b3182f_100%)]",
+    "dark:bg-[linear-gradient(180deg,#f2f2f3_0%,#c4c4c8_36%,#8e8e94_64%,#7a3b45_86%,#b3182f_100%)]",
+].join(" ");
+
 export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boolean }) {
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -32,6 +56,16 @@ export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boo
     const yParagraph = isLowPowerMode ? 0 : yParagraphTransform;
     const yPrompt = isLowPowerMode ? 0 : yPromptTransform;
 
+    // Encendido de "El" y "Humana.": arranca cuando las letras ya entraron.
+    const encender = (delay: number) =>
+        isLowPowerMode
+            ? { initial: false as const }
+            : {
+                  initial: { backgroundPosition: "50% 100%" },
+                  animate: { backgroundPosition: "50% 0%" },
+                  transition: { duration: 1.8, delay, ease: [0.22, 1, 0.36, 1] as const },
+              };
+
     return (
         <section ref={containerRef} className="relative h-[150vh] text-foreground">
             <div className="sticky top-0 h-screen overflow-hidden flex flex-col items-center justify-center">
@@ -50,18 +84,45 @@ export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boo
                                 initial={isLowPowerMode ? { opacity: 0 } : { y: 100, opacity: 0 }}
                                 animate={isLowPowerMode ? { opacity: 1 } : { y: 0, opacity: 1 }}
                                 transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                                className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-foreground/80 to-foreground/20 [-webkit-text-stroke:1px_rgba(0,0,0,0.1)] dark:[-webkit-text-stroke:1px_rgba(255,255,255,0.1)]"
+                                className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-foreground/80 to-foreground/20"
                             >
-                                <span className="font-serif italic font-light opacity-80 text-foreground/60">The</span> Code
+                                <motion.span {...encender(0.5)} className={`font-serif italic font-light ${FUEGO}`}>
+                                    El
+                                </motion.span>{" "}
+                                {/* Pastilla con una pieza de Atlas entre las dos
+                                    palabras, como en la referencia. Medida en em
+                                    para que escale con el titular, y por debajo
+                                    del alto de linea (0.8em): el contenedor tiene
+                                    overflow-hidden para la entrada y la cortaria.
+                                    Entra despues de las letras, girando un poco. */}
+                                <motion.span
+                                    aria-hidden="true"
+                                    initial={isLowPowerMode ? { opacity: 0 } : { scale: 0.4, rotate: -22, opacity: 0 }}
+                                    animate={isLowPowerMode ? { opacity: 1 } : { scale: 1, rotate: -5, opacity: 1 }}
+                                    transition={{ duration: 0.9, delay: isLowPowerMode ? 0 : 0.55, ease: [0.22, 1, 0.36, 1] }}
+                                    className="mx-[0.04em] inline-block h-[0.64em] w-[1.12em] -translate-y-[0.05em] overflow-hidden rounded-[0.22em] align-middle shadow-[0_0.06em_0.22em_rgba(0,0,0,0.5),0_0_0.35em_rgba(225,29,58,0.35)] ring-[3px] ring-foreground/85"
+                                >
+                                    {/* El pasillo rojo de la marca: sus columnas
+                                        de caracteres se leen como codigo. */}
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img
+                                        src="/brand/stack-rojo.webp"
+                                        alt=""
+                                        className="h-full w-full object-cover object-[50%_45%]"
+                                    />
+                                </motion.span>{" "}
+                                Código
                             </motion.h1>
                         </motion.div>
 
                         <motion.div style={{ y: ySubtitle }} className="flex items-center justify-center gap-4 md:gap-8 overflow-hidden">
+                            {/* Las dos lineas nacen grises por fuera y se
+                                encienden en rojo hacia la frase. */}
                             <motion.div
                                 initial={{ scaleX: 0 }}
                                 animate={{ scaleX: 1 }}
                                 transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-                                className="h-px bg-foreground/30 w-12 md:w-32"
+                                className="h-px w-12 origin-right bg-gradient-to-r from-foreground/0 via-foreground/30 to-[#E11D3A]/80 md:w-32"
                             />
                             <motion.p
                                 initial={{ opacity: 0 }}
@@ -69,13 +130,13 @@ export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boo
                                 transition={{ duration: 1, delay: 0.8 }}
                                 className="font-mono text-xs md:text-sm uppercase tracking-widest text-muted-foreground"
                             >
-                                Is merely a vessel for
+                                Es solo un vehículo para la
                             </motion.p>
                             <motion.div
                                 initial={{ scaleX: 0 }}
                                 animate={{ scaleX: 1 }}
                                 transition={{ duration: 1.5, delay: 0.5, ease: "circOut" }}
-                                className="h-px bg-foreground/30 w-12 md:w-32"
+                                className="h-px w-12 origin-left bg-gradient-to-l from-foreground/0 via-foreground/30 to-[#E11D3A]/80 md:w-32"
                             />
                         </motion.div>
 
@@ -84,9 +145,12 @@ export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boo
                                 initial={isLowPowerMode ? { opacity: 0 } : { y: -100, opacity: 0 }}
                                 animate={isLowPowerMode ? { opacity: 1 } : { y: 0, opacity: 1 }}
                                 transition={{ duration: 1, delay: isLowPowerMode ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
-                                className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8] text-transparent bg-clip-text bg-gradient-to-br from-foreground/80 to-foreground/20 [-webkit-text-stroke:1px_rgba(0,0,0,0.1)] dark:[-webkit-text-stroke:1px_rgba(255,255,255,0.1)]"
+                                className="text-6xl md:text-9xl font-black tracking-tighter uppercase leading-[0.8]"
                             >
-                                Human <span className="font-serif italic font-light text-primary/80">Emotion.</span>
+                                <span className={ACERO_TIBIO}>Emoción</span>{" "}
+                                <motion.span {...encender(0.75)} className={`font-serif italic font-light ${FUEGO}`}>
+                                    Humana.
+                                </motion.span>
                             </motion.h1>
                         </motion.div>
                     </div>
@@ -99,8 +163,8 @@ export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boo
                         className="mt-6 md:mt-10 max-w-xl mx-auto"
                     >
                         <p className="text-lg md:text-xl font-serif text-muted-foreground leading-relaxed">
-                            "We build systems not just to process data, but to feel something.
-                            This archive is a collection of moments where logic met beauty."
+                            &ldquo;Construimos sistemas no solo para procesar datos, sino para hacer sentir algo.
+                            Este archivo reúne momentos en que la lógica se encontró con la belleza.&rdquo;
                         </p>
                     </motion.div>
 
@@ -111,7 +175,7 @@ export default function ManifestoHero({ isLowPowerMode }: { isLowPowerMode?: boo
                     style={{ opacity: opacityPrompt, y: yPrompt }}
                     className="absolute bottom-12 flex flex-col items-center gap-4 z-10"
                 >
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">See More</span>
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">Ver más</span>
                     <ArrowDown className="w-5 h-5 text-foreground animate-bounce" />
                 </motion.div>
 
