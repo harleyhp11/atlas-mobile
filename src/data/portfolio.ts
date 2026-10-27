@@ -52,6 +52,9 @@ export const portfolioData: PortfolioData = {
              · Fluxa      → ~/friend-hug-engine (privado)
              · Perú Travel→ SIN código a la vista: todo sale de la captura y
                             está deducido; revisar con Harley.
+             · La Leña    → ~/polleria-landing (privado). Las cifras de
+                            rendimiento son las medidas en _perf/. No se dice
+                            de quién es la pollería, a pedido de Harley.
            WorkUP y Fluxa son prototipos de frontend (datos de muestra, IA
            simulada) y así se cuentan: nada de métricas inventadas. */
         {
@@ -453,6 +456,89 @@ export const portfolioData: PortfolioData = {
                 {
                     problem: 'Recordar los destinos guardados',
                     solution: 'Los marcadores se guardan en el navegador, así siguen ahí cuando el usuario vuelve.',
+                },
+            ],
+        },
+        {
+            id: 'project-polleria-la-lena',
+            slug: 'polleria-la-lena',
+            title: 'Pollería La Leña',
+            description: 'Pollería líder de Abancay: dos locales y más de 20 años de sabor a la leña.',
+            longDescription: 'Landing de Pollería La Leña, la pollería líder de Abancay (Apurímac), con dos locales y más de veinte años en el mercado. El encargo no era una página más de comida: queríamos llevar a lo digital la experiencia de ir a La Leña, con su fuego, su madera y su historia, en vez del diseño de siempre. El reto fue sostener todo eso (intro animada, scroll suave, galerías, secciones que se fijan) y que la página fuera fluida en cualquier equipo, desde una laptop sin tarjeta gráfica hasta un celular de gama media. Además del inicio, el sitio tiene la historia de la pollería y una página por cada local.',
+            image: '/project/polleria-la-lena1.webp',
+            techStack: ['HTML5', 'CSS3', 'JavaScript', 'GSAP', 'Lenis', 'esbuild'],
+            tools: ['ScrollTrigger', 'SplitText', 'CustomEase', 'Filtros SVG', 'AVIF / WebP', 'Vercel'],
+            status: 'ongoing',
+            demoUrl: '#',
+            startDate: '2026-10-19',
+            role: 'Diseño, desarrollo y rendimiento',
+            customTimeline: 'Oct 2026 – en curso',
+            category: 'Gastronomía',
+            highlights: ['Diseño con fuego y madera', 'Carta con pedido por WhatsApp', 'Fluida en cualquier equipo'],
+            features: [
+                {
+                    title: 'Una experiencia, no una plantilla',
+                    items: [
+                        '**Intro de carga con fuego**: el nombre de la pollería se abre en una ventana con destellos de brasas y la foto del pollo a la leña crece hasta llenar la pantalla.',
+                        '**Madera y fuego hechos en el navegador**: tablas de madera roja con bordes astillados (filtros SVG), pizarras y una cinta que cruza entre secciones.',
+                        '**Tipografía con carácter**: letras gastadas, una firma a mano y versalitas que se mezclan como en un afiche.',
+                        '**La cita de los dueños se enciende palabra por palabra** con el scroll.',
+                    ],
+                },
+                {
+                    title: 'Carta y pedidos',
+                    items: [
+                        '**La carta real del local**, por categorías, con una barra de pestañas que acompaña el scroll.',
+                        '**Pedido en un toque**: cada plato se agrega a un pedido que se envía armado por WhatsApp o se resuelve con una llamada.',
+                        '**Tamaños y precios por plato**: de 1/8 a pollo entero, con el total a la vista.',
+                    ],
+                },
+                {
+                    title: 'Locales, horarios e historia',
+                    items: [
+                        '**Horarios en vivo**: cada local dice si está abierto ahora o a qué hora abre, y se explica el descanso de los martes por turnos.',
+                        '**Una página por local**: galería, cómo llegar con mapa y delivery, con la misma página para los dos locales.',
+                        '**Nuestra historia**: una línea del tiempo tipo álbum familiar, desde una casa con un horno simple hasta los dos locales de hoy.',
+                    ],
+                },
+                {
+                    title: 'Rendimiento',
+                    items: [
+                        '**Scroll suave sin trabas**: medido con la CPU ralentizada 6 veces y sin tarjeta gráfica, los fotogramas lentos al bajar pasaron de 27 a 9.',
+                        '**Primera pintura más rápida**: de 580 a 384 ms, y la intro arranca casi 400 ms antes.',
+                        '**Imágenes en AVIF**: el inicio en celular pasó de 2,9 MB a 1,9 MB sin cambios visibles.',
+                    ],
+                },
+            ],
+            challengesAndSolutions: [
+                {
+                    problem: 'Animaciones pesadas que tenían que ir fluidas en cualquier equipo',
+                    solution: 'Medimos antes de tocar nada, con la CPU ralentizada y sin GPU, y comparamos capturas píxel por píxel para no cambiar el diseño. El hallazgo fue que la madera astillada y las sombras se volvían a dibujar en cada fotograma: las pasamos a capas propias del compositor, quitamos sombras que no se veían y pausamos todo lo que queda fuera de pantalla.',
+                },
+                {
+                    problem: 'Un solo archivo de JavaScript hacía más lenta la carga',
+                    solution: 'Al juntar todo en un bundle, la primera pintura empeoraba en equipos lentos porque el navegador ejecutaba una sola tarea larga. Escribimos un build propio con esbuild que minifica y versiona cada script por separado, alojamos las fuentes, GSAP y Lenis en el propio sitio y dejamos en caché de un año todo lo que no cambia.',
+                },
+                {
+                    problem: 'Safari en Mac no daba la talla con las animaciones',
+                    solution: 'En Safari de escritorio el sitio detecta el navegador al cargar y entra en un modo sin animaciones: sin intro, sin scroll suave y con los enlaces saltando directo. El contenido y el diseño son los mismos; solo se apaga el movimiento.',
+                },
+            ],
+            installation: [
+                {
+                    title: 'Repositorio privado',
+                    code: 'El código vive en un repositorio privado. Es HTML, CSS y JavaScript sin framework: para verlo basta un servidor estático.',
+                    type: 'text',
+                },
+                {
+                    title: 'Levantar en desarrollo',
+                    code: 'python3 -m http.server 5360\n# http://localhost:5360',
+                    type: 'code',
+                },
+                {
+                    title: 'Compilar para producción',
+                    code: 'npm install\nnpm run build\n# genera dist/, que se publica en Vercel',
+                    type: 'code',
                 },
             ],
         },
