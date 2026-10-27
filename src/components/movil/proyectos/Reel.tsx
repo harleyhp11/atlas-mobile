@@ -11,7 +11,8 @@ import { useEffect, useRef } from 'react';
    va cayendo hacia abajo, siguiendo la curva e inclinada segun su
    pendiente.
 
-   Corre sola, despacio; el scroll y el dedo la empujan, con inercia. Solo
+   Corre sola, despacio y siempre de derecha a izquierda; el scroll y el
+   dedo la empujan, con inercia. Solo
    se anima en pantalla; con movimiento reducido no corre sola (se puede
    arrastrar igual). */
 
@@ -91,12 +92,13 @@ export function Reel() {
         const ro = new ResizeObserver(medir);
         ro.observe(el);
 
-        // el scroll empuja la tira, con mesura
+        // el scroll empuja la tira, con mesura y siempre hacia la izquierda
+        // (subir o bajar la acelera igual: nunca la da vuelta)
         const alScroll = () => {
             const dy = window.scrollY - ultimoScroll;
             ultimoScroll = window.scrollY;
             if (visible) {
-                empuje = Math.max(-520, Math.min(520, empuje + dy * 2.2));
+                empuje = Math.min(520, Math.max(0, empuje) + Math.abs(dy) * 2.2);
                 pedir();
             }
         };
@@ -127,7 +129,9 @@ export function Reel() {
             gesto.t = t;
             pedir();
         };
+        // al soltar no sigue de largo hacia la derecha: retoma su sentido
         const soltar = () => {
+            if (gesto?.lado) empuje = Math.max(0, empuje);
             gesto = null;
         };
         el.addEventListener('pointerdown', bajar);
