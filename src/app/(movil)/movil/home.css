@@ -40,9 +40,3 @@
         margin-inline: auto;
     }
 }
-
-/* Precios: por construir. Mientras, un tramo en negro al que lleva el menu. */
-.home-precios {
-    min-height: 70svh;
-    background: var(--negro);
-}

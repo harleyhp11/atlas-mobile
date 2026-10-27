@@ -37,19 +37,19 @@ import './home.css';
      · (08) Preguntas: riel que se llena con el scroll y acordeon;
      · (09) el pie en isla clara: la escultura liquida de Atlas (el simbolo
        en metal, siempre en movimiento) y el cierre con WhatsApp.
-     · Precios: por ahora un espacio en negro, despues de la isla clara.
-   Falta Proceso. */
+   Falta Proceso. Precios es su propia pagina (/servicios en el celular,
+   ver movil/precios). */
 
 export const metadata: Metadata = {
     alternates: { canonical: '/' },
 };
 
-// Nosotros lleva a la cita del fundador; Precios, a su seccion (por ahora
-// vacia, en negro); Contacto abre WhatsApp.
+// Nosotros lleva a la cita del fundador; Precios, a su propia pagina (por
+// ahora en negro); Contacto abre WhatsApp.
 const MENU_HOME = [
     { n: '01', label: 'Nosotros', href: '#nosotros' },
     { n: '02', label: 'Servicios', href: '#servicios' },
-    { n: '03', label: 'Precios', href: '#precios' },
+    { n: '03', label: 'Precios', href: '/servicios' },
     { n: '04', label: 'Proyectos', href: '/projects' },
     { n: '05', label: 'Por qué Atlas', href: '#ventajas' },
     { n: '06', label: 'Contacto', href: WHATSAPP, externo: true },
@@ -83,10 +83,6 @@ export default function HomeMovil() {
 
                     <Herramientas />
                 </div>
-
-                {/* Precios: seccion por construir. Por ahora es solo el
-                    espacio en negro al que lleva el menu. */}
-                <section id="precios" className="home-precios" data-tono="oscuro" aria-label="Precios" />
 
                 <Trabajos />
                 <Testimonios />

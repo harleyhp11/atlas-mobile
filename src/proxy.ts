@@ -5,8 +5,9 @@ import { rutaMovil } from '@/lib/vista';
 /* La home y los proyectos tienen dos arboles en la misma URL:
      · (sitio)/... — el escritorio de siempre, desde 1024 px;
      · (movil)/movil/... — la version de celular y tablet, por debajo:
-       "/" → /movil, "/projects" → /movil/proyectos y la ficha de cada
-       proyecto de Atlas → /movil/proyectos/[slug].
+       "/" → /movil, "/projects" → /movil/proyectos, la ficha de cada
+       proyecto de Atlas → /movil/proyectos/[slug] y "/servicios" (los
+       precios) → /movil/precios.
 
    Aqui se decide cual responde sin que el navegador vea otra URL (es un
    rewrite, no un redirect). Manda la cookie `atlas-vista`, que escribe el
@@ -42,5 +43,5 @@ export function proxy(request: NextRequest) {
 // Solo estas rutas tienen dos versiones (ver rutaMovil); el resto ni pasa por
 // aqui. Tiene que ser una lista literal: Next la lee al compilar.
 export const config = {
-    matcher: ['/', '/projects', '/projects/:slug'],
+    matcher: ['/', '/projects', '/projects/:slug', '/servicios'],
 };
