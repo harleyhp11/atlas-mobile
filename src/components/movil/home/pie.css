@@ -1,7 +1,7 @@
 /* =====================================================================
    HOME MÓVIL · (08) Pie — isla clara con la escultura liquida de Atlas.
    Capas de la banda, de atras hacia adelante:
-     .h-pie-fondo      → "atlas" gigante y tenue
+     .h-pie-cinta      → cinta tenue (atlas · sistemas · webs · IA · negocios)
      .h-pie-escenario  → imagen fija + canvas (se pasan 56 px por arriba y
                          por abajo: el polvo puede volar fuera de la banda)
      .h-pie-pista      → "Toca la forma"
@@ -90,21 +90,52 @@
     -webkit-user-select: none;
     user-select: none;
 }
-.h-pie-fondo {
+/* La cinta de atras: el texto gigante y tenue de siempre, ahora corriendo
+   en bucle y difuminado hacia los bordes. */
+.h-pie-cinta {
     position: absolute;
     z-index: 0;
-    left: 50%;
+    inset-inline: 0;
     top: 50%;
-    translate: -50% -50%;
+    translate: 0 -50%;
+    overflow: hidden;
+    pointer-events: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+}
+.h-pie-cinta-pista {
+    display: flex;
+    width: max-content;
+    animation: h-pie-cinta 38s linear infinite;
+}
+.h-pie-cinta.is-off .h-pie-cinta-pista {
+    animation-play-state: paused;
+}
+.h-pie-cinta-grupo {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: 0.22em;
+    padding-right: 0.22em;
     font-family: var(--f-display);
     font-weight: 650;
-    font-size: min(37vw, 250px);
-    line-height: 0.8;
+    font-size: min(30vw, 210px);
+    line-height: 1;
     letter-spacing: -0.06em;
     white-space: nowrap;
-    color: rgba(11, 11, 12, 0.05);
-    pointer-events: none;
+    color: rgba(11, 11, 12, 0.06);
 }
+.h-pie-cinta-sep {
+    flex: none;
+    width: 0.42em;
+    height: auto;
+}
+@keyframes h-pie-cinta {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 .h-pie-escenario {
     position: absolute;
     z-index: 1;
@@ -184,48 +215,26 @@
 .h-pie-cierre {
     position: relative;
     z-index: 2;
-    margin-top: 34px;
+    margin-top: 40px;
+    text-align: center;
 }
 .h-pie-h2 {
-    margin-top: 18px;
     font-size: clamp(44px, 13vw, 64px);
     line-height: 0.92;
     color: var(--tinta);
 }
-.h-pie-p {
-    margin-top: 18px;
-    max-width: 34ch;
+.h-pie-cierre + .h-pie-escena {
+    margin-top: 10px;
 }
 .h-pie-ctas {
+    position: relative;
+    z-index: 2;
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    margin-top: 26px;
+    justify-content: center;
+    margin-top: 40px;
 }
-.h-pie-txt {
-    display: inline-flex;
-    align-items: center;
-    align-self: flex-start;
-    gap: 8px;
-    min-height: 44px;
-    padding: 0 2px;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--tinta);
-    text-decoration: underline;
-    text-decoration-color: rgba(11, 11, 12, 0.3);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 6px;
-    touch-action: manipulation;
-}
-.h-pie-txt svg {
-    width: 14px;
-    height: 14px;
-    transition: translate 0.3s var(--ease);
-}
-.h-pie-txt:active svg {
-    translate: 2px -2px;
+.h-pie-wsp {
+    width: min(100%, 300px);
 }
 
 /* ------------------------------------------------------------ enlaces */
@@ -234,10 +243,14 @@
     z-index: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 44px;
-    padding-top: 26px;
-    border-top: 1px solid var(--linea-tinta);
+    gap: 12px;
+    margin-top: 34px;
+    text-align: center;
+}
+.h-pie-col ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .h-pie-col-t {
     margin-bottom: 6px;
@@ -265,7 +278,7 @@
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 22px;
+    margin-top: 32px;
     padding: 18px 0 14px;
     border-top: 1px solid var(--linea-tinta);
     font-size: 13px;
@@ -280,7 +293,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .h-pie-pista::before {
+    .h-pie-pista::before,
+    .h-pie-cinta-pista {
         animation: none;
     }
     .h-pie-forma,

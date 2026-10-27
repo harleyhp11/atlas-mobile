@@ -1,20 +1,22 @@
 import { Boton } from '../Boton';
-import { Ceja } from '../Ceja';
 import { WHATSAPP } from '../datos';
 import { Flecha, FlechaAbajo } from '../iconos';
 import { Titular } from '../Titular';
 import { EsculturaAtlas } from './pie/EsculturaAtlas';
 import './pie.css';
 
-/* (09) El pie — "Sculpture Hero" (guglielmogiannattasio.it, 21st.dev)
-   pasado a Atlas y a la home movil, en isla clara como servicios:
-     · arriba, la marca y "Volver arriba" (donde el original tenia la nav);
-     · al medio, la escultura liquida: el simbolo de Atlas en metal, siempre
-       en movimiento, con "atlas" gigante y tenue detras. No ocupa la
-       pantalla entera como el original: es una banda de ~70 % del ancho;
-     · abajo, el cierre: titular, una linea y los dos CTA;
-     · y el pie de siempre: enlaces y la linea legal.
-   Sin email ni redes: siguen por confirmar ([CONFIRMAR] del brief). */
+/* El pie de la home, en isla clara con una pestaña arriba al centro.
+   De arriba abajo, como un pie de marca deportiva:
+     · la marca y "Volver arriba";
+     · dos columnas centradas: las secciones de la pagina y las redes;
+     · el titular de cierre;
+     · la escultura liquida: el simbolo de Atlas en metal, siempre en
+       movimiento, con una cinta tenue detras (atlas · sistemas · webs ·
+       IA · negocios) que se difumina en los bordes;
+     · el CTA de WhatsApp, centrado y mas corto;
+     · la linea legal.
+   Las redes, salvo WhatsApp, siguen por confirmar ([CONFIRMAR] del brief):
+   van con href "#" hasta tener las cuentas. */
 
 type Enlace = { label: string; href: string; externo?: boolean };
 
@@ -23,6 +25,14 @@ const EXPLORAR: Enlace[] = [
     { label: 'Por qué Atlas', href: '#ventajas' },
     { label: 'Trabajos', href: '#trabajos' },
     { label: 'Preguntas', href: '#preguntas' },
+];
+
+// [CONFIRMAR] las cuentas de Instagram, TikTok y LinkedIn
+const REDES: Enlace[] = [
+    { label: 'Instagram', href: '#' },
+    { label: 'TikTok', href: '#' },
+    { label: 'LinkedIn', href: '#' },
+    { label: 'WhatsApp', href: WHATSAPP, externo: true },
 ];
 
 function Columna({ titulo, enlaces }: { titulo: string; enlaces: Enlace[] }) {
@@ -56,28 +66,22 @@ export function Pie() {
                 </a>
             </div>
 
-            <EsculturaAtlas />
-
-            <div className="m-wrap h-pie-cierre">
-                <Ceja n="09">Contacto</Ceja>
-                <Titular id="pie-t" className="m-h2 h-pie-h2" texto="Construyamos lo que viene." destacar="viene." />
-                <p className="m-p h-pie-p" data-rv>
-                    Cuéntanos tu idea por WhatsApp. Te respondemos en menos de 24 horas, con el precio cerrado por escrito.
-                </p>
-                <div className="h-pie-ctas" data-rv>
-                    <Boton href={WHATSAPP} externo tinta>
-                        Escríbenos por WhatsApp
-                    </Boton>
-                    <a href="/servicios" className="h-pie-txt">
-                        Ver precios
-                        <Flecha />
-                    </a>
-                </div>
-            </div>
-
             <nav className="m-wrap h-pie-nav" aria-label="Pie de página">
                 <Columna titulo="Explorar" enlaces={EXPLORAR} />
+                <Columna titulo="Redes" enlaces={REDES} />
             </nav>
+
+            <div className="m-wrap h-pie-cierre">
+                <Titular id="pie-t" className="m-h2 h-pie-h2" texto="Construyamos lo que viene." destacar="viene." />
+            </div>
+
+            <EsculturaAtlas />
+
+            <div className="m-wrap h-pie-ctas" data-rv>
+                <Boton href={WHATSAPP} externo tinta className="h-pie-wsp">
+                    Escríbenos por WhatsApp
+                </Boton>
+            </div>
 
             <div className="m-wrap">
                 <div className="h-pie-base">

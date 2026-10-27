@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
+import { SimboloAtlas } from '../../iconos';
 
 /* La escultura del pie: el simbolo de Atlas (rampa + cuadrado) en metal
    grafito cepillado, rehecho con decenas de miles de particulas en la GPU.
@@ -9,9 +10,14 @@ import { useEffect, useRef } from 'react';
 
    Lo pesado (el motor WebGL2) se pide con import() recien cuando el pie se
    acerca a la pantalla. Hasta entonces, y si no hay WebGL2 o el celular
-   esta en ahorro de datos, se ve la imagen fija: la misma pieza, quieta. */
+   esta en ahorro de datos, se ve la imagen fija: la misma pieza, quieta.
+
+   Detras corre una cinta tenue con lo que hace Atlas, que se difumina en
+   los bordes. Va duplicada para que el bucle no tenga costura, y se pausa
+   fuera de pantalla (data-loop). */
 
 const SRC = '/assets/movil/pie-escultura.webp';
+const CINTA = ['atlas', 'sistemas', 'webs', 'IA', 'negocios'];
 
 export function EsculturaAtlas() {
     const escena = useRef<HTMLDivElement>(null);
@@ -52,9 +58,20 @@ export function EsculturaAtlas() {
 
     return (
         <div ref={escena} className="h-pie-escena">
-            <p className="h-pie-fondo" aria-hidden="true">
-                atlas
-            </p>
+            <div className="h-pie-cinta" data-loop aria-hidden="true">
+                <div className="h-pie-cinta-pista">
+                    {[0, 1].map((copia) => (
+                        <span key={copia} className="h-pie-cinta-grupo">
+                            {CINTA.map((p) => (
+                                <Fragment key={p}>
+                                    <span>{p}</span>
+                                    <SimboloAtlas className="h-pie-cinta-sep" />
+                                </Fragment>
+                            ))}
+                        </span>
+                    ))}
+                </div>
+            </div>
             <div ref={escenario} className="h-pie-escenario">
                 <img ref={forma} className="h-pie-forma" src={SRC} width={1040} height={768} alt="" loading="lazy" decoding="async" draggable={false} />
             </div>
