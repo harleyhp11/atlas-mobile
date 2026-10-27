@@ -293,8 +293,7 @@ export function Navbar() {
                             tema y el de idioma ya solo existen en el menu movil,
                             asi que en escritorio no hay forma de cambiarlos
                             desde la interfaz. El de "Focus" no se pierde nada:
-                            apuntaba a arfazrllworkspace.vercel.app, el sitio del
-                            autor de la plantilla original. */}
+                            apuntaba a un sitio externo de la plantilla. */}
                         <div className="flex items-center gap-1.5 md:gap-2">
                             <motion.button
                                 whileHover={{ scale: 1.05 }}

@@ -70,10 +70,8 @@ const signature = Alex_Brush({
 });
 
 /* Esto es lo primero que ve Google y lo que sale al compartir el enlace en
-   WhatsApp. Estaba entero en ingles y a nombre del autor de la plantilla
-   —titulo "Arfazrll | AI & Software Engineer", autor "Your Name", dominio
-   "your-domain.com"—, o sea que el sitio se anunciaba como el portfolio de
-   otra persona. Titulo, descripcion, iconos e imagen para compartir viven
+   WhatsApp. Venia entero en ingles y con los datos de la plantilla, o sea
+   que el sitio se anunciaba como el portfolio de otra persona. Titulo, descripcion, iconos e imagen para compartir viven
    en src/lib/metadatos.ts: los comparte con el layout de la home movil. */
 export const metadata: Metadata = {
     title: {

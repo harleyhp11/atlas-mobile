@@ -17,7 +17,7 @@ import { rutaMovil } from '@/lib/vista';
    una sola vez (ver src/lib/vista.ts).
 
    Antes este archivo mandaba a TODO visitante de celular, en cualquier ruta,
-   a la web del autor de la plantilla (arfazrllworkspace.vercel.app). */
+   a un sitio externo que venia con la plantilla. */
 
 const UA_MOVIL = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i;
 

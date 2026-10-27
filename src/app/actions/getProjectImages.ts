@@ -8,15 +8,15 @@ export async function getProjectImages(slug: string, title?: string): Promise<st
     const projectDir = path.join(publicDir, 'project'); // Folder: public/project
     const validImages: string[] = [];
 
-    // Strategy 1: Slug-based (terraflow-platform -> terraflowplatform)
+    // Strategy 1: Slug-based (rego-premium -> regopremium)
     const sanitizedSlug = slug.replace(/-/g, '');
 
-    // Strategy 2: Title-based (SNBTIn - Platform... -> snbtinplatformpersiapansnbt2025)
+    // Strategy 2: Title-based (Perú Travel -> pertravel)
     // Remove all non-alphanumeric characters and lowercase
     const sanitizedTitle = title ? title.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
 
     // We will check both strategies. If title matches user preference, it will be found.
-    // We prioritize Title if it exists, as per user request for SNBTIn.
+    // We prioritize Title if it exists.
     const searchBases = sanitizedTitle ? [sanitizedTitle, sanitizedSlug] : [sanitizedSlug];
 
     // Remove duplicates if title and slug normalize to the same string

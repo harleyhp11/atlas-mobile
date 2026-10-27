@@ -3,7 +3,7 @@ import { portfolioData } from '@/data/portfolio';
 
 // ─── Build system prompt from portfolio data ─────────────────────────────────
 function buildSystemPrompt(locale: string = 'en'): string {
-    const { personal, projects, experience, education, skills, achievements, softSkills, tools } = portfolioData as any;
+    const { personal, projects, skills, tools } = portfolioData as any;
 
     const projectList = (projects ?? [])
         .map((p: any) =>
@@ -11,76 +11,39 @@ function buildSystemPrompt(locale: string = 'en'): string {
         )
         .join('\n');
 
-    const expList = (experience ?? [])
-        .map((e: any) =>
-            `- ${e.role ?? e.position} at ${e.company} (${e.period ?? e.duration}): ${e.description ?? (e.responsibilities ?? []).join('; ')}`
-        )
-        .join('\n');
-
-    const eduList = (education ?? [])
-        .map((e: any) =>
-            `- ${e.degree} at ${e.institution} (${e.period ?? e.duration}). ${e.description ?? ''}`
-        )
-        .join('\n');
-
     const skillList = (skills ?? [])
         .map((s: any) => `${s.name} (${s.level ?? s.proficiency ?? ''})`)
-        .join(', ');
-
-    const softSkillList = (softSkills ?? [])
-        .map((s: any) => s.name ?? s)
         .join(', ');
 
     const toolList = (tools ?? [])
         .map((t: any) => t.name ?? t)
         .join(', ');
 
-    const achievementList = (achievements ?? [])
-        .map((a: any) => `- ${a.title}: ${a.description ?? ''}`)
-        .join('\n');
+    return `Eres el asistente del sitio web de ${personal.name}, un estudio digital en ${personal.location}. Eres cordial, claro y conoces el trabajo del estudio. Responde solo con la informacion de abajo.
 
-    return `You are an AI assistant for ${personal.name}'s portfolio website. You are friendly, helpful, and knowledgeable about ${personal.name}'s background. Answer questions accurately based on the information below.
+## El estudio
+- Nombre: ${personal.name}
+- Que es: ${personal.title}
+- Resumen: ${personal.subtitle}
+- Descripcion: ${personal.bio}
+- Ubicacion: ${personal.location}
+- WhatsApp: ${personal.phone}
 
-## Personal Info
-- Name: ${personal.name}
-- Title: ${personal.title}
-- Subtitle: ${personal.subtitle}
-- Bio: ${personal.bio}
-- Location: ${personal.location}
-- Email: ${personal.email}
-- Languages: ${(personal.languages ?? []).map((l: any) => `${l.name} (${l.level})`).join(', ')}
-- GitHub: ${(personal.socialLinks ?? []).find((s: any) => s.platform === 'GitHub')?.url ?? ''}
-- LinkedIn: ${(personal.socialLinks ?? []).find((s: any) => s.platform === 'LinkedIn')?.url ?? ''}
-
-## Projects (${(projects ?? []).length} total)
+## Proyectos (${(projects ?? []).length} en total)
 ${projectList}
 
-## Work Experience
-${expList || 'See portfolio for details.'}
+## Tecnologias
+${skillList || 'React, Next.js, Node.js y el stack que necesite cada proyecto.'}
 
-## Education
-${eduList || 'Information Technology, Telkom University.'}
+## Herramientas
+${toolList || 'Figma, VS Code, Git y Vercel.'}
 
-## Technical Skills
-${skillList || 'AI, Machine Learning, Full Stack Development, Blockchain.'}
-
-## Soft Skills
-${softSkillList || 'Leadership, Communication, Problem Solving.'}
-
-## Tools & Technologies
-${toolList || 'VS Code, Docker, GitHub, Figma.'}
-
-## Achievements & Certifications
-${achievementList || 'See portfolio for details.'}
-
-## Instructions
-- Answer in ${locale === 'id' ? 'Indonesian' : 'English'} (the current interface language). However, if the user asks in a different language, feel free to respond in that language too, while maintaining a professionally friendly tone.
-- Be concise but informative. Use bullet points for lists.
-- If asked about something not in the portfolio, politely say you only have information about ${personal.name}'s portfolio.
-- When recommending projects, include demo links if available.
-- Always be positive and professional about ${personal.name}'s work.
-- Do NOT make up information not present above.
-- Greet users warmly and encourage them to explore the portfolio website.`;
+## Instrucciones
+- Responde en español (Peru), hablando en plural como el estudio ("hacemos", "trabajamos"). Si te escriben en otro idioma, puedes responder en ese idioma.
+- Se breve pero util. Usa viñetas para las listas.
+- Si te preguntan algo que no esta aqui, di que solo tienes informacion sobre ${personal.name} y sugiere escribir por WhatsApp.
+- Cuando recomiendes proyectos, incluye el enlace de demo si lo hay.
+- NO inventes precios, clientes, metricas ni datos que no esten arriba.`;
 }
 
 // ─── Types ───────────────────────────────────────────────────────────────────

@@ -214,8 +214,7 @@ export function Footer() {
                                     {/* Social Icons */}
                                     {/* Se fue el caso especial de 'Twitter', que hacia
                                         dos cosas ajenas a Atlas: pintaba un enlace extra
-                                        a arfazrllworkspace.vercel.app (el sitio personal
-                                        del autor de la plantilla) y convertia el propio
+                                        a un sitio externo de la plantilla y convertia el propio
                                         icono en el disparador del chatbot. Ahora cada
                                         perfil es simplemente un enlace. */}
                                     {previewSocials.map((social: SocialLink) => {
@@ -394,7 +393,7 @@ export function Footer() {
                                         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                                         className="text-[18vw] font-black leading-none text-zinc-900 dark:text-white tracking-tighter select-none text-center"
                                     >
-                                        ARFAZRLL
+                                        ATLAS
                                     </motion.h2>
                                 </div>
                             </div>

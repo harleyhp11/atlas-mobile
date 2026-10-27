@@ -1,6 +1,6 @@
 import * as React from "react";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { ArrowRight, ChevronDown, Github, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ChevronDown, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import MagneticEffect from "@/components/ui/MagneticEffect";
@@ -366,18 +366,6 @@ export function ArgentLoopInfiniteSlider() {
                 }}
               >
                 <div className="flex items-center gap-4 pointer-events-auto">
-                  <MagneticEffect>
-                    <a 
-                      href="https://github.com/Arfazrll" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="custom-btn-github hover:scale-110 active:scale-95 transition-transform shadow-xl block"
-                      title="GitHub Profile"
-                    >
-                      <Github className="w-6 h-6" />
-                    </a>
-                  </MagneticEffect>
-                  
                   <MagneticEffect>
                     <div className="group-projects flex items-center gap-2">
                       <Link href="/projects" className="custom-btn group-hover:scale-105 active:scale-95 group-hover:shadow-[0_0_30px_rgba(193,228,74,0.3)]">

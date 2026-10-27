@@ -20,8 +20,9 @@ const calculateMetrics = () => {
         completed: completedProjects,
         techCount: totalTechStack + totalTools,
         yearsExp,
-        // Creative metrics
-        impactScore: '12+', // GitHub stars, downloads, or impact metric
+        // "En produccion": proyectos con una demo publicada de verdad. Antes era
+        // un '12+' fijo de la plantilla que no salia de ningun dato.
+        impactScore: String(portfolioData.projects?.filter(p => p.demoUrl && p.demoUrl !== '#').length || 0),
         satisfaction: '98%'   // Client/user satisfaction rate
     };
 };
