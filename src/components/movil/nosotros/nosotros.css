@@ -1,0 +1,1750 @@
+/* =====================================================================
+   ATLAS · MÓVIL — /nosotros
+
+   Todas las clases empiezan por .nos- (no se reutilizan nombres de otras
+   escenas). Ritmo: hero en isla clara → fichas sobre negro → «A cuatro
+   manos.» en isla clara → «Cinco pasos.» sobre negro → cierre en isla roja
+   → pie compacto.
+
+   Reglas:
+     · un solo acento, el rojo; texto sobre rojo siempre #fff;
+     · secundario sobre papel con alfa >= .62; sobre negro, var(--t2);
+     · nunca `filter` en las fotos de personas (ya vienen en B/N);
+     · el hero entra con @keyframes al cargar (no espera a JS) y el h1 esta
+       quieto desde el primer pintado: es el LCP;
+     · cada estado inicial `.m-js X:not(.is-in) Y` tiene su contraparte en el
+       bloque de movimiento reducido del final.
+   ===================================================================== */
+
+.nos {
+    background: var(--negro);
+}
+
+/* las islas */
+.nos-hero,
+.nos-manos,
+.nos-cierre {
+    margin: 8px 8px 0;
+    border-radius: var(--isla);
+}
+@media (min-width: 768px) {
+    .nos-hero,
+    .nos-manos,
+    .nos-cierre {
+        max-width: 760px;
+        margin-inline: auto;
+    }
+}
+
+/* enlaces pendientes (CV, LinkedIn): mismo sitio, sin accion */
+.nos [data-pendiente] {
+    cursor: default;
+    pointer-events: none;
+}
+
+/* ================================================================ hero */
+.nos-hero {
+    position: relative;
+    isolation: isolate;
+    overflow-x: clip;
+    padding: calc(var(--cab) + 30px) 0 28px;
+    color: var(--tinta);
+    background:
+        radial-gradient(70% 34% at 50% 62%, #fff 0%, rgba(255, 255, 255, 0) 70%),
+        var(--papel);
+}
+
+.nos-h1-wrap {
+    position: relative;
+    container-type: inline-size;
+    --fs: min(calc(100cqi / 3.14), 150px);
+}
+.nos-h1 {
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: var(--fs);
+    line-height: 0.86;
+    letter-spacing: -0.055em;
+}
+.nos-l {
+    display: block;
+    width: fit-content;
+}
+/* la caja roja de «dos.»: pintada desde el inicio, sin barrido */
+/* mismas medidas que .m-w--caja del Titular: el relleno vertical alinea la
+   caja con el ojo de la letra y no con la caja de linea (.86) */
+.nos-caja {
+    position: relative;
+    isolation: isolate;
+    padding: 0.06em 0.13em 0.16em;
+    margin: -0.06em 0 -0.16em;
+    color: #fff;
+}
+.nos-caja::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0.1em 0 0.12em;
+    border-radius: 0.08em;
+    background: var(--rojo);
+}
+.nos-h1-firma {
+    display: block;
+    margin: 2px 0 0 12%;
+    --d: 0.8s;
+}
+
+/* sello giratorio (Mindly): texto en circulo + disco rojo con el simbolo */
+.nos-sello {
+    position: absolute;
+    right: 0;
+    top: calc(var(--fs) * 0.86 + 5px);
+    width: 84px;
+    height: 84px;
+    display: grid;
+    place-items: center;
+    animation: nos-sello 0.7s var(--pop) 0.9s both;
+}
+.nos-sello-txt {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    animation: nos-gira 18s linear infinite;
+}
+.nos-sello-txt text {
+    font-family: var(--f-mono);
+    font-size: 12.5px; /* 84/100 → 10,5 px en pantalla */
+    font-weight: 500;
+    fill: rgba(11, 11, 12, 0.8);
+}
+.nos-sello-disco {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--rojo);
+    color: #fff;
+    box-shadow: 0 10px 22px -10px rgba(225, 29, 58, 0.7);
+}
+.nos-sello-disco svg {
+    width: 16px;
+    height: auto;
+}
+@keyframes nos-sello {
+    from {
+        opacity: 0;
+        scale: 0.6;
+        rotate: -40deg;
+    }
+}
+@keyframes nos-gira {
+    to {
+        rotate: 360deg;
+    }
+}
+
+/* ---- la orbita: dos arcos y un anillo 3D a la altura del pecho */
+.nos-orbita {
+    --placa: clamp(132px, 35vw, 210px);
+    --r: min(39vw, 190px);
+    position: relative;
+    margin-top: 12px;
+    height: calc(var(--placa) * 3.34);
+    perspective: 1000px;
+    perspective-origin: 50% calc(var(--placa) * 1.84);
+}
+/* SIN overflow, filter, opacity < 1 ni mask: aplanarian el 3D */
+.nos-escena {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+}
+.nos-placa {
+    position: absolute;
+    width: var(--placa);
+    height: calc(var(--placa) * 1.394);
+    border-radius: 999px 999px 26px 26px;
+    overflow: hidden;
+    background: var(--niebla);
+    box-shadow: 0 30px 60px -30px rgba(11, 11, 12, 0.45);
+}
+.nos-placa.is-h {
+    left: calc(50% - var(--placa) + 2px);
+    top: calc(var(--placa) * 0.79);
+    transform: translateZ(1px);
+}
+.nos-placa.is-b {
+    left: calc(50% - 2px);
+    top: var(--placa);
+    transform: translateZ(-6px);
+}
+.nos-placa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-mask-image: linear-gradient(#000 62%, transparent);
+    mask-image: linear-gradient(#000 62%, transparent);
+    animation: nos-arco 1.1s var(--ease-io) 0.2s both;
+}
+.nos-placa.is-b img {
+    animation-delay: 0.32s;
+}
+/* nunca desde un recorte del 100 % */
+@keyframes nos-arco {
+    from {
+        clip-path: inset(18% 0 0 0);
+        scale: 1.08;
+    }
+    to {
+        clip-path: inset(0);
+        scale: 1;
+    }
+}
+
+.nos-eje {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--placa) * 1.84);
+    width: 0;
+    height: 0;
+    transform-style: preserve-3d;
+    transform: rotateZ(-6deg) rotateX(-12deg);
+    animation: nos-eje 1.4s var(--ease) 0.7s both;
+}
+@keyframes nos-eje {
+    from {
+        scale: 0.82;
+    }
+}
+.nos-anillo {
+    transform-style: preserve-3d;
+    animation: nos-anillo 40s linear infinite;
+    will-change: transform;
+}
+@keyframes nos-anillo {
+    to {
+        transform: rotateY(-360deg);
+    }
+}
+.nos-hero.is-off :is(.nos-anillo, .nos-sello-txt) {
+    animation-play-state: paused;
+}
+.nos-item {
+    position: absolute;
+    transform-style: preserve-3d;
+    transform: rotateY(calc(var(--i) * 60deg)) translateZ(var(--r));
+}
+.nos-cara,
+.nos-dorso {
+    position: absolute;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    animation: nos-aparece 0.8s var(--ease) both;
+    animation-delay: calc(0.7s + var(--i) * 70ms);
+}
+.nos-dorso {
+    transform: rotateY(180deg);
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 16px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+}
+@keyframes nos-aparece {
+    from {
+        opacity: 0;
+    }
+}
+.nos-hab {
+    left: -66px;
+    top: -25px;
+    width: 132px;
+    height: 50px;
+    border-radius: 16px;
+}
+.nos-cara.nos-hab {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 12px 0 8px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.58));
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.9),
+        0 10px 24px -14px rgba(11, 11, 12, 0.35);
+}
+.nos-hab-ico {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--tinta);
+    color: #fff;
+}
+.nos-hab-ico.is-b {
+    background: var(--rojo);
+}
+.nos-hab-ico svg {
+    width: 16px;
+    height: 16px;
+}
+.nos-hab-ico .nos-logo-figma {
+    width: 11px;
+    height: 16px;
+}
+.nos-hab-txt {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 1px;
+}
+.nos-hab-txt b {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    color: var(--tinta);
+    white-space: nowrap;
+}
+.nos-hab-txt small {
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    line-height: 1.2;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgba(11, 11, 12, 0.66);
+}
+.nos-baldosa {
+    left: -32px;
+    top: -32px;
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+}
+.nos-cara.nos-baldosa {
+    padding: 3px;
+    background: #fff;
+    box-shadow: 0 10px 24px -14px rgba(11, 11, 12, 0.35);
+}
+/* las capturas de proyectos (no son fotos de personas) van en gris */
+.nos-baldosa img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 13px;
+    filter: grayscale(1);
+}
+
+/* ---- las tarjetas laterales: los enlaces a cada ficha */
+.nos-lado {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    width: min(150px, 42vw);
+    min-height: 64px;
+    padding: 12px 14px 13px;
+    border-radius: 20px;
+    background: #fff;
+    color: var(--tinta);
+    box-shadow: 0 18px 36px -22px rgba(11, 11, 12, 0.4);
+    animation: nos-lado 0.9s var(--ease) 1s both;
+    transition: scale 0.3s var(--ease);
+}
+.nos-lado:active {
+    scale: 0.97;
+}
+.nos-lado.is-h {
+    /* en el celular, arriba del todo; con placas mas grandes (tablet) baja
+       hasta quedar justo encima de su arco, para que el hilo lo alcance */
+    top: max(0px, calc(var(--placa) * 0.79 - 108px));
+    right: calc(50% + 6px);
+    rotate: -3deg;
+}
+.nos-lado.is-b {
+    bottom: max(0px, calc(var(--placa) * 0.946 - 130px));
+    left: calc(50% + 6px);
+    rotate: 3deg;
+    animation-delay: 1.12s;
+}
+@keyframes nos-lado {
+    from {
+        opacity: 0;
+        translate: 0 18px;
+    }
+}
+.nos-lado-cargo {
+    letter-spacing: 0.04em;
+    color: rgba(11, 11, 12, 0.62);
+}
+.nos-lado-nombre {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+.nos-lado-linea {
+    font-size: 13px;
+    line-height: 1.3;
+    color: rgba(11, 11, 12, 0.7);
+}
+/* el chip de la flecha, como sticker en la esquina */
+.nos-lado-ir {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--tinta);
+    color: #fff;
+    box-shadow: 0 0 0 3px #fff;
+}
+.nos-lado-ir svg {
+    width: 12px;
+    height: 12px;
+}
+/* el hilo de Mindly: de la tarjeta al borde de su arco */
+.nos-hilo {
+    position: absolute;
+    overflow: visible;
+    pointer-events: none;
+}
+.nos-lado.is-h .nos-hilo {
+    top: 100%;
+    left: 24px;
+}
+.nos-lado.is-b .nos-hilo {
+    bottom: 100%;
+    right: calc(138px - var(--placa)); /* el punto cae en el borde derecho del arco */
+}
+.nos-hilo path {
+    stroke: rgba(11, 11, 12, 0.28);
+    stroke-width: 1;
+    stroke-dasharray: 1;
+    animation: nos-traza 1.1s var(--ease-io) 1.3s both;
+}
+.nos-hilo circle {
+    fill: var(--rojo);
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: nos-punto 0.5s var(--pop) 2.2s both;
+}
+@keyframes nos-traza {
+    from {
+        stroke-dashoffset: 1;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+@keyframes nos-punto {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+.nos-destello {
+    position: absolute;
+    top: 24px;
+    left: calc(50% + 40px);
+    width: 14px;
+    height: 14px;
+    color: var(--tinta);
+    animation: nos-aparece 0.6s var(--ease) 1.5s both;
+}
+
+.nos-hero-nota {
+    max-width: 30ch;
+    margin-top: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: rgba(11, 11, 12, 0.72);
+    text-wrap: pretty;
+    animation: nos-nota 0.8s var(--ease) 1.4s both;
+}
+.nos-nota-estrella {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    vertical-align: -1px;
+    color: var(--tinta);
+}
+@keyframes nos-nota {
+    from {
+        opacity: 0;
+        translate: 0 10px;
+    }
+}
+
+/* ============================================================== fichas */
+.nos-fichas {
+    padding: 56px 0 8px;
+    background: var(--negro);
+}
+@media (min-width: 768px) {
+    .nos-fichas-in {
+        max-width: 600px;
+        margin-inline: auto;
+    }
+}
+.nos-ficha {
+    position: relative;
+    margin: 0 8px;
+    border-radius: var(--isla);
+    background: var(--grafito);
+    overflow: clip;
+}
+.nos-ficha-foto {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #222326;
+}
+.nos-ficha-foto > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.nos-ficha-foto::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 22%, transparent 50%, rgba(0, 0, 0, 0.65) 100%);
+}
+.nos-pildora {
+    position: absolute;
+    z-index: 2;
+    top: 16px;
+    left: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 34px;
+    padding: 0 14px 0 12px;
+    border-radius: 999px;
+    background: rgba(14, 14, 15, 0.62);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+.nos-ficha.is-b .nos-pildora {
+    top: 40px; /* por debajo del «+» */
+    left: auto;
+    right: 16px;
+}
+.nos-ficha-firma {
+    position: absolute;
+    z-index: 2;
+    top: 46%;
+    right: 18px;
+    rotate: -4deg;
+    --d: 0.9s;
+}
+.nos-ficha.is-b .nos-ficha-firma {
+    right: auto;
+    left: 18px;
+}
+.nos-ficha-firma .m-firma {
+    font-size: min(15vw, 64px) !important;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}
+.m-js .nos-ficha:not(.is-in) .nos-ficha-firma .m-firma > span {
+    animation-play-state: paused;
+}
+
+/* la hoja de vidrio, quieta (sin parallax debajo). El desenfoque NO va en
+   la hoja (mediria ~340×730 px y se recalcularia con cada cuadro del riel,
+   de los paquetes y del scroll): va en la franja de la foto que la hoja
+   pisa, como pseudo de la figura. La hoja solo oscurece encima. */
+.nos-ficha-foto::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: auto 0 0;
+    height: 160px;
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-mask-image: linear-gradient(transparent, #000 40px);
+    mask-image: linear-gradient(transparent, #000 40px);
+}
+.nos-vidrio {
+    position: relative;
+    z-index: 2;
+    margin: -132px 8px 8px;
+    padding: 24px 20px 20px;
+    border-radius: 24px;
+    container-type: inline-size;
+    background: linear-gradient(180deg, rgba(23, 24, 26, 0.55) 0, rgba(23, 24, 26, 0.62) 130px, var(--grafito) 210px);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transition:
+        opacity 0.9s var(--ease) 0.25s,
+        translate 0.9s var(--ease) 0.25s;
+}
+.nos-vidrio::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: calc(50% - 18px);
+    width: 36px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.32);
+}
+.m-js .nos-ficha:not(.is-in) .nos-vidrio {
+    opacity: 0;
+    translate: 0 60px;
+}
+.nos-nombre {
+    font-family: var(--f-display);
+    font-weight: 800;
+    /* «Benjamín» mide 4,59 em en 800: con 4,7 y el tracking cabe con aire */
+    font-size: min(calc(100cqi / 4.7), 80px);
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+.nos .nos-nombre .m-w:nth-of-type(2) {
+    display: block;
+    width: fit-content;
+    font-weight: 300;
+}
+.nos-bio {
+    max-width: 30ch;
+    margin-top: 14px;
+    font-size: 15.5px;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.86);
+    text-wrap: pretty;
+}
+.nos-verbos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--linea);
+}
+.nos-verbos li + li {
+    border-left: 1px solid var(--linea);
+    padding-left: 10px;
+}
+.nos-verbos b {
+    display: block;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: min(4.6vw, 19px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+.nos-verbos span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    line-height: 1.3;
+    color: var(--t2);
+}
+.nos-chips {
+    margin-top: 16px;
+}
+.nos .nos-chips .m-chip {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.86);
+}
+.nos .nos-chips .nos-chip-figma {
+    width: 8px;
+    height: 12px;
+}
+.nos .nos-chips .nos-chip-framer {
+    width: 11px;
+    height: 11px;
+}
+.nos-verbos li,
+.nos-chips li {
+    transition:
+        opacity 0.6s var(--ease) calc(0.6s + var(--i, 0) * 50ms),
+        translate 0.6s var(--ease) calc(0.6s + var(--i, 0) * 50ms);
+}
+.m-js .nos-ficha:not(.is-in) :is(.nos-verbos li, .nos-chips li) {
+    opacity: 0;
+    translate: 0 12px;
+}
+
+.nos-pieza {
+    margin-top: 24px;
+}
+.nos-pieza-cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+.nos-pieza-t {
+    color: #fff;
+}
+
+/* ---- carrusel de Harley (Adverse) */
+.nos-riel {
+    display: flex;
+    gap: 10px;
+    margin: 8px -20px 0;
+    padding: 4px 20px 6px;
+    scroll-padding-inline: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
+}
+.nos-riel::-webkit-scrollbar {
+    display: none;
+}
+.nos-riel-item {
+    flex: 0 0 176px;
+    scroll-snap-align: start;
+}
+.nos-riel-item a {
+    display: block;
+    border-radius: 16px;
+}
+.nos-riel-item a:focus-visible {
+    outline-offset: 2px;
+}
+.nos-riel-img {
+    position: relative;
+    display: block;
+}
+.nos-riel-img img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 480 / 300;
+    object-fit: cover;
+    border-radius: 16px;
+    background: #222326;
+}
+.nos-riel-ir {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--tinta);
+    transition: rotate 0.4s var(--ease);
+}
+.nos-riel-ir svg {
+    width: 14px;
+    height: 14px;
+}
+.nos-riel-item a:active .nos-riel-ir {
+    rotate: 45deg;
+}
+.nos-riel-titulo {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: #fff;
+}
+.nos-riel-rol {
+    display: -webkit-box;
+    margin-top: 2px;
+    font-size: 12.5px;
+    line-height: 1.35;
+    color: var(--t2);
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+.nos-flechas {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+.nos-flecha {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22);
+    color: #fff;
+    transition:
+        opacity 0.3s,
+        scale 0.25s var(--ease);
+}
+.nos-flecha svg {
+    width: 16px;
+    height: 16px;
+}
+.nos-flecha:active {
+    scale: 0.94;
+}
+.nos-flecha[aria-disabled='true'] {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* ---- el diagrama de Benjamin: «lo que no se ve» */
+.nos-sistema {
+    max-width: 420px;
+    padding: 12px 12px 6px;
+    border-radius: 18px;
+    background: rgba(0, 0, 0, 0.35);
+    box-shadow: inset 0 0 0 1px var(--linea);
+}
+.nos-sistema-svg {
+    width: 100%;
+    height: auto;
+    margin-top: 6px;
+    overflow: visible;
+}
+.nos-cable {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.28);
+    stroke-width: 1;
+    stroke-dasharray: 100;
+    transition: stroke-dashoffset 0.9s var(--ease-io) 0.4s;
+}
+.nos-paquete {
+    fill: none;
+    stroke: var(--rojo);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 7 100;
+    animation: nos-viaja 2.4s linear infinite;
+    animation-delay: calc(var(--i, 0) * 0.6s);
+    transition: opacity 0.4s ease 1.2s;
+}
+@keyframes nos-viaja {
+    from {
+        stroke-dashoffset: 107;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+.nos-sistema.is-off .nos-paquete {
+    animation-play-state: paused;
+}
+.nos-nodo {
+    transform-box: fill-box;
+    transform-origin: center;
+    transition:
+        transform 0.6s var(--pop) calc(var(--i, 0) * 80ms),
+        opacity 0.4s ease calc(var(--i, 0) * 80ms);
+}
+.nos-nodo rect {
+    fill: rgba(255, 255, 255, 0.06);
+    stroke: rgba(255, 255, 255, 0.28);
+    stroke-width: 1;
+}
+.nos-nodo.is-rojo rect {
+    fill: rgba(225, 29, 58, 0.18);
+    stroke: var(--rojo);
+}
+.nos-nodo text {
+    font-family: var(--f-mono);
+    /* el svg escala a ~0,9: 13 → ~11,7 px reales a 375 */
+    font-size: 13px;
+    font-weight: 500;
+    fill: #fff;
+}
+.m-js .nos-sistema:not(.is-in) .nos-cable {
+    stroke-dashoffset: 100;
+}
+.m-js .nos-sistema:not(.is-in) .nos-paquete {
+    opacity: 0;
+}
+.m-js .nos-sistema:not(.is-in) .nos-nodo {
+    opacity: 0;
+    transform: scale(0.9);
+}
+
+.nos-acciones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+.nos .nos-cv {
+    flex: 1;
+    min-width: 0;
+}
+.nos .nos-cv[data-pendiente] {
+    --bg: rgba(255, 255, 255, 0.12);
+    --fg: #fff;
+    --chip: rgba(255, 255, 255, 0.16);
+    --chipfg: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+/* lo visible de «pendiente»; el lector ya oye «(pronto)» */
+.nos .nos-cv[data-pendiente] > span:first-of-type::after {
+    content: ' · pronto';
+    content: ' · pronto' / '';
+    font-family: var(--f-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--t2);
+}
+/* pendiente: sin el chip de flecha, que prometeria una accion */
+.nos .nos-cv[data-pendiente] {
+    padding-right: 18px;
+}
+.nos .nos-cv[data-pendiente] .m-btn-chip {
+    display: none;
+}
+.nos-red {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transition: scale 0.25s var(--ease);
+}
+.nos-red svg {
+    width: 18px;
+    height: 18px;
+    /* lo que clona <use> hereda del svg que lo usa, no de la raiz del sprite */
+    fill: currentColor;
+}
+.nos-red:active {
+    scale: 0.94;
+}
+.nos-red[data-pendiente] {
+    opacity: 0.5;
+}
+
+/* el «+» entre las dos fichas (.nos .x: gana a [data-rv] de movil.css
+   sin depender del orden de carga del CSS) */
+.nos .nos-union {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin: -20px auto;
+    border-radius: 50%;
+    background: var(--rojo);
+    color: #fff;
+    box-shadow:
+        0 0 0 6px var(--negro),
+        0 14px 30px -12px rgba(225, 29, 58, 0.7);
+    transition:
+        opacity 0.9s var(--ease) var(--d, 0s),
+        translate 1s var(--ease) var(--d, 0s),
+        scale 0.7s var(--pop) var(--d, 0s),
+        rotate 0.7s var(--pop) var(--d, 0s),
+        clip-path 1.1s var(--ease-io) var(--d, 0s);
+}
+.nos .nos-union svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+}
+.m-js .nos .nos-union:not(.is-in) {
+    translate: none;
+    rotate: -90deg;
+    scale: 0.5;
+}
+
+/* ======================================================= a cuatro manos */
+.nos-manos {
+    margin-top: 48px;
+    padding: 72px 0 56px;
+    background: var(--papel);
+    color: var(--tinta);
+}
+.nos-manos > .m-wrap {
+    container-type: inline-size;
+}
+.nos-manos-t {
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: min(calc(100cqi / 3.85), 104px);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+}
+.nos .nos-manos-t .m-w--caja {
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+}
+.nos-manos-bajada {
+    max-width: 28ch;
+    margin-top: 16px;
+    color: rgba(11, 11, 12, 0.72);
+}
+
+/* ---- el Venn: lo que se ve × lo que no se ve */
+.nos-venn {
+    position: relative;
+    width: min(100%, 420px);
+    aspect-ratio: 335 / 214;
+    margin: 36px auto 0;
+    container-type: inline-size;
+}
+.nos-venn > svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+.nos-venn-c circle {
+    fill: rgba(11, 11, 12, 0.03);
+    stroke: rgba(11, 11, 12, 0.3);
+    stroke-width: 1;
+}
+.nos-venn-c {
+    transition: transform 1.1s var(--ease-io);
+}
+.m-js .nos-venn:not(.is-in) .nos-venn-c.is-h {
+    transform: translateX(-34px);
+}
+.m-js .nos-venn:not(.is-in) .nos-venn-c.is-b {
+    transform: translateX(34px);
+}
+.nos-lente {
+    transform-box: view-box;
+    transform-origin: 167.5px 107px;
+    transition: transform 0.6s var(--pop) 0.95s;
+}
+.m-js .nos-venn:not(.is-in) .nos-lente {
+    transform: scale(0);
+}
+/* los satelites: cajas HTML del tamaño de cada circulo (centros 107 y 228
+   de 335, r 106) que giran con rotate en el compositor */
+.nos-orb {
+    position: absolute;
+    top: 50%;
+    width: 63.3%;
+    aspect-ratio: 1;
+    translate: -50% -50%;
+    pointer-events: none;
+    animation: nos-gira 16s linear infinite;
+    transition: opacity 0.5s ease 1.3s;
+}
+.nos-orb.is-h {
+    left: 31.9%;
+}
+.nos-orb.is-b {
+    left: 68.1%;
+    animation-duration: 20s;
+    animation-direction: reverse;
+}
+.nos-orb::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 3.5px);
+    top: -3.5px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--rojo);
+}
+.nos-venn.is-off .nos-orb {
+    animation-play-state: paused;
+}
+.m-js .nos-venn:not(.is-in) .nos-orb {
+    opacity: 0;
+}
+.nos-venn-etq {
+    position: absolute;
+    inset: 0;
+}
+.nos-venn-lado {
+    position: absolute;
+    top: 20%;
+    width: 28%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.6cqi;
+}
+.nos-venn-h {
+    left: 8%;
+}
+.nos-venn-b {
+    right: 8%;
+    align-items: flex-end;
+    text-align: right;
+}
+.nos-venn-lado img {
+    width: 13cqi;
+    height: 13cqi;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px #fff;
+    transition:
+        scale 0.6s var(--pop) 0.4s,
+        opacity 0.4s ease 0.4s;
+}
+.m-js .nos-venn:not(.is-in) .nos-venn-lado img {
+    opacity: 0;
+    scale: 0.6;
+}
+.nos-venn-lado b {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 5.4cqi;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+.nos-venn-lado small {
+    font-family: var(--f-mono);
+    font-size: max(3.6cqi, 11.5px);
+    line-height: 1.2;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(11, 11, 12, 0.66);
+}
+.nos-venn-lente-t {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    max-width: 22cqi;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: max(4.6cqi, 14px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    text-align: center;
+    color: #fff;
+    transition: opacity 0.5s ease 1.25s;
+}
+.m-js .nos-venn:not(.is-in) .nos-venn-lente-t {
+    opacity: 0;
+}
+
+/* ---- las garantias, en cruz */
+.nos-promesas {
+    position: relative;
+    margin-top: 44px;
+}
+.nos-promesas > ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.nos-promesas::before,
+.nos-promesas::after {
+    content: '';
+    position: absolute;
+    background: var(--linea-tinta);
+    transition: transform 0.9s var(--ease-io);
+}
+.nos-promesas::before {
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    transform-origin: 50% 0;
+}
+.nos-promesas::after {
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    transform-origin: 0 50%;
+}
+.m-js .nos-promesas:not(.is-in)::before {
+    transform: scaleY(0);
+}
+.m-js .nos-promesas:not(.is-in)::after {
+    transform: scaleX(0);
+}
+.nos-promesas li {
+    padding: 20px 14px 22px;
+    transition:
+        opacity 0.7s var(--ease) calc(0.3s + var(--i, 0) * 0.08s),
+        translate 0.7s var(--ease) calc(0.3s + var(--i, 0) * 0.08s);
+}
+.m-js .nos-promesas:not(.is-in) li {
+    opacity: 0;
+    translate: 0 16px;
+}
+.nos-promesa-ico {
+    width: 22px;
+    height: 22px;
+    color: var(--tinta);
+}
+.nos-promesas li b {
+    display: block;
+    margin-top: 14px;
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+}
+.nos-promesas li .m-mono {
+    display: block;
+    margin-top: 6px;
+    color: rgba(11, 11, 12, 0.66);
+}
+.nos-cruz {
+    position: absolute;
+    z-index: 1;
+    left: calc(50% - 15px);
+    top: calc(50% - 15px);
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--papel);
+    color: var(--rojo);
+    transition:
+        rotate 0.6s var(--pop) 0.5s,
+        scale 0.6s var(--pop) 0.5s;
+}
+.nos-cruz svg {
+    width: 18px;
+    height: 18px;
+    stroke-width: 2;
+}
+.m-js .nos-promesas:not(.is-in) .nos-cruz {
+    rotate: 45deg;
+    scale: 0;
+}
+
+/* ---- la cita del fundador (tarjeta de Lovish) */
+.nos-cita {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin-top: 48px;
+    padding: 20px 20px 24px;
+    border-radius: 26px;
+    background: #fff;
+    rotate: -1.5deg;
+    box-shadow:
+        0 30px 60px -30px rgba(11, 11, 12, 0.35),
+        inset 0 0 0 1px rgba(11, 11, 12, 0.06);
+    transition:
+        opacity 0.6s ease,
+        translate 0.9s var(--ease),
+        rotate 0.9s var(--ease);
+}
+.m-js .nos-cita:not(.is-in) {
+    opacity: 0;
+    translate: 0 30px;
+    rotate: -4deg;
+}
+.nos-cita-pie {
+    order: -1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.nos-cita-pie > img {
+    flex: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.nos-cita-quien {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.nos-cita-quien b {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+}
+.nos-cita-quien .m-mono {
+    color: rgba(11, 11, 12, 0.62);
+}
+.nos-cita-firma {
+    align-self: flex-end;
+    margin: 2px 6px -10px 0;
+    --d: 1.3s;
+}
+.m-js .nos-cita:not(.is-in) .m-firma > span {
+    animation-play-state: paused;
+}
+.nos-cita-sello {
+    position: absolute;
+    top: -16px;
+    right: -10px;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--rojo);
+    color: #fff;
+    box-shadow:
+        inset 0 0 0 4px #fff,
+        0 12px 24px -12px rgba(225, 29, 58, 0.7);
+    rotate: 8deg;
+    transition:
+        scale 0.5s var(--pop) 1s,
+        opacity 0.3s ease 1s;
+}
+.nos-cita-sello svg {
+    width: 24px;
+    height: auto;
+}
+.m-js .nos-cita:not(.is-in) .nos-cita-sello {
+    opacity: 0;
+    scale: 0;
+}
+.nos-cita-txt p {
+    margin-top: 18px;
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    color: var(--tinta);
+    text-wrap: pretty;
+}
+.nos-cita-txt p > span > span {
+    display: inline-block;
+    transition:
+        opacity 0.5s ease calc(var(--i) * 55ms + 0.15s),
+        filter 0.6s var(--ease) calc(var(--i) * 55ms + 0.15s),
+        color 0.9s ease calc(var(--i) * 55ms + 0.55s);
+}
+.m-js .nos-cita:not(.is-in) .nos-cita-txt p > span > span {
+    opacity: 0;
+    filter: blur(6px);
+    color: #a7a7a3;
+}
+
+/* ========================================================== cinco pasos
+   Sin overflow en la seccion ni en sus ancestros: rompe el sticky. */
+.nos-pasos {
+    padding: 88px 0 72px;
+    background: var(--negro);
+}
+.nos-pasos-t {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: min(12.5vw, 60px);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+}
+.nos-pasos-bajada {
+    max-width: 32ch;
+    margin-top: 16px;
+}
+.nos-mazo {
+    margin-top: 32px;
+}
+.nos-paso {
+    position: sticky;
+    top: calc(var(--cab) + 14px + var(--i) * 12px);
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+    margin-bottom: 18px;
+    padding: 18px 20px 20px;
+    border-radius: 26px;
+    background: #fff;
+    color: var(--tinta);
+    box-shadow: 0 22px 40px -26px rgba(0, 0, 0, 0.6);
+}
+.nos-paso:last-child {
+    margin-bottom: 0;
+}
+.nos-paso-cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+.nos-paso-n {
+    color: rgba(11, 11, 12, 0.62);
+}
+.nos-quien {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.nos-quien .m-mono {
+    color: rgba(11, 11, 12, 0.62);
+}
+.nos-quien-caras {
+    display: inline-flex;
+}
+.nos-quien-caras img {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px #fff;
+}
+.nos-quien-caras img + img {
+    margin-left: -8px;
+}
+.nos-paso-t {
+    margin-top: auto;
+    font-family: var(--f-display);
+    font-weight: 650;
+    font-size: min(10vw, 46px);
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+}
+.nos-paso-pie {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+.nos-paso-sub {
+    font-size: 15px;
+    line-height: 1.35;
+    color: rgba(11, 11, 12, 0.66);
+}
+.nos-paso-extra {
+    margin-top: 6px;
+}
+/* el sello del visto bueno, «estampado» al entrar */
+.nos-visto {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--rojo);
+    transition:
+        scale 0.55s var(--pop) 0.35s,
+        rotate 0.55s var(--pop) 0.35s,
+        opacity 0.3s ease 0.35s;
+}
+.nos-visto svg {
+    width: 16px;
+    height: 16px;
+}
+.nos-visto path {
+    stroke: #fff;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    transition: stroke-dashoffset 0.4s ease 0.55s;
+}
+.m-js .nos-paso:not(.is-in) .nos-visto {
+    opacity: 0;
+    scale: 1.8;
+    rotate: -20deg;
+}
+.m-js .nos-paso:not(.is-in) .nos-visto path {
+    stroke-dashoffset: 1;
+}
+/* la quinta, en rojo: todo en blanco (al 100 %: al 86 % no llega a AA) */
+.nos-paso.is-final {
+    height: auto;
+    min-height: 200px;
+    background: linear-gradient(150deg, var(--rojo), var(--rojo-c));
+    color: #fff;
+}
+.nos-paso.is-final :is(.nos-paso-n, .nos-quien .m-mono, .nos-paso-sub) {
+    color: #fff;
+}
+.nos-paso.is-final .nos-quien-caras img {
+    box-shadow: 0 0 0 2px var(--rojo);
+}
+.nos-paso.is-final .nos-visto {
+    background: #fff;
+}
+.nos-paso.is-final .nos-visto path {
+    stroke: var(--rojo);
+}
+
+.nos-plazos {
+    margin-top: 48px;
+}
+.nos-plazos h3 {
+    font-family: var(--f-display);
+    font-weight: 650;
+    font-size: 26px;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+}
+.nos-plazos ul {
+    margin-top: 12px;
+}
+.nos-plazos li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    border-top: 1px solid var(--linea);
+}
+.nos-plazos li:last-child {
+    border-bottom: 1px solid var(--linea);
+}
+.nos-plazos li > span:first-child {
+    font-family: var(--f-display);
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.02em;
+}
+.nos-plazos li .m-mono {
+    color: #fff;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+}
+
+/* ============================================================== cierre */
+.nos-cierre {
+    position: relative;
+    isolation: isolate;
+    overflow: clip;
+    margin-top: 0;
+    padding: 56px 0 52px;
+    text-align: center;
+    color: #fff;
+    background: radial-gradient(120% 70% at 50% 0%, #e11d3a 0%, #cf1430 50%, #b5110a 100%);
+}
+.nos-cierre-foto {
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 62%;
+    object-fit: cover;
+    object-position: 50% 40%;
+    mix-blend-mode: multiply;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 45%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 45%);
+    transition: opacity 1.2s ease;
+}
+.m-js .nos-cierre:not(.is-in) .nos-cierre-foto {
+    opacity: 0;
+}
+.nos-cierre > .m-wrap {
+    container-type: inline-size;
+}
+.nos-trio {
+    display: inline-flex;
+    justify-content: center;
+}
+.nos-trio > img,
+.nos-tu {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    transition:
+        scale 0.7s var(--pop),
+        opacity 0.5s ease;
+}
+.nos-trio > img {
+    object-fit: cover;
+    box-shadow: 0 0 0 3px #cf1430;
+}
+.nos-trio > :nth-child(2) {
+    transition-delay: 0.12s;
+}
+.nos-trio > :nth-child(3) {
+    transition-delay: 0.24s;
+}
+.nos-trio > * + * {
+    margin-left: -16px;
+}
+.m-js .nos-cierre:not(.is-in) :is(.nos-trio > img, .nos-tu) {
+    opacity: 0;
+    scale: 0.6;
+}
+.nos-tu {
+    position: relative;
+    display: grid;
+    place-items: center;
+    background: rgba(255, 255, 255, 0.08);
+    --d: 0.8s;
+}
+.nos-tu::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(255, 255, 255, 0.75);
+    animation: nos-gira 24s linear infinite;
+}
+.nos-cierre.is-off .nos-tu::before {
+    animation-play-state: paused;
+}
+.nos .nos-tu .m-firma {
+    color: #fff;
+    padding: 0 0.1em 0.08em;
+    transform-origin: 50% 60%;
+}
+.m-js .nos-cierre:not(.is-in) .nos-tu .m-firma > span {
+    animation-play-state: paused;
+}
+.nos-cierre-t {
+    margin-top: 18px;
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: min(calc(100cqi / 4.8), 96px);
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+}
+.nos .nos-cierre .m-w--caja::before {
+    background: var(--tinta);
+}
+.nos-cierre-bajada {
+    max-width: 28ch;
+    margin: 16px auto 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #fff;
+}
+.nos-cierre-cta {
+    width: min(100%, 320px);
+    margin: 28px auto 0;
+    text-align: left;
+}
+.nos-cierre-hora {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    color: #fff;
+}
+.nos-cierre-hora strong {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+.nos-cierre .m-ping,
+.nos-cierre .m-ping::after {
+    background: #fff;
+}
+
+/* ================================================== movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+    /* bucles: quietos */
+    .nos-anillo {
+        animation: none;
+        transform: rotateY(-22deg);
+    }
+    .nos-sello-txt,
+    .nos-tu::before,
+    .nos-orb,
+    .nos-paquete {
+        animation: none;
+    }
+    .nos-orb,
+    .nos-paquete {
+        display: none;
+    }
+
+    /* firmas: escritas (la pausa a 0 las dejaria ocultas) */
+    .m-js .nos-ficha:not(.is-in) .nos-ficha-firma .m-firma > span,
+    .m-js .nos-cita:not(.is-in) .m-firma > span,
+    .m-js .nos-cierre:not(.is-in) .nos-tu .m-firma > span {
+        animation-play-state: running;
+    }
+
+    /* la contraparte visible de cada estado inicial */
+    .m-js .nos-ficha:not(.is-in) .nos-vidrio,
+    .m-js .nos-ficha:not(.is-in) :is(.nos-verbos li, .nos-chips li),
+    .m-js .nos-promesas:not(.is-in) li,
+    .m-js .nos-venn:not(.is-in) .nos-venn-lente-t,
+    .m-js .nos-cierre:not(.is-in) .nos-cierre-foto {
+        opacity: 1;
+        translate: none;
+    }
+    .m-js .nos-sistema:not(.is-in) .nos-cable {
+        stroke-dashoffset: 0;
+    }
+    .m-js .nos-sistema:not(.is-in) .nos-nodo {
+        opacity: 1;
+        transform: none;
+    }
+    .m-js .nos .nos-union:not(.is-in) {
+        rotate: none;
+        scale: 1;
+    }
+    .m-js .nos-venn:not(.is-in) .nos-venn-c.is-h,
+    .m-js .nos-venn:not(.is-in) .nos-venn-c.is-b,
+    .m-js .nos-venn:not(.is-in) .nos-lente {
+        transform: none;
+    }
+    .m-js .nos-venn:not(.is-in) .nos-venn-lado img {
+        opacity: 1;
+        scale: 1;
+    }
+    .m-js .nos-promesas:not(.is-in)::before,
+    .m-js .nos-promesas:not(.is-in)::after {
+        transform: none;
+    }
+    .m-js .nos-promesas:not(.is-in) .nos-cruz {
+        rotate: none;
+        scale: 1;
+    }
+    .m-js .nos-cita:not(.is-in) {
+        opacity: 1;
+        translate: none;
+        rotate: -1.5deg;
+    }
+    .m-js .nos-cita:not(.is-in) .nos-cita-sello {
+        opacity: 1;
+        scale: 1;
+    }
+    .m-js .nos-cita:not(.is-in) .nos-cita-txt p > span > span {
+        opacity: 1;
+        filter: none;
+        color: inherit;
+    }
+    .m-js .nos-paso:not(.is-in) .nos-visto {
+        opacity: 1;
+        scale: 1;
+        rotate: none;
+    }
+    .m-js .nos-paso:not(.is-in) .nos-visto path {
+        stroke-dashoffset: 0;
+    }
+    .m-js .nos-cierre:not(.is-in) :is(.nos-trio > img, .nos-tu) {
+        opacity: 1;
+        scale: 1;
+    }
+}

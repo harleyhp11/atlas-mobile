@@ -12,7 +12,11 @@ import { Flecha, SimboloAtlas } from '../iconos';
    tarjetas suben y se abren en abanico, el monto del bolsillo cuenta hasta
    S/ 400 —el precio de entrada real— y los hologramas brillan. Tocar el
    bolsillo las guarda o las vuelve a sacar. Con movimiento reducido salen
-   abiertas y quietas. */
+   abiertas y quietas.
+
+   `soloNav`: para las paginas que ya cierran con su propio llamado (/nosotros,
+   con su isla roja de WhatsApp): deja solo la navegacion y la linea legal.
+   Por defecto es false, asi que /projects, sus fichas y /servicios no cambian. */
 
 const TARJETAS = [
     { clase: 'is-azul', etiqueta: 'Servicios', detalle: 'Webs, apps, software e IA', href: '/#servicios' },
@@ -27,7 +31,7 @@ const ENLACES = [
     { label: 'Contacto', href: '/contact' },
 ];
 
-export function PieCompacto() {
+export function PieCompacto({ soloNav = false }: { soloNav?: boolean } = {}) {
     const escena = useRef<HTMLDivElement>(null);
     const monto = useRef<HTMLSpanElement>(null);
     const [abierta, setAbierta] = useState(false);
@@ -70,57 +74,61 @@ export function PieCompacto() {
     return (
         <footer className="pry-pie" data-tono="oscuro">
             <div className="m-wrap">
-                <p className="pry-pie-ceja m-mono">
-                    <i aria-hidden="true" />
-                    ¿El siguiente es el tuyo?
-                </p>
-                <h2 className="pry-pie-t">Todo para empezar, en un bolsillo.</h2>
+                {!soloNav && (
+                    <>
+                        <p className="pry-pie-ceja m-mono">
+                            <i aria-hidden="true" />
+                            ¿El siguiente es el tuyo?
+                        </p>
+                        <h2 className="pry-pie-t">Todo para empezar, en un bolsillo.</h2>
 
-                <div ref={escena} className="pry-bill" data-abierta={abierta ? '' : undefined}>
-                    <div className="pry-bill-caja" aria-hidden="true">
-                        <span>Atlas</span>
-                    </div>
+                        <div ref={escena} className="pry-bill" data-abierta={abierta ? '' : undefined}>
+                            <div className="pry-bill-caja" aria-hidden="true">
+                                <span>Atlas</span>
+                            </div>
 
-                    <ul className="pry-bill-tarjetas">
-                        {TARJETAS.map((t, i) => (
-                            <li key={t.etiqueta} className={`pry-bill-t ${t.clase}`} style={{ '--i': i } as CSSProperties}>
-                                <a href={t.href} {...(t.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})} tabIndex={abierta ? 0 : -1}>
-                                    {/* el nombre arriba, grande, como el VISA de una tarjeta: es lo
-                                        que se ve de las de atras en el abanico */}
-                                    <span className="pry-bill-marca">{t.etiqueta}</span>
-                                    <span className="pry-bill-chip" aria-hidden="true" />
-                                    <span className="pry-bill-dato">
-                                        <SimboloAtlas />
-                                        <small>{t.detalle}</small>
-                                    </span>
-                                    <span className="pry-bill-ir" aria-hidden="true">
-                                        <Flecha />
-                                    </span>
-                                    {t.externo && <span className="sr-only"> (abre WhatsApp)</span>}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
+                            <ul className="pry-bill-tarjetas">
+                                {TARJETAS.map((t, i) => (
+                                    <li key={t.etiqueta} className={`pry-bill-t ${t.clase}`} style={{ '--i': i } as CSSProperties}>
+                                        <a href={t.href} {...(t.externo ? { target: '_blank', rel: 'noopener noreferrer' } : {})} tabIndex={abierta ? 0 : -1}>
+                                            {/* el nombre arriba, grande, como el VISA de una tarjeta: es lo
+                                                que se ve de las de atras en el abanico */}
+                                            <span className="pry-bill-marca">{t.etiqueta}</span>
+                                            <span className="pry-bill-chip" aria-hidden="true" />
+                                            <span className="pry-bill-dato">
+                                                <SimboloAtlas />
+                                                <small>{t.detalle}</small>
+                                            </span>
+                                            <span className="pry-bill-ir" aria-hidden="true">
+                                                <Flecha />
+                                            </span>
+                                            {t.externo && <span className="sr-only"> (abre WhatsApp)</span>}
+                                        </a>
+                                    </li>
+                                ))}
+                            </ul>
 
-                    <button
-                        type="button"
-                        className="pry-bill-bolsillo"
-                        aria-pressed={abierta}
-                        aria-label={abierta ? 'Guardar las tarjetas' : 'Sacar las tarjetas'}
-                        onClick={() => {
-                            tocada.current = true;
-                            setAbierta((a) => !a);
-                        }}
-                    >
-                        <span className="pry-bill-costura" aria-hidden="true" />
-                        <span className="pry-bill-label">Tu web, desde</span>
-                        <span className="pry-bill-monto">
-                            S/ <span ref={monto}>400</span>
-                            <small>.00</small>
-                        </span>
-                        <span className="pry-bill-pista m-mono">{abierta ? 'Toca una tarjeta · o el bolsillo para guardarlas' : 'Toca el bolsillo para sacarlas'}</span>
-                    </button>
-                </div>
+                            <button
+                                type="button"
+                                className="pry-bill-bolsillo"
+                                aria-pressed={abierta}
+                                aria-label={abierta ? 'Guardar las tarjetas' : 'Sacar las tarjetas'}
+                                onClick={() => {
+                                    tocada.current = true;
+                                    setAbierta((a) => !a);
+                                }}
+                            >
+                                <span className="pry-bill-costura" aria-hidden="true" />
+                                <span className="pry-bill-label">Tu web, desde</span>
+                                <span className="pry-bill-monto">
+                                    S/ <span ref={monto}>400</span>
+                                    <small>.00</small>
+                                </span>
+                                <span className="pry-bill-pista m-mono">{abierta ? 'Toca una tarjeta · o el bolsillo para guardarlas' : 'Toca el bolsillo para sacarlas'}</span>
+                            </button>
+                        </div>
+                    </>
+                )}
 
                 <nav className="pry-pie-nav" aria-label="Pie de página">
                     <ul>

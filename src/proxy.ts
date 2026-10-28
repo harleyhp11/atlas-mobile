@@ -6,8 +6,16 @@ import { rutaMovil } from '@/lib/vista';
      · (sitio)/... — el escritorio de siempre, desde 1024 px;
      · (movil)/movil/... — la version de celular y tablet, por debajo:
        "/" → /movil, "/projects" → /movil/proyectos, la ficha de cada
-       proyecto de Atlas → /movil/proyectos/[slug] y "/servicios" (los
-       precios) → /movil/precios.
+       proyecto de Atlas → /movil/proyectos/[slug], "/servicios" (los
+       precios) → /movil/precios y "/nosotros" → /movil/nosotros.
+
+   /nosotros es la unica que no tiene version de escritorio: con la cookie
+   `atlas-vista=escritorio` se REDIRIGE (307) a la home "/" (sin #about: en
+   el escritorio About se monta tarde, despues del preloader, y el ancla no
+   existe al cargar); sin esto daria 404. Sin cookie NO se redirige: se sirve
+   la version movil y, si era un escritorio, el script del <head> escribe la
+   cookie y recarga una vez (/nosotros esta en RUTAS_DOBLES), y recien ahi
+   llega el 307. Asi un iPad que se anuncia como Mac no pierde la pagina.
 
    Aqui se decide cual responde sin que el navegador vea otra URL (es un
    rewrite, no un redirect). Manda la cookie `atlas-vista`, que escribe el
@@ -32,7 +40,12 @@ export function proxy(request: NextRequest) {
         : request.headers.get('sec-ch-ua-mobile') === '?1' ||
           UA_MOVIL.test(request.headers.get('user-agent') || '');
 
-    if (esMovil) {
+    if (!esMovil && request.nextUrl.pathname === '/nosotros' && vista === 'escritorio') {
+        return NextResponse.redirect(new URL('/', request.url), 307);
+    }
+
+    // /nosotros sin cookie tambien va al arbol movil (ver arriba)
+    if (esMovil || request.nextUrl.pathname === '/nosotros') {
         const url = request.nextUrl.clone();
         url.pathname = destino;
         return NextResponse.rewrite(url);
@@ -43,5 +56,5 @@ export function proxy(request: NextRequest) {
 // Solo estas rutas tienen dos versiones (ver rutaMovil); el resto ni pasa por
 // aqui. Tiene que ser una lista literal: Next la lee al compilar.
 export const config = {
-    matcher: ['/', '/projects', '/projects/:slug', '/servicios'],
+    matcher: ['/', '/projects', '/projects/:slug', '/servicios', '/nosotros'],
 };

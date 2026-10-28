@@ -387,9 +387,10 @@ export const numero = (p: Proyecto) => String(PROYECTOS.indexOf(p) + 1).padStart
 /* El menu de las paginas de proyectos: lo de la home va con "/" delante. */
 export const MENU_PROYECTOS = [
     { n: '01', label: 'Inicio', href: '/' },
-    { n: '02', label: 'Servicios', href: '/#servicios' },
-    { n: '03', label: 'Proyectos', href: '/projects' },
-    { n: '04', label: 'Tu negocio', href: '/#negocios' },
-    { n: '05', label: 'Preguntas', href: '/#preguntas' },
-    { n: '06', label: 'Contacto', href: '/contact' },
+    { n: '02', label: 'Nosotros', href: '/nosotros' },
+    { n: '03', label: 'Servicios', href: '/#servicios' },
+    { n: '04', label: 'Proyectos', href: '/projects' },
+    { n: '05', label: 'Tu negocio', href: '/#negocios' },
+    { n: '06', label: 'Preguntas', href: '/#preguntas' },
+    { n: '07', label: 'Contacto', href: '/contact' },
 ];

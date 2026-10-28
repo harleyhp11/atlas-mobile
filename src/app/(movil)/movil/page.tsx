@@ -44,10 +44,10 @@ export const metadata: Metadata = {
     alternates: { canonical: '/' },
 };
 
-// Nosotros lleva a la cita del fundador; Precios, a su propia pagina (por
-// ahora en negro); Contacto abre WhatsApp.
+// Nosotros y Precios llevan a sus propias paginas (/nosotros solo existe en
+// el movil; Precios, por ahora en negro); Contacto abre WhatsApp.
 const MENU_HOME = [
-    { n: '01', label: 'Nosotros', href: '#nosotros' },
+    { n: '01', label: 'Nosotros', href: '/nosotros' },
     { n: '02', label: 'Servicios', href: '#servicios' },
     { n: '03', label: 'Precios', href: '/servicios' },
     { n: '04', label: 'Proyectos', href: '/projects' },

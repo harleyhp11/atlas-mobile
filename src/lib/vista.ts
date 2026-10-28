@@ -17,20 +17,23 @@ export const CORTE_MOVIL = 1024;
 /* Las rutas con dos versiones y a donde va cada una en el arbol movil: la
    home, la lista de proyectos, la ficha de los seis proyectos de Atlas
    (los del autor de la plantilla no tienen version movil: siguen en la del
-   escritorio) y los precios (/servicios, que en el escritorio es su pagina
-   de precios). El proxy reescribe con esto. */
+   escritorio), los precios (/servicios, que en el escritorio es su pagina
+   de precios) y /nosotros, que solo existe en el movil (en el escritorio,
+   con la cookie ya escrita, el proxy la manda a la home "/"). El proxy
+   reescribe con esto. */
 export const PROYECTOS_MOVIL = ['workup', 'rego-premium', 'utopp', 'fluxa', 'peru-travel', 'polleria-la-lena'];
 
 export function rutaMovil(ruta: string): string | null {
     if (ruta === '/') return '/movil';
     if (ruta === '/projects') return '/movil/proyectos';
     if (ruta === '/servicios') return '/movil/precios';
+    if (ruta === '/nosotros') return '/movil/nosotros';
     const m = /^\/projects\/([^/]+)$/.exec(ruta);
     return m && PROYECTOS_MOVIL.includes(m[1]) ? `/movil/proyectos/${m[1]}` : null;
 }
 
 // la misma lista, como expresion para el script del <head>
-const RUTAS_DOBLES = `^/(projects(/(${PROYECTOS_MOVIL.join('|')}))?|servicios)?$`;
+const RUTAS_DOBLES = `^/(projects(/(${PROYECTOS_MOVIL.join('|')}))?|servicios|nosotros)?$`;
 
 export function scriptVista(servida: Vista) {
     return `(function(){try{var v=matchMedia('(max-width:${CORTE_MOVIL - 0.02}px)').matches?'movil':'escritorio';document.cookie='atlas-vista='+v+';path=/;max-age=31536000;samesite=lax';if(new RegExp('${RUTAS_DOBLES}').test(location.pathname)&&v!=='${servida}'&&document.cookie.indexOf('atlas-vista='+v)>-1)location.replace(location.href)}catch(e){}})();`;
