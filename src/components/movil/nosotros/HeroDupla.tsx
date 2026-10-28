@@ -82,7 +82,7 @@ export function HeroDupla() {
                         <span className="nos-h1-firma">
                             <Firma texto="y damos la cara." ancho={70} max={58} />
                         </span>
-                        <span className="sr-only"> Harley y Benjamín Ibáñez, de Atlas.</span>
+                        <span className="sr-only"> Harley y Benjamín, de Atlas.</span>
                     </h1>
                     <span className="nos-sello" aria-hidden="true">
                         <svg className="nos-sello-txt" viewBox="0 0 100 100">

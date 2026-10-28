@@ -30,7 +30,7 @@ import '@/components/movil/nosotros/nosotros.css';
 
 export const metadata: Metadata = {
     title: 'Nosotros',
-    description: 'Harley y Benjamín Ibáñez, las dos personas detrás de Atlas: quién dirige y diseña, quién lleva la parte técnica y cómo trabajan contigo.',
+    description: 'Harley y Benjamín, las dos personas detrás de Atlas: quién dirige y diseña, quién lleva la parte técnica y cómo trabajan contigo.',
     alternates: { canonical: '/nosotros' },
     // fotos de otras personas con nuestros nombres: no indexar hasta cambiarlas
     ...(FOTOS_PROVISIONALES ? { robots: { index: false, follow: false } } : {}),

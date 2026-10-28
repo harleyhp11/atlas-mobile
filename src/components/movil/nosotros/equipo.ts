@@ -33,7 +33,7 @@ export type Id = 'harley' | 'benjamin';
 export type Persona = {
     id: Id;
     nombre: string; // tarjetas, avatares, «quien»
-    nombreCompleto: string; // h3 de la ficha (solo "Harley", sin apellidos)
+    nombreCompleto: string; // h3 de la ficha: solo el nombre, sin apellidos (pedido de Harley)
     pildora: string; // pildora sobre la foto de la ficha
     lado: string; // linea de la tarjeta lateral del hero
     bio: string;
@@ -87,7 +87,7 @@ export const HARLEY: Persona = {
 export const BENJAMIN: Persona = {
     id: 'benjamin',
     nombre: 'Benjamín',
-    nombreCompleto: 'Benjamín Ibáñez',
+    nombreCompleto: 'Benjamín',
     pildora: 'CTO · Cofundador',
     lado: 'Backend e infraestructura',
     bio: 'Lleva la parte técnica: lo que no se ve y sostiene todo.',
@@ -104,7 +104,7 @@ export const BENJAMIN: Persona = {
     retrato: { src: '/assets/movil/nosotros/benjamin.webp', w: 540, h: 720, pos: '50% 16%' },
     ficha: { src: '/assets/movil/nosotros/benjamin-2.webp', w: 720, h: 960, pos: '50% 10%' },
     mini: '/assets/movil/nosotros/benjamin-mini.webp',
-    alt: 'Foto provisional de Benjamín Ibáñez', // [CONFIRMAR] → 'Retrato de Benjamín Ibáñez'
+    alt: 'Foto provisional de Benjamín', // [CONFIRMAR] → 'Retrato de Benjamín'
     cv: null, // [CONFIRMAR]
     linkedin: null, // [CONFIRMAR]
     github: null, // [CONFIRMAR] ¿'https://github.com/gussephe-benjamin'?
