@@ -1054,6 +1054,30 @@
 .m-js .nos-venn:not(.is-in) .nos-lente {
     transform: scale(0);
 }
+/* la tinta de la lente: una caja sobre el cruce y una mascara que la deja con la forma
+   del cruce de los circulos (centros 107 y 228 de 335, r 106). Debajo queda
+   el respaldo quieto; el canvas lo cubre cuando arranca. */
+.nos-lente-tinta {
+    /* solo la caja de la lente (x 122–213, y 20–194 de 335 × 214): asi la
+       tinta se reparte en lo que se ve */
+    position: absolute;
+    left: 36.418%;
+    top: 9.346%;
+    width: 27.164%;
+    height: 81.308%;
+    isolation: isolate;
+    background:
+        radial-gradient(70% 45% at 35% 30%, rgba(225, 29, 58, 0.95), transparent 70%),
+        radial-gradient(60% 40% at 65% 72%, rgba(225, 29, 58, 0.65), transparent 70%),
+        #070001;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='122 20 91 174'%3E%3Cpath d='M167.5 20A106 106 0 0 0 167.5 194A106 106 0 0 0 167.5 20Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='122 20 91 174'%3E%3Cpath d='M167.5 20A106 106 0 0 0 167.5 194A106 106 0 0 0 167.5 20Z'/%3E%3C/svg%3E") 0 0 / 100% 100% no-repeat;
+    transform-origin: 50% 50%;
+    transition: transform 0.6s var(--pop) 0.95s;
+}
+.m-js .nos-venn:not(.is-in) .nos-lente-tinta {
+    transform: scale(0);
+}
 /* los satelites: cajas HTML del tamaño de cada circulo (centros 107 y 228
    de 335, r 106) que giran con rotate en el compositor */
 .nos-orb {
@@ -1714,7 +1738,8 @@
     }
     .m-js .nos-venn:not(.is-in) .nos-venn-c.is-h,
     .m-js .nos-venn:not(.is-in) .nos-venn-c.is-b,
-    .m-js .nos-venn:not(.is-in) .nos-lente {
+    .m-js .nos-venn:not(.is-in) .nos-lente,
+    .m-js .nos-venn:not(.is-in) .nos-lente-tinta {
         transform: none;
     }
     .m-js .nos-venn:not(.is-in) .nos-venn-lado img {

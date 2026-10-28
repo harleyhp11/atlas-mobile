@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { Firma } from '../Firma';
 import { Documento, Llave, Mas, Reloj, Salvavidas, SimboloAtlas } from '../iconos';
+import { TintaAnodizada } from '../TintaAnodizada';
 import { Titular } from '../Titular';
 import { BENJAMIN, CITA, GARANTIAS, HARLEY } from './equipo';
 
@@ -37,6 +38,11 @@ export function CuatroManos() {
                         </g>
                         <circle className="nos-lente" cx="107" cy="107" r="106" fill="#E11D3A" clipPath="url(#nos-venn-b)" />
                     </svg>
+                    {/* la lente con la tinta anodizada del boton de WhatsApp,
+                        recortada con la misma forma (mascara en nosotros.css) */}
+                    <div className="nos-lente-tinta" aria-hidden="true">
+                        <TintaAnodizada escala={2.2} />
+                    </div>
                     <div className="nos-venn-etq" aria-hidden="true">
                         {/* los satelites rojos: HTML que gira en el compositor */}
                         <i className="nos-orb is-h" />

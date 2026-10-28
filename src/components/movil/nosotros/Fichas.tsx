@@ -161,7 +161,7 @@ export function Fichas() {
                         {i > 0 && (
                             <div className="nos-union" data-rv aria-hidden="true">
                                 {/* el mismo fondo que el boton de WhatsApp */}
-                                <TintaAnodizada />
+                                <TintaAnodizada escala={1.8} />
                                 <Mas />
                             </div>
                         )}

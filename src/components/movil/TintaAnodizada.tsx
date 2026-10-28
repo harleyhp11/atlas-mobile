@@ -113,7 +113,10 @@ function compilar(gl: WebGL2RenderingContext) {
     return gl.getProgramParameter(programa, gl.LINK_STATUS) ? programa : null;
 }
 
-export function TintaAnodizada() {
+/* `escala`: cuantas vetas entran por alto. 0,7 es la de los botones de
+   56 px; las piezas chicas o angostas (el + y la lente de /nosotros) piden
+   mas para que asome el rojo y no quede solo el fondo negro. */
+export function TintaAnodizada({ escala = 0.7 }: { escala?: number } = {}) {
     const ref = useRef<HTMLCanvasElement>(null);
 
     useEffect(() => {
@@ -172,7 +175,7 @@ export function TintaAnodizada() {
                 gl.uniform3fv(loc.ink, INK);
                 gl.uniform3fv(loc.sheen, SHEEN);
                 // unas cuantas vetas a lo ancho de un boton de 56 px
-                gl.uniform1f(loc.scale, 0.7);
+                gl.uniform1f(loc.scale, escala);
                 gl.drawArrays(gl.TRIANGLES, 0, 3);
                 gl.bindVertexArray(null);
                 if (!pintado) {
@@ -220,7 +223,7 @@ export function TintaAnodizada() {
             else window.clearTimeout(espera);
             limpiar();
         };
-    }, []);
+    }, [escala]);
 
     return <canvas ref={ref} className="m-btn-tinta" aria-hidden="true" />;
 }
