@@ -125,10 +125,15 @@ export const ANILLO: ({ tipo: 'hab'; t: string; quien: Id; icono: Icono } | { ti
     { tipo: 'pry', slug: 'utopp' },
 ];
 
-// Carrusel de Harley: slugs de PROYECTOS (proyectos.ts). Fichas.tsx los
-// resuelve en el servidor a {slug, titulo, rol}. Peru Travel queda fuera
-// porque no tiene rol.
-export const CARRUSEL_HARLEY = ['workup', 'rego-premium', 'utopp', 'fluxa', 'polleria-la-lena'];
+// El carrusel de Harley: sus diseños en Figma (capturas que paso el, en
+// /assets/movil/nosotros/disenos/; -completo es la captura entera, que se
+// abre al tocar la tarjeta).
+export const DISENOS_HARLEY = [
+    { id: 'app-pagos', titulo: 'App de pagos', rol: 'Figma · cinco pantallas' },
+    { id: 'interfaces', titulo: 'Flujo de IA y wallet', rol: 'Figma · interfaces de producto' },
+    { id: 'kit-app', titulo: 'Kit de app móvil', rol: 'Figma · sistema de diseño' },
+    { id: 'panaderia', titulo: 'Web de panadería', rol: 'Figma · diseño web' },
+];
 
 // Las 5 etapas reales (src/components/sections/faq/escenas.tsx). El reparto «quien» es una lectura
 // de los roles → [CONFIRMAR] con Harley; no se muestra hasta REPARTO_CONFIRMADO.

@@ -3,14 +3,14 @@
 import { useEffect, useRef, useState } from 'react';
 import { Flecha, FlechaDer, FlechaIzq } from '../iconos';
 
-/* Los proyectos de Harley en la ficha: un riel con scroll-snap nativo (se
+/* Los diseños de Harley en Figma, en su ficha: un riel con scroll-snap nativo (se
    desliza con el dedo) y dos flechas redondas que lo mueven una tarjeta.
    Es el unico JS propio de /nosotros: las flechas y saber si el riel esta
    en un extremo (calculado en un rAF por scroll, pasivo). */
 
-export type ItemCarrusel = { slug: string; titulo: string; rol: string };
+export type ItemCarrusel = { id: string; titulo: string; rol: string; src: string; completo: string };
 
-const PASO = 186; // 176 de tarjeta + 10 de espacio
+const PASO = 242; // 232 de tarjeta + 10 de espacio
 
 export function Carrusel({ items }: { items: ItemCarrusel[] }) {
     const riel = useRef<HTMLUListElement>(null);
@@ -51,20 +51,21 @@ export function Carrusel({ items }: { items: ItemCarrusel[] }) {
         <div className="nos-carrusel">
             <div className="nos-pieza-cab">
                 <span className="m-mono nos-pieza-t">Lo que se ve</span>
+                <span className="m-mono nos-pieza-sub">En Figma</span>
             </div>
-            <ul ref={riel} id="nos-riel" className="nos-riel" aria-label="Proyectos de Harley">
+            <ul ref={riel} id="nos-riel" className="nos-riel" aria-label="Diseños de Harley en Figma">
                 {items.map((p) => (
-                    <li key={p.slug} className="nos-riel-item">
-                        <a href={`/projects/${p.slug}`}>
+                    <li key={p.id} className="nos-riel-item">
+                        <a href={p.completo} target="_blank" rel="noopener noreferrer">
                             <span className="nos-riel-img">
-                                <img src={`/assets/movil/nosotros/proyectos/${p.slug}.webp`} width={480} height={300} alt="" loading="lazy" decoding="async" />
+                                <img src={p.src} width={720} height={450} alt="" loading="lazy" decoding="async" />
                                 <span className="nos-riel-ir" aria-hidden="true">
                                     <Flecha />
                                 </span>
                             </span>
                             <span className="nos-riel-titulo">{p.titulo}</span>
                             <span className="nos-riel-rol">{p.rol}</span>
-                            <span className="sr-only">, ver proyecto</span>
+                            <span className="sr-only">, ver la captura completa (abre en otra pestaña)</span>
                         </a>
                     </li>
                 ))}
@@ -74,7 +75,7 @@ export function Carrusel({ items }: { items: ItemCarrusel[] }) {
                     type="button"
                     className="nos-flecha"
                     aria-controls="nos-riel"
-                    aria-label="Proyecto anterior"
+                    aria-label="Diseño anterior"
                     aria-disabled={bordes.inicio || undefined}
                     onClick={() => mover(-1)}
                 >
@@ -84,7 +85,7 @@ export function Carrusel({ items }: { items: ItemCarrusel[] }) {
                     type="button"
                     className="nos-flecha"
                     aria-controls="nos-riel"
-                    aria-label="Proyecto siguiente"
+                    aria-label="Diseño siguiente"
                     aria-disabled={bordes.fin || undefined}
                     onClick={() => mover(1)}
                 >

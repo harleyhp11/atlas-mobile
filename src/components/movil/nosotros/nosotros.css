@@ -698,6 +698,9 @@
 .nos-pieza-t {
     color: #fff;
 }
+.nos-pieza-sub {
+    color: var(--t3);
+}
 
 /* ---- carrusel de Harley (Adverse) */
 .nos-riel {
@@ -717,7 +720,7 @@
     display: none;
 }
 .nos-riel-item {
-    flex: 0 0 176px;
+    flex: 0 0 232px;
     scroll-snap-align: start;
 }
 .nos-riel-item a {
@@ -734,7 +737,7 @@
 .nos-riel-img img {
     width: 100%;
     height: auto;
-    aspect-ratio: 480 / 300;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
     border-radius: 16px;
     background: #222326;

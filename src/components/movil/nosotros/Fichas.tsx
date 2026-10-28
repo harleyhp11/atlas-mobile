@@ -5,21 +5,23 @@ import { LinkedIn, Mas } from '../iconos';
 import { FIGMA, FRAMER } from '../logos';
 import { TintaAnodizada } from '../TintaAnodizada';
 import { Titular } from '../Titular';
-import { PROYECTOS } from '../proyectos/proyectos';
 import { Carrusel, type ItemCarrusel } from './Carrusel';
-import { CARRUSEL_HARLEY, EQUIPO, type Persona } from './equipo';
+import { DISENOS_HARLEY, EQUIPO, type Persona } from './equipo';
 import { Sistema } from './Sistema';
 
 /* Las dos fichas sobre negro: la foto 4:5 con su cargo y el autografo rojo,
    y encima una hoja de vidrio con el nombre, lo que hace (tres verbos, sin
-   cifras), sus habilidades, su pieza propia —los proyectos de Harley, el
+   cifras), sus habilidades, su pieza propia —los diseños de Harley en Figma, el
    diagrama de Benjamin— y las acciones (CV y redes). Entre las dos, el «+». */
 
-// los proyectos del carrusel, resueltos aqui en el servidor
-const ITEMS: ItemCarrusel[] = CARRUSEL_HARLEY.flatMap((slug) => {
-    const p = PROYECTOS.find((x) => x.slug === slug);
-    return p && p.rol ? [{ slug, titulo: p.titulo, rol: p.rol }] : [];
-});
+// los diseños de Harley en Figma, para el carrusel
+const ITEMS: ItemCarrusel[] = DISENOS_HARLEY.map((d) => ({
+    id: d.id,
+    titulo: d.titulo,
+    rol: d.rol,
+    src: `/assets/movil/nosotros/disenos/${d.id}.webp`,
+    completo: `/assets/movil/nosotros/disenos/${d.id}-completo.webp`,
+}));
 
 function LogoChip({ logo }: { logo: 'figma' | 'framer' }) {
     if (logo === 'figma') {
