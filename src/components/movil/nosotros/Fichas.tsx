@@ -3,6 +3,7 @@ import { Boton } from '../Boton';
 import { Firma } from '../Firma';
 import { LinkedIn, Mas } from '../iconos';
 import { FIGMA, FRAMER } from '../logos';
+import { TintaAnodizada } from '../TintaAnodizada';
 import { Titular } from '../Titular';
 import { PROYECTOS } from '../proyectos/proyectos';
 import { Carrusel, type ItemCarrusel } from './Carrusel';
@@ -159,6 +160,8 @@ export function Fichas() {
                     <Fragment key={p.id}>
                         {i > 0 && (
                             <div className="nos-union" data-rv aria-hidden="true">
+                                {/* el mismo fondo que el boton de WhatsApp */}
+                                <TintaAnodizada />
                                 <Mas />
                             </div>
                         )}

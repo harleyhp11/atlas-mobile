@@ -958,7 +958,14 @@
     height: 64px;
     margin: -20px auto;
     border-radius: 50%;
-    background: var(--rojo);
+    isolation: isolate;
+    overflow: hidden;
+    /* tinta anodizada, como el boton de WhatsApp: este es el respaldo
+       quieto; el canvas (.m-btn-tinta) lo cubre cuando arranca */
+    background:
+        radial-gradient(60% 140% at 22% 30%, rgba(225, 29, 58, 0.95), transparent 70%),
+        radial-gradient(50% 120% at 78% 75%, rgba(225, 29, 58, 0.6), transparent 70%),
+        #070001;
     color: #fff;
     box-shadow:
         0 0 0 6px var(--negro),
@@ -971,6 +978,7 @@
         clip-path 1.1s var(--ease-io) var(--d, 0s);
 }
 .nos .nos-union svg {
+    position: relative;
     width: 22px;
     height: 22px;
     stroke-width: 2;
