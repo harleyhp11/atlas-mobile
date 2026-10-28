@@ -811,10 +811,11 @@
     cursor: default;
 }
 
-/* ---- el diagrama de Benjamin: «lo que no se ve» (Sistema.tsx) */
+/* ---- «lo que no se ve» de Benjamin (Sistema.tsx): una pantalla chica que
+   corta entre cinco escenas */
 .nos-sistema {
     max-width: 420px;
-    padding: 12px 12px 12px;
+    padding: 12px;
     border-radius: 18px;
     background:
         radial-gradient(120% 60% at 50% 0%, rgba(225, 29, 58, 0.08), transparent 70%),
@@ -839,215 +840,428 @@
         opacity: 0.25;
     }
 }
-.nos-sistema-svg {
-    width: 100%;
-    height: auto;
+
+/* las pestañas, como historias */
+.nos-sis-tabs {
+    display: grid;
+    grid-template-columns: repeat(5, auto);
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 12px;
+    font-size: 10.5px;
+    color: var(--t3);
+}
+.nos-sis-tabs li {
+    transition: color 0.3s;
+}
+.nos-sis-tabs li.is-on {
+    color: #fff;
+}
+.nos-sis-tabs i {
+    position: relative;
+    display: block;
+    height: 2px;
+    margin-top: 6px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+.nos-sis-tabs li.is-on i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--rojo);
+    transform-origin: left;
+    animation: nos-sis-barra var(--dura) linear forwards;
+}
+@keyframes nos-sis-barra {
+    from {
+        transform: scaleX(0);
+    }
+}
+
+/* la pantalla y el corte */
+.nos-sis-pantalla {
+    position: relative;
+    height: 128px;
     margin-top: 10px;
-    overflow: visible;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+.nos-sis-escena {
+    position: absolute;
+    inset: 0;
+    padding: 10px 12px;
+    visibility: hidden;
+    clip-path: inset(0 0 0 100%);
+    transition:
+        clip-path 0.45s var(--ease-io),
+        visibility 0s linear 0.45s;
+}
+.nos-sis-escena.is-on {
+    z-index: 1;
+    visibility: visible;
+    clip-path: inset(0);
+    transition: clip-path 0.45s var(--ease-io);
+}
+.nos-sis-corte {
+    position: absolute;
+    z-index: 2;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    width: 2px;
+    background: var(--rojo);
+    box-shadow: 0 0 12px 2px rgba(225, 29, 58, 0.7);
+    opacity: 0;
+    animation: nos-sis-corte 0.45s var(--ease-io);
+}
+@keyframes nos-sis-corte {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(calc(-1 * (100cqi)));
+    }
+}
+.nos-sis-pantalla {
+    container-type: inline-size;
+}
+
+/* 1 · flujo */
+.nos-sis-escena > svg {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 .nos-cable {
     fill: none;
     stroke: rgba(255, 255, 255, 0.22);
     stroke-width: 1;
-    stroke-dasharray: 100;
-    transition: stroke-dashoffset 0.9s var(--ease-io) calc(0.3s + var(--i, 0) * 40ms);
 }
-.nos-cable.is-lado {
-    stroke-dasharray: 3 3;
-    stroke: rgba(255, 255, 255, 0.3);
-}
-.nos-cable.is-worker {
-    stroke: rgba(225, 29, 58, 0.55);
-    stroke-dasharray: 4 3;
-}
-.nos-sis-ida {
-    fill: var(--rojo);
+.nos-paquete {
+    fill: none;
+    stroke: var(--rojo);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 7 100;
+    animation: nos-viaja 1.6s linear infinite;
+    animation-delay: calc(var(--i, 0) * 0.32s);
     filter: drop-shadow(0 0 3px rgba(225, 29, 58, 0.9));
 }
-.nos-sis-vuelta {
-    fill: #fff;
+@keyframes nos-viaja {
+    from {
+        stroke-dashoffset: 107;
+    }
+    to {
+        stroke-dashoffset: 0;
+    }
 }
-.nos-nodo {
-    transform-box: fill-box;
-    transform-origin: center;
-    transition:
-        transform 0.6s var(--pop) calc(var(--i, 0) * 60ms),
-        opacity 0.4s ease calc(var(--i, 0) * 60ms);
-}
-.nos-nodo rect,
-.nos-sis-db path,
-.nos-sis-db ellipse {
+.nos-nodo rect {
     fill: rgba(255, 255, 255, 0.06);
     stroke: rgba(255, 255, 255, 0.28);
     stroke-width: 1;
-}
-.nos-sis-db ellipse {
-    fill: #1b1b1e;
 }
 .nos-nodo.is-rojo rect {
     fill: rgba(225, 29, 58, 0.2);
     stroke: var(--rojo);
 }
-.nos-nodo.is-chico rect {
-    stroke-dasharray: 3 2;
-}
 .nos-nodo text {
     font-family: var(--f-mono);
-    /* el svg escala a ~0,9: 12,5 → ~11,2 px reales a 375 (decorativo,
-       aria-hidden; el sr-only lo describe) */
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 500;
     fill: #fff;
 }
-.nos-nodo.is-rojo text {
-    font-size: 14px;
-    font-weight: 700;
-}
-.nos-nodo.is-chico text {
-    fill: var(--t2);
-}
-.nos-sis-luz {
-    fill: rgba(225, 29, 58, 0.35);
-    stroke: var(--rojo);
-    stroke-width: 1.5;
-}
-.nos-sis-luz.is-blanca {
-    fill: rgba(255, 255, 255, 0.16);
-    stroke: rgba(255, 255, 255, 0.7);
-}
-.nos-sis-nota {
-    font-family: var(--f-mono);
-    font-size: 10px;
-    fill: rgba(225, 29, 58, 0.9);
-    letter-spacing: 0.04em;
-}
-.m-js .nos-sistema:not(.is-in) .nos-cable {
-    stroke-dashoffset: 100;
-}
-.m-js .nos-sistema:not(.is-in) .nos-nodo {
+.nos-sis-ok {
+    position: absolute;
+    left: 50%;
+    bottom: 8px;
+    translate: -50% 0;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
     opacity: 0;
-    transform: scale(0.9);
+}
+.is-on .nos-sis-ok {
+    animation: nos-sis-pop 0.4s var(--pop) 1.4s forwards;
 }
 
-/* el registro: tres lineas a la vista, sube de a una cada segundo */
-.nos-sis-log {
-    position: relative;
-    height: 66px;
-    margin-top: 12px;
-    padding: 0 10px;
-    overflow: hidden;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-    -webkit-mask-image: linear-gradient(180deg, transparent, #000 30%, #000 85%, transparent);
-    mask-image: linear-gradient(180deg, transparent, #000 30%, #000 85%, transparent);
-}
-.nos-sis-log ul {
-    animation: nos-sis-sube 9s steps(6) infinite;
-}
-.nos-sistema.is-off .nos-sis-log ul {
-    animation-play-state: paused;
-}
-@keyframes nos-sis-sube {
-    to {
-        transform: translateY(-50%);
-    }
-}
-.nos-sis-log li {
-    display: grid;
-    grid-template-columns: 30px 38px 1fr auto;
-    gap: 6px;
+/* 2 · deploy */
+.nos-sis-term p {
+    display: flex;
+    gap: 8px;
+    height: 18px;
     align-items: center;
-    height: 22px;
     font-size: 11px;
     color: var(--t2);
     white-space: nowrap;
+    opacity: 0;
 }
-.nos-sis-log b {
+.nos-sis-term b {
+    color: var(--rojo);
     font-weight: 500;
+}
+.nos-sis-term em {
+    margin-left: auto;
+    font-style: normal;
     color: #fff;
 }
-.nos-sis-log em {
-    font-style: normal;
-    color: var(--t3);
+.is-on.nos-sis-term p {
+    animation: nos-sis-aparece 0.25s ease forwards;
+    animation-delay: calc(0.1s + var(--i) * 0.45s);
 }
-.nos-sis-log li.is-error b,
-.nos-sis-log li.is-error em {
-    color: var(--rojo);
+.nos-sis-avance {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 9px;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+}
+.nos-sis-avance i {
+    position: absolute;
+    inset: 0;
+    background: var(--rojo);
+    transform-origin: left;
+    transform: scaleX(0);
+}
+.is-on .nos-sis-avance i {
+    animation: nos-sis-llena 2.4s var(--ease-io) 0.1s forwards;
+}
+@keyframes nos-sis-llena {
+    to {
+        transform: scaleX(1);
+    }
 }
 
-/* los medidores */
-.nos-sis-medidores {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 10px;
-}
-.nos-sis-medidores > div {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 9px 10px 10px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-.nos-sis-medidores .m-mono {
+/* 3 · datos */
+.nos-sis-tabla-t {
+    margin-bottom: 4px;
     font-size: 10.5px;
     color: var(--t3);
 }
-.nos-sis-barras,
+.nos-sis-fila {
+    display: grid;
+    grid-template-columns: 52px 1fr auto;
+    gap: 8px;
+    align-items: center;
+    height: 23px;
+    padding: 0 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: var(--t2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+.nos-sis-fila.is-nueva {
+    color: #fff;
+    background: rgba(225, 29, 58, 0.22);
+    box-shadow: inset 0 0 0 1px var(--rojo);
+}
+.is-on .nos-sis-fila {
+    animation: nos-sis-baja 0.5s var(--ease) 0.5s backwards;
+}
+.is-on .nos-sis-fila.is-nueva {
+    animation: nos-sis-entra 0.5s var(--pop) 0.5s backwards;
+}
+@keyframes nos-sis-baja {
+    from {
+        transform: translateY(-23px);
+    }
+}
+@keyframes nos-sis-entra {
+    from {
+        transform: translateX(-30px);
+        opacity: 0;
+    }
+}
+.nos-sis-estado {
+    display: grid;
+}
+.nos-sis-estado i {
+    grid-area: 1 / 1;
+    font-style: normal;
+    text-align: right;
+}
+.nos-sis-estado i + i {
+    opacity: 0;
+}
+.is-on .nos-sis-estado i:first-child {
+    animation: nos-sis-sale 0.25s ease 1.9s forwards;
+}
+.is-on .nos-sis-estado i + i {
+    animation: nos-sis-pop 0.35s var(--pop) 2s forwards;
+}
+
+/* 4 · monitoreo */
+.nos-sis-mon {
+    display: grid;
+    grid-template-columns: 1fr 86px;
+    gap: 12px;
+}
+.nos-sis-mon > svg {
+    width: 100%;
+    height: 100%;
+}
+.nos-sis-area {
+    fill: rgba(225, 29, 58, 0.16);
+    opacity: 0;
+}
+.nos-sis-linea {
+    fill: none;
+    stroke: var(--rojo);
+    stroke-width: 2;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+}
+.is-on .nos-sis-linea {
+    animation: nos-sis-traza 1.6s var(--ease-io) 0.2s forwards;
+}
+.is-on .nos-sis-area {
+    animation: nos-sis-aparece 0.6s ease 1.2s forwards;
+}
+@keyframes nos-sis-traza {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+.nos-sis-mon-lado {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    font-size: 10.5px;
+    color: var(--t3);
+}
+.nos-sis-mon-lado b {
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
 .nos-sis-cpu {
     display: flex;
     align-items: flex-end;
     gap: 3px;
-    height: 22px;
+    height: 24px;
+    margin-top: 6px;
 }
-.nos-sis-barras i,
 .nos-sis-cpu i {
     flex: 1;
     height: 100%;
     border-radius: 2px;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.4);
     transform-origin: bottom;
-    animation: nos-sis-pulso 1.8s ease-in-out infinite alternate;
-    animation-delay: calc(var(--i) * -0.37s);
+    animation: nos-sis-pulso 1.4s ease-in-out infinite alternate;
+    animation-delay: calc(var(--i) * -0.33s);
 }
-.nos-sis-barras i:nth-child(3n) {
+.nos-sis-cpu i:nth-child(3n) {
     background: var(--rojo);
-}
-.nos-sis-cpu i {
-    background: rgba(255, 255, 255, 0.24);
-    animation-duration: 2.6s;
-    animation-delay: calc(var(--i) * -0.9s);
 }
 @keyframes nos-sis-pulso {
     from {
-        transform: scaleY(0.2);
-    }
-    to {
-        transform: scaleY(1);
+        transform: scaleY(0.25);
     }
 }
-.nos-sistema.is-off :is(.nos-sis-barras i, .nos-sis-cpu i, .nos-sis-vivo i) {
-    animation-play-state: paused;
-}
-.nos-sis-candado {
-    display: inline-flex;
+
+/* 5 · seguridad */
+.nos-sis-seg {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
     align-items: center;
-    gap: 6px;
-    height: 22px;
-    font-family: var(--f-mono);
-    font-size: 11px;
-    color: #fff;
 }
-.nos-sis-candado svg {
-    width: 14px;
-    height: 14px;
+.nos-sis-escudo {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: rgba(225, 29, 58, 0.18);
+    box-shadow: inset 0 0 0 1px var(--rojo);
+}
+.is-on .nos-sis-escudo {
+    animation: nos-sis-escudo 1.2s ease-in-out 0.9s 2;
+}
+@keyframes nos-sis-escudo {
+    50% {
+        box-shadow:
+            inset 0 0 0 1px var(--rojo),
+            0 0 0 6px rgba(225, 29, 58, 0.18);
+    }
+}
+.nos-sis-escudo svg {
+    width: 22px;
+    height: 22px;
     fill: none;
-    stroke: var(--rojo);
+    stroke: #fff;
     stroke-width: 1.6;
     stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.nos-sis-seg li {
+    display: grid;
+    grid-template-columns: 30px 1fr auto;
+    gap: 6px;
+    align-items: center;
+    height: 30px;
+    font-size: 11px;
+    color: var(--t2);
+    white-space: nowrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    opacity: 0;
+}
+.nos-sis-seg li b {
+    font-weight: 500;
+    color: #fff;
+}
+.nos-sis-seg em {
+    font-style: normal;
+}
+.nos-sis-seg li.is-no b,
+.nos-sis-seg li.is-no em {
+    color: var(--rojo);
+}
+.is-on.nos-sis-seg li {
+    animation: nos-sis-aparece 0.3s ease forwards;
+    animation-delay: calc(0.2s + var(--i) * 0.55s);
+}
+
+@keyframes nos-sis-aparece {
+    to {
+        opacity: 1;
+    }
+}
+@keyframes nos-sis-sale {
+    to {
+        opacity: 0;
+    }
+}
+@keyframes nos-sis-pop {
+    from {
+        opacity: 0;
+        scale: 0.85;
+    }
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+.nos-sistema.is-off :is(.nos-paquete, .nos-sis-cpu i, .nos-sis-vivo i) {
+    animation-play-state: paused;
 }
 
 .nos-acciones {
@@ -1156,6 +1370,8 @@
 .nos-manos {
     margin-top: 48px;
     padding: 72px 0 56px;
+    /* los satelites del Venn giran y asomaban por la derecha */
+    overflow-x: clip;
     background: var(--papel);
     color: var(--tinta);
 }
@@ -1864,11 +2080,13 @@
     .nos-sello-txt,
     .nos-tu::before,
     .nos-orb,
-    .nos-sis-log ul,
+    .nos-paquete,
     .nos-sis-vivo i,
-    .nos-sis-barras i,
     .nos-sis-cpu i {
         animation: none;
+    }
+    .nos-paquete {
+        display: none;
     }
     .nos-orb {
         display: none;
@@ -1889,13 +2107,6 @@
     .m-js .nos-cierre:not(.is-in) .nos-cierre-foto {
         opacity: 1;
         translate: none;
-    }
-    .m-js .nos-sistema:not(.is-in) .nos-cable {
-        stroke-dashoffset: 0;
-    }
-    .m-js .nos-sistema:not(.is-in) .nos-nodo {
-        opacity: 1;
-        transform: none;
     }
     .m-js .nos .nos-union:not(.is-in) {
         rotate: none;
