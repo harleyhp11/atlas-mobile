@@ -77,7 +77,7 @@ export const HARLEY: Persona = {
     mini: '/assets/movil/nosotros/harley-mini.webp',
     alt: 'Foto provisional de Harley', // [CONFIRMAR] con la foto real → 'Retrato de Harley'
     cv: '/CV_Harley_Huaman_Pena.pdf', // el mismo PDF de /resume del escritorio (pedido de Harley, 29/10)
-    linkedin: null, // [CONFIRMAR] URL del perfil
+    linkedin: 'https://www.linkedin.com/in/harley-huaman-pe%C3%B1a-7331a2313', // la de su CV («peña», codificada)
     github: 'https://github.com/harleyhp11', // real (enlaces de codigo de proyectos.ts)
 };
 
