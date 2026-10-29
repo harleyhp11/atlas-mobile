@@ -82,37 +82,66 @@ export function UiNoche() {
 }
 
 /* ------------------------------------------------------------- TIEMPO
-   La bandeja se llena con la misma pregunta escrita de cuatro maneras, y el
-   contador de sin leer no para de subir. */
-export function UiChats() {
-    const chats = [
-        { n: 'María', m: '¿Precio?', c: 3 },
-        { n: 'Jorge', m: '¿Cuánto cuesta?', c: 1 },
-        { n: 'Lucía', m: '¿Tienen catálogo?', c: 2 },
-        { n: 'Carlos', m: '¿Hasta qué hora atienden?', c: 1 },
-    ];
+   Un pedido sin sistema, de principio a fin: llega por WhatsApp, se anota a
+   mano entre decenas de chats iguales, nadie lo ve en cocina y el cliente
+   reclama. Arriba el reloj del pedido sube de 2 a 47 min y la barra pasa la
+   marca de lo prometido (20 min) y se pone roja; al final, el sello. */
+export function UiPedido() {
+    const pasos = [
+        { t: 'Llega por WhatsApp', s: '2 pollos · delivery', ico: 'ok' },
+        { t: 'Lo anotas a mano', s: 'entre 30 chats que preguntan lo mismo', ico: 'lapiz' },
+        { t: 'En cocina no lo ven', s: 'sin aviso, sin orden de llegada', ico: 'mal' },
+        { t: '«¿Y mi pedido?»', s: 'el cliente sigue esperando', ico: 'mal' },
+    ] as const;
     return (
-        <div className="mx-ui px-chats" data-loop aria-hidden="true">
-            <div className="px-chats-top">
-                <b>Chats</b>
-                <span className="px-chats-cont">
-                    {[3, 5, 7, 8].map((n) => (
-                        <span key={n}>{n} sin leer</span>
-                    ))}
+        <div className="mx-ui px-ped" data-loop aria-hidden="true">
+            <div className="px-ped-top">
+                <span>
+                    <b>Pedido #048</b>
+                    <small>María · delivery</small>
+                </span>
+                <span className="px-ped-reloj">
+                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                        <circle cx="8" cy="8" r="6" />
+                        <path d="M8 4.8V8l2.2 1.4" />
+                    </svg>
+                    <span className="px-ped-min">
+                        {['02', '09', '21', '47'].map((m) => (
+                            <span key={m}>{m} min</span>
+                        ))}
+                    </span>
                 </span>
             </div>
-            <ul className="px-chats-lista">
-                {chats.map((c, k) => (
-                    <li key={c.n} className="px-chats-fila" style={{ '--k': k } as CSSProperties}>
-                        <i>{c.n[0]}</i>
+
+            <div className="px-ped-barra">
+                <i />
+                <span className="px-ped-meta">
+                    <small>Prometido: 20 min</small>
+                </span>
+            </div>
+
+            <ul className="px-ped-pasos">
+                {pasos.map((p, k) => (
+                    <li key={p.t} className={`px-ped-paso px-ped-paso--${p.ico}`} style={{ '--k': k } as CSSProperties}>
+                        <i>
+                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                {p.ico === 'ok' && <path d="m4 8.5 2.6 2.5L12 5.5" />}
+                                {p.ico === 'lapiz' && <path d="M10.5 3.5 12.5 5.5 6 12H4v-2z" />}
+                                {p.ico === 'mal' && <path d="m5 5 6 6M11 5l-6 6" />}
+                            </svg>
+                        </i>
                         <span>
-                            <b>{c.n}</b>
-                            <small>{c.m}</small>
+                            <b>{p.t}</b>
+                            <small>{p.s}</small>
                         </span>
-                        <em>{c.c}</em>
                     </li>
                 ))}
             </ul>
+
+            <span className="px-ped-sello">
+                Retrasado
+                <small>47 min · cliente perdido</small>
+            </span>
         </div>
     );
 }
@@ -120,5 +149,5 @@ export function UiChats() {
 export const UI_PERDIDA = {
     clientes: UiBusqueda,
     plata: UiNoche,
-    tiempo: UiChats,
+    tiempo: UiPedido,
 };

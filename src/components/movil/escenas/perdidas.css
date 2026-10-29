@@ -1,6 +1,6 @@
 /* =====================================================================
    ATLAS · MÓVIL — mini-interfaces de "Lo que pierdes sin web"
-   Busqueda (clientes), Noche (plata) y Chats (tiempo). Un ciclo por
+   Busqueda (clientes), Noche (plata) y Pedido (tiempo). Un ciclo por
    escena; .is-off las pausa fuera de pantalla.
    ===================================================================== */
 
@@ -365,179 +365,388 @@
     background: #fff;
 }
 
-/* =============================================================== CHATS */
-.px-chats {
-    --ciclo: 10s;
+/* ============================================================== PEDIDO
+   Ciclo de 12 s: los pasos entran al 6, 22, 40 y 58 %; el reloj salta a
+   09, 21 y 47 min con ellos; la barra se llena hasta el 70 % y se pone roja
+   al pasar la marca de 20 min (40 %); el sello cae al 72 %. */
+.px-ped {
+    --ciclo: 12s;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    padding: 16px 14px;
+    padding: 14px 14px 12px;
 }
-.px-chats-top {
+.px-ped-top {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 8px;
 }
-.px-chats-top > b {
+.px-ped-top > span:first-child {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+.px-ped-top b {
     font-family: var(--f-display);
     font-weight: 650;
-    font-size: 20px;
+    font-size: 17px;
     letter-spacing: -0.03em;
 }
-.px-chats-cont {
-    display: grid;
-    padding: 5px 10px;
-    border-radius: 99px;
-    background: var(--rojo);
-    color: #fff;
+.px-ped-top small {
     font-family: var(--f-mono);
-    font-size: 10px;
-    font-weight: 500;
+    font-size: 9.5px;
+    color: var(--mut);
 }
-.px-chats-cont > span {
+.px-ped-reloj {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px 5px 8px;
+    border-radius: 99px;
+    font-family: var(--f-mono);
+    font-size: 11px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    animation: px-ped-reloj var(--ciclo) steps(1) infinite;
+}
+.px-ped-reloj svg {
+    width: 13px;
+    height: 13px;
+}
+.px-ped-min {
+    display: grid;
+}
+.px-ped-min > span {
     grid-area: 1 / 1;
     opacity: 0;
 }
-.px-chats-cont > span:nth-child(1) {
-    animation: px-cont1 var(--ciclo) steps(1) infinite;
+.px-ped-min > span:nth-child(1) {
+    animation: px-ped-m1 var(--ciclo) steps(1) infinite;
 }
-.px-chats-cont > span:nth-child(2) {
-    animation: px-cont2 var(--ciclo) steps(1) infinite;
+.px-ped-min > span:nth-child(2) {
+    animation: px-ped-m2 var(--ciclo) steps(1) infinite;
 }
-.px-chats-cont > span:nth-child(3) {
-    animation: px-cont3 var(--ciclo) steps(1) infinite;
+.px-ped-min > span:nth-child(3) {
+    animation: px-ped-m3 var(--ciclo) steps(1) infinite;
 }
-.px-chats-cont > span:nth-child(4) {
-    animation: px-cont4 var(--ciclo) steps(1) infinite;
+.px-ped-min > span:nth-child(4) {
+    animation: px-ped-m4 var(--ciclo) steps(1) infinite;
 }
-@keyframes px-cont1 {
+@keyframes px-ped-reloj {
     0%,
-    19% {
+    39% {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--fg);
+    }
+    40%,
+    100% {
+        background: var(--rojo);
+        color: #fff;
+    }
+}
+@keyframes px-ped-m1 {
+    0%,
+    21% {
         opacity: 1;
     }
-    20%,
+    22%,
     100% {
         opacity: 0;
     }
 }
-@keyframes px-cont2 {
+@keyframes px-ped-m2 {
     0%,
-    19% {
+    21% {
         opacity: 0;
     }
-    20%,
-    34% {
+    22%,
+    39% {
         opacity: 1;
     }
-    35%,
+    40%,
     100% {
         opacity: 0;
     }
 }
-@keyframes px-cont3 {
+@keyframes px-ped-m3 {
     0%,
-    34% {
+    39% {
         opacity: 0;
     }
-    35%,
-    49% {
+    40%,
+    57% {
         opacity: 1;
     }
-    50%,
+    58%,
     100% {
         opacity: 0;
     }
 }
-@keyframes px-cont4 {
+@keyframes px-ped-m4 {
     0%,
-    49% {
+    57% {
         opacity: 0;
     }
-    50%,
+    58%,
     100% {
         opacity: 1;
     }
 }
-.px-chats-lista {
+
+/* la barra del tiempo, con la marca de lo prometido */
+.px-ped-barra {
+    position: relative;
+    height: 6px;
+    margin-bottom: 14px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.1);
+}
+.px-ped-barra > i {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    transform-origin: 0 50%;
+    animation: px-ped-barra var(--ciclo) linear infinite;
+}
+@keyframes px-ped-barra {
+    0%,
+    4% {
+        transform: scaleX(0.04);
+        background: var(--fg);
+    }
+    39% {
+        background: var(--fg);
+    }
+    40% {
+        background: var(--rojo);
+    }
+    70%,
+    100% {
+        transform: scaleX(1);
+        background: var(--rojo);
+    }
+}
+.px-ped-meta {
+    position: absolute;
+    /* donde la barra llega al 40 % del ciclo, cuando el reloj pasa a 21 */
+    left: 56%;
+    top: -3px;
+    bottom: -3px;
+    width: 2px;
+    border-radius: 1px;
+    background: var(--fg);
+}
+.px-ped-meta small {
+    position: absolute;
+    top: calc(100% + 3px);
+    left: 50%;
+    translate: -50% 0;
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    color: var(--mut);
+    white-space: nowrap;
+}
+
+/* los pasos: entran uno tras otro; los dos ultimos, en rojo */
+.px-ped-pasos {
     display: flex;
     flex-direction: column;
     gap: 5px;
 }
-.px-chats-fila {
+.px-ped-paso {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 7px 9px;
-    border-radius: 13px;
+    gap: 9px;
+    padding: 6px 9px;
+    border-radius: 12px;
     background: rgba(255, 255, 255, 0.07);
     box-shadow: inset 0 0 0 1px var(--line);
     opacity: 0;
-    translate: 0 -10px;
-    animation: px-chat var(--ciclo) var(--ease) infinite;
-    animation-delay: calc(var(--k) * 0.75s);
+    animation: px-ped-paso1 var(--ciclo) var(--ease) infinite;
 }
-.mx-ui[data-tema='claro'] .px-chats-fila {
-    background: rgba(255, 255, 255, 0.75);
+.px-ped-paso:nth-child(2) {
+    animation-name: px-ped-paso2;
 }
-.px-chats-fila > i {
+.px-ped-paso:nth-child(3) {
+    animation-name: px-ped-paso3;
+}
+.px-ped-paso:nth-child(4) {
+    animation-name: px-ped-paso4;
+}
+.px-ped-paso > i {
     flex: none;
     display: grid;
     place-items: center;
-    width: 26px;
-    height: 26px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     background: var(--fg);
     color: var(--fondo);
-    font-style: normal;
-    font-size: 11px;
-    font-weight: 600;
 }
-.px-chats-fila > span {
+.px-ped-paso > i svg {
+    width: 12px;
+    height: 12px;
+}
+.px-ped-paso > span {
     display: flex;
     flex: 1;
     min-width: 0;
     flex-direction: column;
     line-height: 1.2;
 }
-.px-chats-fila b {
+.px-ped-paso b {
     font-size: 11.5px;
     font-weight: 600;
 }
-.px-chats-fila small {
-    font-size: 11px;
+.px-ped-paso small {
+    font-size: 10px;
     color: var(--mut);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.px-chats-fila em {
-    flex: none;
-    display: grid;
-    place-items: center;
-    min-width: 19px;
-    height: 19px;
-    padding: 0 5px;
-    border-radius: 10px;
+.px-ped-paso--mal {
+    background: rgba(225, 29, 58, 0.12);
+    box-shadow: inset 0 0 0 1px rgba(225, 29, 58, 0.45);
+}
+.px-ped-paso--mal > i {
     background: var(--rojo);
     color: #fff;
-    font-style: normal;
-    font-family: var(--f-mono);
-    font-size: 10px;
 }
-@keyframes px-chat {
+@keyframes px-ped-paso1 {
     0%,
-    6% {
+    5% {
         opacity: 0;
-        translate: 0 -10px;
+        translate: 0 8px;
     }
-    10%,
+    9%,
     94% {
         opacity: 1;
         translate: 0 0;
     }
     100% {
         opacity: 0;
+    }
+}
+@keyframes px-ped-paso2 {
+    0%,
+    21% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    25%,
+    94% {
+        opacity: 1;
         translate: 0 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+/* el error sacude un poco al entrar */
+@keyframes px-ped-paso3 {
+    0%,
+    39% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    42% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    43.5% {
+        translate: -4px 0;
+    }
+    45% {
+        translate: 3px 0;
+    }
+    46.5%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-ped-paso4 {
+    0%,
+    57% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    60% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    61.5% {
+        translate: -4px 0;
+    }
+    63% {
+        translate: 3px 0;
+    }
+    64.5%,
+    94% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/* el sello: cae con un golpe y se queda torcido sobre la lista */
+.px-ped-sello {
+    position: absolute;
+    left: 50%;
+    top: 62%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 8px 18px 9px;
+    border: 2.5px solid var(--rojo);
+    border-radius: 10px;
+    background: #141517;
+    white-space: nowrap;
+    color: var(--rojo);
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
+    translate: -50% -50%;
+    rotate: -9deg;
+    opacity: 0;
+    animation: px-ped-sello var(--ciclo) var(--pop) infinite;
+}
+.px-ped-sello small {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 9px;
+    letter-spacing: 0.08em;
+}
+@keyframes px-ped-sello {
+    0%,
+    71% {
+        opacity: 0;
+        scale: 1.8;
+    }
+    74% {
+        opacity: 1;
+        scale: 0.94;
+    }
+    77%,
+    94% {
+        opacity: 1;
+        scale: 1;
+    }
+    100% {
+        opacity: 0;
+        scale: 1;
     }
 }
 
@@ -547,14 +756,26 @@
     }
     .px-busca-fila,
     .px-noche-aviso,
-    .px-chats-fila,
+    .px-ped-paso,
+    .px-ped-sello,
     .px-noche-perdida,
     .px-busca-cero {
         opacity: 1;
         translate: none;
         scale: 1;
     }
-    .px-chats-cont > span:last-child {
+    .px-ped-sello {
+        translate: -50% -50%;
+    }
+    .px-ped-min > span:last-child {
         opacity: 1;
+    }
+    .px-ped-reloj {
+        background: var(--rojo);
+        color: #fff;
+    }
+    .px-ped-barra > i {
+        transform: none;
+        background: var(--rojo);
     }
 }
