@@ -12,8 +12,10 @@ import { ANILLO, BENJAMIN, HARLEY, PERSONA, type Icono, type Persona } from './e
    resuelve preserve-3d, sin JS. Las dos tarjetas laterales son los enlaces
    reales a cada ficha.
 
-   Todo entra con @keyframes al cargar —no espera a Revelador— y el h1 esta
-   quieto desde el primer pintado: es el LCP. Los bucles (anillo y texto del
+   Todo entra con @keyframes al cargar —no espera a Revelador—, tambien al
+   llegar desde el inicio. El h1 entra en tres tiempos: «Somos» sube letra a
+   letra desde su mascara, la caja roja barre y «dos» sube dentro de ella, y
+   el punto cae con un rebote. Despues se escribe la firma y salta el sello. Los bucles (anillo y texto del
    sello) se pausan fuera de pantalla con data-loop. */
 
 const ICONOS: Record<Exclude<Icono, 'figma'>, (p: { className?: string }) => React.ReactElement> = {
@@ -32,6 +34,15 @@ function LogoFigma() {
             ))}
         </svg>
     );
+}
+
+// cada letra en su span, para que suban una tras otra; --k es su turno
+function Letras({ texto, desde = 0 }: { texto: string; desde?: number }) {
+    return [...texto].map((l, k) => (
+        <span key={k} className="nos-letra" style={{ '--k': desde + k } as CSSProperties}>
+            {l}
+        </span>
+    ));
 }
 
 function Placa({ p }: { p: Persona }) {
@@ -75,9 +86,14 @@ export function HeroDupla() {
                 <div className="nos-h1-wrap">
                     <h1 id="nos-t" className="nos-h1">
                         {/* el punto solo a la vista: se lee «Somos dos y damos la cara» */}
-                        <span className="nos-l">Somos</span>{' '}
+                        <span className="nos-l nos-somos">
+                            <Letras texto="Somos" />
+                        </span>{' '}
                         <span className="nos-l nos-caja">
-                            dos<span aria-hidden="true">.</span>
+                            <Letras texto="dos" />
+                            <span className="nos-punto" aria-hidden="true">
+                                .
+                            </span>
                         </span>{' '}
                         <span className="nos-h1-firma">
                             <Firma texto="y damos la cara." ancho={70} max={58} />
