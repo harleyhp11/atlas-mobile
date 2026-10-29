@@ -8,20 +8,17 @@ import { WHATSAPP, whatsapp } from '../datos';
    Nada inventado: ni años, ni clientes, ni cifras, ni testimonios. Lo que no
    se sabe va en null o vacio y con [CONFIRMAR].
 
-   FOTOS: benjamin*.webp ya es Benjamin (foto que mando Harley el 29/10).
-   PROVISIONALES [CONFIRMAR]: harley*.webp y trabajo.webp son de OTRAS
-   personas (CC0, StockSnap y WordPress Photo Directory), puestas hasta que
-   Harley mande la suya. No publicar a produccion con esas caras. Autores,
-   por si se quiere dar credito:
-     · harley*.webp — Jonas Svidras (https://step.camera);
+   FOTOS: harley*.webp y benjamin*.webp ya son ellos (fotos que mando
+   Harley el 29/10). trabajo.webp (manos y laptop, sin cara) es CC0 de
+   WordPress Photo Directory; autor, por si se quiere dar credito:
      · trabajo.webp — Blazej Zablotny (https://blazejzablotny.pl).
    Medidas a respetar al reemplazarlas: 540×720 (retratos del hero, se ven a
    ~132–210 px), 720×960 y ≤ 35 KB (fichas), 240×240 (avatares) y 1200×800
    (trabajo). Todas en B/N, en webp (cwebp -q 70 -m 6, desde el original). */
 
-// [CONFIRMAR] pasar a false cuando este la foto real de Harley: mientras sea true,
-// /nosotros va con noindex (no indexar caras de otras personas con estos nombres)
-export const FOTOS_PROVISIONALES = true;
+// Mientras sea true, /nosotros va con noindex (no indexar caras de otras
+// personas con estos nombres). Desde el 29/10 las dos fotos son las reales.
+export const FOTOS_PROVISIONALES = false;
 
 // [CONFIRMAR] quien lleva cada etapa (ETAPAS.quien). Mientras sea false, el
 // mazo de /nosotros no muestra el reparto.
@@ -76,7 +73,7 @@ export const HARLEY: Persona = {
     herramientas: [],
     // PROVISIONAL [CONFIRMAR]: foto de otra persona
     retrato: { src: '/assets/movil/nosotros/harley.webp', w: 540, h: 720, pos: '50% 20%' },
-    ficha: { src: '/assets/movil/nosotros/harley-2.webp', w: 720, h: 960, pos: '50% 30%' },
+    ficha: { src: '/assets/movil/nosotros/harley-2.webp', w: 720, h: 960, pos: '50% 20%' },
     mini: '/assets/movil/nosotros/harley-mini.webp',
     alt: 'Foto provisional de Harley', // [CONFIRMAR] con la foto real → 'Retrato de Harley'
     cv: null, // [CONFIRMAR] existe /CV_Harley_Huaman_Pena.pdf (lo usa /resume del escritorio), pero el nombre lleva apellidos: ¿usarlo, renombrarlo a /cv/harley.pdf o subir otro?
