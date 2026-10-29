@@ -8,18 +8,18 @@ import { WHATSAPP, whatsapp } from '../datos';
    Nada inventado: ni años, ni clientes, ni cifras, ni testimonios. Lo que no
    se sabe va en null o vacio y con [CONFIRMAR].
 
-   FOTOS PROVISIONALES [CONFIRMAR]: las de public/assets/movil/nosotros/ son
-   de OTRAS personas (CC0, StockSnap y WordPress Photo Directory), puestas
-   hasta que Harley y Benjamin manden las suyas. No publicar a produccion con
-   estas caras. Autores, por si se quiere dar credito:
+   FOTOS: benjamin*.webp ya es Benjamin (foto que mando Harley el 29/10).
+   PROVISIONALES [CONFIRMAR]: harley*.webp y trabajo.webp son de OTRAS
+   personas (CC0, StockSnap y WordPress Photo Directory), puestas hasta que
+   Harley mande la suya. No publicar a produccion con esas caras. Autores,
+   por si se quiere dar credito:
      · harley*.webp — Jonas Svidras (https://step.camera);
-     · benjamin*.webp — Kristin Hardwick (https://www.kristinhardwick.com);
      · trabajo.webp — Blazej Zablotny (https://blazejzablotny.pl).
    Medidas a respetar al reemplazarlas: 540×720 (retratos del hero, se ven a
    ~132–210 px), 720×960 y ≤ 35 KB (fichas), 240×240 (avatares) y 1200×800
    (trabajo). Todas en B/N, en webp (cwebp -q 70 -m 6, desde el original). */
 
-// [CONFIRMAR] pasar a false cuando esten las fotos reales: mientras sea true,
+// [CONFIRMAR] pasar a false cuando este la foto real de Harley: mientras sea true,
 // /nosotros va con noindex (no indexar caras de otras personas con estos nombres)
 export const FOTOS_PROVISIONALES = true;
 

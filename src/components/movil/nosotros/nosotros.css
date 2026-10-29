@@ -600,6 +600,9 @@
     --d: 0.9s;
 }
 .nos-ficha.is-b .nos-ficha-firma {
+    /* su foto es un selfie: la cara llena el cuadro, asi que la firma baja
+       hasta la barbilla para no taparle los ojos ni la boca */
+    top: 59.5%;
     right: auto;
     left: 18px;
 }
