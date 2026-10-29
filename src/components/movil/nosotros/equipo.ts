@@ -76,7 +76,7 @@ export const HARLEY: Persona = {
     ficha: { src: '/assets/movil/nosotros/harley-2.webp', w: 720, h: 960, pos: '50% 20%' },
     mini: '/assets/movil/nosotros/harley-mini.webp',
     alt: 'Foto provisional de Harley', // [CONFIRMAR] con la foto real → 'Retrato de Harley'
-    cv: null, // [CONFIRMAR] existe /CV_Harley_Huaman_Pena.pdf (lo usa /resume del escritorio), pero el nombre lleva apellidos: ¿usarlo, renombrarlo a /cv/harley.pdf o subir otro?
+    cv: '/CV_Harley_Huaman_Pena.pdf', // el mismo PDF de /resume del escritorio (pedido de Harley, 29/10)
     linkedin: null, // [CONFIRMAR] URL del perfil
     github: 'https://github.com/harleyhp11', // real (enlaces de codigo de proyectos.ts)
 };
