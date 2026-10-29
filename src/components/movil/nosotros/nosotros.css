@@ -720,7 +720,7 @@
     display: none;
 }
 .nos-riel-item {
-    flex: 0 0 232px;
+    flex: 0 0 280px;
     scroll-snap-align: start;
 }
 .nos-riel-item a {
@@ -737,9 +737,10 @@
 .nos-riel-img img {
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 10;
-    object-fit: cover;
-    border-radius: 16px;
+    /* la captura completa de Figma, sin recortar */
+    aspect-ratio: 17 / 10;
+    object-fit: contain;
+    border-radius: 12px;
     background: #222326;
 }
 .nos-riel-ir {

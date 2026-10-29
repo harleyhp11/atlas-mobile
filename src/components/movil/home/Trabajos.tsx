@@ -18,12 +18,13 @@ import './trabajos.css';
        secuestra el scroll.
 
    Las imagenes son las piezas de la galeria de Atlas (las mismas del
-   mosaico del escritorio) mas las portadas de Utopp y REGO, en blanco y
-   negro como alla. Son decorativas: el boton del centro lleva a los
-   proyectos. */
+   mosaico del escritorio), las portadas de Utopp y REGO y los diseños de
+   Harley en Figma (enteros, apaisados). Son decorativas: el boton del
+   centro lleva a los proyectos. */
 
-const COLUMNA_A = ['rego', 'obra-02', 'app-golf', 'obra-06', 'sitio-web'];
-const COLUMNA_B = ['obra-01', 'obra-04', 'utopp', 'obra-05', 'laboratorio', 'obra-03'];
+// figma-*: los diseños de Harley en Figma, la captura entera (apaisada)
+const COLUMNA_A = ['rego', 'figma-app-pagos', 'obra-02', 'app-golf', 'figma-kit-app', 'obra-06', 'sitio-web'];
+const COLUMNA_B = ['obra-01', 'figma-interfaces', 'obra-04', 'utopp', 'figma-panaderia', 'obra-05', 'laboratorio', 'obra-03'];
 
 function Columna({ piezas, lado }: { piezas: string[]; lado: 'a' | 'b' }) {
     return (
@@ -32,9 +33,21 @@ function Columna({ piezas, lado }: { piezas: string[]; lado: 'a' | 'b' }) {
                 {/* dos copias: el bucle cierra sin costura */}
                 {[0, 1].map((copia) => (
                     <div key={copia} className="h-trab-grupo">
-                        {piezas.map((p) => (
-                            <img key={p} src={`/assets/movil/trabajos/${p}.webp`} width={480} height={720} alt="" loading="lazy" decoding="async" />
-                        ))}
+                        {piezas.map((p) => {
+                            const ancho = p.startsWith('figma-');
+                            return (
+                                <img
+                                    key={p}
+                                    src={`/assets/movil/trabajos/${p}.webp`}
+                                    className={ancho ? 'is-ancho' : undefined}
+                                    width={480}
+                                    height={ancho ? 283 : 720}
+                                    alt=""
+                                    loading="lazy"
+                                    decoding="async"
+                                />
+                            );
+                        })}
                     </div>
                 ))}
             </div>

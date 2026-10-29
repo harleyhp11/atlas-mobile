@@ -77,6 +77,12 @@
     border-radius: 18px;
     background: #141517;
 }
+/* los diseños en Figma van enteros, apaisados */
+.h-trab-grupo img.is-ancho {
+    aspect-ratio: 17 / 10;
+    object-fit: contain;
+    border-radius: 12px;
+}
 @keyframes h-trab-bucle-sube {
     from {
         transform: translateY(0);

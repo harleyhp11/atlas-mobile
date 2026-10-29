@@ -3,14 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { Flecha, FlechaDer, FlechaIzq } from '../iconos';
 
-/* Los diseños de Harley en Figma, en su ficha: un riel con scroll-snap nativo (se
+/* Los diseños de Harley en Figma, en su ficha (la captura entera, con la
+   interfaz de Figma alrededor): un riel con scroll-snap nativo (se
    desliza con el dedo) y dos flechas redondas que lo mueven una tarjeta.
    Es el unico JS propio de /nosotros: las flechas y saber si el riel esta
    en un extremo (calculado en un rAF por scroll, pasivo). */
 
 export type ItemCarrusel = { id: string; titulo: string; rol: string; src: string; completo: string };
 
-const PASO = 242; // 232 de tarjeta + 10 de espacio
+const PASO = 290; // 280 de tarjeta + 10 de espacio
 
 export function Carrusel({ items }: { items: ItemCarrusel[] }) {
     const riel = useRef<HTMLUListElement>(null);
@@ -58,7 +59,7 @@ export function Carrusel({ items }: { items: ItemCarrusel[] }) {
                     <li key={p.id} className="nos-riel-item">
                         <a href={p.completo} target="_blank" rel="noopener noreferrer">
                             <span className="nos-riel-img">
-                                <img src={p.src} width={720} height={450} alt="" loading="lazy" decoding="async" />
+                                <img src={p.src} width={720} height={424} alt="" loading="lazy" decoding="async" />
                                 <span className="nos-riel-ir" aria-hidden="true">
                                     <Flecha />
                                 </span>
