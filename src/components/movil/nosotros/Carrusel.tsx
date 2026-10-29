@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Flecha, FlechaDer, FlechaIzq } from '../iconos';
 
-/* Los diseños de Harley en Figma, en su ficha (la captura entera, con la
-   interfaz de Figma alrededor): un riel con scroll-snap nativo (se
+/* Los diseños de Harley, en su ficha: piezas de la galeria y capturas de
+   Figma enteras, con la interfaz alrededor (entero: sin recortar): un riel con scroll-snap nativo (se
    desliza con el dedo) y dos flechas redondas que lo mueven una tarjeta.
    Es el unico JS propio de /nosotros: las flechas y saber si el riel esta
    en un extremo (calculado en un rAF por scroll, pasivo). */
 
-export type ItemCarrusel = { id: string; titulo: string; rol: string; src: string; completo: string };
+export type ItemCarrusel = { id: string; titulo: string; rol: string; src: string; completo: string; entero?: boolean };
 
 const PASO = 290; // 280 de tarjeta + 10 de espacio
 
@@ -52,21 +52,21 @@ export function Carrusel({ items }: { items: ItemCarrusel[] }) {
         <div className="nos-carrusel">
             <div className="nos-pieza-cab">
                 <span className="m-mono nos-pieza-t">Lo que se ve</span>
-                <span className="m-mono nos-pieza-sub">En Figma</span>
+                <span className="m-mono nos-pieza-sub">UI / UX</span>
             </div>
-            <ul ref={riel} id="nos-riel" className="nos-riel" aria-label="Diseños de Harley en Figma">
+            <ul ref={riel} id="nos-riel" className="nos-riel" aria-label="Diseños de Harley">
                 {items.map((p) => (
                     <li key={p.id} className="nos-riel-item">
                         <a href={p.completo} target="_blank" rel="noopener noreferrer">
                             <span className="nos-riel-img">
-                                <img src={p.src} width={720} height={424} alt="" loading="lazy" decoding="async" />
+                                <img src={p.src} className={p.entero ? 'is-entero' : undefined} width={720} height={p.entero ? 424 : 480} alt="" loading="lazy" decoding="async" />
                                 <span className="nos-riel-ir" aria-hidden="true">
                                     <Flecha />
                                 </span>
                             </span>
                             <span className="nos-riel-titulo">{p.titulo}</span>
                             <span className="nos-riel-rol">{p.rol}</span>
-                            <span className="sr-only">, ver la captura completa (abre en otra pestaña)</span>
+                            <span className="sr-only">, ver en grande (abre en otra pestaña)</span>
                         </a>
                     </li>
                 ))}

@@ -128,11 +128,20 @@ export const ANILLO: ({ tipo: 'hab'; t: string; quien: Id; icono: Icono } | { ti
 // El carrusel de Harley: sus diseños en Figma (capturas que paso el, en
 // /assets/movil/nosotros/disenos/; -completo es la captura entera, que se
 // abre al tocar la tarjeta).
+// El carrusel de Harley: sus piezas de la galeria (las mejores del muro de
+// Trabajos, sin las portadas de proyectos de clientes) intercaladas con sus
+// capturas de Figma. Los titulos describen lo que se ve → [CONFIRMAR] nombres.
+// figma: la captura entera va sin recortar; si no, la imagen es la del reel.
 export const DISENOS_HARLEY = [
-    { id: 'app-pagos', titulo: 'App de pagos', rol: 'Figma · cinco pantallas' },
-    { id: 'interfaces', titulo: 'Flujo de IA y wallet', rol: 'Figma · interfaces de producto' },
-    { id: 'kit-app', titulo: 'Kit de app móvil', rol: 'Figma · sistema de diseño' },
-    { id: 'panaderia', titulo: 'Web de panadería', rol: 'Figma · diseño web' },
+    { id: 'obra-03', titulo: 'Panel de finanzas', rol: 'Dashboard · interfaz web', figma: false },
+    { id: 'app-pagos', titulo: 'App de pagos', rol: 'Figma · cinco pantallas', figma: true },
+    { id: 'obra-05', titulo: 'Reserva de vuelos', rol: 'Panel de control · web', figma: false },
+    { id: 'interfaces', titulo: 'Flujo de IA y wallet', rol: 'Figma · interfaces de producto', figma: true },
+    { id: 'obra-06', titulo: 'Análisis de energía solar', rol: 'App para tablet · datos', figma: false },
+    { id: 'kit-app', titulo: 'Kit de app móvil', rol: 'Figma · sistema de diseño', figma: true },
+    { id: 'obra-01', titulo: 'App de clima y energía', rol: 'App móvil · interfaz', figma: false },
+    { id: 'panaderia', titulo: 'Web de panadería', rol: 'Figma · diseño web', figma: true },
+    { id: 'laboratorio', titulo: 'Web de laboratorio', rol: 'Landing · diseño web', figma: false },
 ];
 
 // Las 5 etapas reales (src/components/sections/faq/escenas.tsx). El reparto «quien» es una lectura

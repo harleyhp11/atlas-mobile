@@ -11,7 +11,7 @@ import { Sistema } from './Sistema';
 
 /* Las dos fichas sobre negro: la foto 4:5 con su cargo y el autografo rojo,
    y encima una hoja de vidrio con el nombre, lo que hace (tres verbos, sin
-   cifras), sus habilidades, su pieza propia —los diseños de Harley en Figma, el
+   cifras), sus habilidades, su pieza propia —los diseños de Harley (galeria y Figma), el
    diagrama de Benjamin— y las acciones (CV y redes). Entre las dos, el «+». */
 
 // los diseños de Harley en Figma, para el carrusel
@@ -20,7 +20,8 @@ const ITEMS: ItemCarrusel[] = DISENOS_HARLEY.map((d) => ({
     titulo: d.titulo,
     rol: d.rol,
     src: `/assets/movil/nosotros/disenos/${d.id}.webp`,
-    completo: `/assets/movil/nosotros/disenos/${d.id}-completo.webp`,
+    completo: d.figma ? `/assets/movil/nosotros/disenos/${d.id}-completo.webp` : `/assets/movil/reel/${d.id}.webp`,
+    entero: d.figma,
 }));
 
 function LogoChip({ logo }: { logo: 'figma' | 'framer' }) {

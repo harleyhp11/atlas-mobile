@@ -737,11 +737,14 @@
 .nos-riel-img img {
     width: 100%;
     height: auto;
-    /* la captura completa de Figma, sin recortar */
     aspect-ratio: 17 / 10;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 12px;
     background: #222326;
+}
+/* las capturas de Figma van enteras, sin recortar */
+.nos-riel-img img.is-entero {
+    object-fit: contain;
 }
 .nos-riel-ir {
     position: absolute;
