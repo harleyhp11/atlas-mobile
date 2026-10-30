@@ -82,16 +82,16 @@ export function UiNoche() {
 }
 
 /* ------------------------------------------------------------- TIEMPO
-   Un pedido sin sistema, de principio a fin: llega por WhatsApp, se anota a
-   mano entre decenas de chats iguales, nadie lo ve en cocina y el cliente
-   reclama. Arriba el reloj del pedido sube de 2 a 47 min y la barra pasa la
+   Un pedido sin sistema, de principio a fin: se anota en un cuaderno, el
+   papel pasa a cocina a mano, no queda stock (nadie lo llevaba) y la cuenta
+   sale mal. Nada de chats: eso ya lo cuentan las otras dos tarjetas. Arriba el reloj del pedido sube de 2 a 47 min y la barra pasa la
    marca de lo prometido (20 min) y se pone roja; al final, el sello. */
 export function UiPedido() {
     const pasos = [
-        { t: 'Llega por WhatsApp', s: '2 pollos · delivery', ico: 'ok' },
-        { t: 'Lo anotas a mano', s: 'entre 30 chats que preguntan lo mismo', ico: 'lapiz' },
-        { t: 'En cocina no lo ven', s: 'sin aviso, sin orden de llegada', ico: 'mal' },
-        { t: '«¿Y mi pedido?»', s: 'el cliente sigue esperando', ico: 'mal' },
+        { t: 'Lo anotas en el cuaderno', s: '2 pollos · delivery', ico: 'lapiz' },
+        { t: 'El papel pasa a cocina', s: 'a mano, cuando alguien puede', ico: 'pasa' },
+        { t: 'No queda pollo', s: 'nadie llevaba el stock', ico: 'mal' },
+        { t: 'Se cobra mal', s: 'la cuenta se hizo a mano', ico: 'mal' },
     ] as const;
     return (
         <div className="mx-ui px-ped" data-loop aria-hidden="true">
@@ -125,7 +125,7 @@ export function UiPedido() {
                     <li key={p.t} className={`px-ped-paso px-ped-paso--${p.ico}`} style={{ '--k': k } as CSSProperties}>
                         <i>
                             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                {p.ico === 'ok' && <path d="m4 8.5 2.6 2.5L12 5.5" />}
+                                {p.ico === 'pasa' && <path d="M3.5 8h8.5M9 5l3 3-3 3" />}
                                 {p.ico === 'lapiz' && <path d="M10.5 3.5 12.5 5.5 6 12H4v-2z" />}
                                 {p.ico === 'mal' && <path d="m5 5 6 6M11 5l-6 6" />}
                             </svg>

@@ -103,8 +103,8 @@ export const PERDIDAS: Perdida[] = [
     {
         clave: 'tiempo',
         label: 'Tiempo',
-        titulo: 'Respondes lo mismo todos los días.',
-        texto: 'Precios, horarios, catálogo, ubicación: las mismas preguntas, una por una, por chat. Horas que no vuelven.',
+        titulo: 'Sin sistema, todo se atrasa.',
+        texto: 'Pedidos en un cuaderno, stock de memoria, cuentas a mano: cada paso espera a alguien y algo siempre sale tarde o mal.',
     },
 ];
 
