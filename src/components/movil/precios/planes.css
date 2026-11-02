@@ -241,8 +241,12 @@
     right: 0;
     top: calc(var(--fs) * 0.3);
     height: 90%;
-    /* centrado en su caja y apagado antes de los bordes: sin cortes rectos */
-    background: radial-gradient(60% 40% at 50% 45%, rgba(244, 241, 234, 0.08), transparent);
+    /* centrado en su caja y apagado antes de los bordes: sin cortes rectos.
+       Con rojo: el vidrio lo refracta y la tarjeta se tiñe por zonas */
+    background:
+        radial-gradient(60% 40% at 50% 45%, rgba(244, 241, 234, 0.07), transparent),
+        radial-gradient(45% 30% at 85% 30%, rgba(225, 29, 58, 0.22), transparent),
+        radial-gradient(40% 28% at 12% 78%, rgba(225, 29, 58, 0.16), transparent);
     pointer-events: none;
 }
 .pre-pl-gigante {
@@ -295,19 +299,72 @@
 }
 
 .pre-pl-vidrio {
+    position: relative;
+    isolation: isolate;
     display: grid;
     padding: 22px 20px;
     border-radius: var(--pre-r-l);
+    overflow: hidden;
     /* arriba un poco mas denso: ahi pasa la palabra desenfocada y el texto
-       chico tiene que seguir leyendose */
+       chico tiene que seguir leyendose. Debajo, el oscuro con rojo por
+       zonas (pedido de Harley): brasa arriba a la derecha, vino abajo */
     background:
         linear-gradient(180deg, rgba(10, 10, 11, 0.42), rgba(10, 10, 11, 0) 34%),
+        radial-gradient(80% 46% at 100% 0%, rgba(225, 29, 58, 0.3), transparent 72%),
+        radial-gradient(75% 42% at 0% 100%, rgba(170, 16, 40, 0.34), transparent 72%),
         var(--pre-vidrio);
     -webkit-backdrop-filter: var(--pre-desenfoque);
     backdrop-filter: var(--pre-desenfoque);
     border: 1px solid var(--pre-vidrio-borde);
-    box-shadow: var(--pre-vidrio-brillo), var(--pre-sombra);
+    box-shadow:
+        var(--pre-vidrio-brillo),
+        inset 0 -1px 0 rgba(225, 29, 58, 0.18),
+        var(--pre-sombra),
+        0 30px 70px -30px rgba(225, 29, 58, 0.28);
     touch-action: pan-y;
+}
+/* el borde liquido: un filo que pasa de rojo a hueso y vuelve a rojo */
+.pre-pl-vidrio::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(225, 29, 58, 0.6), rgba(244, 241, 234, 0.1) 38%, rgba(244, 241, 234, 0.06) 62%, rgba(225, 29, 58, 0.45));
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box exclude,
+        linear-gradient(#000 0 0);
+    pointer-events: none;
+}
+/* un resplandor rojo que deriva lento por dentro, como luz bajo el vidrio */
+.pre-pl-vidrio::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: -30%;
+    top: 20%;
+    width: 90%;
+    height: 60%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(225, 29, 58, 0.24), transparent);
+    filter: blur(10px);
+    pointer-events: none;
+    animation: pre-pl-brasa 14s ease-in-out infinite alternate;
+}
+@keyframes pre-pl-brasa {
+    to {
+        translate: 70% 25%;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .pre-pl-vidrio::after {
+        animation: none;
+    }
 }
 
 /* los cuatro paneles en la misma celda: el alto es el del mas alto y
