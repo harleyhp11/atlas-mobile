@@ -1,7 +1,7 @@
 /* =====================================================================
    PRECIOS MÓVIL · la entrada «Nuestros / Precios» (ver IntroPrecios.tsx).
-   Pista alta con un escenario sticky; el JS mueve el titular, la leyenda,
-   las lineas y el lienzo de three.js segun el avance del scroll.
+   Una pantalla de alto completo; el JS mueve el titular, la leyenda, las
+   lineas y el lienzo de three.js con el reloj de la entrada (no el scroll).
    ===================================================================== */
 
 .pre {
@@ -12,12 +12,8 @@
     color: var(--pre-tinta);
 }
 
-.pre-pista {
-    height: 640vh;
-}
-.pre-escena {
-    position: sticky;
-    top: 0;
+.pre-intro {
+    position: relative;
     height: 100vh;
     height: 100svh;
     overflow: hidden;
@@ -164,32 +160,61 @@
     height: 1px;
     background: var(--pre-tinta);
 }
+/* mientras corre la entrada: el unico control, para no tener que esperarla */
+.pre-saltar {
+    min-height: 44px;
+    margin: 0 -10px -12px 0;
+    padding: 0 10px;
+    border: 0;
+    background: none;
+    color: var(--pre-tinta);
+    cursor: pointer;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+}
+.pre-saltar:focus-visible {
+    outline: 1px solid var(--pre-tinta);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+/* al terminar, «Desliza» aparece y su linea late hacia abajo */
+.pre-intro.is-listo .pre-bot-r {
+    animation: pre-aparece 0.6s var(--ease) both;
+}
+.pre-intro.is-listo .pre-bot-r::after {
+    transform-origin: left;
+    animation: pre-late 1.8s var(--ease) 0.6s infinite;
+}
+@keyframes pre-aparece {
+    from {
+        opacity: 0;
+        translate: 0 6px;
+    }
+}
+@keyframes pre-late {
+    0%,
+    100% {
+        transform: scaleX(1);
+    }
+    50% {
+        transform: scaleX(0.4);
+    }
+}
 
 /* ---- quieto (movimiento reducido o sin WebGL): solo el titular */
-.pre-pista.is-quieto {
-    height: auto;
-}
-.pre-pista.is-quieto .pre-escena {
-    position: relative;
-}
-.pre-pista.is-quieto .pre-hl,
-.pre-pista.is-quieto .pre-cap {
+.pre-intro.is-quieto .pre-hl,
+.pre-intro.is-quieto .pre-cap {
     transform: none;
 }
-.pre-pista.is-quieto .pre-cap {
+.pre-intro.is-quieto .pre-cap {
     top: calc(50% + min(16vw, 92px) * 1.6);
     transform: translate(-50%, -50%);
 }
-.pre-pista.is-quieto .pre-hl > span {
+.pre-intro.is-quieto .pre-hl > span {
     margin: 0;
 }
-.pre-pista.is-quieto :is(.pre-gl, .pre-regla, .pre-bot-r) {
+.pre-intro.is-quieto :is(.pre-gl, .pre-regla) {
     display: none;
-}
-@media (prefers-reduced-motion: reduce) {
-    .pre-pista {
-        height: auto;
-    }
 }
 
 /* ---- despues de la entrada: aqui iran las tarjetas de precios */

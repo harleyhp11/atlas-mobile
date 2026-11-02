@@ -6,28 +6,45 @@ import './precios.css';
 /* La entrada de /servicios en el celular: «Nuestros / Precios».
 
    Es el hero «Vante» que paso Harley, llevado al celular. Todo sale de un
-   solo numero, el avance del scroll `p` (0 → 1, suavizado), dentro de una
-   pista alta con un escenario sticky:
+   solo numero, el avance `p` (0 → 1, suavizado), que aqui NO lo mueve el
+   scroll: corre solo con el tiempo al entrar (DURA) sobre una pantalla de
+   alto completo:
      · las dos lineas del titular cruzan la pantalla en sentidos opuestos;
-     · una cinta de tarjetas viaja por un riel fijo en 3D: entra chica por
-       abajo, pasa cerca en un arco suave, rodea el borde y se va por arriba;
+     · una cinta de tarjetas con video viaja por un riel fijo en 3D: entra
+       chica por abajo, pasa cerca en un arco suave, rodea el borde y se va
+       por arriba;
      · al dejar el riel, cada tarjeta vuela a su lugar en una grilla de
        2 × 3 y una linea fina se dibuja entre las filas.
-   Volver a subir lo rebobina igual.
+   Mientras corre, el scroll queda bloqueado y abajo hay un «Saltar»; al
+   terminar se suelta y el pie dice «Desliza»: el scroll es para bajar a
+   los precios. Si se llega con la pagina ya bajada, va directo al final.
 
    Cambios para el celular: la camara mantiene fijo el ancho visible (como
    el original bajo 16:9), pero en una pantalla alta eso deja la cinta como
    una franja delgada, asi que el riel se abre en vertical (ys) y las
    tarjetas crecen (k). La grilla es de 2 columnas. Sin hover (es tactil).
 
-   Las tarjetas son piezas de la galeria de Atlas (imagenes), no los videos
-   del original: esos eran trabajos de otro estudio. Las seis primeras
-   quedan en la grilla; las dos ultimas solo pasan por la cinta.
+   Los videos son los del codigo original (pedido de Harley), servidos desde
+   su R2 con CORS abierto: si algun dia los bajan, la tarjeta queda en el
+   gris oscuro de espera. Cada video solo corre mientras su tarjeta se ve.
 
    three.js entra con import() recien en esta pagina. Con movimiento
-   reducido, o sin WebGL, queda el titular quieto. */
+   reducido, o sin WebGL, queda el titular quieto y no se bloquea nada. */
 
-const PIEZAS = ['obra-03', 'obra-05', 'obra-01', 'obra-06', 'obra-02', 'laboratorio', 'app-golf', 'obra-04'];
+const R2 = 'https://pub-86dc5b5484314368ac5436a674b0d919.r2.dev/';
+const WORK = [
+    ['Roadster 3D', 'designs/roadster-3d-car-landing.mp4'],
+    ['Living Portrait', 'aaaf/living-portrait-hero.mp4'],
+    ['Particle Self', 'aaaf/oraciteslArea.mp4'],
+    ['Robot Jellyfish', 'aaaf/medusa-jellyfish-hero.mp4'],
+    ['Ink Reveal', 'designs/ink-reveal-hover.mp4'],
+    ['Space Voyage', 'designs/space-voyage-video.mp4'],
+    ['Helion Dispatch', 'designs/helion-dispatch-landing.mp4'],
+    ['Honey Bee', 'designs/honey-bee-melli-landing.mp4'],
+] as const;
+
+const DURA = 8500; // ms de la entrada completa (p de 0 a 1)
+const LIBRE = 0.86; // desde aqui la grilla ya esta quieta: se suelta el scroll
 
 const clamp = (x: number, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const mix = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -48,30 +65,43 @@ void main(){
   gl_FragColor=vec4(mix(c,vec3(1.),edge*.1),a);
 }`;
 
+type Estado = 'corre' | 'listo' | 'quieto';
+
 export function IntroPrecios() {
-    const pista = useRef<HTMLDivElement>(null);
+    const caja = useRef<HTMLDivElement>(null);
     const lienzo = useRef<HTMLCanvasElement>(null);
-    const [quieto, setQuieto] = useState(false);
+    const saltar = useRef<() => void>(() => {});
+    const [estado, setEstado] = useState<Estado>('corre');
 
     useEffect(() => {
-        const track = pista.current;
+        const intro = caja.current;
         const canvas = lienzo.current;
-        if (!track || !canvas) return;
+        if (!intro || !canvas) return;
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            setQuieto(true);
+            setEstado('quieto');
             return;
         }
 
-        const $ = <T extends HTMLElement>(sel: string) => track.querySelector<T>(sel)!;
+        const $ = <T extends HTMLElement>(sel: string) => intro.querySelector<T>(sel)!;
         const l1 = $('.pre-l1');
         const l2 = $('.pre-l2');
         const cap = $('.pre-cap');
-        const intro = [$('.pre-glow'), $('.pre-cross')];
-        const reglas = [...track.querySelectorAll<HTMLElement>('.pre-regla')];
+        const primeros = [$('.pre-glow'), $('.pre-cross')];
+        const reglas = [...intro.querySelectorAll<HTMLElement>('.pre-regla')];
+
+        // el scroll queda quieto mientras corre la entrada
+        const html = document.documentElement;
+        let bloqueado = false;
+        const bloquear = (si: boolean) => {
+            if (si === bloqueado) return;
+            bloqueado = si;
+            html.style.overflow = si ? 'hidden' : '';
+            document.body.style.overflow = si ? 'hidden' : '';
+        };
 
         let vivo = true;
         let raf = 0;
-        let limpiar = () => {};
+        let limpiar = () => bloquear(false);
 
         import('three').then((THREE) => {
             if (!vivo) return;
@@ -80,7 +110,7 @@ export function IntroPrecios() {
             try {
                 renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
             } catch {
-                setQuieto(true);
+                setEstado('quieto');
                 return;
             }
             renderer.setClearColor(0, 0);
@@ -139,11 +169,20 @@ export function IntroPrecios() {
                 ot.lerpVectors(pathT[i], pathT[i + 1], r).normalize();
             };
 
-            /* ---------- las tarjetas */
+            /* ---------- las tarjetas, cada una con su video */
             const NX = 28;
             const NY = 3;
-            const loader = new THREE.TextureLoader();
-            const cards = PIEZAS.map((id, i) => {
+            let listos = 0; // videos con su primer cuadro ya cargado
+            const cards = WORK.map(([title, src], i) => {
+                const v = document.createElement('video');
+                Object.assign(v, { crossOrigin: 'anonymous', muted: true, loop: true, playsInline: true, preload: 'auto', src: R2 + src });
+                v.setAttribute('playsinline', '');
+                v.setAttribute('muted', '');
+                const tex = new THREE.VideoTexture(v);
+                tex.colorSpace = THREE.NoColorSpace;
+                tex.minFilter = THREE.LinearFilter;
+                tex.magFilter = THREE.LinearFilter;
+                tex.generateMipmaps = false;
                 const geo = new THREE.PlaneGeometry(1, 1, NX, NY);
                 const mat = new THREE.ShaderMaterial({
                     vertexShader: VS,
@@ -151,7 +190,7 @@ export function IntroPrecios() {
                     transparent: true,
                     side: THREE.DoubleSide,
                     uniforms: {
-                        map: { value: null },
+                        map: { value: tex },
                         cover: { value: new THREE.Vector2(1, 1) },
                         aspect: { value: CARD_W / CARD_H },
                         ready: { value: 0 },
@@ -162,15 +201,12 @@ export function IntroPrecios() {
                 mesh.frustumCulled = false;
                 mesh.visible = false;
                 scene.add(mesh);
-                const c = { i, geo, mat, mesh, va: 1.5 };
-                loader.load(`/assets/movil/reel/${id}.webp`, (tex) => {
-                    if (!vivo) return tex.dispose();
-                    tex.colorSpace = THREE.NoColorSpace;
-                    tex.anisotropy = 4;
-                    mat.uniforms.map.value = tex;
-                    c.va = tex.image.width / tex.image.height;
+                const c = { i, title, v, tex, geo, mat, mesh, va: 16 / 9 };
+                v.addEventListener('loadeddata', () => {
+                    c.va = v.videoWidth / v.videoHeight;
                     ajustarCover(c);
                     mat.uniforms.ready.value = 1;
+                    listos++;
                 });
                 return c;
             });
@@ -196,8 +232,8 @@ export function IntroPrecios() {
             };
 
             const resize = () => {
-                W = innerWidth;
-                H = innerHeight;
+                W = intro.clientWidth;
+                H = intro.clientHeight;
                 asp = W / H;
                 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
                 renderer.setSize(W, H, false);
@@ -226,15 +262,32 @@ export function IntroPrecios() {
             };
             resize();
 
-            /* ---------- scroll */
+            /* ---------- el reloj de la entrada (no el scroll). Arranca cuando
+               los tres primeros videos tienen imagen (o a los 3 s), para que la
+               cinta no pase con tarjetas negras en datos moviles; mientras
+               tanto se ve el primer cuadro, el casi vacio. */
             let target = 0;
             let p = 0;
-            const leer = () => {
-                const r = track.getBoundingClientRect();
-                target = clamp(-r.top / (track.offsetHeight - innerHeight));
+            const tInicio = performance.now();
+            let t0 = tInicio;
+            let arranco = false;
+            let terminado = false;
+            // si se llega con la pagina ya bajada (volver atras), directo al final
+            if (scrollY > 40) {
+                arranco = true;
+                t0 -= DURA;
+                target = p = 1;
+            } else bloquear(true);
+            const terminar = () => {
+                if (terminado) return;
+                terminado = true;
+                bloquear(false);
+                setEstado('listo');
             };
-            leer();
-            p = target;
+            saltar.current = () => {
+                arranco = true;
+                t0 = performance.now() - DURA;
+            };
 
             /* ---------- poses */
             const op = new THREE.Vector3();
@@ -295,7 +348,7 @@ export function IntroPrecios() {
                 cap.style.opacity = String(1 - span(pp, 0.52, 0.57));
                 cap.style.transform = `translate(-50%,calc(-50% + ${rise * 34}vh))`;
                 const a = String(1 - span(pp, 0, 0.05));
-                intro.forEach((el) => (el.style.opacity = a));
+                primeros.forEach((el) => (el.style.opacity = a));
                 const regla = ease(span(pp, 0.72, 0.86));
                 reglas.forEach((el) => (el.style.transform = `scaleX(${regla})`));
                 // la cinta y despues la grilla
@@ -319,7 +372,8 @@ export function IntroPrecios() {
                 renderer.render(scene, camera);
             };
 
-            /* ---------- bucle: solo mientras la pista esta en pantalla */
+            /* ---------- bucle: mientras la entrada este en pantalla (los videos
+               de la grilla siguen corriendo al terminar) */
             let enPantalla = true;
             let ultimo = performance.now();
             const loop = () => {
@@ -327,9 +381,19 @@ export function IntroPrecios() {
                 const ahora = performance.now();
                 const dt = Math.min(0.1, (ahora - ultimo) / 1000);
                 ultimo = ahora;
+                if (!arranco && (listos >= 3 || ahora - tInicio > 3000)) {
+                    arranco = true;
+                    t0 = ahora;
+                }
+                target = arranco ? clamp((ahora - t0) / DURA) : 0;
                 // el .09 por cuadro del original, a 60 fps, sin importar los Hz
                 p += (target - p) * (1 - Math.pow(1 - 0.09, dt * 60));
                 if (Math.abs(target - p) < 0.00005) p = target;
+                if (p >= LIBRE) terminar();
+                for (const c of cards) {
+                    if (c.mesh.visible && c.v.paused) c.v.play().catch(() => {});
+                    else if (!c.mesh.visible && !c.v.paused) c.v.pause();
+                }
                 render();
                 if (enPantalla) raf = requestAnimationFrame(loop);
             };
@@ -341,30 +405,28 @@ export function IntroPrecios() {
             };
             const io = new IntersectionObserver(([e]) => {
                 enPantalla = e.isIntersecting;
+                if (!enPantalla) cards.forEach((c) => c.v.pause());
                 pedir();
             });
-            io.observe(track);
-            const alScroll = () => {
-                leer();
-                pedir();
-            };
+            io.observe(intro);
             const alResize = () => {
                 resize();
-                leer();
                 pedir();
             };
-            addEventListener('scroll', alScroll, { passive: true });
             addEventListener('resize', alResize);
             pedir();
 
             limpiar = () => {
+                bloquear(false);
                 cancelAnimationFrame(raf);
                 io.disconnect();
-                removeEventListener('scroll', alScroll);
                 removeEventListener('resize', alResize);
                 for (const c of cards) {
+                    c.v.pause();
+                    c.v.removeAttribute('src');
+                    c.v.load();
+                    c.tex.dispose();
                     c.geo.dispose();
-                    c.mat.uniforms.map.value?.dispose();
                     c.mat.dispose();
                 }
                 renderer.dispose();
@@ -378,30 +440,34 @@ export function IntroPrecios() {
     }, []);
 
     return (
-        <div ref={pista} className={`pre-pista${quieto ? ' is-quieto' : ''}`}>
-            <div className="pre-escena" data-tono="oscuro">
-                <h1 className="pre-h1" aria-label="Nuestros precios">
-                    <span className="pre-hl pre-l1" aria-hidden="true">
-                        <span>Nuestros</span>
-                    </span>
-                    <span className="pre-hl pre-l2" aria-hidden="true">
-                        <span>Precios</span>
-                    </span>
-                </h1>
-                <p className="pre-cap">Lo que cuesta, claro desde el inicio.</p>
-                <div className="pre-glow" aria-hidden="true" />
-                <div className="pre-cross" aria-hidden="true">
-                    <i>+</i>
-                </div>
-                <div className="pre-regla" aria-hidden="true" />
-                <div className="pre-regla" aria-hidden="true" />
-                <canvas ref={lienzo} className="pre-gl" aria-hidden="true" />
-                <div className="pre-bot">
-                    <p>Webs, apps, sistemas y automatizaciones, cada uno con su precio.</p>
+        <div ref={caja} className={`pre-intro is-${estado}`} data-tono="oscuro">
+            <h1 className="pre-h1" aria-label="Nuestros precios">
+                <span className="pre-hl pre-l1" aria-hidden="true">
+                    <span>Nuestros</span>
+                </span>
+                <span className="pre-hl pre-l2" aria-hidden="true">
+                    <span>Precios</span>
+                </span>
+            </h1>
+            <p className="pre-cap">Lo que cuesta, claro desde el inicio.</p>
+            <div className="pre-glow" aria-hidden="true" />
+            <div className="pre-cross" aria-hidden="true">
+                <i>+</i>
+            </div>
+            <div className="pre-regla" aria-hidden="true" />
+            <div className="pre-regla" aria-hidden="true" />
+            <canvas ref={lienzo} className="pre-gl" aria-hidden="true" />
+            <div className="pre-bot">
+                <p>Webs, apps, sistemas y automatizaciones, cada uno con su precio.</p>
+                {estado === 'corre' ? (
+                    <button type="button" className="pre-bot-r pre-saltar" onClick={() => saltar.current()}>
+                        Saltar
+                    </button>
+                ) : (
                     <span className="pre-bot-r" aria-hidden="true">
                         Desliza
                     </span>
-                </div>
+                )}
             </div>
         </div>
     );
