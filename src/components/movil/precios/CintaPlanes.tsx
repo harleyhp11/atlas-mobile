@@ -2,30 +2,25 @@
 
 import { useEffect, useRef } from 'react';
 
-/* La cinta «PLANES / Y PRECIOS» que abre #planes: dos lineas de letra
-   enorme que entran cada una desde un lado de la pantalla y se cruzan con
-   el scroll, como el titular de la entrada (pedido de Harley).
+/* La cinta «PLANES / Y PRECIOS» al pie de la entrada, donde antes iba la
+   flecha (pedido de Harley): aparece cuando termina la animacion, cada linea
+   entrando desde un lado de la pantalla, y toda ella es el enlace a #planes.
 
-   Se mueve con el avance de la cinta por la pantalla (--p): 0 cuando asoma
-   por abajo, ~0,98 cuando llega arriba (ahi quedan centradas, que es donde
-   la deja la flecha de la intro, a 14 px del borde) y sigue un poco al
-   salir. Un rAF por
-   scroll y solo mientras esta en pantalla. Decorativa: el titular de la
-   seccion es el h2 de abajo. Con movimiento reducido queda quieta. */
+   Al bajar, las dos lineas se siguen abriendo cada una hacia su lado (--corre,
+   en px, con el scroll), como el titular de la entrada. Un rAF por scroll y
+   solo mientras se ve. Con movimiento reducido aparece quieta. */
 
 export function CintaPlanes() {
-    const cinta = useRef<HTMLDivElement>(null);
+    const cinta = useRef<HTMLAnchorElement>(null);
 
     useEffect(() => {
         const el = cinta.current;
         if (!el || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
         let raf = 0;
-        let visible = false;
+        let visible = true;
         const pintar = () => {
             raf = 0;
-            const r = el.getBoundingClientRect();
-            const p = Math.min(1.25, Math.max(0, 1 - r.top / innerHeight));
-            el.style.setProperty('--p', p.toFixed(4));
+            el.style.setProperty('--corre', `${Math.min(innerWidth, scrollY * 0.6).toFixed(1)}px`);
         };
         const pedir = () => {
             if (visible && !raf) raf = requestAnimationFrame(pintar);
@@ -37,21 +32,23 @@ export function CintaPlanes() {
         io.observe(el);
         pintar();
         addEventListener('scroll', pedir, { passive: true });
-        addEventListener('resize', pedir);
         return () => {
             cancelAnimationFrame(raf);
             io.disconnect();
             removeEventListener('scroll', pedir);
-            removeEventListener('resize', pedir);
         };
     }, []);
 
     return (
-        <div ref={cinta} className="pre-pl-cinta" aria-hidden="true">
-            <span className="pre-pl-cinta-l1">Planes</span>
-            <span className="pre-pl-cinta-l2">
-                <em>y</em> precios
+        <a ref={cinta} className="pre-cinta" href="#planes" aria-label="Ver planes y precios">
+            <span className="pre-cinta-l1" aria-hidden="true">
+                <span>Planes</span>
             </span>
-        </div>
+            <span className="pre-cinta-l2" aria-hidden="true">
+                <span>
+                    <em>y</em> precios
+                </span>
+            </span>
+        </a>
     );
 }

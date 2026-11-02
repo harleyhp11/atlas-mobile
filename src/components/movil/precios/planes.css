@@ -17,61 +17,17 @@
    ===================================================================== */
 
 .pre-pl {
-    /* La flecha de la intro (y /servicios#planes) deja el borde de la
+    /* La cinta de la intro (y /servicios#planes) deja el borde de la
        seccion arriba del todo: el scroll-margin negativo anula el
        scroll-padding de html (cab + 12), asi arriba nunca asoma un pedazo
-       cortado de la intro. Antes la seccion reservaba aqui el alto de la
-       cabecera (92 px); ahora la abre la cinta «PLANES / Y PRECIOS», que es
-       decorativa y hace de colchon, asi que basta un margen chico (14 px) y el
-       bento entra casi entero en la primera pantalla (812 px). */
+       cortado de la intro. Al bajar, la cabecera se esconde: basta un aire
+       chico arriba y el bento entra casi entero en la primera pantalla. */
     scroll-margin-top: calc(-1 * (var(--cab) + 12px));
-    padding-top: 14px;
+    padding-top: 36px;
     padding-bottom: 64px;
     overflow-x: clip;
     /* al final se funde con el negro del pie (el body es #000; .pre, #0a0a0b) */
     background: linear-gradient(180deg, transparent calc(100% - 180px), var(--negro));
-}
-
-/* ---- la cinta «PLANES / Y PRECIOS» (CintaPlanes.tsx): dos lineas enormes
-   que entran desde lados opuestos con el scroll y quedan centradas cuando
-   la flecha de la intro deja la seccion arriba (la cinta a 14 px del
-   borde: --p ~ 0,98 en un celular de 812 px) */
-.pre-pl-cinta {
-    --p: 0.98;
-    --corre: calc((var(--p) - 0.98) * 120vw);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 12px;
-    font-family: var(--f-display);
-    font-weight: 800;
-    /* «Y PRECIOS» (la mas larga) entra entera en el ancho al quedar centrada */
-    font-size: min(14.5vw, 124px);
-    line-height: 0.86;
-    letter-spacing: -0.055em;
-    text-transform: uppercase;
-    white-space: nowrap;
-    pointer-events: none;
-    user-select: none;
-}
-.pre-pl-cinta > span {
-    display: block;
-    will-change: transform;
-}
-.pre-pl-cinta-l1 {
-    color: var(--pre-tinta, #f4f1ea);
-    transform: translate3d(var(--corre), 0, 0);
-}
-/* la segunda, en contorno y en sentido contrario; la «y» en rojo */
-.pre-pl-cinta-l2 {
-    color: transparent;
-    -webkit-text-stroke: 1.5px var(--pre-tinta, #f4f1ea);
-    transform: translate3d(calc(-1 * var(--corre)), 0, 0);
-}
-.pre-pl-cinta-l2 em {
-    font-style: normal;
-    color: var(--rojo);
-    -webkit-text-stroke: 0;
 }
 
 /* ---- los titulares de los cuatro bloques */

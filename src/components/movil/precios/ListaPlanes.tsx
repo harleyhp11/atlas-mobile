@@ -25,7 +25,6 @@ import {
     type Detalle,
     type SlugPlan,
 } from './planes';
-import { CintaPlanes } from './CintaPlanes';
 import './planes.css';
 
 /* #planes: lo que hay debajo de la entrada «Nuestros / Precios». Cuatro
@@ -85,7 +84,6 @@ export function Planes() {
 
     return (
         <section id="planes" className="pre-pl" aria-labelledby="planes-t">
-            <CintaPlanes />
             <Elegir elegido={elegido} elegir={elegir} />
             <Comparador pestana={pestana} setPestana={setPestana} />
             <Hoy />

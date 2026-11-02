@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { CintaPlanes } from './CintaPlanes';
 import './precios.css';
 
 /* La entrada de /servicios en el celular: «Nuestros / Servicios».
@@ -16,8 +17,9 @@ import './precios.css';
      · al dejar el riel, cada tarjeta vuela a su lugar en una grilla de
        2 × 3 y una linea fina se dibuja entre las filas.
    Mientras corre, el scroll queda bloqueado y abajo hay un «Saltar»; al
-   terminar se suelta y aparece una flecha que late hacia abajo (y lleva a
-   #planes): el scroll es para bajar a los precios. Si se llega con la
+   terminar se suelta y abajo entra la cinta «PLANES / Y PRECIOS», cada
+   linea desde un lado (lleva a #planes): el scroll es para bajar a los
+   precios. Si se llega con la
    pagina ya bajada, con /servicios#planes o volviendo atras desde el
    detalle de un plan, va directo al final y no bloquea nada.
 
@@ -494,16 +496,11 @@ export function IntroPrecios() {
                     <button type="button" className="pre-bot-r pre-saltar" onClick={() => saltar.current()}>
                         Saltar
                     </button>
-                ) : (
-                    <a className="pre-bajar" href="#planes" aria-label="Bajar a los planes y precios">
-                        <span>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                <path d="M12 4v15M6 13l6 6 6-6" />
-                            </svg>
-                        </span>
-                    </a>
-                )}
+                ) : null}
             </div>
+            {/* al terminar, abajo (donde iba la flecha): la cinta «PLANES / Y
+                PRECIOS» entra desde los dos lados y lleva a #planes */}
+            {estado !== 'corre' && <CintaPlanes />}
         </div>
     );
 }
