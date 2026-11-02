@@ -1,0 +1,198 @@
+/* =====================================================================
+   PRECIOS MÓVIL · la entrada «Nuestros / Precios» (ver IntroPrecios.tsx).
+   Pista alta con un escenario sticky; el JS mueve el titular, la leyenda,
+   las lineas y el lienzo de three.js segun el avance del scroll.
+   ===================================================================== */
+
+.pre {
+    --pre-tinta: #f4f1ea;
+    --pre-medio: #8d8b86;
+    --pre-linea: rgba(244, 241, 234, 0.14);
+    background: #0a0a0b;
+    color: var(--pre-tinta);
+}
+
+.pre-pista {
+    height: 640vh;
+}
+.pre-escena {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+    background: #0a0a0b;
+}
+
+/* ---- el titular: dos lineas que se cruzan como dos trenes */
+.pre-h1 {
+    margin: 0;
+    font: inherit;
+}
+.pre-hl {
+    position: absolute;
+    left: 0;
+    right: 0;
+    font-family: var(--f-display);
+    font-weight: 500;
+    font-size: min(16vw, 92px);
+    line-height: 1;
+    letter-spacing: -0.055em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-align: center;
+    will-change: transform;
+}
+.pre-l1 {
+    top: calc(50% - 0.98em);
+}
+.pre-l2 {
+    top: calc(50% + 0.03em);
+}
+.pre-hl > span {
+    display: inline-block;
+}
+.pre-l1 > span {
+    margin-right: 15vw;
+}
+.pre-l2 > span {
+    margin-left: 15vw;
+}
+/* antes de que corra el JS: como en p = 0 (abajo y abriendo la pantalla) */
+.pre-l1 {
+    transform: translate3d(-50vw, 34vh, 0);
+}
+.pre-l2 {
+    transform: translate3d(50vw, 34vh, 0);
+}
+
+.pre-cap {
+    position: absolute;
+    left: 50%;
+    /* encima del titular y no entre sus lineas: en el celular las palabras
+       llenan el ancho y la tapaban */
+    top: calc(50% - min(16vw, 92px) * 1.5);
+    width: 13em;
+    margin: 0;
+    transform: translate(-50%, calc(-50% + 34vh));
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: 0.06em;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+/* ---- el primer cuadro: brillo arriba y una linea con su + */
+.pre-glow {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 42%;
+    background: linear-gradient(rgba(244, 241, 234, 0.1), rgba(244, 241, 234, 0));
+}
+.pre-cross {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    top: 37.5%;
+    height: 1px;
+    background: var(--pre-linea);
+}
+.pre-cross i {
+    position: absolute;
+    left: 50%;
+    top: -0.62em;
+    margin-left: -0.3em;
+    padding: 0 0.3em;
+    font: 400 13px var(--f-mono);
+    font-style: normal;
+    line-height: 1.2;
+    color: var(--pre-medio);
+    background: #0a0a0b;
+}
+
+/* ---- las lineas entre filas de la grilla (el JS pone su top) */
+.pre-regla {
+    position: absolute;
+    left: 3.5vw;
+    right: 3.5vw;
+    top: 50%;
+    height: 1px;
+    background: var(--pre-linea);
+    transform-origin: left;
+    transform: scaleX(0);
+}
+
+.pre-gl {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ---- el pie del escenario */
+.pre-bot {
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: calc(18px + env(safe-area-inset-bottom));
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 16px;
+    pointer-events: none;
+}
+.pre-bot p {
+    max-width: 19em;
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.35;
+}
+.pre-bot-r {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font: 400 11px var(--f-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+.pre-bot-r::after {
+    content: '';
+    width: 22px;
+    height: 1px;
+    background: var(--pre-tinta);
+}
+
+/* ---- quieto (movimiento reducido o sin WebGL): solo el titular */
+.pre-pista.is-quieto {
+    height: auto;
+}
+.pre-pista.is-quieto .pre-escena {
+    position: relative;
+}
+.pre-pista.is-quieto .pre-hl,
+.pre-pista.is-quieto .pre-cap {
+    transform: none;
+}
+.pre-pista.is-quieto .pre-cap {
+    top: calc(50% + min(16vw, 92px) * 1.6);
+    transform: translate(-50%, -50%);
+}
+.pre-pista.is-quieto .pre-hl > span {
+    margin: 0;
+}
+.pre-pista.is-quieto :is(.pre-gl, .pre-regla, .pre-bot-r) {
+    display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .pre-pista {
+        height: auto;
+    }
+}
+
+/* ---- despues de la entrada: aqui iran las tarjetas de precios */
+.pre-planes {
+    min-height: 40svh;
+}
