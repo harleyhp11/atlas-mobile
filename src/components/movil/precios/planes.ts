@@ -159,7 +159,10 @@ export const DETALLES: Detalle[] = [
         corto: 'Landing',
         titulo: 'Landing page',
         material: 'niebla',
-        foto: { src: '/assets/movil/negocios/turismo.webp', mini: '/assets/movil/negocios/turismo-mini.webp', w: 800, h: 1000, pos: '50% 38%' },
+        // un estudio con «www.» y un boton START con su cursor en la pared: la
+        // landing es eso, un llamado a dar el paso. Foto CC0 de Rashed Hossain,
+        // WordPress Photo Directory (pedido de Harley: en vez de Machu Picchu)
+        foto: { src: '/assets/movil/precios/landing.webp', mini: '/assets/movil/precios/landing-mini.webp', w: 800, h: 1000, pos: '70% 45%' },
         escena: 'navegador',
         // [CONFIRMAR copy con Harley] (paraTi, mejorOtro, incluye.explica, dentro, ejes, extras)
         paraTi: [
