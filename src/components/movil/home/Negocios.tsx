@@ -1,4 +1,3 @@
-import { Boton } from '../Boton';
 import { Ceja } from '../Ceja';
 import { Titular } from '../Titular';
 import { ComparadorDiferido } from './negocios/ComparadorDiferido';
@@ -12,8 +11,8 @@ import './negocios.css';
    propia del rubro, y debajo que construimos y cuanto cuesta. Pero sin
    casos inventados: son EJEMPLOS por rubro y la pildora de la tarjeta lo
    dice ("Tu restaurante · ejemplo"; ver negocios/escenarios.ts). La nota
-   del pie que lo repetia la quito Harley. Lo real esta a un toque, en
-   "Ver proyectos reales". */
+   del pie que lo repetia la quito Harley, y tambien el boton "Ver
+   proyectos reales" (lo real vive en /projects, desde el menu). */
 
 export function Negocios() {
     return (
@@ -22,13 +21,8 @@ export function Negocios() {
                 <Ceja n="07">Tu negocio</Ceja>
                 <Titular id="negocios-t" className="m-h2 h-neg-h2" texto="Tu negocio, después de Atlas." destacar="después" />
                 <p className="m-p h-neg-intro" data-rv>
-                    Atlas es para cualquier rubro de negocio. Así podemos mejorar tus procesos, con tecnología que se adapta a ti.
+                    Sea cual sea tu rubro, ordenamos tus procesos con tecnología a tu medida.
                 </p>
-                <div className="h-neg-ver" data-rv>
-                    <Boton href="/projects" variante="fantasma">
-                        Ver proyectos reales
-                    </Boton>
-                </div>
             </div>
 
             <ComparadorDiferido />

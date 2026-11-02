@@ -22,13 +22,7 @@
 }
 .h-neg-intro {
     margin-top: 16px;
-    max-width: 36ch;
-}
-.h-neg-ver {
-    margin-top: 22px;
-}
-.h-neg-ver .m-btn {
-    display: inline-flex;
+    max-width: 32ch;
 }
 
 /* ------------------------------------------------------------ los rubros */
