@@ -177,11 +177,10 @@
     border-radius: 4px;
 }
 /* ---- al terminar: la cinta «PLANES / Y PRECIOS» abajo, donde iba la
-   flecha (CintaPlanes.tsx). Cada linea entra desde un lado (translate) y con
-   el scroll se sigue abriendo (--corre, en transform). Toda es un enlace a
-   #planes. «Y PRECIOS», la mas larga, entra entera en el ancho. */
+   flecha (CintaPlanes.tsx). Cada linea entra desde un lado y se queda
+   centrada. Toda es un enlace a #planes. «Y PRECIOS», la mas larga, entra
+   entera en el ancho. */
 .pre-cinta {
-    --corre: 0px;
     position: absolute;
     left: 0;
     right: 0;
@@ -208,16 +207,11 @@
 }
 .pre-cinta > span {
     display: block;
-    will-change: transform;
 }
-.pre-cinta-l1 {
-    transform: translate3d(var(--corre), 0, 0);
-}
-/* la segunda, en contorno y hacia el otro lado; la «y» en rojo */
+/* la segunda, en contorno; la «y» en rojo */
 .pre-cinta-l2 {
     color: transparent;
     -webkit-text-stroke: 1.5px var(--pre-tinta);
-    transform: translate3d(calc(-1 * var(--corre)), 0, 0);
 }
 .pre-cinta-l2 em {
     font-style: normal;
