@@ -704,17 +704,16 @@
     overflow: hidden;
     background: var(--pre-grafito);
 }
-.pre-pl-ayuda-card > img {
-    /* la foto ocupa la parte de arriba (el telefono con la marca) y se
-       funde abajo: el texto nunca cae sobre la pantalla del telefono */
+.pre-pl-ondas {
+    /* las ondas (FondoOndas.tsx) llenan la tarjeta: arriba suben a rojo y
+       hueso, abajo bajan al negro, donde va el texto. Sin WebGL queda el
+       grafito de la tarjeta */
     position: absolute;
     z-index: -2;
-    top: 0;
-    left: 0;
+    inset: 0;
+    display: block;
     width: 100%;
-    height: 76%;
-    object-fit: cover;
-    object-position: 50% 0%;
+    height: 100%;
 }
 /* el texto solo va donde el degradado ya tapa casi todo (≥ .86) */
 .pre-pl-ayuda-card::after {
