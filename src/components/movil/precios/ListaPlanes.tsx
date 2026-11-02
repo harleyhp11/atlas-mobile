@@ -26,6 +26,7 @@ import {
     type SlugPlan,
 } from './planes';
 import { FondoOndas } from './FondoOndas';
+import { TintaAnodizada } from '../TintaAnodizada';
 import './planes.css';
 
 /* #planes: lo que hay debajo de la entrada «Nuestros / Precios». Cuatro
@@ -370,6 +371,9 @@ function Hoy() {
 
                 {/* widgets de la ref 33: lo que va en los cuatro planes */}
                 <div className="pre-pl-todos" data-rv>
+                    {/* de fondo, la tinta roja de siempre (la del boton «Ayúdame a
+                        elegir»), pedido de Harley */}
+                    <TintaAnodizada escala={1.4} />
                     {/* [CONFIRMAR copy con Harley] */}
                     <h3 className="pre-pl-todos-t">Y además, en todos los planes</h3>
                     <ul className="pre-pl-todos-g">
