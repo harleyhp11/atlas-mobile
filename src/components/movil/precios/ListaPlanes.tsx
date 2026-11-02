@@ -405,10 +405,8 @@ function Ayuda() {
     return (
         <section className="pre-pl-ayuda" data-tono="oscuro" aria-labelledby="elegir-t">
             <div className="m-wrap">
-                <div className="pre-pl-ayuda-card">
-                    {/* las ondas en los colores de Atlas (pedido de Harley), en
-                        lugar de la foto del monolito */}
-                    <FondoOndas className="pre-pl-ondas" />
+                <div className="pre-pl-ayuda-card" data-rv="img">
+                    <img src="/assets/movil/monolito-alto.webp" width={600} height={800} alt="" loading="lazy" decoding="async" />
                     <div className="pre-pl-ayuda-in">
                         <p className="pre-pl-quien" data-rv style={{ '--d': '.15s' } as CSSProperties}>
                             <span className="pre-pl-caras" aria-hidden="true">
@@ -436,6 +434,12 @@ function Ayuda() {
                     ))}
                 </ul>
                 <p className="pre-pl-legal">{NOTA_LEGAL}</p>
+            </div>
+
+            {/* el final de la pagina, en vez del negro liso: las ondas en los
+                colores de Atlas suben desde el pie (pedido de Harley) */}
+            <div className="pre-pl-ondas" aria-hidden="true">
+                <FondoOndas />
             </div>
         </section>
     );

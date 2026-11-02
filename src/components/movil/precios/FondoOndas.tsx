@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
-/* Fondo de ondas para el cierre de Servicios («Te ayudamos a elegir»): el
+/* Fondo de ondas para el final de Servicios (debajo de «Te ayudamos a
+   elegir», donde antes habia negro liso, hasta el pie): el
    shader «Waves» del Shader Builder de 21st.dev que paso Harley, con la
    paleta de Atlas en vez de los azules del original: negro → vino → rojo
    Atlas → hueso. Un canvas WebGL que llena a su padre.
@@ -183,10 +184,10 @@ void main() {
 }
 `
 
-// [r, g, b] de 0 a 1. Abajo (y = 0) el negro de la pagina, para que el texto
-// del cierre caiga sobre oscuro; arriba sube por vino y rojo Atlas hasta hueso.
+// [r, g, b] de 0 a 1, de abajo (y = 0) hacia arriba: hueso junto al pie,
+// rojo Atlas, vino y, arriba, el negro de la pagina, donde la franja se funde.
 const hex = (h: string): [number, number, number] => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255) as [number, number, number];
-const COLORES = ['#0a0a0b', '#3a0812', '#e11d3a', '#f4f1ea'].map(hex);
+const COLORES = ['#f4f1ea', '#e11d3a', '#3a0812', '#0a0a0b'].map(hex);
 
 const U = {
     scale: 1.08,
