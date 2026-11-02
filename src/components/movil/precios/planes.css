@@ -102,42 +102,6 @@
     }
 }
 
-/* la linea viva: reserva dos lineas para que el bento no salte */
-.pre-pl-linea {
-    min-height: 40px;
-    margin-top: 12px;
-    font-size: 14px;
-    line-height: 20px;
-    color: var(--t2);
-    text-wrap: pretty;
-}
-.pre-pl-linea b {
-    font-weight: 600;
-    color: var(--pre-hueso);
-}
-.pre-pl-linea-in {
-    display: block;
-    animation: pre-pl-cruce 0.24s var(--ease) both;
-}
-@keyframes pre-pl-cruce {
-    from {
-        opacity: 0;
-        translate: 0 4px;
-    }
-}
-/* el enlace de «No sé cuál»: 44 px de alto tactil sin agrandar la linea */
-.pre-pl-linea-a {
-    display: inline-block;
-    padding: 12px 0;
-    margin: -12px 0;
-    font-weight: 600;
-    color: var(--pre-hueso);
-    white-space: nowrap;
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-}
-
 .pre-pl-bento {
     display: grid;
     grid-template-columns: 1fr 1fr;

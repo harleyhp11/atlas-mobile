@@ -19,7 +19,6 @@ import {
     NECESIDADES,
     NOTA_LEGAL,
     PASOS,
-    PLANES,
     WSP_AYUDA,
     wspPlan,
     type Detalle,
@@ -106,7 +105,10 @@ function Elegir({ elegido, elegir }: { elegido: Eleccion; elegir: (id: Eleccion)
         const f = fila.current;
         if (!f || f.scrollWidth <= f.clientWidth) return;
         const quieto = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        f.scrollTo({ left: chip.offsetLeft + chip.offsetWidth / 2 - f.clientWidth / 2, behavior: quieto ? 'auto' : 'smooth' });
+        f.scrollTo({
+            left: chip.offsetLeft + chip.offsetWidth / 2 - f.clientWidth / 2,
+            behavior: quieto ? 'auto' : 'smooth',
+        });
     };
     return (
         <div className="pre-pl-elegir m-wrap" data-tono="oscuro">
@@ -115,30 +117,38 @@ function Elegir({ elegido, elegir }: { elegido: Eleccion; elegir: (id: Eleccion)
             {/* data-in en la fila y no en cada chip: los que quedan fuera por
                 la derecha no cruzan la pantalla y nunca se revelarian */}
             <div ref={fila} className="pre-pl-chips" role="group" aria-label="¿Qué necesita tu negocio?" data-in>
-                {NECESIDADES.map((n, k) => (
-                    <button
-                        key={n.id}
-                        type="button"
-                        className="pre-pl-chip"
-                        aria-pressed={elegido === n.id}
-                        style={{ '--d': `${0.25 + k * 0.04}s` } as CSSProperties}
-                        onClick={(ev) => {
-                            elegir(n.id);
-                            centrar(ev.currentTarget);
-                        }}
-                    >
-                        {n.label}
-                    </button>
-                ))}
+                {NECESIDADES.map((n, k) =>
+                    n.id === 'ayuda' ? (
+                        // sin la linea que lo explicaba (Harley la quito), «No sé
+                        // cuál» abre WhatsApp directo para que te ayudemos
+                        <a
+                            key={n.id}
+                            className="pre-pl-chip"
+                            href={WSP_AYUDA}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ '--d': `${0.25 + k * 0.04}s` } as CSSProperties}
+                        >
+                            {n.label}
+                            <span className="sr-only"> (te ayudamos por WhatsApp)</span>
+                        </a>
+                    ) : (
+                        <button
+                            key={n.id}
+                            type="button"
+                            className="pre-pl-chip"
+                            aria-pressed={elegido === n.id}
+                            style={{ '--d': `${0.25 + k * 0.04}s` } as CSSProperties}
+                            onClick={(ev) => {
+                                elegir(n.id);
+                                centrar(ev.currentTarget);
+                            }}
+                        >
+                            {n.label}
+                        </button>
+                    ),
+                )}
             </div>
-
-            {/* la linea viva: dice que hacer en cada estado; reserva dos
-                lineas para que el bento no salte */}
-            <p className="pre-pl-linea" aria-live="polite">
-                <span key={elegido} className="pre-pl-linea-in">
-                    <Linea elegido={elegido} d={marcado} />
-                </span>
-            </p>
 
             <div className="pre-pl-bento">
                 {DETALLES.map((d, k) => (
@@ -154,33 +164,6 @@ function Elegir({ elegido, elegir }: { elegido: Eleccion; elegir: (id: Eleccion)
                 ))}
             </div>
         </div>
-    );
-}
-
-// [CONFIRMAR copy con Harley] las tres lineas
-function Linea({ elegido, d }: { elegido: Eleccion; d?: Detalle }) {
-    if (elegido === 'ayuda') {
-        return (
-            <>
-                Sin problema: cuéntanos tu negocio y te decimos cuál te conviene.{' '}
-                <a className="pre-pl-linea-a" href={WSP_AYUDA} target="_blank" rel="noopener noreferrer">
-                    Escribir por WhatsApp
-                    <span className="sr-only"> (abre WhatsApp)</span>
-                </a>
-            </>
-        );
-    }
-    if (d) {
-        return (
-            <>
-                <b>Para ti: {d.titulo}.</b> Tócala para ver todo lo que incluye.
-            </>
-        );
-    }
-    return (
-        <>
-            <b>{PLANES.length} planes</b>, de menor a mayor. Toca uno para ver todo lo que incluye.
-        </>
     );
 }
 
@@ -223,14 +206,7 @@ function Comparador({ pestana, setPestana }: { pestana: number; setPestana: (i: 
         <section className="pre-pl-cmp" data-tono="oscuro" aria-labelledby="cmp-t">
             <div className="m-wrap">
                 <Titular id="cmp-t" className="m-h2 pre-pl-t pre-c-t-gris" texto="Lo que incluye, punto por punto." />
-                <div
-                    ref={lista}
-                    className="pre-pl-tabs"
-                    role="tablist"
-                    aria-label="Planes"
-                    onKeyDown={alTecla}
-                    style={{ '--i': pestana } as CSSProperties}
-                >
+                <div ref={lista} className="pre-pl-tabs" role="tablist" aria-label="Planes" onKeyDown={alTecla} style={{ '--i': pestana } as CSSProperties}>
                     <span className="pre-pl-tabs-ind" aria-hidden="true" />
                     {DETALLES.map((d, k) => (
                         <button
@@ -280,14 +256,7 @@ function Comparador({ pestana, setPestana }: { pestana: number; setPestana: (i: 
 function Panel({ d, activo }: { d: Detalle; activo: boolean }) {
     const { plan } = d;
     return (
-        <div
-            role="tabpanel"
-            id={`cmp-panel-${d.slug}`}
-            aria-labelledby={`cmp-tab-${d.slug}`}
-            className="pre-pl-panel"
-            data-activo={activo}
-            inert={!activo}
-        >
+        <div role="tabpanel" id={`cmp-panel-${d.slug}`} aria-labelledby={`cmp-tab-${d.slug}`} className="pre-pl-panel" data-activo={activo} inert={!activo}>
             <p className="pre-pl-panel-n">
                 <b>{plan.nombre}</b> {plan.coda}
             </p>
