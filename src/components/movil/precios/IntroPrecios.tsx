@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './precios.css';
 
-/* La entrada de /servicios en el celular: «Nuestros / Precios».
+/* La entrada de /servicios en el celular: «Nuestros / Servicios».
 
    Es el hero «Vante» que paso Harley, llevado al celular. Todo sale de un
    solo numero, el avance `p` (0 → 1, suavizado), que aqui NO lo mueve el
@@ -17,7 +17,9 @@ import './precios.css';
        2 × 3 y una linea fina se dibuja entre las filas.
    Mientras corre, el scroll queda bloqueado y abajo hay un «Saltar»; al
    terminar se suelta y aparece una flecha que late hacia abajo (y lleva a
-   #planes): el scroll es para bajar a los precios. Si se llega con la pagina ya bajada, va directo al final.
+   #planes): el scroll es para bajar a los precios. Si se llega con la
+   pagina ya bajada, con /servicios#planes o volviendo atras desde el
+   detalle de un plan, va directo al final y no bloquea nada.
 
    Cambios para el celular: la camara mantiene fijo el ancho visible (como
    el original bajo 16:9), pero en una pantalla alta eso deja la cinta como
@@ -110,10 +112,15 @@ export function IntroPrecios() {
         let t0 = -1; // se fija en el primer cuadro pintado, no al montar
         let pausado = 0; // ms descontados por tirones
         let terminado = false;
-        // si se llega con la pagina ya bajada (volver atras), directo al final
-        if (scrollY > 40) {
+        // si se llega con la pagina ya bajada, con #planes o volviendo atras desde
+        // un detalle: directo al final, sin bloquear el scroll
+        const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined;
+        const yaBajado = scrollY > 40 || location.hash === '#planes' || nav?.type === 'back_forward';
+        if (yaBajado) {
             t0 = performance.now() - DURA;
             target = p = 1;
+            if (location.hash === '#planes' && scrollY < 40)
+                requestAnimationFrame(() => document.getElementById('planes')?.scrollIntoView({ behavior: 'instant', block: 'start' }));
         } else bloquear(true);
         const terminar = () => {
             if (terminado) return;
@@ -466,12 +473,12 @@ export function IntroPrecios() {
 
     return (
         <div ref={caja} className={`pre-intro is-${estado}`} data-tono="oscuro">
-            <h1 className="pre-h1" aria-label="Nuestros precios">
+            <h1 className="pre-h1" aria-label="Nuestros servicios">
                 <span className="pre-hl pre-l1" aria-hidden="true">
                     <span>Nuestros</span>
                 </span>
                 <span className="pre-hl pre-l2" aria-hidden="true">
-                    <span>Precios</span>
+                    <span>Servicios</span>
                 </span>
             </h1>
             <p className="pre-cap">Lo que cuesta, claro desde el inicio.</p>
@@ -483,13 +490,12 @@ export function IntroPrecios() {
             <div className="pre-regla" aria-hidden="true" />
             <canvas ref={lienzo} className="pre-gl" aria-hidden="true" />
             <div className="pre-bot">
-                <p>Webs, apps, sistemas y automatizaciones, cada uno con su precio.</p>
                 {estado === 'corre' ? (
                     <button type="button" className="pre-bot-r pre-saltar" onClick={() => saltar.current()}>
                         Saltar
                     </button>
                 ) : (
-                    <a className="pre-bajar" href="#planes" aria-label="Bajar a los precios">
+                    <a className="pre-bajar" href="#planes" aria-label="Bajar a los planes y precios">
                         <span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                 <path d="M12 4v15M6 13l6 6 6-6" />

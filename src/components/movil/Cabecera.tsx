@@ -24,6 +24,9 @@ type Props = {
     inicio?: 'arriba' | 'fija';
     estado?: boolean;
     ctaRojo?: boolean;
+    /* Enlace del Cotizar de la capsula; el detalle de un plan manda su
+       propio mensaje. */
+    cotizar?: string;
 };
 
 const formato = () =>
@@ -53,7 +56,7 @@ export function RelojLima() {
     );
 }
 
-export function Cabecera({ enlaces = MENU, inicio = 'arriba', estado = false, ctaRojo = false }: Props) {
+export function Cabecera({ enlaces = MENU, inicio = 'arriba', estado = false, ctaRojo = false, cotizar = WHATSAPP }: Props) {
     const cab = useRef<HTMLElement>(null);
     const boton = useRef<HTMLButtonElement>(null);
     const menu = useRef<HTMLDivElement>(null);
@@ -165,7 +168,7 @@ export function Cabecera({ enlaces = MENU, inicio = 'arriba', estado = false, ct
                             <span>Disponibles</span>
                         </span>
                     )}
-                    <a className={`m-cab-cta${ctaRojo ? ' m-cab-cta--rojo' : ''}`} href={WHATSAPP} target="_blank" rel="noopener noreferrer">
+                    <a className={`m-cab-cta${ctaRojo ? ' m-cab-cta--rojo' : ''}`} href={cotizar} target="_blank" rel="noopener noreferrer">
                         Cotizar<span className="sr-only"> por WhatsApp</span>
                     </a>
                     <button

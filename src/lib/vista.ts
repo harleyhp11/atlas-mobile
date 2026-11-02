@@ -18,22 +18,31 @@ export const CORTE_MOVIL = 1024;
    home, la lista de proyectos, la ficha de los seis proyectos de Atlas
    (los del autor de la plantilla no tienen version movil: siguen en la del
    escritorio), los precios (/servicios, que en el escritorio es su pagina
-   de precios) y /nosotros, que solo existe en el movil (en el escritorio,
-   con la cookie ya escrita, el proxy la manda a la home "/"). El proxy
-   reescribe con esto. */
+   de precios) y dos que solo existen en el movil:
+     · /nosotros (en el escritorio, con la cookie ya escrita, el proxy la
+       manda a la home "/");
+     · el detalle de cada plan, /servicios/[slug] (en el escritorio no hay
+       detalle: el proxy lo manda a su pagina de precios, /servicios).
+   El proxy reescribe con esto. */
 export const PROYECTOS_MOVIL = ['workup', 'rego-premium', 'utopp', 'fluxa', 'peru-travel', 'polleria-la-lena'];
+
+// los cuatro planes de /servicios con pagina de detalle (solo movil); el
+// orden es el de PLANES en (sitio)/servicios/datos.ts
+export const PLANES_MOVIL = ['tienda-online', 'landing-page', 'web-corporativa', 'software-a-medida'];
 
 export function rutaMovil(ruta: string): string | null {
     if (ruta === '/') return '/movil';
     if (ruta === '/projects') return '/movil/proyectos';
     if (ruta === '/servicios') return '/movil/precios';
     if (ruta === '/nosotros') return '/movil/nosotros';
+    const s = /^\/servicios\/([^/]+)$/.exec(ruta);
+    if (s) return PLANES_MOVIL.includes(s[1]) ? `/movil/precios/${s[1]}` : null;
     const m = /^\/projects\/([^/]+)$/.exec(ruta);
     return m && PROYECTOS_MOVIL.includes(m[1]) ? `/movil/proyectos/${m[1]}` : null;
 }
 
 // la misma lista, como expresion para el script del <head>
-const RUTAS_DOBLES = `^/(projects(/(${PROYECTOS_MOVIL.join('|')}))?|servicios|nosotros)?$`;
+const RUTAS_DOBLES = `^/(projects(/(${PROYECTOS_MOVIL.join('|')}))?|servicios(/(${PLANES_MOVIL.join('|')}))?|nosotros)?$`;
 
 export function scriptVista(servida: Vista) {
     return `(function(){try{var v=matchMedia('(max-width:${CORTE_MOVIL - 0.02}px)').matches?'movil':'escritorio';document.cookie='atlas-vista='+v+';path=/;max-age=31536000;samesite=lax';if(new RegExp('${RUTAS_DOBLES}').test(location.pathname)&&v!=='${servida}'&&document.cookie.indexOf('atlas-vista='+v)>-1)location.replace(location.href)}catch(e){}})();`;

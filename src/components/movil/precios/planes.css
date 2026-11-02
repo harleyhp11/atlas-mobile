@@ -1,0 +1,850 @@
+/* =====================================================================
+   PRECIOS · la lista de planes (#planes), debajo de la entrada. Ver
+   Planes.tsx. Prefijo .pre-pl-. Los tokens (--pre-*, --mat-*) y las
+   piezas compartidas (.pre-c-*) vienen de precios.css y comun/comun.css.
+
+   Ritmo: chips + bento sobre negro → comparador de vidrio sobre negro →
+   «¿Y si les escribo hoy?» en isla hueso → cierre con foto a sangre → pie.
+
+   Reglas:
+     · el rojo es solo señal: la caja de los titulares, el «Para ti» y el
+       punto de la linea del «< 24 h»;
+     · cada estado inicial `.m-js X:not(.is-in)` tiene su contraparte en el
+       bloque de movimiento reducido del final;
+     · solo se animan opacity, translate, scale, transform y el trazo de
+       los SVG.
+   ===================================================================== */
+
+.pre-pl {
+    /* La flecha de la intro (y /servicios#planes) deja el borde de la
+       seccion arriba del todo: el scroll-margin negativo anula el
+       scroll-padding de html (cab + 12). Los 92 px de arriba son de la
+       propia seccion, asi que se vea o no la cabecera (se esconde al
+       bajar), arriba nunca asoma un pedazo cortado de la intro. El titular
+       queda en y = 92. */
+    scroll-margin-top: calc(-1 * (var(--cab) + 12px));
+    padding-top: calc(var(--cab) + 24px);
+    padding-bottom: 64px;
+    overflow-x: clip;
+    /* al final se funde con el negro del pie (el body es #000; .pre, #0a0a0b) */
+    background: linear-gradient(180deg, transparent calc(100% - 180px), var(--negro));
+}
+
+/* ---- la cinta «PLANES / Y PRECIOS» (CintaPlanes.tsx): dos lineas enormes
+   que entran desde lados opuestos con el scroll y quedan centradas cuando
+   la flecha de la intro deja la seccion arriba (--p ~ 0,9) */
+.pre-pl-cinta {
+    --p: 0.9;
+    --corre: calc((var(--p) - 0.9) * 120vw);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+    font-family: var(--f-display);
+    font-weight: 800;
+    /* «Y PRECIOS» (la mas larga) entra entera en el ancho al quedar centrada */
+    font-size: min(17.5vw, 150px);
+    line-height: 0.86;
+    letter-spacing: -0.055em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+}
+.pre-pl-cinta > span {
+    display: block;
+    will-change: transform;
+}
+.pre-pl-cinta-l1 {
+    color: var(--pre-tinta, #f4f1ea);
+    transform: translate3d(var(--corre), 0, 0);
+}
+/* la segunda, en contorno y en sentido contrario; la «y» en rojo */
+.pre-pl-cinta-l2 {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--pre-tinta, #f4f1ea);
+    transform: translate3d(calc(-1 * var(--corre)), 0, 0);
+}
+.pre-pl-cinta-l2 em {
+    font-style: normal;
+    color: var(--rojo);
+    -webkit-text-stroke: 0;
+}
+
+/* ---- los titulares de los cuatro bloques */
+.pre-pl-t {
+    max-width: 15ch;
+}
+
+/* ===================================================== 1 · chips + bento */
+
+/* chips: la fila sangra hasta el borde y hace scroll dentro de si misma;
+   se desvanece a la derecha para que se note que sigue */
+.pre-pl-chips {
+    position: relative; /* offsetParent de los chips, para centrarlos */
+    display: flex;
+    gap: 8px;
+    margin: 10px calc(-1 * var(--g)) -4px;
+    padding: 4px var(--g);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--g);
+    scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+}
+.pre-pl-chips::-webkit-scrollbar {
+    display: none;
+}
+/* el ultimo chip no queda debajo del desvanecido al llegar al final */
+.pre-pl-chips::after {
+    content: '';
+    flex: none;
+    width: 8px;
+}
+.pre-pl-chip {
+    flex: none;
+    scroll-snap-align: start;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: rgba(244, 241, 234, 0.08);
+    color: var(--t2);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    touch-action: manipulation;
+    /* entrada (con su escalon) + el encendido al tocar (sin escalon) */
+    transition:
+        opacity 0.6s var(--pop) var(--d, 0s),
+        translate 0.6s var(--pop) var(--d, 0s),
+        background-color 0.3s var(--ease),
+        color 0.3s var(--ease),
+        scale 0.3s var(--ease);
+}
+.pre-pl-chip:active {
+    scale: 0.96;
+}
+/* cada chip se enciende en su sitio: sin un fondo que viaje entre ellos */
+.pre-pl-chip[aria-pressed='true'] {
+    background: var(--pre-hueso);
+    color: var(--pre-ink);
+}
+.m-js .pre-pl-chips:not(.is-in) .pre-pl-chip {
+    opacity: 0;
+    translate: 0 12px;
+}
+@media (hover: hover) and (pointer: fine) {
+    .pre-pl-chip[aria-pressed='false']:hover {
+        background: rgba(244, 241, 234, 0.14);
+        color: var(--pre-hueso);
+    }
+}
+
+/* la linea viva: reserva dos lineas para que el bento no salte */
+.pre-pl-linea {
+    min-height: 40px;
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+.pre-pl-linea b {
+    font-weight: 600;
+    color: var(--pre-hueso);
+}
+.pre-pl-linea-in {
+    display: block;
+    animation: pre-pl-cruce 0.24s var(--ease) both;
+}
+@keyframes pre-pl-cruce {
+    from {
+        opacity: 0;
+        translate: 0 4px;
+    }
+}
+/* el enlace de «No sé cuál»: 44 px de alto tactil sin agrandar la linea */
+.pre-pl-linea-a {
+    display: inline-block;
+    padding: 12px 0;
+    margin: -12px 0;
+    font-weight: 600;
+    color: var(--pre-hueso);
+    white-space: nowrap;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+.pre-pl-bento {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+}
+/* Ajuste fino para la meta de llegada: a 375 × 812 las 4 tarjetas caben
+   enteras debajo del titular, los chips y la linea (spec: ±8 px) */
+.pre-pl-bento .pre-c-tile[data-tam='ancho']:not([data-medida]) {
+    min-height: 140px;
+}
+.pre-pl-bento .pre-c-tile-extra {
+    margin-top: 6px;
+}
+
+@media (min-width: 768px) {
+    /* en tablet caben en dos filas: sin scroll ni desvanecido */
+    .pre-pl-chips {
+        flex-wrap: wrap;
+        margin-inline: 0;
+        padding-inline: 0;
+        overflow: visible;
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+    .pre-pl-chips::after {
+        display: none;
+    }
+    .pre-pl-bento {
+        gap: 14px;
+    }
+}
+
+/* ===================================================== 2 · comparador */
+
+.pre-pl-cmp {
+    margin-top: var(--pre-sec);
+}
+
+/* pestañas: pista fija (no hace scroll), un solo indicador hueso que se
+   desliza por debajo del texto */
+.pre-pl-tabs {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    height: 48px;
+    margin-top: 24px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px var(--pre-vidrio-borde);
+}
+.pre-pl-tabs-ind {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / 4);
+    border-radius: 999px;
+    background: var(--pre-hueso);
+    translate: calc(var(--i, 0) * 100%) 0;
+    transition: translate 0.42s var(--ease);
+}
+.pre-pl-tab {
+    position: relative;
+    z-index: 1;
+    height: 48px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--t2);
+    transition: color 0.3s var(--ease);
+    touch-action: manipulation;
+}
+.pre-pl-tab[aria-selected='true'] {
+    color: var(--pre-ink);
+}
+.pre-pl-tab:focus-visible {
+    outline-offset: -2px;
+}
+.pre-pl-tab[aria-selected='true']:focus-visible {
+    outline-color: var(--pre-ink);
+}
+
+/* la escena: la palabra gigante y, en la misma celda, la tarjeta de vidrio
+   que baja hasta tapar su mitad inferior */
+.pre-pl-escena {
+    --fs: clamp(96px, 30vw, 150px);
+    position: relative;
+    display: grid;
+    margin-top: 30px;
+}
+.pre-pl-escena::after {
+    /* el halo que el vidrio tiene para refractar, por debajo */
+    content: '';
+    position: absolute;
+    z-index: 0;
+    left: 0;
+    right: 0;
+    top: calc(var(--fs) * 0.3);
+    height: 90%;
+    /* centrado en su caja y apagado antes de los bordes: sin cortes rectos */
+    background: radial-gradient(60% 40% at 50% 45%, rgba(244, 241, 234, 0.08), transparent);
+    pointer-events: none;
+}
+.pre-pl-gigante {
+    position: relative;
+    grid-area: 1 / 1;
+    height: calc(var(--fs) * 0.8);
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: var(--fs);
+    line-height: 0.8;
+    letter-spacing: -0.05em;
+    /* hueso al 92 % sobre el fondo, pero OPACO: con alfa, el traslape de
+       las letras (tracking negativo) se marca como una costura */
+    color: #e1ded8;
+    pointer-events: none;
+    user-select: none;
+}
+.pre-pl-gigante span {
+    position: absolute;
+    top: 0;
+    left: var(--g);
+    white-space: nowrap;
+    transition:
+        translate 0.52s var(--ease),
+        opacity 0.52s var(--ease);
+}
+.pre-pl-gigante [data-pos='antes'] {
+    translate: -30% 0;
+    opacity: 0;
+}
+.pre-pl-gigante [data-pos='despues'] {
+    translate: 30% 0;
+    opacity: 0;
+}
+.pre-pl-escena-in {
+    position: relative;
+    z-index: 1;
+    grid-area: 1 / 1;
+    /* la tarjeta tapa la mitad de abajo de la palabra: el ojo de las
+       letras sigue leyendose arriba y el resto pasa desenfocado */
+    padding-top: calc(var(--fs) * 0.62);
+}
+
+.pre-pl-vidrio {
+    display: grid;
+    padding: 22px 20px;
+    border-radius: var(--pre-r-l);
+    /* arriba un poco mas denso: ahi pasa la palabra desenfocada y el texto
+       chico tiene que seguir leyendose */
+    background:
+        linear-gradient(180deg, rgba(10, 10, 11, 0.42), rgba(10, 10, 11, 0) 34%),
+        var(--pre-vidrio);
+    -webkit-backdrop-filter: var(--pre-desenfoque);
+    backdrop-filter: var(--pre-desenfoque);
+    border: 1px solid var(--pre-vidrio-borde);
+    box-shadow: var(--pre-vidrio-brillo), var(--pre-sombra);
+    touch-action: pan-y;
+}
+
+/* los cuatro paneles en la misma celda: el alto es el del mas alto y
+   cambiar de plan no mueve nada de lo que sigue */
+.pre-pl-panel {
+    grid-area: 1 / 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition:
+        opacity 0.28s var(--ease),
+        translate 0.28s var(--ease),
+        visibility 0s;
+}
+.pre-pl-panel[data-activo='false'] {
+    opacity: 0;
+    visibility: hidden;
+    translate: 0 8px;
+    transition:
+        opacity 0.2s var(--ease),
+        translate 0.28s var(--ease),
+        visibility 0s 0.28s;
+}
+
+.pre-pl-panel-n {
+    font-size: 15px;
+    line-height: 1.35;
+    color: var(--t2);
+}
+.pre-pl-panel-n b {
+    font-weight: 600;
+    color: var(--pre-hueso);
+}
+.pre-pl-panel-precio {
+    margin-top: 16px;
+}
+@media (min-width: 768px) {
+    /* mas especifico que el fundido de comun.css (que lo achica para 295 px) */
+    .pre-pl-panel .pre-pl-panel-precio.pre-c-precio[data-tam] {
+        --pp-num: 60px;
+        --pp-medida: 60px;
+        --pp-mon: 17px;
+    }
+}
+.pre-pl-panel-nota {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.4;
+    color: var(--t3);
+}
+.pre-pl-panel-ent {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    margin-top: 16px;
+    padding: 0 13px 0 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px var(--pre-vidrio-borde);
+    color: var(--pre-hueso);
+}
+.pre-pl-panel-ent svg {
+    width: 15px;
+    height: 15px;
+    flex: none;
+}
+.pre-pl-panel-filete {
+    align-self: stretch;
+    height: 1px;
+    margin: 22px -20px 20px;
+    border: 0;
+    background: rgba(255, 255, 255, 0.1);
+}
+.pre-pl-panel-acc {
+    align-self: stretch;
+    display: grid;
+    gap: 6px;
+    margin-top: 26px;
+}
+.pre-pl-panel-wsp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--pre-hueso);
+}
+.pre-pl-panel-wsp svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+}
+.pre-pl-panel-wsp:active {
+    opacity: 0.7;
+}
+@media (prefers-reduced-motion: no-preference) {
+    /* el panel que se va deja sus checks sin dibujar: al volver se marcan
+       de nuevo, uno tras otro */
+    .pre-pl-panel[data-activo='false'] .pre-c-checks[data-dibujar] .pre-c-check path {
+        stroke-dashoffset: 18;
+        transition: none;
+    }
+    .pre-pl-panel[data-activo='false'] .pre-c-checks[data-dibujar] .pre-c-check {
+        scale: 0.6;
+        transition: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .pre-pl-vidrio {
+        padding: 30px 32px;
+    }
+    .pre-pl-panel-filete {
+        margin-inline: -32px;
+    }
+    .pre-pl-panel-acc {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 18px;
+    }
+    .pre-pl-panel-wsp {
+        padding-inline: 8px;
+    }
+}
+
+/* ============================================= 3 · «¿Y si les escribo hoy?» */
+
+.pre-pl-hoy {
+    margin: var(--pre-sec) 8px 0;
+    padding: 56px 0 20px;
+    border-radius: var(--pre-r-xl);
+    background:
+        radial-gradient(80% 30% at 100% 0%, #fff, rgba(255, 255, 255, 0) 70%),
+        var(--pre-hueso);
+    color: var(--pre-ink);
+}
+/* 8 + 12 = 20: el texto de la isla cae en la misma columna que el resto */
+.pre-pl-hoy > .m-wrap {
+    --g: 12px;
+}
+@media (min-width: 768px) {
+    .pre-pl-hoy {
+        max-width: 760px;
+        margin-inline: auto;
+        padding-bottom: 32px;
+    }
+    .pre-pl-hoy > .m-wrap {
+        --g: 32px;
+    }
+}
+
+/* ---- la cifra (ref 32): etiqueta y linea arriba, «< 24 h» enorme abajo */
+.pre-pl-24 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+        'e g'
+        'c c';
+    margin-top: 34px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--pre-ink-linea);
+}
+.pre-pl-24-e {
+    grid-area: e;
+    align-self: start;
+    padding-top: 4px;
+    color: var(--pre-ink-2);
+}
+.pre-pl-24-grafico {
+    grid-area: g;
+    position: relative;
+    width: 120px;
+    height: 44px;
+}
+.pre-pl-24-grafico svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+.pre-pl-24-linea {
+    stroke: var(--pre-ink);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1.2s var(--ease-io) 0.3s;
+}
+.pre-pl-24-area {
+    fill: rgba(11, 11, 12, 0.06);
+    transition: opacity 0.8s var(--ease) 1.1s;
+}
+/* el punto rojo al final de la linea: llega cuando termina el trazo */
+.pre-pl-24-grafico .m-ping {
+    position: absolute;
+    left: calc(95% - 3.5px);
+    top: calc(11.4% - 3.5px);
+    transition:
+        opacity 0.3s var(--ease) 1.4s,
+        scale 0.5s var(--pop) 1.4s;
+}
+.m-js .pre-pl-24:not(.is-in) .pre-pl-24-linea {
+    stroke-dashoffset: 1;
+}
+.m-js .pre-pl-24:not(.is-in) .pre-pl-24-area {
+    opacity: 0;
+}
+.m-js .pre-pl-24:not(.is-in) .m-ping {
+    opacity: 0;
+    scale: 0;
+}
+.pre-pl-24-cifra {
+    grid-area: c;
+    margin-top: 14px;
+    font-family: var(--f-display);
+    font-weight: 700;
+    font-size: clamp(76px, 23.5vw, 112px);
+    line-height: 0.86;
+    letter-spacing: -0.06em;
+    white-space: nowrap;
+}
+
+/* ---- los cuatro pasos, unidos por un conector que baja */
+.pre-pl-pasos {
+    display: grid;
+    gap: 24px;
+    margin-top: 30px;
+}
+.pre-pl-paso {
+    position: relative;
+    display: grid;
+    grid-template-columns: 32px minmax(0, 1fr);
+    column-gap: 14px;
+}
+.pre-pl-paso:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 15.5px;
+    top: 38px;
+    bottom: -20px;
+    width: 1px;
+    background: var(--pre-ink-linea);
+    transform-origin: 50% 0;
+    transition: transform 1.4s var(--ease-io) calc(var(--d, 0s) + 0.35s);
+}
+.m-js .pre-pl-paso:not(.is-in)::before {
+    transform: scaleY(0);
+}
+.pre-pl-paso-n {
+    font-family: var(--f-display);
+    font-weight: 300;
+    font-size: 30px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+.pre-pl-paso-c {
+    padding-top: 3px;
+}
+.pre-pl-paso-t {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+}
+.pre-pl-paso-d {
+    margin-top: 4px;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--pre-ink-2);
+    text-wrap: pretty;
+}
+.pre-pl-etapas {
+    gap: 6px;
+    margin: 10px 0 8px;
+}
+
+/* ---- lo que va en todos los planes: dos widgets (ref 33) */
+.pre-pl-todos {
+    margin-top: 36px;
+    padding: 16px;
+    border-radius: 22px;
+    background: var(--pre-ink);
+    color: var(--pre-hueso);
+}
+.pre-pl-todos-t {
+    margin: 2px 2px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--t2);
+}
+.pre-pl-todos-g {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+.pre-pl-w {
+    display: flex;
+    flex-direction: column;
+    padding: 14px;
+    border-radius: 16px;
+    background: var(--pre-grafito);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+.pre-pl-w-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+.pre-pl-w-ic {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+.pre-pl-w-ic svg {
+    width: 18px;
+    height: 18px;
+}
+.pre-pl-w-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 26px;
+    padding: 0 10px 0 9px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1;
+    color: var(--t2);
+    white-space: nowrap;
+}
+.pre-pl-w-pill i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--pre-hueso);
+}
+.pre-pl-w-b {
+    margin-top: 20px;
+    font-family: var(--f-display);
+    font-weight: 650;
+    /* «Todo tuyo» en una linea tambien a 360 px, como «30 días» */
+    font-size: clamp(22px, 6.5vw, 26px);
+    white-space: nowrap;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+.pre-pl-w-s {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--t2);
+}
+@media (max-width: 359px) {
+    .pre-pl-w-pill {
+        padding-inline: 8px;
+        font-size: 11px;
+    }
+}
+
+/* ============================================= 4 · «Te ayudamos a elegir.» */
+
+.pre-pl-ayuda {
+    margin-top: var(--pre-sec);
+}
+.pre-pl-ayuda-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 540px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: var(--pre-r-l);
+    overflow: hidden;
+    background: var(--pre-grafito);
+}
+.pre-pl-ayuda-card > img {
+    /* la foto ocupa la parte de arriba (el telefono con la marca) y se
+       funde abajo: el texto nunca cae sobre la pantalla del telefono */
+    position: absolute;
+    z-index: -2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 76%;
+    object-fit: cover;
+    object-position: 50% 0%;
+}
+/* el texto solo va donde el degradado ya tapa casi todo (≥ .86) */
+.pre-pl-ayuda-card::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 10, 11, 0) 30%, rgba(10, 10, 11, 0.92) 43%, var(--pre-fondo) 50%);
+}
+.pre-pl-ayuda-in {
+    display: flex;
+    flex-direction: column;
+}
+.pre-pl-quien {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+    line-height: 1.35;
+    color: var(--t2);
+    transition:
+        opacity 0.6s var(--pop) var(--d, 0s),
+        translate 0.6s var(--pop) var(--d, 0s);
+}
+.m-js .pre-pl-quien[data-rv]:not(.is-in) {
+    translate: 12px 0;
+}
+.pre-pl-caras {
+    display: flex;
+    flex: none;
+}
+.pre-pl-caras img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 0 2px var(--pre-fondo);
+}
+.pre-pl-caras img + img {
+    margin-left: -10px;
+}
+.pre-pl-ayuda .pre-pl-t {
+    margin-top: 18px;
+}
+.pre-pl-ayuda-p {
+    margin-top: 12px;
+    max-width: 30ch;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--t2);
+    text-wrap: pretty;
+}
+.pre-pl-ayuda-cta {
+    margin-top: 24px;
+}
+.pre-pl-confianza {
+    margin-top: 20px;
+}
+.pre-pl-legal {
+    margin-top: 16px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--t3);
+    text-wrap: pretty;
+}
+@media (min-width: 768px) {
+    .pre-pl-ayuda-card {
+        min-height: 620px;
+        padding: 32px;
+    }
+    .pre-pl-ayuda-cta {
+        max-width: 360px;
+    }
+}
+
+/* ------------------------------------------------- movimiento reducido
+   Todo visible y quieto; los cambios de estado son inmediatos (la regla
+   global de movil.css deja las transiciones en 0). */
+@media (prefers-reduced-motion: reduce) {
+    .m-js .pre-pl-chips:not(.is-in) .pre-pl-chip {
+        opacity: 1;
+    }
+    .m-js .pre-pl-chips:not(.is-in) .pre-pl-chip,
+    .m-js .pre-pl-quien[data-rv]:not(.is-in) {
+        translate: none;
+    }
+    .pre-pl-chip:active {
+        scale: none;
+    }
+    .pre-pl-gigante [data-pos] {
+        translate: none;
+    }
+    .pre-pl-panel[data-activo='false'] {
+        translate: none;
+    }
+    .m-js .pre-pl-24:not(.is-in) .pre-pl-24-linea {
+        stroke-dashoffset: 0;
+    }
+    .m-js .pre-pl-24:not(.is-in) .pre-pl-24-area,
+    .m-js .pre-pl-24:not(.is-in) .m-ping {
+        opacity: 1;
+        scale: 1;
+    }
+    .m-js .pre-pl-paso:not(.is-in)::before {
+        transform: none;
+    }
+}

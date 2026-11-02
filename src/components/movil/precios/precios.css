@@ -1,5 +1,5 @@
 /* =====================================================================
-   PRECIOS MÓVIL · la entrada «Nuestros / Precios» (ver IntroPrecios.tsx).
+   PRECIOS MÓVIL · la entrada «Nuestros / Servicios» (ver IntroPrecios.tsx).
    Una pantalla de alto completo; el JS mueve el titular, la leyenda, las
    lineas y el lienzo de three.js con el reloj de la entrada (no el scroll).
    ===================================================================== */
@@ -134,10 +134,9 @@
     left: 18px;
     right: 18px;
     bottom: calc(18px + env(safe-area-inset-bottom));
-    display: grid;
-    grid-template-columns: 1fr auto;
+    display: flex;
+    justify-content: flex-end;
     align-items: end;
-    gap: 16px;
     pointer-events: none;
 }
 .pre-bot p {
@@ -277,7 +276,96 @@
     display: none;
 }
 
-/* ---- despues de la entrada: aqui iran las tarjetas de precios */
-.pre-planes {
-    min-height: 40svh;
+/* =====================================================================
+   PRECIOS · tokens compartidos por la lista (#planes), el detalle y comun/.
+   Todo cuelga de .pre: la lista y el detalle lo llevan en su <main>.
+   ===================================================================== */
+.pre {
+    --pre-fondo: #0a0a0b;
+    --pre-hueso: #f4f1ea;
+    --pre-hueso-2: #e4e0d6;
+    --pre-niebla: #dcdcd8;
+    --pre-grafito: #17181a;
+    --pre-carbon: #050506;
+    --pre-ink: #0b0b0c;
+    --pre-ink-2: rgba(11, 11, 12, 0.66); /* ≥ 5,6:1 sobre hueso y niebla */
+    --pre-ink-linea: rgba(11, 11, 12, 0.12);
+    /* vidrio: SOLO sobre algo que desenfocar (palabra gigante, foto, glifo) */
+    --pre-vidrio: rgba(24, 24, 27, 0.5);
+    --pre-vidrio-borde: rgba(244, 241, 234, 0.14);
+    --pre-vidrio-brillo: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    --pre-desenfoque: blur(18px) saturate(1.3);
+    --pre-r-xl: var(--isla); /* 30px: islas */
+    --pre-r-l: 28px; /* tiles, tarjetas */
+    --pre-r-m: 20px; /* filas */
+    --pre-r-s: 14px; /* cuadros de cifra */
+    --pre-sombra: 0 24px 48px -16px rgba(0, 0, 0, 0.55);
+    --pre-sombra-hoja: 0 30px 60px -24px rgba(0, 0, 0, 0.7);
+    --pre-sec: 96px; /* ritmo entre bloques (detalle: 88px) */
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .pre {
+        --pre-vidrio: rgba(24, 24, 27, 0.94);
+    }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .pre {
+        --pre-vidrio: rgba(24, 24, 27, 0.94);
+    }
+}
+
+/* Material de cada plan: el mismo en el bento, en «Otros planes» y en el
+   cuadrito del dock, para reconocerlo en cualquier parte. Claro → oscuro =
+   simple → a medida. */
+.pre [data-mat='hueso'] {
+    --mat-bg: var(--pre-hueso);
+    --mat-fg: var(--pre-ink);
+    --mat-fg2: var(--pre-ink-2);
+    --mat-borde: transparent;
+    --mat-chip: var(--pre-ink);
+    --mat-chipfg: var(--pre-hueso);
+}
+.pre [data-mat='niebla'] {
+    --mat-bg: var(--pre-niebla);
+    --mat-fg: var(--pre-ink);
+    --mat-fg2: var(--pre-ink-2);
+    --mat-borde: transparent;
+    --mat-chip: var(--pre-ink);
+    --mat-chipfg: var(--pre-niebla);
+}
+.pre [data-mat='grafito'] {
+    --mat-bg: var(--pre-grafito);
+    --mat-fg: var(--pre-hueso);
+    --mat-fg2: var(--t2);
+    --mat-borde: rgba(255, 255, 255, 0.1);
+    --mat-chip: var(--pre-hueso);
+    --mat-chipfg: var(--pre-ink);
+}
+.pre [data-mat='carbon'] {
+    --mat-bg: radial-gradient(120% 90% at 100% 0%, rgba(244, 241, 234, 0.1), transparent 60%), var(--pre-carbon);
+    --mat-fg: var(--pre-hueso);
+    --mat-fg2: var(--t2);
+    --mat-borde: rgba(255, 255, 255, 0.16);
+    --mat-chip: var(--pre-hueso);
+    --mat-chipfg: var(--pre-ink);
+}
+
+/* Transicion entre documentos (lista ↔ detalle, detalle ↔ detalle). Mejora
+   progresiva: sin soporte se navega normal. Los nombres van inline
+   (pre-plan-<slug>, pre-perilla) y son unicos por documento. */
+@view-transition {
+    navigation: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+    @view-transition {
+        navigation: none;
+    }
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.28s;
+}
+::view-transition-group(*) {
+    animation-duration: 0.42s;
+    animation-timing-function: cubic-bezier(0.2, 0.85, 0.15, 1);
 }

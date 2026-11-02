@@ -27,7 +27,7 @@ const TARJETAS = [
 const ENLACES = [
     { label: 'Inicio', href: '/' },
     { label: 'Proyectos', href: '/projects' },
-    { label: 'Precios', href: '/servicios' },
+    { label: 'Servicios', href: '/servicios' },
     { label: 'Contacto', href: '/contact' },
 ];
 

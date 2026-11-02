@@ -388,7 +388,7 @@ export const numero = (p: Proyecto) => String(PROYECTOS.indexOf(p) + 1).padStart
 export const MENU_PROYECTOS = [
     { n: '01', label: 'Inicio', href: '/' },
     { n: '02', label: 'Nosotros', href: '/nosotros' },
-    { n: '03', label: 'Servicios', href: '/#servicios' },
+    { n: '03', label: 'Servicios', href: '/servicios' },
     { n: '04', label: 'Proyectos', href: '/projects' },
     { n: '05', label: 'Tu negocio', href: '/#negocios' },
     { n: '06', label: 'Preguntas', href: '/#preguntas' },

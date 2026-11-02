@@ -44,15 +44,14 @@ export const metadata: Metadata = {
     alternates: { canonical: '/' },
 };
 
-// Nosotros y Precios llevan a sus propias paginas (/nosotros solo existe en
-// el movil; Precios, por ahora en negro); Contacto abre WhatsApp.
+// Nosotros y Servicios llevan a sus propias paginas (/nosotros solo existe
+// en el movil; /servicios son los planes y precios); Contacto abre WhatsApp.
 const MENU_HOME = [
     { n: '01', label: 'Nosotros', href: '/nosotros' },
-    { n: '02', label: 'Servicios', href: '#servicios' },
-    { n: '03', label: 'Precios', href: '/servicios' },
-    { n: '04', label: 'Proyectos', href: '/projects' },
-    { n: '05', label: 'Por qué Atlas', href: '#ventajas' },
-    { n: '06', label: 'Contacto', href: WHATSAPP, externo: true },
+    { n: '02', label: 'Servicios', href: '/servicios' },
+    { n: '03', label: 'Proyectos', href: '/projects' },
+    { n: '04', label: 'Por qué Atlas', href: '#ventajas' },
+    { n: '05', label: 'Contacto', href: WHATSAPP, externo: true },
 ];
 
 export default function HomeMovil() {
