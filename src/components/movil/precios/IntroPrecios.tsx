@@ -7,8 +7,8 @@ import './precios.css';
 
    Es el hero «Vante» que paso Harley, llevado al celular. Todo sale de un
    solo numero, el avance `p` (0 → 1, suavizado), que aqui NO lo mueve el
-   scroll: corre solo con el tiempo al entrar (DURA) sobre una pantalla de
-   alto completo:
+   scroll: corre solo con el tiempo, desde que se llega (DURA), sobre una
+   pantalla de alto completo:
      · las dos lineas del titular cruzan la pantalla en sentidos opuestos;
      · una cinta de tarjetas con video viaja por un riel fijo en 3D: entra
        chica por abajo, pasa cerca en un arco suave, rodea el borde y se va
@@ -16,8 +16,8 @@ import './precios.css';
      · al dejar el riel, cada tarjeta vuela a su lugar en una grilla de
        2 × 3 y una linea fina se dibuja entre las filas.
    Mientras corre, el scroll queda bloqueado y abajo hay un «Saltar»; al
-   terminar se suelta y el pie dice «Desliza»: el scroll es para bajar a
-   los precios. Si se llega con la pagina ya bajada, va directo al final.
+   terminar se suelta y aparece una flecha que late hacia abajo (y lleva a
+   #planes): el scroll es para bajar a los precios. Si se llega con la pagina ya bajada, va directo al final.
 
    Cambios para el celular: la camara mantiene fijo el ancho visible (como
    el original bajo 16:9), pero en una pantalla alta eso deja la cinta como
@@ -43,7 +43,7 @@ const WORK = [
     ['Honey Bee', 'designs/honey-bee-melli-landing.mp4'],
 ] as const;
 
-const DURA = 8500; // ms de la entrada completa (p de 0 a 1)
+const DURA = 6000; // ms de la entrada completa (p de 0 a 1)
 const LIBRE = 0.86; // desde aqui la grilla ya esta quieta: se suelta el scroll
 
 const clamp = (x: number, a = 0, b = 1) => Math.min(b, Math.max(a, x));
@@ -101,7 +101,110 @@ export function IntroPrecios() {
 
         let vivo = true;
         let raf = 0;
-        let limpiar = () => bloquear(false);
+
+        /* ---------- el reloj de la entrada (no el scroll): arranca apenas se
+           llega, sin esperar a three ni a los videos; el titular ya se mueve
+           y la cinta entra cuando el 3D este listo (al .14, de sobra) */
+        let target = 0;
+        let p = 0;
+        let t0 = -1; // se fija en el primer cuadro pintado, no al montar
+        let pausado = 0; // ms descontados por tirones
+        let terminado = false;
+        // si se llega con la pagina ya bajada (volver atras), directo al final
+        if (scrollY > 40) {
+            t0 = performance.now() - DURA;
+            target = p = 1;
+        } else bloquear(true);
+        const terminar = () => {
+            if (terminado) return;
+            terminado = true;
+            bloquear(false);
+            setEstado('listo');
+        };
+        saltar.current = () => {
+            t0 = performance.now() - DURA;
+        };
+
+        const pintarDom = (pp: number) => {
+            // el titular cruza la pagina, cada linea hacia su lado
+            const rise = 1 - out(span(pp, 0, 0.12));
+            // hasta 112vw y no 76: en el celular las palabras ocupan casi todo
+            // el ancho y con 76 asomaban por los bordes sobre la grilla
+            const run = mix(-50, 112, span(pp, 0, 0.58));
+            l1.style.transform = `translate3d(${run}vw,${rise * 34}vh,0)`;
+            l2.style.transform = `translate3d(${-run}vw,${rise * 34}vh,0)`;
+            cap.style.opacity = String(1 - span(pp, 0.52, 0.57));
+            cap.style.transform = `translate(-50%,calc(-50% + ${rise * 34}vh))`;
+            const a = String(1 - span(pp, 0, 0.05));
+            primeros.forEach((el) => (el.style.opacity = a));
+            const regla = ease(span(pp, 0.72, 0.86));
+            reglas.forEach((el) => (el.style.transform = `scaleX(${regla})`));
+        };
+
+        // lo que pone three cuando carga
+        let pintar3d: ((pp: number) => void) | null = null;
+        let resize3d = () => {};
+        let pausar3d = () => {};
+        let limpiar3d = () => {};
+
+        /* ---------- bucle: mientras la entrada este en pantalla (los videos
+           de la grilla siguen corriendo al terminar) */
+        let enPantalla = true;
+        let ultimo = performance.now();
+        const loop = () => {
+            raf = 0;
+            const ahora = performance.now();
+            const hueco = ahora - ultimo;
+            const dt = Math.min(0.1, hueco / 1000);
+            ultimo = ahora;
+            // el reloj arranca con el primer cuadro (la carga de la pagina no se
+            // come la entrada) y no avanza durante un tiron largo del hilo (three
+            // compilando, por ejemplo): asi la entrada se ve entera
+            if (t0 < 0) t0 = ahora;
+            else if (hueco > 250 && pausado < 2500) {
+                // con tope: en un equipo lento de verdad no se alarga sin fin
+                pausado += hueco - 16;
+                t0 += hueco - 16;
+            }
+            target = clamp((ahora - t0) / DURA);
+            // el .09 por cuadro del original, a 60 fps, sin importar los Hz
+            p += (target - p) * (1 - Math.pow(1 - 0.09, dt * 60));
+            if (Math.abs(target - p) < 0.00005) p = target;
+            if (p >= LIBRE) terminar();
+            pintarDom(p);
+            pintar3d?.(p);
+            if (enPantalla && vivo) raf = requestAnimationFrame(loop);
+        };
+        const pedir = () => {
+            if (!raf && enPantalla && vivo) {
+                ultimo = performance.now();
+                raf = requestAnimationFrame(loop);
+            }
+        };
+        const io = new IntersectionObserver(([e]) => {
+            enPantalla = e.isIntersecting;
+            if (!enPantalla) pausar3d();
+            pedir();
+        });
+        io.observe(intro);
+        const alResize = () => {
+            resize3d();
+            pedir();
+        };
+        addEventListener('resize', alResize);
+        pedir();
+
+        // sin WebGL: titular quieto, sin bloqueo
+        const sinWebGL = () => {
+            vivo = false;
+            cancelAnimationFrame(raf);
+            bloquear(false);
+            [l1, l2, cap, ...primeros, ...reglas].forEach((el) => {
+                el.style.transform = '';
+                el.style.opacity = '';
+            });
+            setEstado('quieto');
+        };
 
         import('three').then((THREE) => {
             if (!vivo) return;
@@ -110,7 +213,7 @@ export function IntroPrecios() {
             try {
                 renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
             } catch {
-                setEstado('quieto');
+                sinWebGL();
                 return;
             }
             renderer.setClearColor(0, 0);
@@ -172,7 +275,6 @@ export function IntroPrecios() {
             /* ---------- las tarjetas, cada una con su video */
             const NX = 28;
             const NY = 3;
-            let listos = 0; // videos con su primer cuadro ya cargado
             const cards = WORK.map(([title, src], i) => {
                 const v = document.createElement('video');
                 Object.assign(v, { crossOrigin: 'anonymous', muted: true, loop: true, playsInline: true, preload: 'auto', src: R2 + src });
@@ -206,7 +308,6 @@ export function IntroPrecios() {
                     c.va = v.videoWidth / v.videoHeight;
                     ajustarCover(c);
                     mat.uniforms.ready.value = 1;
-                    listos++;
                 });
                 return c;
             });
@@ -262,33 +363,6 @@ export function IntroPrecios() {
             };
             resize();
 
-            /* ---------- el reloj de la entrada (no el scroll). Arranca cuando
-               los tres primeros videos tienen imagen (o a los 3 s), para que la
-               cinta no pase con tarjetas negras en datos moviles; mientras
-               tanto se ve el primer cuadro, el casi vacio. */
-            let target = 0;
-            let p = 0;
-            const tInicio = performance.now();
-            let t0 = tInicio;
-            let arranco = false;
-            let terminado = false;
-            // si se llega con la pagina ya bajada (volver atras), directo al final
-            if (scrollY > 40) {
-                arranco = true;
-                t0 -= DURA;
-                target = p = 1;
-            } else bloquear(true);
-            const terminar = () => {
-                if (terminado) return;
-                terminado = true;
-                bloquear(false);
-                setEstado('listo');
-            };
-            saltar.current = () => {
-                arranco = true;
-                t0 = performance.now() - DURA;
-            };
-
             /* ---------- poses */
             const op = new THREE.Vector3();
             const ot = new THREE.Vector3();
@@ -336,21 +410,7 @@ export function IntroPrecios() {
 
             const RIB_A = 0.14;
             const RIB_B = 0.63;
-            const render = () => {
-                const pp = p;
-                // el titular cruza la pagina, cada linea hacia su lado
-                const rise = 1 - out(span(pp, 0, 0.12));
-                // hasta 112vw y no 76: en el celular las palabras ocupan casi todo
-                // el ancho y con 76 asomaban por los bordes sobre la grilla
-                const run = mix(-50, 112, span(pp, 0, 0.58));
-                l1.style.transform = `translate3d(${run}vw,${rise * 34}vh,0)`;
-                l2.style.transform = `translate3d(${-run}vw,${rise * 34}vh,0)`;
-                cap.style.opacity = String(1 - span(pp, 0.52, 0.57));
-                cap.style.transform = `translate(-50%,calc(-50% + ${rise * 34}vh))`;
-                const a = String(1 - span(pp, 0, 0.05));
-                primeros.forEach((el) => (el.style.opacity = a));
-                const regla = ease(span(pp, 0.72, 0.86));
-                reglas.forEach((el) => (el.style.transform = `scaleX(${regla})`));
+            const render = (pp: number) => {
                 // la cinta y despues la grilla
                 const pr = span(pp, RIB_A, RIB_B);
                 const total = PATH_L + cards.length * STEP;
@@ -369,58 +429,18 @@ export function IntroPrecios() {
                         if (c.mesh.visible) poseGrid(c, q);
                     } else c.mesh.visible = false;
                 }
-                renderer.render(scene, camera);
-            };
-
-            /* ---------- bucle: mientras la entrada este en pantalla (los videos
-               de la grilla siguen corriendo al terminar) */
-            let enPantalla = true;
-            let ultimo = performance.now();
-            const loop = () => {
-                raf = 0;
-                const ahora = performance.now();
-                const dt = Math.min(0.1, (ahora - ultimo) / 1000);
-                ultimo = ahora;
-                if (!arranco && (listos >= 3 || ahora - tInicio > 3000)) {
-                    arranco = true;
-                    t0 = ahora;
-                }
-                target = arranco ? clamp((ahora - t0) / DURA) : 0;
-                // el .09 por cuadro del original, a 60 fps, sin importar los Hz
-                p += (target - p) * (1 - Math.pow(1 - 0.09, dt * 60));
-                if (Math.abs(target - p) < 0.00005) p = target;
-                if (p >= LIBRE) terminar();
+                // cada video corre solo mientras su tarjeta se ve
                 for (const c of cards) {
                     if (c.mesh.visible && c.v.paused) c.v.play().catch(() => {});
                     else if (!c.mesh.visible && !c.v.paused) c.v.pause();
                 }
-                render();
-                if (enPantalla) raf = requestAnimationFrame(loop);
+                renderer.render(scene, camera);
             };
-            const pedir = () => {
-                if (!raf && enPantalla) {
-                    ultimo = performance.now();
-                    raf = requestAnimationFrame(loop);
-                }
-            };
-            const io = new IntersectionObserver(([e]) => {
-                enPantalla = e.isIntersecting;
-                if (!enPantalla) cards.forEach((c) => c.v.pause());
-                pedir();
-            });
-            io.observe(intro);
-            const alResize = () => {
-                resize();
-                pedir();
-            };
-            addEventListener('resize', alResize);
-            pedir();
 
-            limpiar = () => {
-                bloquear(false);
-                cancelAnimationFrame(raf);
-                io.disconnect();
-                removeEventListener('resize', alResize);
+            pintar3d = render;
+            resize3d = resize;
+            pausar3d = () => cards.forEach((c) => c.v.pause());
+            limpiar3d = () => {
                 for (const c of cards) {
                     c.v.pause();
                     c.v.removeAttribute('src');
@@ -431,11 +451,16 @@ export function IntroPrecios() {
                 }
                 renderer.dispose();
             };
+            pedir();
         });
 
         return () => {
             vivo = false;
-            limpiar();
+            cancelAnimationFrame(raf);
+            io.disconnect();
+            removeEventListener('resize', alResize);
+            bloquear(false);
+            limpiar3d();
         };
     }, []);
 
@@ -464,9 +489,13 @@ export function IntroPrecios() {
                         Saltar
                     </button>
                 ) : (
-                    <span className="pre-bot-r" aria-hidden="true">
-                        Desliza
-                    </span>
+                    <a className="pre-bajar" href="#planes" aria-label="Bajar a los precios">
+                        <span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                <path d="M12 4v15M6 13l6 6 6-6" />
+                            </svg>
+                        </span>
+                    </a>
                 )}
             </div>
         </div>
