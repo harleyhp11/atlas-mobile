@@ -15,7 +15,7 @@ export function OtrosPlanes({ d }: { d: Detalle }) {
     return (
         <section className="pre-dt-sec pre-dt-otros" data-tono="oscuro" aria-labelledby="otros-t">
             <div className="m-wrap">
-                <Titular id="otros-t" className="pre-dt-t" texto="¿Buscabas otra cosa?" destacar="otra" />
+                <Titular id="otros-t" className="pre-dt-t pre-c-t-gris" texto="¿Buscabas otra cosa?" />
                 <div className="pre-dt-otros-grilla">
                     {otros(d).map((o, k) => (
                         <TarjetaPlan key={o.slug} d={o} tam="cuadro" revelar retraso={k * 0.07} />

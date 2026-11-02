@@ -10,8 +10,8 @@ import { detalle, precioLeido, WSP_MAS40, type Detalle } from '../planes';
    plan, cada una como enlace directo a ese plan. Asi nadie llega al final
    de la pagina para descubrir que buscaba otra cosa.
 
-   La mini-etiqueta de cada enlace sale del plan de destino (nombre corto y
-   precio, de datos.ts). «Más de 40 productos» no tiene plan: va a WhatsApp
+   La mini-etiqueta de cada enlace sale del plan de destino (la miniatura
+   redonda de su rubro, nombre corto y precio, de datos.ts). «Más de 40 productos» no tiene plan: va a WhatsApp
    con su propio mensaje (WSP_MAS40). */
 
 export function ParaTi({ d }: { d: Detalle }) {
@@ -58,7 +58,7 @@ export function ParaTi({ d }: { d: Detalle }) {
                                     <span className="pre-dt-otro-t">
                                         <span className="pre-dt-otro-q">{m.texto}</span>
                                         <small className="m-mono" aria-hidden="true">
-                                            <i data-mat={o.material} />
+                                            <img src={o.foto.mini} width={112} height={112} alt="" loading="lazy" decoding="async" />
                                             {o.corto} · {o.plan.precio}
                                         </small>
                                     </span>

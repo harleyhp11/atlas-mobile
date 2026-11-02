@@ -75,7 +75,6 @@ export type Detalle = {
     dentro: {
         titular: string;
         destacar: string;
-        modo?: 'caja' | 'marco';
         cabecera: string;
         forma: FormaDentro;
         partes: { t: string; d: string }[];
@@ -85,6 +84,9 @@ export type Detalle = {
     proyecto: string; // slug de PROYECTOS (proyectos/proyectos.ts)
     proyectoLinea: string;
     extras: string[]; // nombres EXACTOS de GRUPOS
+    /* como se MUESTRA un extra en este plan, si su nombre de GRUPOS confunde
+       aqui (el nombre exacto sigue siendo la clave) */
+    etiquetas?: Record<string, string>;
     pedido: string; // ultima palabra de «¿Empezamos tu …?»
 };
 
@@ -144,6 +146,10 @@ export const DETALLES: Detalle[] = [
         proyecto: 'polleria-la-lena',
         proyectoLinea: 'Tiene la carta con pedido por WhatsApp, una página por local y la historia de la pollería.', // literal del resumen
         extras: ['E-commerce', 'Identidad visual', 'Hosting y dominio', 'Contenido y actualizaciones', 'Mantenimiento mensual'],
+        // en la pagina de «Tiendas online», «E-commerce» se lee como «la
+        // tienda misma» y parece que no la incluye: se dice lo que suma de
+        // verdad (cobrar en la web, no por WhatsApp) [CONFIRMAR copy con Harley]
+        etiquetas: { 'E-commerce': 'Carrito y pago en línea' },
         pedido: 'catálogo',
     },
     {
@@ -219,7 +225,6 @@ export const DETALLES: Detalle[] = [
         dentro: {
             titular: 'Tu web, página por página.',
             destacar: 'página.',
-            modo: 'marco',
             cabecera: 'Mapa del sitio',
             forma: 'arbol',
             partes: [
@@ -293,6 +298,7 @@ const SERVICIOS_PLANOS = GRUPOS.flatMap((g) => g.servicios);
 export const tipoDe = (nombre: string): TipoServicio | undefined => SERVICIOS_PLANOS.find((s) => s.nombre === nombre)?.tipo;
 export const detalle = (slug: string) => DETALLES.find((d) => d.slug === slug);
 export const otros = (d: Detalle) => DETALLES.filter((x) => x !== d);
+export const nombreExtra = (d: Detalle, n: string) => d.etiquetas?.[n] ?? n;
 export const miles = (n: number) => n.toLocaleString('en-US'); // 1200 → "1,200", como el dato
 export const soles = (n: number) => `S/ ${miles(n)}`;
 
@@ -318,7 +324,7 @@ const minuscula = (s: string) => s.charAt(0).toLowerCase() + s.slice(1);
 export function mensajePlan(d: Detalle, extras: string[] = []) {
     const precio = d.plan.aMedida ? '' : ` (${d.plan.precio})`;
     const lineas = [`${SALUDO} Vi el plan ${d.titulo}${precio} y quiero ${minuscula(d.plan.cta)}.`];
-    if (extras.length) lineas.push('También me interesa:', ...extras.map((e) => `· ${e}`));
+    if (extras.length) lineas.push('También me interesa:', ...extras.map((e) => `· ${nombreExtra(d, e)}`));
     lineas.push(d.plan.aMedida ? 'Hoy trabajamos así: ' : 'Mi negocio es: ');
     return lineas.join('\n');
 }
@@ -339,10 +345,12 @@ export const NECESIDADES: { id: SlugPlan | 'todos' | 'ayuda'; label: string }[] 
     { id: 'ayuda', label: 'No sé cuál' },
 ];
 
+// las bajadas 2 y 3 dicen algo que el titulo no dice (antes repetian su
+// propio titulo) [CONFIRMAR copy con Harley]
 export const PASOS: { t: string; d: string; etapas?: boolean }[] = [
     { t: 'Nos escribes.', d: FRASES.tuIdea },
-    { t: 'Primera reunión.', d: FRASES.fecha },
-    { t: 'Precio cerrado, por escrito.', d: FRASES.montoFinal },
+    { t: 'Primera reunión.', d: 'Ahí fijamos la fecha de entrega.' },
+    { t: 'Precio cerrado, por escrito.', d: 'Lo tienes antes de empezar, con todo lo que vamos a hacer.' },
     { t: 'Cinco etapas, con tu visto bueno.', d: FRASES.nadaSinVerlo, etapas: true },
 ];
 

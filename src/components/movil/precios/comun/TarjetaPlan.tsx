@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { Flecha } from '../../iconos';
+import { Flecha, Reloj } from '../../iconos';
 import { entregaLeida, FRASES, precioLeido, type Detalle } from '../planes';
 import { PrecioPlan } from './PrecioPlan';
 import './comun.css';
@@ -31,8 +31,12 @@ import './comun.css';
    «Landing page que convierte. De 600 a 1,500 soles. Entrega en 7 a 10
    días. Ver el plan.», una sola vez y en orden. */
 
-// «7 – 10 días» no se parte alrededor del guion: a lo mas, «7 – 10 / días»
-const sinCorte = (s: string) => s.replace(/ – /g, '\u00a0–\u00a0');
+// «7 – 10 días» no se parte nunca: ni alrededor del guion ni antes de la
+// unidad. En el cuadro (media columna, al lado del chip ↗) va ademas sin
+// espacios en el guion, «7–10 días», como la cifra de «¿Cuándo está listo?»:
+// asi entra en una linea hasta en 360 px.
+const sinCorte = (s: string, junto = false) =>
+    s.replace(/ – /g, junto ? '–' : '\u00a0–\u00a0').replace(/ (días|semanas)/gi, '\u00a0$1');
 
 type Props = {
     d: Detalle;
@@ -74,9 +78,11 @@ export function TarjetaPlan({ d, tam, estado, revelar, retraso = 0, cuenta, tran
             <span className="pre-c-tile-precio" aria-hidden="true">
                 <PrecioPlan plan={plan} tam={ancho ? 'xl' : 'l'} cola={ancho ? 'chica' : 'abajo'} cuenta={cuenta} />
             </span>
+            {/* en el cuadro no cabe la palabra «Entrega»: la dice el reloj */}
             <span className="pre-c-tile-ent" aria-hidden="true">
                 <small className="m-mono">Entrega</small>
-                <b>{sinCorte(plan.entrega)}</b>
+                {!ancho && <Reloj className="pre-c-tile-reloj" />}
+                <b>{sinCorte(plan.entrega, !ancho)}</b>
             </span>
             <span className="pre-c-tile-ir" aria-hidden="true">
                 <Flecha />

@@ -40,8 +40,9 @@ import './planes.css';
         gigante del plan detras de una tarjeta de vidrio que la desenfoca,
         precio, plazo y los checks que se van marcando. Se cambia tocando la
         pestaña, con las flechas o deslizando sobre la tarjeta.
-     3. «¿Y si les escribo hoy?» (ref 32): la hoja clara con el «< 24 h» y
-        los cuatro pasos hasta el precio cerrado, y lo que va en todos.
+     3. «¿Y si les escribo hoy?» (ref 32): la hoja clara con el «< 24 h» (y
+        un reloj que se completa) y los cuatro pasos hasta el precio
+        cerrado, y lo que va en todos.
      4. «Te ayudamos a elegir.» (ref 35): la salida para quien sigue sin
         saber: foto a sangre, los dos que responden y WhatsApp.
 
@@ -221,7 +222,7 @@ function Comparador({ pestana, setPestana }: { pestana: number; setPestana: (i: 
     return (
         <section className="pre-pl-cmp" data-tono="oscuro" aria-labelledby="cmp-t">
             <div className="m-wrap">
-                <Titular id="cmp-t" className="m-h2 pre-pl-t" texto="Lo que incluye, punto por punto." destacar="punto." />
+                <Titular id="cmp-t" className="m-h2 pre-pl-t pre-c-t-gris" texto="Lo que incluye, punto por punto." />
                 <div
                     ref={lista}
                     className="pre-pl-tabs"
@@ -251,10 +252,15 @@ function Comparador({ pestana, setPestana }: { pestana: number; setPestana: (i: 
 
             <div className="pre-pl-escena">
                 {/* la palabra gigante: dice en que plan estas sin leer; el
-                    vidrio la desenfoca justo donde la tapa */}
+                    vidrio la desenfoca justo donde la tapa. --n (letras)
+                    achica las largas para que entren enteras en el ancho */}
                 <div className="pre-pl-gigante m-wrap" aria-hidden="true">
                     {DETALLES.map((d, k) => (
-                        <span key={d.slug} data-pos={k < pestana ? 'antes' : k === pestana ? 'activa' : 'despues'}>
+                        <span
+                            key={d.slug}
+                            data-pos={k < pestana ? 'antes' : k === pestana ? 'activa' : 'despues'}
+                            style={{ '--n': d.corto.length } as CSSProperties}
+                        >
                             {d.corto}
                         </span>
                     ))}
@@ -318,16 +324,19 @@ function Hoy() {
     return (
         <section className="pre-pl-hoy m-claro" data-tono="claro" aria-labelledby="hoy-t">
             <div className="m-wrap">
-                <Titular id="hoy-t" className="m-h2 pre-pl-t" texto="¿Y si les escribo hoy?" destacar="hoy?" />
+                <Titular id="hoy-t" className="m-h2 pre-pl-t pre-c-t-gris" texto="¿Y si les escribo hoy?" />
 
-                {/* la cifra grande con su linea (el «86 %» de la ref 32) */}
+                {/* la cifra grande con su grafico (el «86 %» de la ref 32). Un
+                    reloj que se completa y no una linea que sube: junto a un
+                    tiempo de respuesta, subir se leeria «cada vez tardamos mas» */}
                 <div className="pre-pl-24" data-in data-loop>
                     {/* [CONFIRMAR copy con Harley] */}
                     <p className="m-mono pre-pl-24-e">Te respondemos en</p>
                     <span className="pre-pl-24-grafico" aria-hidden="true">
-                        <svg viewBox="0 0 120 44" fill="none">
-                            <path className="pre-pl-24-area" d="M2 41C26 41 34 33 52 29S84 20 96 11 108 5 114 5V44H2Z" />
-                            <path className="pre-pl-24-linea" pathLength={1} d="M2 41C26 41 34 33 52 29S84 20 96 11 108 5 114 5" />
+                        <svg viewBox="0 0 44 44" fill="none">
+                            <circle className="pre-pl-24-area" cx="22" cy="22" r="19" />
+                            <circle className="pre-pl-24-linea" pathLength={1} cx="22" cy="22" r="19" transform="rotate(-90 22 22)" />
+                            <path className="pre-pl-24-agujas" d="M22 22V12M22 22l6 4" />
                         </svg>
                         <i className="m-ping m-ping--siempre" />
                     </span>

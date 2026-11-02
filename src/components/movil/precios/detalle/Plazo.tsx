@@ -10,7 +10,10 @@ import { ETAPAS, FRASES, plazo, type Detalle } from '../planes';
 
    El plazo sale de plan.entrega con plazo(): «7 – 10» + «días», «Desde» +
    «4» + «semanas». La tienda no tiene plazo confirmado todavia (dice «A
-   coordinar»): se muestra tal cual, sin inventar un numero.
+   coordinar»): sin inventar un numero, y sin darle la cifra gigante a un
+   dato que falta. Ahi «A coordinar» baja a etiqueta y la protagonista es
+   la frase que SI responde la pregunta: la fecha se fija en la primera
+   reunion (FRASES.fecha, que entonces no se repite debajo).
 
    NO se reparten dias por etapa: no hay dato. Lo que si es seguro va al
    cierre de la hoja: nada se publica sin que lo veas y lo que pasa despues
@@ -24,7 +27,7 @@ export function Plazo({ d }: { d: Detalle }) {
     return (
         <section id="plazo" className="pre-dt-plazo m-claro" data-tono="claro" aria-labelledby="plazo-t">
             <div className="m-wrap">
-                <Titular id="plazo-t" className="pre-dt-t" texto="¿Cuándo está listo?" destacar="listo?" />
+                <Titular id="plazo-t" className="pre-dt-t pre-c-t-gris" texto="¿Cuándo está listo?" />
 
                 <div className="pre-dt-plazo-cifra" data-rv>
                     <p className="pre-dt-plazo-v" data-coordinar={p ? undefined : ''}>
@@ -37,7 +40,10 @@ export function Plazo({ d }: { d: Detalle }) {
                                 </span>
                             </>
                         ) : (
-                            <b>{plan.entrega}</b>
+                            <>
+                                <small className="m-mono">Entrega · {plan.entrega}</small>
+                                <b>{FRASES.fecha}</b>
+                            </>
                         )}
                     </p>
                     {/* la linea de la ref 32: sube hasta el punto del lanzamiento.
@@ -50,9 +56,11 @@ export function Plazo({ d }: { d: Detalle }) {
                         <i className="pre-dt-linea-punto" />
                     </div>
                 </div>
-                <p className="pre-dt-plazo-fecha" data-rv>
-                    {FRASES.fecha}
-                </p>
+                {p && (
+                    <p className="pre-dt-plazo-fecha" data-rv>
+                        {FRASES.fecha}
+                    </p>
+                )}
 
                 <ol className="pre-dt-etapas" data-in>
                     {ETAPAS.map((e, k) => (

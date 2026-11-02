@@ -67,6 +67,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         alternates: { canonical: url },
         // el openGraph de la pagina REEMPLAZA al del layout: se repite todo
         openGraph: { type: 'website', locale: 'es_PE', siteName: 'Atlas', url, title, description, images: [IMAGEN_OG] },
+        // y el de X tambien: sin esto, al compartir un plan salia el de la home
+        twitter: { card: 'summary_large_image', title, description, images: [IMAGEN_OG] },
     };
 }
 

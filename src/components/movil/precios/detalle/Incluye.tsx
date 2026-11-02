@@ -23,7 +23,7 @@ export function Incluye({ d }: { d: Detalle }) {
         <section id="incluye" className="pre-dt-sec pre-dt-inc" data-tono="oscuro" aria-labelledby="incluye-t">
             <img className="pre-dt-inc-fondo" src={d.foto.mini} alt="" aria-hidden="true" loading="lazy" decoding="async" />
             <div className="m-wrap">
-                <Titular id="incluye-t" className="pre-dt-t" texto="Todo lo que incluye." destacar="incluye." />
+                <Titular id="incluye-t" className="pre-dt-t pre-c-t-gris" texto="Todo lo que incluye." />
                 <ol className="pre-dt-inc-lista">
                     {plan.incluye.map((item, k) => {
                         const x = d.incluye[k];

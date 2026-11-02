@@ -1,14 +1,15 @@
 /* =====================================================================
    PRECIOS · la lista de planes (#planes), debajo de la entrada. Ver
-   Planes.tsx. Prefijo .pre-pl-. Los tokens (--pre-*, --mat-*) y las
+   ListaPlanes.tsx. Prefijo .pre-pl-. Los tokens (--pre-*, --mat-*) y las
    piezas compartidas (.pre-c-*) vienen de precios.css y comun/comun.css.
 
    Ritmo: chips + bento sobre negro → comparador de vidrio sobre negro →
    «¿Y si les escribo hoy?» en isla hueso → cierre con foto a sangre → pie.
 
    Reglas:
-     · el rojo es solo señal: la caja de los titulares, el «Para ti» y el
-       punto de la linea del «< 24 h»;
+     · el rojo es solo señal: la caja de DOS titulares (el primero y el
+       cierre; el resto va con .pre-c-t-gris), el «Para ti» y el punto del
+       reloj del «< 24 h»;
      · cada estado inicial `.m-js X:not(.is-in)` tiene su contraparte en el
        bloque de movimiento reducido del final;
      · solo se animan opacity, translate, scale, transform y el trazo de
@@ -18,12 +19,13 @@
 .pre-pl {
     /* La flecha de la intro (y /servicios#planes) deja el borde de la
        seccion arriba del todo: el scroll-margin negativo anula el
-       scroll-padding de html (cab + 12). Los 92 px de arriba son de la
-       propia seccion, asi que se vea o no la cabecera (se esconde al
-       bajar), arriba nunca asoma un pedazo cortado de la intro. El titular
-       queda en y = 92. */
+       scroll-padding de html (cab + 12), asi arriba nunca asoma un pedazo
+       cortado de la intro. Antes la seccion reservaba aqui el alto de la
+       cabecera (92 px); ahora la abre la cinta «PLANES / Y PRECIOS», que es
+       decorativa y hace de colchon, asi que basta un margen chico (14 px) y el
+       bento entra casi entero en la primera pantalla (812 px). */
     scroll-margin-top: calc(-1 * (var(--cab) + 12px));
-    padding-top: calc(var(--cab) + 24px);
+    padding-top: 14px;
     padding-bottom: 64px;
     overflow-x: clip;
     /* al final se funde con el negro del pie (el body es #000; .pre, #0a0a0b) */
@@ -32,18 +34,19 @@
 
 /* ---- la cinta «PLANES / Y PRECIOS» (CintaPlanes.tsx): dos lineas enormes
    que entran desde lados opuestos con el scroll y quedan centradas cuando
-   la flecha de la intro deja la seccion arriba (--p ~ 0,9) */
+   la flecha de la intro deja la seccion arriba (la cinta a 14 px del
+   borde: --p ~ 0,98 en un celular de 812 px) */
 .pre-pl-cinta {
-    --p: 0.9;
-    --corre: calc((var(--p) - 0.9) * 120vw);
+    --p: 0.98;
+    --corre: calc((var(--p) - 0.98) * 120vw);
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 12px;
     font-family: var(--f-display);
     font-weight: 800;
     /* «Y PRECIOS» (la mas larga) entra entera en el ancho al quedar centrada */
-    font-size: min(17.5vw, 150px);
+    font-size: min(14.5vw, 124px);
     line-height: 0.86;
     letter-spacing: -0.055em;
     text-transform: uppercase;
@@ -183,10 +186,11 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-top: 16px;
+    margin-top: 12px;
 }
-/* Ajuste fino para la meta de llegada: a 375 × 812 las 4 tarjetas caben
-   enteras debajo del titular, los chips y la linea (spec: ±8 px) */
+/* Ajuste fino para la meta de llegada: a 375 × 812, debajo de la cinta,
+   el titular, los chips y la linea, entran Tienda, Landing y Web enteras y
+   asoma la cabeza de Software, lo bastante para que Revelador la muestre */
 .pre-pl-bento .pre-c-tile[data-tam='ancho']:not([data-medida]) {
     min-height: 140px;
 }
@@ -299,11 +303,19 @@
     color: #e1ded8;
     pointer-events: none;
     user-select: none;
+    /* 100cqw = el ancho util de la columna (sin el --g de cada lado) */
+    container-type: inline-size;
 }
+/* Cada palabra entra ENTERA en el ancho: «Landing» y «Software» se salian
+   de la pantalla y «Tienda» no. El tamaño baja segun sus letras (--n;
+   0,53 em por letra es el ancho medido de Funnel Display a -0,05em, con
+   holgura) y nunca pasa de --fs. Van apoyadas abajo: el vidrio tapa la
+   misma franja de todas, sea cual sea su tamaño. */
 .pre-pl-gigante span {
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: var(--g);
+    font-size: min(var(--fs), 100cqw / (var(--n, 6) * 0.53));
     white-space: nowrap;
     transition:
         translate 0.52s var(--ease),
@@ -516,7 +528,7 @@
 .pre-pl-24-grafico {
     grid-area: g;
     position: relative;
-    width: 120px;
+    width: 44px;
     height: 44px;
 }
 .pre-pl-24-grafico svg {
@@ -524,6 +536,7 @@
     height: 100%;
     overflow: visible;
 }
+/* el reloj: la esfera, el arco que da la vuelta completa y las agujas */
 .pre-pl-24-linea {
     stroke: var(--pre-ink);
     stroke-width: 1.6;
@@ -536,11 +549,16 @@
     fill: rgba(11, 11, 12, 0.06);
     transition: opacity 0.8s var(--ease) 1.1s;
 }
-/* el punto rojo al final de la linea: llega cuando termina el trazo */
+.pre-pl-24-agujas {
+    stroke: var(--pre-ink);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+}
+/* el punto rojo arriba, en las 12: llega cuando el arco cierra la vuelta */
 .pre-pl-24-grafico .m-ping {
     position: absolute;
-    left: calc(95% - 3.5px);
-    top: calc(11.4% - 3.5px);
+    left: calc(50% - 3.5px);
+    top: calc(6.8% - 3.5px);
     transition:
         opacity 0.3s var(--ease) 1.4s,
         scale 0.5s var(--pop) 1.4s;

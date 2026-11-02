@@ -1,4 +1,4 @@
-import { DETALLES, type Detalle } from '../planes';
+import { DETALLES, plazo, rango, soles, type Detalle } from '../planes';
 import { Volver } from './Volver';
 
 /* D1 · El hero del detalle (refs 34 y 35): la foto del rubro a sangre, en
@@ -14,10 +14,16 @@ import { Volver } from './Volver';
    y la mascara de las palabras cortaria esa transicion. Entra con una
    animacion de CSS que no espera a JS (es el LCP junto con la foto).
 
+   Encima del h1, un dato con su etiqueta delante («ENTREGA | 7 – 10 días»).
+   Si el plan aun no tiene plazo («A coordinar», la tienda), no se le da
+   ese peso a un dato que falta: va el precio de entrada («DESDE | S/ 400»).
+
    La foto es ambiente, no un cliente: alt vacio (ver planes.ts). */
 
 export function HeroPlan({ d }: { d: Detalle }) {
     const { plan } = d;
+    const r = rango(plan);
+    const meta = plazo(plan) ? { etq: 'Entrega', v: plan.entrega } : r ? { etq: 'Desde', v: soles(r.desde) } : null;
     return (
         <section className="pre-dt-hero" data-tono="oscuro" aria-labelledby="plan-t">
             <div className="pre-dt-hero-foto" aria-hidden="true">
@@ -45,11 +51,13 @@ export function HeroPlan({ d }: { d: Detalle }) {
             </div>
 
             <div className="pre-dt-hero-in m-wrap">
-                <p className="pre-dt-hero-meta">
-                    <b>{plan.entrega}</b>
-                    <i aria-hidden="true" />
-                    <span className="m-mono">Entrega</span>
-                </p>
+                {meta && (
+                    <p className="pre-dt-hero-meta">
+                        <span className="m-mono">{meta.etq}</span>
+                        <i aria-hidden="true" />
+                        <b>{meta.v}</b>
+                    </p>
+                )}
                 <h1 id="plan-t" className="pre-dt-h1">
                     <span className="pre-dt-h1-nom" style={{ viewTransitionName: `pre-plan-${d.slug}` }}>
                         {plan.nombre}

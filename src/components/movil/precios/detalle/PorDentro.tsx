@@ -13,7 +13,17 @@ import { Casa, Pausa, Reproducir } from './Iconos';
    pintado dispara recalculos de estilo de mas de 1 s en celulares lentos
    (gotcha del proyecto). El escenario tiene alto fijo, asi que nada salta.
    Solo corre si se ve (IntersectionObserver, 35 %), si nadie la pauso y sin
-   movimiento reducido. Lleva SIEMPRE la pildora «Maqueta de ejemplo»: la
+   movimiento reducido. El alto del escenario depende de la escena
+   (data-escena): el panel del software necesita mas que el resto para que
+   entren las barras de la semana.
+
+   Landing y Web usan la misma escena (navegador), pero no deben verse
+   iguales: es justo la diferencia que la persona esta tratando de entender.
+   Sin tocar la escena del escritorio, detalle.css la ajusta por plan
+   (data-plan): la landing es UNA pagina sin menu que baja hasta su
+   formulario; la web tiene menu con paginas y cambia de pagina mientras
+   corre. La pildora «$ next build» del FAQ se oculta: es jerga de
+   programador y tapaba la foto. Lleva SIEMPRE la pildora «Maqueta de ejemplo»: la
    del catalogo muestra precios de mentira («S/ 32») y en una pagina de
    precios se confundirian con los de verdad.
 
@@ -60,13 +70,15 @@ export function PorDentro({ d }: { d: Detalle }) {
     return (
         <section id="por-dentro" className="pre-dt-sec pre-dt-dentro" data-tono="oscuro" aria-labelledby="dentro-t">
             <div className="m-wrap">
-                <Titular id="dentro-t" className="pre-dt-t" texto={dentro.titular} destacar={dentro.destacar} modo={dentro.modo} />
+                {/* el marco de Figma y no la caja roja: el rojo queda para
+                    «¿Es para ti?» y el cierre */}
+                <Titular id="dentro-t" className="pre-dt-t" texto={dentro.titular} destacar={dentro.destacar} modo="marco" />
 
                 {/* la maqueta con su barra de reproductor debajo: la pildora
                     «Maqueta de ejemplo» y la pausa van fuera de la escena, para
                     no taparle nada */}
                 <figure className="pre-dt-esc" data-rv>
-                    <div ref={escenario} className="pre-dt-esc-ui" aria-hidden="true">
+                    <div ref={escenario} className="pre-dt-esc-ui" data-escena={d.escena} data-plan={d.slug} aria-hidden="true">
                         <Escena tipo={d.escena} tema="oscuro" run={run} />
                     </div>
                     <figcaption className="pre-dt-esc-pie">

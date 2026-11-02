@@ -954,6 +954,9 @@
 .pry-pie-nav a {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
+    /* «Inicio» medía 37 px de ancho: el toque pide 44 en los dos lados */
+    min-width: 44px;
     min-height: 44px;
     font-size: 15px;
     font-weight: 500;

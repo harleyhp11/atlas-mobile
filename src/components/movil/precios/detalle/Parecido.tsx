@@ -21,7 +21,7 @@ export function Parecido({ d }: { d: Detalle }) {
     return (
         <section className="pre-dt-sec pre-dt-par-sec" data-tono="oscuro" aria-labelledby="parecido-t">
             <div className="m-wrap">
-                <Titular id="parecido-t" className="pre-dt-t" texto="Algo parecido que hicimos." destacar="hicimos." />
+                <Titular id="parecido-t" className="pre-dt-t pre-c-t-gris" texto="Algo parecido que hicimos." />
                 <p className="pre-dt-bajada" data-rv>
                     {d.proyectoLinea}
                 </p>

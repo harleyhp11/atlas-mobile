@@ -7,8 +7,9 @@ import { useEffect, useRef } from 'react';
    el scroll, como el titular de la entrada (pedido de Harley).
 
    Se mueve con el avance de la cinta por la pantalla (--p): 0 cuando asoma
-   por abajo, ~0,9 cuando llega arriba (ahi quedan centradas, que es donde
-   la deja la flecha de la intro) y sigue un poco al salir. Un rAF por
+   por abajo, ~0,98 cuando llega arriba (ahi quedan centradas, que es donde
+   la deja la flecha de la intro, a 14 px del borde) y sigue un poco al
+   salir. Un rAF por
    scroll y solo mientras esta en pantalla. Decorativa: el titular de la
    seccion es el h2 de abajo. Con movimiento reducido queda quieta. */
 

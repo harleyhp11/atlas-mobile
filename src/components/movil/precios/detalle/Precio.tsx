@@ -3,19 +3,21 @@ import { Boton } from '../../Boton';
 import { Titular } from '../../Titular';
 import { ListaCheck } from '../comun/ListaCheck';
 import { PrecioPlan } from '../comun/PrecioPlan';
-import { FRASES, NOTA_LEGAL, rango, soles, type Detalle } from '../planes';
+import { NOTA_LEGAL, rango, soles, type Detalle } from '../planes';
 
 /* D6 · «Lo que mueve el precio.» (ref 31): por que es un rango y no un
    numero, dicho sin letra chica.
 
    Detras, el glifo «S/» gigante (la palabra «Pricing» de la ref); delante,
    una tarjeta de vidrio que tapa su mitad de abajo y la desenfoca. Dentro:
-     · el rango con la cola que se desvanece;
+     · el rango, con la cola del mismo tamaño en gris;
      · la barra del rango: de un extremo al otro, con lo que lo mueve
-       (ejes de planes.ts) debajo. Se llena de izquierda a derecha al
+       (ejes de planes.ts) debajo. Los extremos son marcas finas y no
+       perillas: no es un control y no debe parecer que se arrastra. Se llena de izquierda a derecha al
        aparecer y NUNCA muestra cifras intermedias: no hay una tabla de
        «tanto por tanto» y no se inventa;
-     · los tres factores de NOTA_LEGAL (alcance, integraciones, contenido);
+     · los tres factores de NOTA_LEGAL (alcance, integraciones, contenido),
+       con «+» y no con check: no son algo incluido, son lo que suma;
      · el boton blanco de la ref, que baja al armador del mensaje.
    El plan a medida no tiene rango: en su lugar, como se llega al monto
    (llamada → propuesta cerrada → diagnostico). */
@@ -41,9 +43,9 @@ export function Precio({ d }: { d: Detalle }) {
         <section id="precio" className="pre-dt-sec pre-dt-pre" data-tono="oscuro" aria-labelledby="precio-t">
             <div className="m-wrap">
                 {plan.aMedida ? (
-                    <Titular id="precio-t" className="pre-dt-t" texto="Cómo se cotiza." destacar="cotiza." />
+                    <Titular id="precio-t" className="pre-dt-t pre-c-t-gris" texto="Cómo se cotiza." />
                 ) : (
-                    <Titular id="precio-t" className="pre-dt-t" texto="Lo que mueve el precio." destacar="precio." />
+                    <Titular id="precio-t" className="pre-dt-t pre-c-t-gris" texto="Lo que mueve el precio." />
                 )}
 
                 <div className="pre-dt-pre-escena">
@@ -96,7 +98,7 @@ export function Precio({ d }: { d: Detalle }) {
                             <>
                                 {/* [CONFIRMAR copy con Harley] */}
                                 <p className="pre-dt-pre-ademas">Además influye:</p>
-                                <ListaCheck items={FACTORES} dibujar />
+                                <ListaCheck items={FACTORES} dibujar marca="mas" />
                             </>
                         )}
 
@@ -107,9 +109,8 @@ export function Precio({ d }: { d: Detalle }) {
                     </div>
                 </div>
 
-                <p className="pre-dt-pre-promesa" data-rv>
-                    {FRASES.montoFinal}
-                </p>
+                {/* FRASES.montoFinal va una sola vez por pagina: en el resumen,
+                    debajo del boton principal */}
                 <p className="pre-dt-legal" data-rv>
                     {NOTA_LEGAL}
                 </p>

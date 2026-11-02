@@ -12,6 +12,10 @@ import { Volver } from './Volver';
    mensaje que arma «¿Empezamos tu…?»; si ya marcaste extras, lo dice con
    una insignia «+n».
 
+   El plan se reconoce por la miniatura redonda de la foto de su rubro (la
+   misma de «Tu pedido»); antes era un cuadrito del material y, en Web
+   (grafito), parecia una casilla para marcar.
+
    Aparece cuando el boton del resumen ya se fue por arriba (antes estaria
    repitiendo lo que se ve) y se esconde donde estorbaria: en el armador
    (#empezar, que tiene su propio boton) y en el pie. Escondido queda
@@ -55,7 +59,7 @@ export function Dock({ d }: { d: Detalle }) {
         <aside className="pre-dt-dock" aria-label="Cotizar este plan" data-visible={visible} inert={!visible} aria-hidden={!visible}>
             <Volver className="pre-dt-dock-volver" />
             <span className="pre-dt-dock-plan">
-                <i data-mat={d.material} aria-hidden="true" />
+                <img src={d.foto.mini} width={112} height={112} alt="" loading="lazy" decoding="async" />
                 <span>
                     <b>{plan.nombre}</b>
                     <small aria-hidden="true">{plan.precio}</small>

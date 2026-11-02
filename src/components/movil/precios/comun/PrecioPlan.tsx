@@ -18,7 +18,8 @@ import './comun.css';
    Tamaños (data-tam) y colas (data-cola) en comun.css:
      · 'chica'   — la cola chica al lado, apagada (por defecto);
      · 'abajo'   — la cola chica en la linea siguiente (tarjetas cuadradas);
-     · 'fundido' — la cola al tamaño del «desde», desvaneciendose (ref 31). */
+     · 'fundido' — la cola al tamaño del «desde», en gris solido (ref 31;
+       ya no se desvanece: es una cifra y no puede parecer cortada). */
 
 type Props = {
     plan: Plan;

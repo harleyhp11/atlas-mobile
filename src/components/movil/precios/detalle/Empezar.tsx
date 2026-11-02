@@ -5,13 +5,14 @@ import { Boton } from '../../Boton';
 import { Mas } from '../../iconos';
 import { Titular } from '../../Titular';
 import { PrecioPlan } from '../comun/PrecioPlan';
-import { LEYENDA_TIPO, mensajePlan, NOTA_LEGAL, tipoDe, wspPlan, type Detalle } from '../planes';
+import { LEYENDA_TIPO, mensajePlan, nombreExtra, NOTA_LEGAL, tipoDe, wspPlan, type Detalle } from '../planes';
 import { useExtras } from './Pedido';
 
 /* D9 · «¿Empezamos tu …?» (refs 33 y 34): el armador del mensaje.
 
    Arriba, los extras que tienen sentido con este plan (nombres EXACTOS de
-   los 21 servicios de datos.ts, con su leyenda en palabras del cliente: «se
+   los 21 servicios de datos.ts, mostrados con nombreExtra() por si en este
+   plan se leen mal, con su leyenda en palabras del cliente: «se
    suma si lo necesitas», «se cotiza aparte»…) como interruptores. Abajo, la
    tarjeta «Tu pedido» de la ref 34: el plan, su rango y su entrega, lo que
    sumaste (chips con × para quitar) y el mensaje EXACTO que va a llegar por
@@ -65,7 +66,7 @@ export function Empezar({ d }: { d: Detalle }) {
                             <li key={n} data-rv style={{ '--d': `${k * 0.05}s` } as CSSProperties}>
                                 <button type="button" role="switch" aria-checked={on} className="pre-dt-sw" onClick={() => alternar(n)}>
                                     <span className="pre-dt-sw-t">
-                                        <b>{n}</b>
+                                        <b>{nombreExtra(d, n)}</b>
                                         {tipo && <small className="m-mono">{LEYENDA_TIPO[tipo]}</small>}
                                     </span>
                                     <span className="pre-dt-sw-pista" aria-hidden="true">
@@ -114,8 +115,8 @@ export function Empezar({ d }: { d: Detalle }) {
                             <ul className="pre-dt-chips">
                                 {extras.map((n) => (
                                     <li key={n} className="pre-dt-chip">
-                                        <span>{n}</span>
-                                        <button type="button" aria-label={`Quitar ${n}`} onClick={() => quitarChip(n)}>
+                                        <span>{nombreExtra(d, n)}</span>
+                                        <button type="button" aria-label={`Quitar ${nombreExtra(d, n)}`} onClick={() => quitarChip(n)}>
                                             <Mas />
                                         </button>
                                     </li>
