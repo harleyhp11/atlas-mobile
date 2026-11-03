@@ -3,8 +3,8 @@
    Prefijo .pre-dt-. Usa los tokens de precios.css (--pre-*, --mat-*) y las
    piezas de comun/ (.pre-c-*).
 
-   Ritmo: hero con foto a sangre → resumen en hoja hueso montada sobre el
-   hero (precio y su rango) → bloques sobre negro (para ti, incluye sobre
+   Ritmo: hero con foto a sangre → resumen en vidrio sobre brasas rojas,
+   montado sobre el hero (precio y su rango) → bloques sobre negro (para ti, incluye sobre
    la foto desenfocada, por dentro) → plazo en isla hueso → caso parecido →
    armador del mensaje con la tarjeta hueso del pedido → dos salidas.
 
@@ -291,154 +291,8 @@
 }
 
 /* ===================================================== D2 · resumen
-   Hoja hueso montada 48 px sobre el hero (ref 34), con el tirador de la
-   ref 32 arriba. */
-.pre-dt-res {
-    position: relative;
-    z-index: 2;
-    margin: -48px var(--g) 0;
-    padding: 20px 20px 18px;
-    border-radius: var(--pre-r-l);
-    background: var(--pre-hueso);
-    color: var(--pre-ink);
-    box-shadow: var(--pre-sombra-hoja);
-}
-/* en tablet, la hoja se alinea con la columna del texto (m-wrap) */
-@media (min-width: 768px) {
-    .pre-dt-res {
-        max-width: var(--ancho);
-        margin-inline: auto;
-    }
-}
-.pre-dt-res-tirador {
-    display: block;
-    width: 36px;
-    height: 4px;
-    margin: -8px auto 16px;
-    border-radius: 4px;
-    background: rgba(11, 11, 12, 0.18);
-}
-.pre-dt-res-pildora {
-    position: absolute;
-    top: 30px;
-    right: 18px;
-    display: inline-flex;
-    align-items: center;
-    height: 28px;
-    padding: 0 12px;
-    border-radius: 999px;
-    background: rgba(11, 11, 12, 0.07);
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 1;
-}
-.pre-dt-res-etq {
-    color: var(--pre-ink-2);
-}
-.pre-dt-res .pre-c-precio[data-tam='m'] {
-    --pp-num: clamp(36px, 10.6vw, 46px);
-    --pp-medida: clamp(36px, 10.6vw, 46px);
-    margin-top: 12px;
-}
-.pre-dt-res-nota {
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 1.45;
-    color: var(--pre-ink-2);
-}
-.pre-dt-res-datos {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin-top: 18px;
-    padding-top: 16px;
-    border-top: 1px solid var(--pre-ink-linea);
-}
-.pre-dt-res-datos > div + div {
-    padding-left: 16px;
-    border-left: 1px solid var(--pre-ink-linea);
-}
-.pre-dt-res-datos dt {
-    color: var(--pre-ink-2);
-}
-.pre-dt-res-datos dd {
-    margin: 6px 0 0;
-    font-family: var(--f-display);
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1.15;
-    letter-spacing: -0.02em;
-}
-.pre-dt-res-btn {
-    margin-top: 20px;
-}
-.pre-dt-res-promesa {
-    margin-top: 12px;
-    font-size: 12.5px;
-    line-height: 1.4;
-    text-align: center;
-    color: var(--pre-ink-2);
-}
-
-/* ---- la barra del rango, dentro del resumen (antes iba en «Lo que mueve
-   el precio», una segunda tarjeta con el mismo precio: Harley la vio
-   repetida). Sin cifras debajo: el precio esta justo arriba; solo lo que
-   lo mueve, de un extremo al otro */
-.pre-dt-rango {
-    margin-top: 16px;
-}
-.pre-dt-rango-pista {
-    position: relative;
-    height: 6px;
-    margin: 0 1px;
-    border-radius: 6px;
-    background: rgba(11, 11, 12, 0.1);
-}
-.pre-dt-rango-relleno {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(90deg, rgba(11, 11, 12, 0.25), var(--pre-ink));
-    transform-origin: 0 50%;
-    transition: scale 1s var(--ease-io) 0.35s;
-}
-/* los extremos: marcas verticales finas (no perillas: la barra no se
-   arrastra y no debe parecer un control) */
-.pre-dt-rango-perilla {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 2px;
-    height: 14px;
-    margin: -7px 0 0 -1px;
-    border-radius: 1px;
-    background: var(--pre-ink);
-}
-.pre-dt-rango-perilla:last-child {
-    left: 100%;
-    transition:
-        scale 0.5s var(--pop) 1.1s,
-        opacity 0.3s 1.1s;
-}
-.m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno {
-    scale: 0 1;
-}
-.m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-perilla:last-child {
-    scale: 0.4;
-    opacity: 0;
-}
-.pre-dt-rango-ejes {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 8px;
-    font-size: 13px;
-    line-height: 1.35;
-    color: var(--pre-ink-2);
-}
-.pre-dt-rango-ejes span:last-child {
-    text-align: right;
-}
-
+   La tarjeta de vidrio sobre brasas, con el rango que se desliza solo:
+   resumen.css (la importa Resumen.tsx). */
 
 /* ====================================================== D3 · para ti */
 .pre-dt-para-si {
@@ -1558,14 +1412,10 @@
         translate: none;
     }
     .m-js .pre-dt-inc-fila:not(.is-in) .pre-dt-inc-cuadro,
-    .m-js .pre-dt-linea-caja:not(.is-in) .pre-dt-linea-punto,
-    .m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-perilla:last-child {
+    .m-js .pre-dt-linea-caja:not(.is-in) .pre-dt-linea-punto {
         opacity: 1;
         scale: none;
         rotate: none;
-    }
-    .m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno {
-        scale: none;
     }
     .m-js .pre-dt-linea-caja:not(.is-in) path {
         stroke-dashoffset: 0;

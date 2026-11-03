@@ -1,0 +1,507 @@
+/* =====================================================================
+   D2 · el resumen del plan (Resumen.tsx): tarjeta de vidrio oscura sobre
+   brasas rojas, montada 48 px sobre el hero, con el rango que se desliza
+   solo y estalla al llegar (ref: el control «Effort» del video de Harley).
+
+   Un solo reloj para todo (--ciclo, 8 s). En % del ciclo:
+     0–8      la perilla quieta a la izquierda, «Desde S/ 400»;
+     8–34     viaja a la derecha (se estira al arrastrar, rebota al llegar)
+              y deja el degradado detras;
+     30–38    la leyenda pasa a «Hasta S/ 1,200» con un desenfoque;
+     34–72    destello, tres anillos y las burbujas; las brasas del fondo
+              se encienden y el precio late una vez;
+     86–95    vuelve sin estallido; 95–100 quieta.
+   Los estilos SIN animacion son el estado final (perilla a la derecha,
+   «Hasta…», brasas a media luz): es lo que queda con movimiento reducido,
+   donde la regla global de movil.css termina cada animacion al instante.
+   data-loop (Revelador) pone .is-off fuera de pantalla: ahi se pausa.
+   ===================================================================== */
+
+.pre-dt-res {
+    --ciclo: 8s;
+    --perilla: 48px;
+    --alto: 30px;
+    position: relative;
+    z-index: 2;
+    isolation: isolate;
+    margin: -48px var(--g) 0;
+    padding: 20px 20px 18px;
+    border-radius: var(--pre-r-l);
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--pre-hueso);
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18),
+        0 30px 60px -24px rgba(225, 29, 58, 0.45),
+        var(--pre-sombra-hoja);
+}
+/* en tablet, la tarjeta se alinea con la columna del texto (m-wrap) */
+@media (min-width: 768px) {
+    .pre-dt-res {
+        max-width: var(--ancho);
+        margin-inline: auto;
+    }
+}
+.pre-dt-res.is-off *,
+.pre-dt-res.is-off *::before,
+.pre-dt-res.is-off *::after {
+    animation-play-state: paused;
+}
+
+/* ---- las brasas: el fondo de la tarjeta */
+.pre-dt-res-fondo {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    background:
+        radial-gradient(90% 55% at 100% 0%, rgba(225, 29, 58, 0.5), transparent 70%),
+        radial-gradient(85% 60% at 0% 100%, rgba(150, 12, 34, 0.6), transparent 70%),
+        linear-gradient(160deg, #1c0709, #0b0b0c 55%, #21060a);
+}
+/* una brasa grande que deriva lenta por detras del vidrio */
+.pre-dt-res-fondo::before {
+    content: '';
+    position: absolute;
+    left: -30%;
+    top: 18%;
+    width: 85%;
+    height: 70%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255, 40, 70, 0.42), transparent);
+    filter: blur(14px);
+    animation: pre-ds-deriva 15s ease-in-out infinite alternate;
+}
+/* el brillo del estallido, del lado donde llega la perilla */
+.pre-dt-res-fondo i {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(70% 45% at 86% 50%, rgba(255, 70, 95, 0.75), transparent 72%),
+        radial-gradient(50% 30% at 86% 50%, rgba(255, 210, 215, 0.35), transparent 70%);
+    opacity: 0.45;
+    animation: pre-ds-brillo var(--ciclo) linear infinite;
+}
+/* sin rango (Software) no hay estallido: el brillo queda quieto */
+.pre-dt-res:not(:has(.pre-dt-ds)) .pre-dt-res-fondo i {
+    animation: none;
+    opacity: 0.3;
+}
+
+/* ---- cabecera, precio y datos */
+.pre-dt-res-tirador {
+    display: block;
+    width: 36px;
+    height: 4px;
+    margin: -8px auto 16px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.22);
+}
+.pre-dt-res-pildora {
+    position: absolute;
+    top: 30px;
+    right: 18px;
+    display: inline-flex;
+    align-items: center;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+}
+.pre-dt-res-etq {
+    color: var(--t2);
+}
+.pre-dt-res .pre-c-precio[data-tam='m'] {
+    --pp-num: clamp(36px, 10.6vw, 46px);
+    --pp-medida: clamp(36px, 10.6vw, 46px);
+    margin-top: 12px;
+    text-shadow: 0 0 28px rgba(225, 29, 58, 0.35);
+}
+.pre-dt-res-precio {
+    transform-origin: 0 70%;
+    animation: pre-ds-precio var(--ciclo) var(--ease) infinite;
+}
+.pre-dt-res-nota {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--t2);
+}
+.pre-dt-res-datos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+.pre-dt-res-datos > div + div {
+    padding-left: 16px;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+}
+.pre-dt-res-datos dt {
+    color: var(--t3);
+}
+.pre-dt-res-datos dd {
+    margin: 6px 0 0;
+    font-family: var(--f-display);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+.pre-dt-res-btn {
+    margin-top: 20px;
+}
+.pre-dt-res-promesa {
+    margin-top: 12px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--t3);
+}
+
+/* ===================================================== el deslizador */
+.pre-dt-ds {
+    margin-top: 18px;
+}
+.pre-dt-ds-ejes {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--t2);
+}
+.pre-dt-ds-ejes span:last-child {
+    text-align: right;
+}
+.pre-dt-ds-riel {
+    position: relative;
+    height: var(--alto);
+}
+.pre-dt-ds-pista {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 999px;
+    background: #1d0b0e;
+}
+/* la profundidad de la canaleta, por encima de todo lo que lleva dentro */
+.pre-dt-ds-pista::after {
+    content: '';
+    position: absolute;
+    z-index: 3;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow:
+        inset 0 1px 3px rgba(0, 0, 0, 0.6),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    pointer-events: none;
+}
+/* el degradado de la marca, quieto; la tapa que viaja con la perilla lo
+   va descubriendo */
+.pre-dt-ds-relleno {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #6b0c1c 0%, #c8142f 30%, #ff3b55 58%, #ff9aa6 82%, #f4f1ea 100%);
+}
+/* el carril mide la pista menos la perilla: su 100% es el recorrido exacto */
+.pre-dt-ds-carril {
+    position: absolute;
+    inset: 0 var(--perilla) 0 0;
+}
+.pre-dt-ds-mover {
+    position: absolute;
+    inset: 0;
+    translate: 100% 0;
+    animation: pre-ds-mover var(--ciclo) infinite;
+}
+.pre-dt-ds-tapa {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--perilla) / 2);
+    width: 200vw;
+    background: #1d0b0e;
+}
+.pre-dt-ds-puntos {
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 calc(var(--perilla) / 2 - 2px);
+}
+.pre-dt-ds-puntos i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+}
+.pre-dt-ds-carril--perilla {
+    z-index: 2;
+}
+.pre-dt-ds-perilla {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--perilla);
+    height: var(--alto);
+    border-radius: 999px;
+    background: linear-gradient(180deg, #fff, #f6eeee 60%, #ecdfe0);
+    box-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.45),
+        0 0 18px rgba(255, 90, 110, 0.45),
+        inset 0 -2px 4px rgba(225, 29, 58, 0.18),
+        inset 0 1px 0 #fff;
+    animation: pre-ds-perilla var(--ciclo) infinite;
+}
+
+/* ---- el estallido: centrado en la perilla cuando llega a la derecha */
+.pre-dt-ds-estallido {
+    position: absolute;
+    z-index: 4;
+    top: 50%;
+    right: calc(var(--perilla) / 2);
+    width: 0;
+    height: 0;
+    pointer-events: none;
+}
+.pre-dt-ds-estallido i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    opacity: 0;
+}
+.pre-dt-ds-destello {
+    width: 110px;
+    height: 110px;
+    margin: -55px 0 0 -55px;
+    background: radial-gradient(circle, #fff 0%, rgba(255, 200, 208, 0.95) 22%, rgba(255, 60, 90, 0.55) 46%, transparent 70%);
+    animation: pre-ds-destello var(--ciclo) infinite;
+}
+.pre-dt-ds-anillo {
+    width: 64px;
+    height: 64px;
+    margin: -32px 0 0 -32px;
+    box-shadow:
+        inset 0 0 0 1.5px rgba(255, 225, 228, 0.85),
+        0 0 12px rgba(255, 80, 105, 0.5);
+    animation: pre-ds-anillo var(--ciclo) infinite;
+}
+.pre-dt-ds-anillo:nth-child(3) {
+    animation-delay: 0.14s;
+}
+.pre-dt-ds-anillo:nth-child(4) {
+    animation-delay: 0.28s;
+}
+.pre-dt-ds-burbuja {
+    width: var(--s);
+    height: var(--s);
+    margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+    background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.05) 60%);
+    box-shadow: inset 0 0 0 1px rgba(255, 228, 231, 0.85);
+    animation: pre-ds-burbuja var(--ciclo) cubic-bezier(0.2, 0.7, 0.3, 1) infinite;
+    animation-delay: calc(var(--dl) * 0.3s);
+}
+
+/* ---- la leyenda: «Desde…» y «Hasta…» en la misma celda */
+.pre-dt-ds-ley {
+    display: grid;
+    justify-items: center;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+}
+.pre-dt-ds-ley span {
+    grid-area: 1 / 1;
+}
+.pre-dt-ds-ley span:first-child {
+    opacity: 0;
+    animation: pre-ds-ley-a var(--ciclo) infinite;
+}
+.pre-dt-ds-ley span:last-child {
+    animation: pre-ds-ley-b var(--ciclo) infinite;
+}
+
+/* ---- el reloj */
+@keyframes pre-ds-mover {
+    0%,
+    8% {
+        translate: 0 0;
+        animation-timing-function: cubic-bezier(0.62, 0, 0.3, 1);
+    }
+    34%,
+    86% {
+        translate: 100% 0;
+        animation-timing-function: cubic-bezier(0.55, 0, 0.35, 1);
+    }
+    95%,
+    100% {
+        translate: 0 0;
+    }
+}
+@keyframes pre-ds-perilla {
+    0%,
+    9% {
+        scale: 1 1;
+    }
+    14%,
+    30% {
+        scale: 1.16 0.9;
+    }
+    35% {
+        scale: 0.9 1.1;
+    }
+    40%,
+    87% {
+        scale: 1 1;
+    }
+    90%,
+    93% {
+        scale: 1.1 0.93;
+    }
+    97%,
+    100% {
+        scale: 1 1;
+    }
+}
+@keyframes pre-ds-destello {
+    0%,
+    33.5% {
+        opacity: 0;
+        scale: 0.2;
+    }
+    35.5% {
+        opacity: 1;
+        scale: 0.65;
+    }
+    46%,
+    100% {
+        opacity: 0;
+        scale: 1.9;
+    }
+}
+@keyframes pre-ds-anillo {
+    0%,
+    34% {
+        opacity: 0;
+        scale: 0.3;
+    }
+    35.5% {
+        opacity: 0.95;
+    }
+    60%,
+    100% {
+        opacity: 0;
+        scale: 3.4;
+    }
+}
+@keyframes pre-ds-burbuja {
+    0%,
+    34% {
+        opacity: 0;
+        translate: 0 0;
+        scale: 0.3;
+    }
+    38% {
+        opacity: 1;
+    }
+    60% {
+        opacity: 0.8;
+    }
+    74%,
+    100% {
+        opacity: 0;
+        translate: var(--x) var(--y);
+        scale: 1;
+    }
+}
+@keyframes pre-ds-brillo {
+    0%,
+    33% {
+        opacity: 0.12;
+    }
+    38% {
+        opacity: 1;
+    }
+    62%,
+    86% {
+        opacity: 0.45;
+    }
+    96%,
+    100% {
+        opacity: 0.12;
+    }
+}
+@keyframes pre-ds-precio {
+    0%,
+    34% {
+        scale: 1;
+    }
+    38% {
+        scale: 1.035;
+    }
+    48%,
+    100% {
+        scale: 1;
+    }
+}
+@keyframes pre-ds-ley-a {
+    0%,
+    29% {
+        opacity: 1;
+        filter: blur(0);
+        translate: 0 0;
+    }
+    35%,
+    88% {
+        opacity: 0;
+        filter: blur(6px);
+        translate: 0 -6px;
+    }
+    95%,
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        translate: 0 0;
+    }
+}
+@keyframes pre-ds-ley-b {
+    0%,
+    31% {
+        opacity: 0;
+        filter: blur(6px);
+        translate: 0 6px;
+    }
+    37%,
+    85% {
+        opacity: 1;
+        filter: blur(0);
+        translate: 0 0;
+    }
+    91%,
+    100% {
+        opacity: 0;
+        filter: blur(6px);
+        translate: 0 6px;
+    }
+}
+@keyframes pre-ds-deriva {
+    to {
+        translate: 60% -20%;
+    }
+}
