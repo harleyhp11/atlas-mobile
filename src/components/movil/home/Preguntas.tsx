@@ -112,9 +112,10 @@ export function Preguntas() {
         <section id="preguntas" className="h-faq" data-tono="oscuro" aria-labelledby="preguntas-t">
             {/* de fondo, el ferrofluido en los colores de Atlas (pedido de
                 Harley): puas que ondulan con luz hueso y filos rojos; al tocar
-                la pantalla sale una onda desde el dedo */}
+                la pantalla sale una onda desde el dedo. Sin la intro (las
+                puas creciendo desde cero): al llegar ya tiene que estar */}
             <div className="h-faq-fondo" aria-hidden="true">
-                <Ferrofluid colors={['#f4f1ea', '#e11d3a', '#e11d3a']} speed={0.45} scale={1.6} tilt={48} opacity={0.75} dpr={1} />
+                <Ferrofluid colors={['#f4f1ea', '#e11d3a', '#e11d3a']} speed={0.45} scale={1.6} tilt={48} opacity={0.75} dpr={1} intro={false} />
             </div>
             <div className="m-wrap">
                 <Ceja n="08">Preguntas</Ceja>

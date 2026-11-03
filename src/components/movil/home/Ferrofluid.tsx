@@ -13,7 +13,8 @@ import './ferrofluid.css';
        se soltaba al instante, getContext devolvia el contexto ya perdido y
        no se veia nada;
      · tipos de TypeScript; la logica y los shaders son los mismos.
-   Solo dibuja mientras se ve y con la pestaña visible. Con movimiento
+   Solo dibuja mientras esta cerca de verse (una pantalla antes) y con la
+   pestaña visible. Con movimiento
    reducido queda quieto (sin intro ni deriva). */
 
 const CELL = 1 / 3;
@@ -893,13 +894,18 @@ export function Ferrofluid({
 
         const resizeObserver = new ResizeObserver(resize);
         resizeObserver.observe(container);
-        const intersection = new IntersectionObserver((entries) => {
-            visible = entries.some((entry) => entry.isIntersecting);
-            if (visible) {
-                last = 0;
-                wake();
-            }
-        });
+        // arranca una pantalla antes de llegar: al entrar a la seccion el
+        // fluido ya esta formado y moviendose, no aparece tarde (Harley)
+        const intersection = new IntersectionObserver(
+            (entries) => {
+                visible = entries.some((entry) => entry.isIntersecting);
+                if (visible) {
+                    last = 0;
+                    wake();
+                }
+            },
+            { rootMargin: '100% 0px' },
+        );
         intersection.observe(container);
         window.addEventListener('pointermove', onPointerMove, { passive: true });
         window.addEventListener('pointerdown', onPointerDown, { passive: true });
