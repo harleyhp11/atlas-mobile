@@ -271,11 +271,12 @@
     overflow: hidden;
     /* arriba un poco mas denso: ahi pasa la palabra desenfocada y el texto
        chico tiene que seguir leyendose. Debajo, el oscuro con rojo por
-       zonas (pedido de Harley): brasa arriba a la derecha, vino abajo */
+       zonas (pedido de Harley): brasa arriba a la derecha y abajo, en un
+       rojo vivo, con el mismo difuminado */
     background:
         linear-gradient(180deg, rgba(10, 10, 11, 0.42), rgba(10, 10, 11, 0) 34%),
-        radial-gradient(80% 46% at 100% 0%, rgba(225, 29, 58, 0.3), transparent 72%),
-        radial-gradient(75% 42% at 0% 100%, rgba(170, 16, 40, 0.34), transparent 72%),
+        radial-gradient(80% 46% at 100% 0%, rgba(255, 26, 56, 0.6), transparent 72%),
+        radial-gradient(75% 42% at 0% 100%, rgba(255, 22, 52, 0.62), transparent 72%),
         var(--pre-vidrio);
     -webkit-backdrop-filter: var(--pre-desenfoque);
     backdrop-filter: var(--pre-desenfoque);
@@ -315,7 +316,7 @@
     width: 90%;
     height: 60%;
     border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(225, 29, 58, 0.24), transparent);
+    background: radial-gradient(closest-side, rgba(255, 30, 60, 0.5), transparent);
     filter: blur(10px);
     pointer-events: none;
     animation: pre-pl-brasa 14s ease-in-out infinite alternate;
