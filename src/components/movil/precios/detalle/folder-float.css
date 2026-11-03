@@ -1,0 +1,227 @@
+/* La carpeta flotante (FolderFloat.tsx). Arriba, el espacio de las notas:
+   tantas filas como arme el layout (--ff-filas); el ancla queda en el borde
+   de arriba de la carpeta y cada nota se ubica con --x/--y desde ahi (la
+   fisica escribe esas mismas variables en cada frame).
+   Capas: fondo y hoja (0) · notas (1) · tapa (2) · boton (3). Asi, al
+   abrirse, las notas salen de detras de la tapa. */
+
+.folder-float {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    justify-items: center;
+    padding-top: calc(var(--ff-lift) + var(--ff-filas, 2) * 50px + 10px);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.folder-float__items {
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: calc(var(--ff-lift) + var(--ff-filas, 2) * 50px + 10px);
+    width: 0;
+    height: 0;
+}
+
+/* ---- las notas */
+.folder-float__item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: var(--ff-item-ink);
+    cursor: pointer;
+    white-space: nowrap;
+    /* cerrada: chica, dentro de la carpeta */
+    transform: translate(-50%, calc(var(--ff-h) * 0.32)) scale(0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform var(--ff-close) cubic-bezier(0.4, 0, 0.2, 1) calc((var(--ff-n) - 1 - var(--i)) * var(--ff-stagger) * 0.5),
+        opacity calc(var(--ff-close) * 0.7) ease calc((var(--ff-n) - 1 - var(--i)) * var(--ff-stagger) * 0.5);
+}
+.folder-float[data-open] .folder-float__item {
+    transform: translate(calc(var(--x) - 50%), var(--y)) rotate(var(--r));
+    opacity: 1;
+    pointer-events: auto;
+    transition:
+        transform var(--ff-open) var(--ff-spring) calc(var(--i) * var(--ff-stagger)),
+        opacity calc(var(--ff-open) * 0.4) ease calc(var(--i) * var(--ff-stagger));
+}
+/* con la fisica andando, la posicion la manda cada frame: sin transicion */
+.folder-float[data-open][data-live] .folder-float__item {
+    transition: none;
+    touch-action: none;
+    cursor: grab;
+}
+.folder-float__item[data-drag] {
+    z-index: 2;
+    cursor: grabbing;
+}
+
+.folder-float__drift {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 38px;
+    padding: 0 16px 0 7px;
+    border-radius: 999px;
+    background: var(--ff-item);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.08) inset,
+        0 10px 22px -12px rgba(0, 0, 0, 0.55);
+    transition:
+        scale 0.2s var(--ff-spring),
+        box-shadow 0.2s ease;
+}
+.folder-float__drift i {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(244, 241, 234, 0.14);
+    font-family: var(--f-mono, ui-monospace, monospace);
+    font-size: 11px;
+    font-style: normal;
+    font-weight: 500;
+}
+.folder-float__item[data-acento] .folder-float__drift {
+    background: var(--rojo, #e11d3a);
+    color: #fff;
+    box-shadow: 0 12px 26px -12px rgba(225, 29, 58, 0.7);
+}
+.folder-float__item[data-acento] .folder-float__drift i {
+    background: rgba(255, 255, 255, 0.22);
+}
+.folder-float__item[data-drag] .folder-float__drift {
+    scale: 1.06;
+    box-shadow: 0 18px 30px -14px rgba(0, 0, 0, 0.6);
+}
+.folder-float__item[data-pop] .folder-float__drift {
+    animation: folder-float-pop 0.32s var(--ff-spring);
+}
+@keyframes folder-float-pop {
+    40% {
+        scale: 1.12;
+    }
+}
+.folder-float__item:focus-visible {
+    outline: none;
+}
+.folder-float__item:focus-visible .folder-float__drift {
+    outline: 2px solid var(--rojo, #e11d3a);
+    outline-offset: 3px;
+}
+
+/* ---- la carpeta */
+.folder-float__folder {
+    position: relative;
+    width: var(--ff-w);
+    height: var(--ff-h);
+    perspective: 700px;
+}
+.folder-float__back {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px var(--ff-r) var(--ff-r) var(--ff-r);
+    background: var(--ff-back);
+}
+/* la pestaña de la carpeta */
+.folder-float__back::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 100%;
+    width: 42%;
+    height: 14px;
+    border-radius: 10px 14px 0 0;
+    background: var(--ff-back);
+}
+.folder-float__paper {
+    position: absolute;
+    left: 9%;
+    right: 9%;
+    top: 12px;
+    height: 70%;
+    border-radius: 8px;
+    background: var(--ff-paper);
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06);
+    transition: translate var(--ff-close) cubic-bezier(0.4, 0, 0.2, 1);
+}
+.folder-float[data-open] .folder-float__paper {
+    translate: 0 -16px;
+    transition: translate var(--ff-open) var(--ff-spring);
+}
+.folder-float__front {
+    position: absolute;
+    z-index: 2;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: 14px 16px;
+    border-radius: var(--ff-r);
+    background: var(--ff-front);
+    color: var(--ff-label);
+    box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.1) inset,
+        0 -10px 24px -14px rgba(0, 0, 0, 0.5);
+    transform-origin: 50% 100%;
+    transform: rotateX(calc(var(--ff-rest) * -1));
+    transition: transform var(--ff-close) cubic-bezier(0.4, 0, 0.2, 1);
+}
+.folder-float[data-open] .folder-float__front {
+    transform: rotateX(calc(var(--ff-angle) * -1));
+    transition: transform var(--ff-open) var(--ff-spring);
+}
+.folder-float__label {
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+}
+.folder-float__sub {
+    font-family: var(--f-mono, ui-monospace, monospace);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.6;
+}
+.folder-float__trigger {
+    position: absolute;
+    z-index: 3;
+    inset: -14px 0 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--ff-r);
+    background: none;
+    cursor: pointer;
+}
+.folder-float__trigger:focus-visible {
+    outline: 2px solid var(--rojo, #e11d3a);
+    outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .folder-float__item,
+    .folder-float[data-open] .folder-float__item,
+    .folder-float__paper,
+    .folder-float[data-open] .folder-float__paper,
+    .folder-float__front,
+    .folder-float[data-open] .folder-float__front {
+        transition-duration: 0s;
+        transition-delay: 0s;
+    }
+}

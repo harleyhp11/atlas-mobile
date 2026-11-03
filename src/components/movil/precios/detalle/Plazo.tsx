@@ -1,19 +1,19 @@
-import type { CSSProperties } from 'react';
 import { Check } from '../../iconos';
 import { Titular } from '../../Titular';
-import { ETAPAS, FRASES, plazo, type Detalle } from '../planes';
+import { FRASES, plazo, type Detalle } from '../planes';
+import { CarpetaEtapas } from './CarpetaEtapas';
 
 /* D7 · «¿Cuándo está listo?» (ref 32): una isla hueso con el plazo en una
-   cifra enorme, y debajo las cinco etapas reales de Atlas como una linea
-   de tiempo que se llena hasta el lanzamiento (el unico punto rojo: es el
-   destino).
+   cifra enorme, y debajo las cinco etapas reales de Atlas en la carpeta
+   flotante (CarpetaEtapas): se abre sola y suelta los cinco pasos; el
+   lanzamiento es el unico rojo, es el destino.
 
    El plazo sale de plan.entrega con plazo(): «7 – 10» + «días», «Desde» +
    «4» + «semanas». La tienda no tiene plazo confirmado todavia (dice «A
    coordinar»): sin inventar un numero, y sin darle la cifra gigante a un
-   dato que falta. Ahi «A coordinar» baja a etiqueta y la protagonista es
-   la frase que SI responde la pregunta: la fecha se fija en la primera
-   reunion (FRASES.fecha, que entonces no se repite debajo).
+   dato que falta. Ahi va «A coordinar» tal cual, con la letra del titular.
+   La frase «la fecha queda fijada desde la primera reunion» se quito (pedido
+   de Harley).
 
    NO se reparten dias por etapa: no hay dato. Lo que si es seguro va al
    cierre de la hoja: nada se publica sin que lo veas y lo que pasa despues
@@ -41,8 +41,8 @@ export function Plazo({ d }: { d: Detalle }) {
                             </>
                         ) : (
                             <>
-                                <small className="m-mono">Entrega · {plan.entrega}</small>
-                                <b>{FRASES.fecha}</b>
+                                <small className="m-mono">Entrega</small>
+                                <b>{plan.entrega}</b>
                             </>
                         )}
                     </p>
@@ -56,26 +56,8 @@ export function Plazo({ d }: { d: Detalle }) {
                         <i className="pre-dt-linea-punto" />
                     </div>
                 </div>
-                {p && (
-                    <p className="pre-dt-plazo-fecha" data-rv>
-                        {FRASES.fecha}
-                    </p>
-                )}
 
-                <ol className="pre-dt-etapas" data-in>
-                    {ETAPAS.map((e, k) => (
-                        <li key={e.nombre} style={{ '--i': k } as CSSProperties} data-fin={k === ETAPAS.length - 1 ? '' : undefined}>
-                            <span className="pre-dt-etapa-n" aria-hidden="true">
-                                {k + 1}
-                            </span>
-                            <span className="pre-dt-etapa-punto" aria-hidden="true" />
-                            <span className="pre-dt-etapa-t">
-                                <b>{e.nombre}</b>
-                                <span>{e.sub}</span>
-                            </span>
-                        </li>
-                    ))}
-                </ol>
+                <CarpetaEtapas />
 
                 <div className="pre-dt-plazo-pie" data-rv>
                     <p>

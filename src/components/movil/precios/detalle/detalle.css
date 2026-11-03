@@ -10,7 +10,7 @@
 
    Reglas:
      · el rojo SOLO como señal: la caja de los titulares, el trazo del
-       recorrido de la tienda, el punto de «Lanzamiento», el interruptor en
+       recorrido de la tienda, la nota de «Lanzamiento», el interruptor en
        «Sí», el boton del dock y los botones tinta;
      · secundario sobre negro en var(--t2); sobre hueso, --pre-ink-2;
      · backdrop-filter solo sobre algo que desenfocar (foto del hero, glifo
@@ -1290,88 +1290,23 @@
 .m-js .pre-dt-linea-caja:not(.is-in) .pre-dt-linea-punto {
     scale: 0;
 }
-.pre-dt-plazo-fecha {
-    margin-top: 18px;
-    font-size: 15px;
-    line-height: 1.45;
-    color: var(--pre-ink-2);
-}
-
-/* ---- las cinco etapas */
-.pre-dt-etapas {
-    position: relative;
+/* ---- las cinco etapas: la carpeta flotante (CarpetaEtapas) */
+.pre-dt-carpeta {
     margin-top: 24px;
-    padding-top: 8px;
+    padding-top: 14px;
     border-top: 1px solid var(--pre-ink-linea);
 }
-.pre-dt-etapas::before,
-.pre-dt-etapas::after {
-    content: '';
-    position: absolute;
-    left: 54px;
-    top: 38px;
-    bottom: 30px;
-    width: 2px;
-    border-radius: 2px;
-}
-.pre-dt-etapas::before {
-    background: var(--pre-ink-linea);
-}
-.pre-dt-etapas::after {
-    background: var(--pre-ink);
-    transform-origin: 50% 0;
-    transition: scale 1.4s var(--ease-io) 0.2s;
-}
-.m-js .pre-dt-etapas:not(.is-in)::after {
-    scale: 1 0;
-}
-.pre-dt-etapas li {
-    position: relative;
-    display: grid;
-    grid-template-columns: 36px 14px minmax(0, 1fr);
-    column-gap: 12px;
-    align-items: center;
-    min-height: 60px;
-}
-.pre-dt-etapa-n {
-    font-family: var(--f-display);
-    font-weight: 300;
-    font-size: 30px;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    font-variant-numeric: tabular-nums;
+.pre-dt-carpeta-nota {
+    min-height: 2.9em;
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.45;
+    text-align: center;
     color: var(--pre-ink-2);
 }
-.pre-dt-etapa-punto {
-    position: relative;
-    z-index: 1;
-    justify-self: center;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--pre-ink);
-    box-shadow: 0 0 0 4px var(--pre-hueso);
-    transition: scale 0.5s var(--pop) calc(var(--i, 0) * 0.28s + 0.25s);
-}
-.pre-dt-etapas li[data-fin] .pre-dt-etapa-punto {
-    width: 10px;
-    height: 10px;
-    background: var(--rojo);
-}
-.m-js .pre-dt-etapas:not(.is-in) .pre-dt-etapa-punto {
-    scale: 0.3;
-}
-.pre-dt-etapa-t b {
-    display: block;
-    font-size: 18px;
+.pre-dt-carpeta-nota b {
     font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-}
-.pre-dt-etapa-t span {
-    font-size: 14px;
-    line-height: 1.35;
-    color: var(--pre-ink-2);
+    color: var(--pre-ink);
 }
 .pre-dt-plazo-pie {
     display: grid;
@@ -2027,7 +1962,6 @@
         translate: none;
     }
     .m-js .pre-dt-inc-fila:not(.is-in) .pre-dt-inc-cuadro,
-    .m-js .pre-dt-etapas:not(.is-in) .pre-dt-etapa-punto,
     .m-js .pre-dt-linea-caja:not(.is-in) .pre-dt-linea-punto,
     .m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-perilla:last-child {
         opacity: 1;
@@ -2036,8 +1970,7 @@
     }
     .m-js .pre-dt-partes[data-forma='recorrido'] .pre-dt-partes-lista:not(.is-in) .pre-dt-parte::after,
     .m-js .pre-dt-partes-lista:not(.is-in) .pre-dt-mini i[data-on],
-    .m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno,
-    .m-js .pre-dt-etapas:not(.is-in)::after {
+    .m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno {
         scale: none;
     }
     .m-js .pre-dt-arbol:not(.is-in) .pre-dt-arbol-raiz::after,
