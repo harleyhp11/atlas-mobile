@@ -47,7 +47,7 @@ const WORK = [
     ['Honey Bee', 'designs/honey-bee-melli-landing.mp4'],
 ] as const;
 
-const DURA = 6000; // ms de la entrada completa (p de 0 a 1)
+const DURA = 4500; // ms de la entrada completa (p de 0 a 1); Harley la pidio mas rapida dos veces
 const LIBRE = 0.86; // desde aqui la grilla ya esta quieta: se suelta el scroll
 
 const clamp = (x: number, a = 0, b = 1) => Math.min(b, Math.max(a, x));
