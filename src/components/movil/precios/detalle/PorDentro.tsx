@@ -5,6 +5,7 @@ import { Escena } from '../../escenas/Escenas';
 import { Titular } from '../../Titular';
 import type { Detalle } from '../planes';
 import { Casa, Pausa, Reproducir } from './Iconos';
+import { MaquetaLanding } from './MaquetaLanding';
 
 /* D5 · «Por dentro»: como se ve y de que partes esta hecho lo que compras.
 
@@ -17,12 +18,11 @@ import { Casa, Pausa, Reproducir } from './Iconos';
    (data-escena): el panel del software necesita mas que el resto para que
    entren las barras de la semana.
 
-   Landing y Web usan la misma escena (navegador), pero no deben verse
-   iguales: es justo la diferencia que la persona esta tratando de entender.
-   Sin tocar la escena del escritorio, detalle.css la ajusta por plan
-   (data-plan): la landing es UNA pagina sin menu que baja hasta su
-   formulario; la web tiene menu con paginas y cambia de pagina mientras
-   corre. La pildora «$ next build» del FAQ se oculta: es jerga de
+   La Landing tiene su propia maqueta (MaquetaLanding): una landing real
+   entera, del anuncio al contacto que te llega (pedido de Harley: la escena
+   del navegador quedaba simple). La Web usa la escena del navegador y
+   detalle.css la ajusta (data-plan): menu con paginas que cambia de pagina
+   mientras corre. La pildora «$ next build» del FAQ se oculta: es jerga de
    programador y tapaba la foto. Lleva SIEMPRE la pildora «Maqueta de ejemplo»: la
    del catalogo muestra precios de mentira («S/ 32») y en una pagina de
    precios se confundirian con los de verdad.
@@ -79,7 +79,7 @@ export function PorDentro({ d }: { d: Detalle }) {
                     no taparle nada */}
                 <figure className="pre-dt-esc" data-rv>
                     <div ref={escenario} className="pre-dt-esc-ui" data-escena={d.escena} data-plan={d.slug} aria-hidden="true">
-                        <Escena tipo={d.escena} tema="oscuro" run={run} />
+                        {d.slug === 'landing-page' ? <MaquetaLanding run={run} /> : <Escena tipo={d.escena} tema="oscuro" run={run} />}
                     </div>
                     <figcaption className="pre-dt-esc-pie">
                         <span className="pre-dt-esc-pildora m-mono" data-run={run ? '' : undefined}>
