@@ -705,81 +705,8 @@
 /* ---- landing: tiene su propia maqueta, una landing completa (ver
    MaquetaLanding.tsx y maqueta-landing.css) */
 
-/* ---- web: menu con sus paginas; a mitad de la pelicula pasa de Inicio a
-   Nosotros (cambian la direccion, la pestaña y la pagina) en vez de bajar */
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav {
-    gap: 9px;
-}
-/* las pestañas junto al logo: a la derecha las tapaba el «< 2 s» */
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav b {
-    margin-right: 6px;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav em {
-    margin-left: auto;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav i {
-    width: auto;
-    height: auto;
-    padding-bottom: 2px;
-    border-radius: 0;
-    background: none;
-    border-bottom: 1.5px solid transparent;
-    font-family: var(--f-texto);
-    font-size: 9px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 1;
-    color: #8d8d92;
-    transition:
-        color 0.3s,
-        border-color 0.3s;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav i:nth-of-type(1)::before {
-    content: 'Inicio';
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav i:nth-of-type(2)::before {
-    content: 'Nosotros';
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav i:nth-of-type(3)::before {
-    content: 'Servicios';
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg-nav i:nth-of-type(1),
-.pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-pg-nav i:nth-of-type(2) {
-    color: #0b0b0c;
-    border-color: #0b0b0c;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-pg-nav i:nth-of-type(1) {
-    color: #8d8d92;
-    border-color: transparent;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa'] .afq-pg.is-abajo {
-    transform: none;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-br-url > span::after {
-    content: '/nosotros';
-}
-.pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-pg-img {
-    background-image: url('/assets/movil/negocios/inmobiliaria.webp');
-    background-position: 50% 30%;
-    filter: grayscale(1);
-}
-.pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-pg-hero i {
-    width: 64%;
-}
-.pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-pg-hero i + i {
-    width: 40%;
-}
-@media (prefers-reduced-motion: no-preference) {
-    .pre-dt-esc-ui[data-plan='web-corporativa']:has(.afq-pg.is-abajo) .afq-pg > :not(.afq-pg-nav) {
-        animation: pre-dt-pagina 0.6s var(--ease) both;
-    }
-}
-@keyframes pre-dt-pagina {
-    from {
-        opacity: 0;
-        translate: 0 8px;
-    }
-}
+/* ---- web: tiene su propia maqueta, una web completa (ver MaquetaWeb.tsx
+   y maqueta-web.css) */
 
 .pre-dt-esc-pie {
     display: flex;
