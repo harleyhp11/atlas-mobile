@@ -1135,7 +1135,7 @@
     position: relative;
     flex: 1;
     min-width: 0;
-    height: 200px;
+    height: 400px;
     margin-top: 6px;
 }
 .pre-mt-pasos {
@@ -1173,6 +1173,131 @@
     font-style: normal;
     font-size: 8.5px;
     font-weight: 500;
+}
+
+/* --------------------------- el problema de hoy, debajo de los pasos: dos
+   por caso, en los tramos en que no esta el WhatsApp de abajo */
+.pre-mt-antes {
+    position: absolute;
+    top: 178px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 10px 9px;
+    border-radius: 12px;
+    background:
+        radial-gradient(90% 70% at 0% 0%, rgba(225, 29, 58, 0.22), transparent 70%),
+        rgba(244, 241, 234, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(225, 29, 58, 0.35);
+    opacity: 0;
+    translate: 0 8px;
+    animation: var(--ciclo) var(--ease) infinite;
+}
+.pre-mt-antes small {
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #ff6b80;
+}
+.pre-mt-antes s {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: rgba(244, 241, 234, 0.72);
+    /* tachado fino: se lee igual lo que esta mal */
+    text-decoration-color: rgba(225, 29, 58, 0.85);
+    text-decoration-thickness: 1px;
+}
+.pre-mt-antes span {
+    padding-top: 5px;
+    border-top: 1px solid rgba(244, 241, 234, 0.12);
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--hueso);
+}
+.pre-mt-antes--0 {
+    animation-name: pre-mt-antes0;
+}
+.pre-mt-antes--1 {
+    animation-name: pre-mt-antes1;
+}
+.pre-mt-antes--2 {
+    animation-name: pre-mt-antes2;
+}
+.pre-mt-antes--3 {
+    animation-name: pre-mt-antes3;
+}
+@keyframes pre-mt-antes0 {
+    0%,
+    1.5% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    3%,
+    12% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    13%,
+    100% {
+        opacity: 0;
+        translate: 0 -6px;
+    }
+}
+@keyframes pre-mt-antes1 {
+    0%,
+    13.5% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    15%,
+    25% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    26%,
+    100% {
+        opacity: 0;
+        translate: 0 -6px;
+    }
+}
+@keyframes pre-mt-antes2 {
+    0%,
+    51% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    52.5%,
+    63% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    64%,
+    100% {
+        opacity: 0;
+        translate: 0 -6px;
+    }
+}
+@keyframes pre-mt-antes3 {
+    0%,
+    64.5% {
+        opacity: 0;
+        translate: 0 8px;
+    }
+    66%,
+    76% {
+        opacity: 1;
+        translate: 0 0;
+    }
+    77%,
+    100% {
+        opacity: 0;
+        translate: 0 -6px;
+    }
 }
 
 /* ---------------------------------------- el WhatsApp que te llega a ti */
@@ -1285,8 +1410,13 @@
     .pre-mt-tienda,
     .pre-mt-dedo,
     .pre-mt-wsp,
-    .pre-mt-pasos--b {
+    .pre-mt-pasos--b,
+    .pre-mt-antes:not(.pre-mt-antes--0) {
         display: none;
+    }
+    .pre-mt-antes--0 {
+        opacity: 1;
+        translate: none;
     }
     .pre-mt-barra {
         transform: none;

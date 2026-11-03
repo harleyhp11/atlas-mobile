@@ -16,7 +16,9 @@ import './maqueta-tienda.css';
 
    Lo que cambia entre uno y otro es justo lo que el cliente quiere
    entender: la mesa y la cocina frente al envio a casa; platos frente a
-   productos con talla. Al costado, los pasos del caso que corre. Fotos
+   productos con talla. Al costado, los pasos del caso que corre y, debajo,
+   lo que el cliente hace hoy y le da problemas (la carta de papel, el PDF),
+   tachado, con lo que cambia. Fotos
    reales (CC0, WordPress Photo Directory: dil1324, shirishpoudel07,
    ChrisEdwardsCE, maharjan2, Vishnu Chandra, binitagothe, Alina
    Kakshapati); los negocios, precios y mensajes son de EJEMPLO y la
@@ -37,6 +39,15 @@ const PRODUCTOS = [
     { n: 'Cartera acolchada', p: 149, f: 'cartera-blanca' },
     { n: 'Cartera croco', p: 159, f: 'cartera-rosa' },
     { n: 'Bolso urbano', p: 129, f: 'bolso' },
+];
+
+// lo que el cliente hace HOY y le da problemas: una tarjeta por tramo,
+// debajo de los pasos (pedido de Harley). [CONFIRMAR copy con Harley]
+const ANTES = [
+    { antes: 'Cartas de papel que se manchan y se rompen', ahora: 'Tu carta, siempre limpia en el celular' },
+    { antes: 'Reimprimir cada vez que sube un precio', ahora: 'Cambias el precio tú, en un minuto' },
+    { antes: 'Catálogos en PDF que nadie abre', ahora: 'Tu tienda en un enlace' },
+    { antes: 'Fotos y precios por chat, uno por uno', ahora: 'Eligen solos y te llega el pedido armado' },
 ];
 
 const PASOS_MENU = ['Escanean el QR', 'Eligen con fotos', 'Piden por WhatsApp', 'Te llega a cocina'];
@@ -252,6 +263,15 @@ export function MaquetaTienda({ run }: { run: boolean }) {
                             </li>
                         ))}
                     </ol>
+
+                    {/* el problema de hoy, tachado, y lo que cambia */}
+                    {ANTES.map((a, k) => (
+                        <div key={a.antes} className={`pre-mt-antes pre-mt-antes--${k}`}>
+                            <small>✕ Hoy</small>
+                            <s>{a.antes}</s>
+                            <span>{a.ahora}</span>
+                        </div>
+                    ))}
                 </div>
             </div>
 
