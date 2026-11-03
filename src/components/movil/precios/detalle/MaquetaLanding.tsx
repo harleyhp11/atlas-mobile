@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { Contraste, type Par } from './Contraste';
 import './maqueta-landing.css';
 
 /* «Por dentro» de la Landing page: una landing de verdad, entera, en un
@@ -14,11 +15,22 @@ import './maqueta-landing.css';
      5. «¡Listo, Ana!» en el celular y, afuera, el aviso que te llega a ti:
         un contacto nuevo, desde tu landing.
 
-   A la derecha, la guia marca en que parte va (las mismas partes de la hoja
+   A la derecha, la guia marca en que parte va y, debajo, lo que el cliente
+   hace hoy (el link en bio, el Excel) contra lo que cambia. La guia marca (las mismas partes de la hoja
    de abajo). Todo es una MAQUETA: el negocio (Kora, un gimnasio), las personas
    y la opinion son de ejemplo, y la pildora «Maqueta de ejemplo» lo dice.
    Solo CSS (un reloj comun, --ciclo); `run` pausa todo fuera de pantalla o
    con la pausa del reproductor. Con movimiento reducido queda la oferta. */
+
+// lo que el cliente hace hoy, contra lo que cambia con una landing: una
+// tarjeta por tramo, debajo de la guia (pedido de Harley, como en la
+// tienda). [CONFIRMAR copy con Harley]
+const ANTES: Par[] = [
+    { antes: 'Link en bio', ia: 'bio', ahora: 'Una página', ib: 'pagina' },
+    { antes: 'Mil mensajes', ia: 'chat', ahora: 'Todo claro', ib: 'claro' },
+    { antes: 'Mismas dudas', ia: 'dudas', ahora: 'Ya resueltas', ib: 'claro' },
+    { antes: 'Hoja de Excel', ia: 'excel', ahora: 'A tu correo', ib: 'correo' },
+];
 
 const GUIA = ['La oferta', 'Beneficios', 'La prueba', 'Las dudas', 'Formulario', 'Te llega'];
 
@@ -153,6 +165,11 @@ export function MaquetaLanding({ run }: { run: boolean }) {
                     </li>
                 ))}
             </ol>
+
+            {/* el problema de hoy, tachado, y lo que cambia */}
+            {ANTES.map((a, k) => (
+                <Contraste key={a.antes} {...a} className={`pre-ml-antes pre-ml-antes--${k}`} />
+            ))}
 
             {/* el aviso que te llega a ti */}
             <div className="pre-ml-aviso">

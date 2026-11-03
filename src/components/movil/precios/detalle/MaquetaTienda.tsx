@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { WhatsApp } from '../../iconos';
+import { Contraste, type Par } from './Contraste';
 import './maqueta-tienda.css';
 
 /* «Por dentro» de Tiendas online y menús digitales: los DOS casos del plan
@@ -45,84 +46,13 @@ const PRODUCTOS = [
 // tarjeta por tramo, debajo de los pasos (pedido de Harley). Se lee de un
 // vistazo: icono + dos palabras, tachado en rojo → icono + dos palabras.
 // [CONFIRMAR copy con Harley]
-type Icono = 'papel' | 'impresora' | 'pdf' | 'drive' | 'qr' | 'lapiz' | 'enlace' | 'carrito';
-const ANTES: { antes: string; ia: Icono; ahora: string; ib: Icono }[] = [
+const ANTES: Par[] = [
     { antes: 'Carta de papel', ia: 'papel', ahora: 'Carta con QR', ib: 'qr' },
     { antes: 'Reimprimir', ia: 'impresora', ahora: 'Editas tú', ib: 'lapiz' },
     { antes: 'Catálogo PDF', ia: 'pdf', ahora: 'Tu enlace', ib: 'enlace' },
     { antes: 'Fotos en Drive', ia: 'drive', ahora: 'Pedido armado', ib: 'carrito' },
 ];
 
-function Ico({ i }: { i: Icono }) {
-    const t = { fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round', strokeLinejoin: 'round' } as const;
-    switch (i) {
-        case 'papel':
-            // una hoja arrugada, con su mancha
-            return (
-                <svg viewBox="0 0 24 24" {...t}>
-                    <path d="M6 3h9l3 3v15l-3-1.5L12 21l-3-1.5L6 21z" />
-                    <path d="M9 8h6M9 11h6M9 14h3" />
-                    <circle cx="15" cy="16" r="1.6" fill="currentColor" stroke="none" />
-                </svg>
-            );
-        case 'impresora':
-            return (
-                <svg viewBox="0 0 24 24" {...t}>
-                    <path d="M7 9V3h10v6M7 17H4v-7a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7h-3" />
-                    <path d="M7 14h10v7H7z" />
-                </svg>
-            );
-        case 'pdf':
-            return (
-                <svg viewBox="0 0 24 24">
-                    <path d="M6 2h9l4 4v16H6z" fill="#f4f1ea" />
-                    <path d="M15 2v4h4" fill="#d8d5cd" />
-                    <rect x="3" y="11" width="13" height="7" rx="1.5" fill="#e11d3a" />
-                    <text x="9.5" y="16.6" textAnchor="middle" fontSize="5.2" fontWeight="800" fill="#fff" fontFamily="system-ui, sans-serif">
-                        PDF
-                    </text>
-                </svg>
-            );
-        case 'drive':
-            // el triangulo de tres colores de una carpeta en la nube
-            return (
-                <svg viewBox="0 0 24 24">
-                    <path d="M8.5 3h7l7 12h-7z" fill="#f5c451" />
-                    <path d="M8.5 3 1.5 15l3.5 6 7-12z" fill="#2fa86b" />
-                    <path d="M5 21h14l3.5-6h-14z" fill="#3b7bf0" />
-                </svg>
-            );
-        case 'qr':
-            return (
-                <svg viewBox="0 0 24 24" {...t}>
-                    <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z" />
-                    <path d="M14 14h2v2h-2zM18 14h2M14 18h2v2M18 18h2v2" />
-                </svg>
-            );
-        case 'lapiz':
-            return (
-                <svg viewBox="0 0 24 24" {...t}>
-                    <path d="M15 4l5 5L9 20H4v-5z" />
-                    <path d="M13 6l5 5" />
-                </svg>
-            );
-        case 'enlace':
-            return (
-                <svg viewBox="0 0 24 24" {...t}>
-                    <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
-                    <path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
-                </svg>
-            );
-        case 'carrito':
-            return (
-                <svg viewBox="0 0 24 24" {...t}>
-                    <path d="M3 4h2l2.5 11h10L20 7H7" />
-                    <circle cx="9" cy="19" r="1.4" />
-                    <circle cx="17" cy="19" r="1.4" />
-                </svg>
-            );
-    }
-}
 
 const PASOS_MENU = ['Escanean el QR', 'Eligen con fotos', 'Piden por WhatsApp', 'Te llega a cocina'];
 const PASOS_TIENDA = ['Abren tu enlace', 'Eligen y su talla', 'Carrito y entrega', 'Te llega el pedido'];
@@ -340,23 +270,7 @@ export function MaquetaTienda({ run }: { run: boolean }) {
 
                     {/* el problema de hoy, tachado, y lo que cambia */}
                     {ANTES.map((a, k) => (
-                        <div key={a.antes} className={`pre-mt-antes pre-mt-antes--${k}`}>
-                            <span className="pre-mt-vs is-no">
-                                <span className="pre-mt-vs-ic">
-                                    <Ico i={a.ia} />
-                                    <i>✕</i>
-                                </span>
-                                <s>{a.antes}</s>
-                            </span>
-                            <span className="pre-mt-vs-flecha">↓</span>
-                            <span className="pre-mt-vs is-si">
-                                <span className="pre-mt-vs-ic">
-                                    <Ico i={a.ib} />
-                                    <i>✓</i>
-                                </span>
-                                <b>{a.ahora}</b>
-                            </span>
-                        </div>
+                        <Contraste key={a.antes} {...a} className={`pre-mt-antes pre-mt-antes--${k}`} />
                     ))}
                 </div>
             </div>
