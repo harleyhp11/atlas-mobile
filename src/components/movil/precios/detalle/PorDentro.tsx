@@ -6,6 +6,7 @@ import { Titular } from '../../Titular';
 import type { Detalle } from '../planes';
 import { Casa, Pausa, Reproducir } from './Iconos';
 import { MaquetaLanding } from './MaquetaLanding';
+import { MaquetaTienda } from './MaquetaTienda';
 import { MaquetaWeb } from './MaquetaWeb';
 
 /* D5 · «Por dentro»: como se ve y de que partes esta hecho lo que compras.
@@ -22,7 +23,8 @@ import { MaquetaWeb } from './MaquetaWeb';
    La Landing tiene su propia maqueta (MaquetaLanding): una landing real
    entera, del anuncio al contacto que te llega (pedido de Harley: la escena
    del navegador quedaba simple), y la Web tambien (MaquetaWeb): una web
-   completa recorrida de Google al contacto. La pildora «$ next build» del FAQ se oculta: es jerga de
+   completa recorrida de Google al contacto. Tiendas online tambien
+   (MaquetaTienda): el menu digital y la tienda, uno tras otro. La pildora «$ next build» del FAQ se oculta: es jerga de
    programador y tapaba la foto. Lleva SIEMPRE la pildora «Maqueta de ejemplo»: la
    del catalogo muestra precios de mentira («S/ 32») y en una pagina de
    precios se confundirian con los de verdad.
@@ -79,7 +81,9 @@ export function PorDentro({ d }: { d: Detalle }) {
                     no taparle nada */}
                 <figure className="pre-dt-esc" data-rv>
                     <div ref={escenario} className="pre-dt-esc-ui" data-escena={d.escena} data-plan={d.slug} aria-hidden="true">
-                        {d.slug === 'landing-page' ? (
+                        {d.slug === 'tienda-online' ? (
+                            <MaquetaTienda run={run} />
+                        ) : d.slug === 'landing-page' ? (
                             <MaquetaLanding run={run} />
                         ) : d.slug === 'web-corporativa' ? (
                             <MaquetaWeb run={run} />
