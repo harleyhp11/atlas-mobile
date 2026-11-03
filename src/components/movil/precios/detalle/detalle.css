@@ -4,17 +4,17 @@
    piezas de comun/ (.pre-c-*).
 
    Ritmo: hero con foto a sangre → resumen en hoja hueso montada sobre el
-   hero → bloques sobre negro (para ti, incluye sobre la foto desenfocada,
-   por dentro, precio con el glifo) → plazo en isla hueso → caso parecido →
-   armador del mensaje con la tarjeta hueso del pedido → otros planes.
+   hero (precio y su rango) → bloques sobre negro (para ti, incluye sobre
+   la foto desenfocada, por dentro) → plazo en isla hueso → caso parecido →
+   armador del mensaje con la tarjeta hueso del pedido → dos salidas.
 
    Reglas:
-     · el rojo SOLO como señal: la caja de los titulares, el trazo del
-       recorrido de la tienda, la nota de «Lanzamiento», el interruptor en
+     · el rojo SOLO como señal: la caja de los titulares, la nota de
+       «Lanzamiento», el interruptor en
        «Sí», el boton del dock y los botones tinta;
      · secundario sobre negro en var(--t2); sobre hueso, --pre-ink-2;
-     · backdrop-filter solo sobre algo que desenfocar (foto del hero, glifo
-       «S/», maqueta, dock), nunca en listas que hacen scroll;
+     · backdrop-filter solo sobre algo que desenfocar (foto del hero,
+       maqueta, dock), nunca en listas que hacen scroll;
      · cada estado inicial `.m-js X:not(.is-in) Y` tiene su contraparte en
        el bloque de movimiento reducido del final.
    ===================================================================== */
@@ -78,7 +78,6 @@
 /* vidrio: solo donde hay algo detras que desenfocar */
 .pre-dt-volver,
 .pre-dt-sel,
-.pre-dt-pre-card,
 .pre-dt-dock {
     background: var(--pre-vidrio);
     -webkit-backdrop-filter: var(--pre-desenfoque);
@@ -223,31 +222,9 @@
     }
 }
 
-/* ---- abajo: entrega, h1 y descripcion */
+/* ---- abajo: h1 y descripcion */
 .pre-dt-hero-in {
     position: relative;
-}
-.pre-dt-hero-meta {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 18px;
-}
-.pre-dt-hero-meta b {
-    font-family: var(--f-display);
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 1;
-    letter-spacing: -0.03em;
-    white-space: nowrap;
-}
-.pre-dt-hero-meta i {
-    width: 1px;
-    height: 28px;
-    background: rgba(244, 241, 234, 0.32);
-}
-.pre-dt-hero-meta .m-mono {
-    color: var(--t2);
 }
 .pre-dt-h1 {
     font-family: var(--f-display);
@@ -280,7 +257,6 @@
     .pre-dt-hero-ctl {
         animation: pre-dt-baja 0.8s var(--ease) 0.1s both;
     }
-    .pre-dt-hero-meta,
     .pre-dt-h1,
     .pre-dt-hero-desc {
         animation: pre-dt-sube 0.9s var(--ease) both;
@@ -403,67 +379,70 @@
     color: var(--pre-ink-2);
 }
 
-/* ---- indice «en esta pagina»: riel que sangra hasta el borde */
-.pre-dt-ind {
-    margin-top: 20px;
+/* ---- la barra del rango, dentro del resumen (antes iba en «Lo que mueve
+   el precio», una segunda tarjeta con el mismo precio: Harley la vio
+   repetida). Sin cifras debajo: el precio esta justo arriba; solo lo que
+   lo mueve, de un extremo al otro */
+.pre-dt-rango {
+    margin-top: 16px;
 }
-.pre-dt-ind ul {
-    display: flex;
-    gap: 8px;
-    max-width: calc(var(--ancho) + var(--g) * 2);
-    margin-inline: auto;
-    padding: 2px var(--g);
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
-    mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
+.pre-dt-rango-pista {
+    position: relative;
+    height: 6px;
+    margin: 0 1px;
+    border-radius: 6px;
+    background: rgba(11, 11, 12, 0.1);
 }
-.pre-dt-ind ul::-webkit-scrollbar {
-    display: none;
+.pre-dt-rango-relleno {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(11, 11, 12, 0.25), var(--pre-ink));
+    transform-origin: 0 50%;
+    transition: scale 1s var(--ease-io) 0.35s;
 }
-.pre-dt-ind li {
-    flex: none;
+/* los extremos: marcas verticales finas (no perillas: la barra no se
+   arrastra y no debe parecer un control) */
+.pre-dt-rango-perilla {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 2px;
+    height: 14px;
+    margin: -7px 0 0 -1px;
+    border-radius: 1px;
+    background: var(--pre-ink);
+}
+.pre-dt-rango-perilla:last-child {
+    left: 100%;
     transition:
-        opacity 0.6s var(--ease) calc(var(--i, 0) * 50ms + 0.35s),
-        translate 0.7s var(--ease) calc(var(--i, 0) * 50ms + 0.35s);
+        scale 0.5s var(--pop) 1.1s,
+        opacity 0.3s 1.1s;
 }
-.pre-dt-ind li:last-child {
-    margin-right: var(--g);
+.m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno {
+    scale: 0 1;
 }
-.m-js .pre-dt-ind ul:not(.is-in) li {
+.m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-perilla:last-child {
+    scale: 0.4;
     opacity: 0;
-    translate: 18px 0;
 }
-.pre-dt-ind a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 44px;
-    padding: 0 15px 0 17px;
-    border-radius: 999px;
-    box-shadow: inset 0 0 0 1px var(--pre-linea);
-    font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
-    color: var(--pre-hueso);
-    transition:
-        background-color 0.3s,
-        scale 0.3s var(--ease);
-    touch-action: manipulation;
+.pre-dt-rango-ejes {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 13px;
+    line-height: 1.35;
+    color: var(--pre-ink-2);
 }
-.pre-dt-ind a:active {
-    scale: 0.96;
-    background: rgba(244, 241, 234, 0.08);
-}
-.pre-dt-ind svg {
-    width: 12px;
-    height: 12px;
-    color: var(--t3);
+.pre-dt-rango-ejes span:last-child {
+    text-align: right;
 }
 
+
 /* ====================================================== D3 · para ti */
-.pre-dt-para .pre-dt-t + .pre-dt-h3 {
-    margin-top: 32px;
+.pre-dt-para-si {
+    margin-top: 28px;
 }
 .pre-dt-para-no-t {
     margin-top: 40px;
@@ -645,23 +624,6 @@
     color: var(--t2);
     text-wrap: pretty;
 }
-.pre-dt-inc-ancla {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 44px;
-    margin-bottom: -10px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: rgba(244, 241, 234, 0.4);
-    text-underline-offset: 4px;
-}
-.pre-dt-inc-ancla svg {
-    width: 12px;
-    height: 12px;
-}
-
 /* ================================================== D5 · por dentro
    La maqueta y, debajo, su barra de reproductor: la pildora «Maqueta de
    ejemplo» (con un punto que late mientras corre) y la pausa. */
@@ -770,7 +732,8 @@
     height: 13px;
 }
 
-/* ---- la hoja de las partes (ref 35) */
+/* ---- la hoja de las partes (ref 35): solo en Software. En Tienda, Landing
+   y Web repetia lo que su maqueta ya muestra paso a paso (Harley) */
 .pre-dt-partes {
     margin-top: 16px;
     padding: 18px 18px 20px;
@@ -858,343 +821,9 @@
     translate: 16px 0;
 }
 
-/* ---- recorrido (tienda): circulos tinta unidos por un trazo que se
-   llena de rojo de arriba abajo, tramo por tramo */
-.pre-dt-partes[data-forma='recorrido'] .pre-dt-parte-marca {
-    background: var(--pre-ink);
-    color: #fff;
-}
-.pre-dt-partes[data-forma='recorrido'] .pre-dt-parte:not(:last-child)::before,
-.pre-dt-partes[data-forma='recorrido'] .pre-dt-parte:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    left: 19px;
-    top: 52px;
-    bottom: -12px;
-    width: 2px;
-    border-radius: 2px;
-}
-.pre-dt-partes[data-forma='recorrido'] .pre-dt-parte:not(:last-child)::before {
-    background: var(--pre-ink-linea);
-}
-.pre-dt-partes[data-forma='recorrido'] .pre-dt-parte:not(:last-child)::after {
-    background: var(--rojo);
-    transform-origin: 50% 0;
-    transition: scale 0.32s linear calc(var(--i, 0) * 0.32s + 0.45s);
-}
-.m-js .pre-dt-partes[data-forma='recorrido'] .pre-dt-partes-lista:not(.is-in) .pre-dt-parte::after {
-    scale: 1 0;
-}
-
-/* ---- bandas (landing): la misma pagina, con la banda de cada fila */
-.pre-dt-partes[data-forma='bandas'] .pre-dt-parte-marca {
-    height: auto;
-    border-radius: 0;
-}
-.pre-dt-partes[data-forma='bandas'] .pre-dt-parte-txt {
-    padding-top: 4px;
-}
-.pre-dt-mini {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    width: 36px;
-    height: 52px;
-    padding: 5px;
-    border-radius: 7px;
-    background: var(--pre-hueso);
-    box-shadow: inset 0 0 0 1px var(--pre-ink-linea);
-}
-.pre-dt-mini i {
-    height: 6px;
-    flex: none;
-    border-radius: 2px;
-    background: rgba(11, 11, 12, 0.14);
-}
-.pre-dt-mini i[data-on] {
-    background: var(--pre-ink);
-    transform-origin: 0 50%;
-    transition: scale 0.6s var(--ease) calc(var(--i, 0) * 60ms + 0.45s);
-}
-.m-js .pre-dt-partes-lista:not(.is-in) .pre-dt-mini i[data-on] {
-    scale: 0 1;
-}
-
-/* ---- arbol (web): el inicio y sus paginas, con lineas de arbol que se
-   dibujan de arriba abajo */
-.pre-dt-arbol {
-    --rama: rgba(11, 11, 12, 0.26);
-}
-.pre-dt-arbol-raiz .pre-dt-parte-marca {
-    background: var(--pre-ink);
-    color: #fff;
-}
-.pre-dt-arbol-raiz .pre-dt-parte-marca svg {
-    width: 18px;
-    height: 18px;
-}
-.pre-dt-arbol-raiz::after,
-.pre-dt-arbol ul .pre-dt-parte::before,
-.pre-dt-arbol ul .pre-dt-parte:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    left: 19.25px;
-    transition: clip-path 0.5s var(--ease-io) calc(var(--i, 0) * 90ms + 0.2s);
-}
-/* del circulo del inicio hacia abajo. Todas las ramas son bordes (no
-   fondos): asi se ajustan al pixel igual y la linea no da saltitos entre
-   una fila y la siguiente */
-.pre-dt-arbol-raiz::after {
-    top: 52px;
-    bottom: 0;
-    border-left: 1.5px solid var(--rama);
-}
-/* el codo hasta cada pagina */
-.pre-dt-arbol ul .pre-dt-parte::before {
-    top: 0;
-    width: 23px;
-    height: 32px;
-    border-left: 1.5px solid var(--rama);
-    border-bottom: 1.5px solid var(--rama);
-}
-.pre-dt-arbol ul .pre-dt-parte:last-child::before {
-    border-bottom-left-radius: 9px;
-}
-/* y la linea que sigue hacia la pagina de abajo */
-.pre-dt-arbol ul .pre-dt-parte:not(:last-child)::after {
-    top: 32px;
-    bottom: 0;
-    border-left: 1.5px solid var(--rama);
-}
-.pre-dt-arbol ul .pre-dt-parte {
-    padding-left: 28px;
-    grid-template-columns: 40px minmax(0, 1fr);
-}
-.pre-dt-arbol ul .pre-dt-parte-marca i {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    border: 1.5px solid var(--pre-ink);
-    background: #fff;
-}
-.pre-dt-arbol .pre-dt-parte {
-    transition: opacity 0.5s var(--ease) calc(var(--i, 0) * 90ms + 0.15s);
-}
-.m-js .pre-dt-arbol:not(.is-in) .pre-dt-parte {
-    opacity: 0;
-}
-.m-js .pre-dt-arbol:not(.is-in) .pre-dt-arbol-raiz::after,
-.m-js .pre-dt-arbol:not(.is-in) ul .pre-dt-parte::before,
-.m-js .pre-dt-arbol:not(.is-in) ul .pre-dt-parte::after {
-    clip-path: inset(0 0 100% 0);
-}
-.pre-dt-arbol-raiz::after,
-.pre-dt-arbol ul .pre-dt-parte::before,
-.pre-dt-arbol ul .pre-dt-parte::after {
-    clip-path: inset(0 0 0 0);
-}
-
-/* ---- modulos (software): piezas sueltas, sin conector */
-.pre-dt-partes[data-forma='modulos'] .pre-dt-parte-marca {
+/* las piezas sueltas del software, sin conector */
+.pre-dt-partes .pre-dt-parte-marca {
     box-shadow: inset 0 0 0 1.5px var(--pre-ink);
-}
-
-/* ===================================================== D6 · precio
-   El glifo «S/» gigante detras (la palabra «Pricing» de la ref 31) y la
-   tarjeta de vidrio que tapa su mitad de abajo. */
-.pre-dt-pre {
-    overflow-x: clip;
-}
-.pre-dt-pre-escena {
-    --glifo: clamp(220px, 70vw, 340px);
-    position: relative;
-    margin-top: 20px;
-    /* padding y no margin en la tarjeta: el margen se colapsaria con el de
-       la escena y el glifo bajaria con ella */
-    padding-top: calc(var(--glifo) * 0.46);
-}
-.pre-dt-pre-glifo {
-    position: absolute;
-    top: 0;
-    left: -6px;
-    font-family: var(--f-display);
-    font-weight: 700;
-    font-size: var(--glifo);
-    line-height: 0.8;
-    letter-spacing: -0.06em;
-    white-space: nowrap;
-    color: rgba(244, 241, 234, 0.9);
-    pointer-events: none;
-    user-select: none;
-}
-.pre-dt-pre-card {
-    position: relative;
-    padding: 22px;
-    border-radius: var(--pre-r-l);
-    box-shadow:
-        inset 0 0 0 1px var(--pre-vidrio-borde),
-        var(--pre-vidrio-brillo),
-        var(--pre-sombra);
-}
-.pre-dt-pre-nom {
-    font-size: 15px;
-    color: var(--t2);
-}
-.pre-dt-pre-precio {
-    margin-top: 12px;
-}
-.pre-dt-filete {
-    height: 1px;
-    margin: 20px -22px 22px;
-    border: 0;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* ---- la barra del rango */
-.pre-dt-rango-pista {
-    position: relative;
-    height: 8px;
-    margin: 4px 7px 0;
-    border-radius: 8px;
-    background: rgba(244, 241, 234, 0.12);
-}
-.pre-dt-rango-relleno {
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(90deg, rgba(244, 241, 234, 0.35), #f4f1ea);
-    transform-origin: 0 50%;
-    transition: scale 1s var(--ease-io) 0.15s;
-}
-/* los extremos: marcas verticales finas (no perillas: la barra no se
-   arrastra y no debe parecer un control) */
-.pre-dt-rango-perilla {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 2px;
-    height: 18px;
-    margin: -9px 0 0 -1px;
-    border-radius: 1px;
-    background: var(--pre-hueso);
-}
-.pre-dt-rango-perilla:last-child {
-    left: 100%;
-    transition:
-        scale 0.5s var(--pop) 0.9s,
-        opacity 0.3s 0.9s;
-}
-.m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno {
-    scale: 0 1;
-}
-.m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-perilla:last-child {
-    scale: 0.4;
-    opacity: 0;
-}
-.pre-dt-rango-cifras {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 14px;
-    font-size: 12px;
-    letter-spacing: 0.02em;
-    color: var(--pre-hueso);
-}
-.pre-dt-rango-ejes {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    margin-top: 4px;
-    font-size: 13px;
-    line-height: 1.35;
-    color: var(--t2);
-}
-.pre-dt-rango-ejes span:last-child {
-    text-align: right;
-}
-.pre-dt-pre-ademas {
-    margin: 24px 0 12px;
-    font-size: 14px;
-    color: var(--t2);
-}
-.pre-dt-pre-btn {
-    margin-top: 24px;
-}
-
-/* ---- a medida: como se cotiza, en tres pasos */
-.pre-dt-cotiza {
-    display: grid;
-    gap: 18px;
-}
-.pre-dt-cotiza li {
-    position: relative;
-    display: grid;
-    grid-template-columns: 32px minmax(0, 1fr);
-    gap: 14px;
-    transition:
-        opacity 0.6s var(--ease) calc(var(--i, 0) * 90ms + 0.1s),
-        translate 0.8s var(--ease) calc(var(--i, 0) * 90ms + 0.1s);
-}
-.m-js .pre-dt-cotiza:not(.is-in) li {
-    opacity: 0;
-    translate: 0 12px;
-}
-.pre-dt-cotiza li:not(:last-child)::before {
-    content: '';
-    position: absolute;
-    left: 15.5px;
-    top: 38px;
-    bottom: -14px;
-    width: 1px;
-    background: var(--pre-linea);
-}
-.pre-dt-cotiza-n {
-    display: grid;
-    place-items: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: rgba(244, 241, 234, 0.1);
-    font-family: var(--f-display);
-    font-size: 14px;
-    font-weight: 600;
-}
-.pre-dt-cotiza b {
-    display: block;
-    padding-top: 5px;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.3;
-}
-.pre-dt-cotiza li span span {
-    display: block;
-    margin-top: 3px;
-    font-size: 14px;
-    line-height: 1.45;
-    color: var(--t2);
-}
-/* debajo de la tarjeta va directo la nota legal (la promesa del monto
-   por escrito ya esta en el resumen) */
-.pre-dt-pre .pre-dt-legal {
-    margin-top: 22px;
-}
-
-/* el glifo se queda atras al bajar: profundidad del vidrio */
-@supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) {
-        .pre-dt-pre-glifo {
-            animation: pre-dt-glifo linear both;
-            animation-timeline: view();
-            animation-range: entry 0% exit 100%;
-        }
-    }
-}
-@keyframes pre-dt-glifo {
-    from {
-        translate: 0 0;
-    }
-    to {
-        translate: 0 -40px;
-    }
 }
 
 /* ====================================================== D7 · plazo
@@ -1589,31 +1218,6 @@
     line-height: 1.3;
     color: var(--pre-ink-2);
 }
-.pre-dt-ped-datos {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    column-gap: 16px;
-    padding: 18px 10px 4px;
-}
-.pre-dt-ped-datos > div + div {
-    padding-left: 16px;
-    border-left: 1px solid var(--pre-ink-linea);
-}
-.pre-dt-ped-datos dt {
-    color: var(--pre-ink-2);
-}
-.pre-dt-ped-datos dd {
-    margin: 6px 0 0;
-    font-size: 17px;
-    font-weight: 600;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-}
-.pre-dt-ped .pre-c-precio[data-tam='m'] {
-    --pp-num: 20px;
-    --pp-medida: 20px;
-    letter-spacing: -0.03em;
-}
 .pre-dt-ped-sum,
 .pre-dt-ped-msg {
     padding: 18px 10px 0;
@@ -1668,10 +1272,6 @@
         scale: 0.9;
     }
 }
-.pre-dt-ped-nada {
-    font-size: 14px;
-    color: var(--pre-ink-2);
-}
 .pre-dt-burbuja {
     position: relative;
     padding: 12px 14px;
@@ -1707,14 +1307,13 @@
         opacity: 0;
     }
 }
-.pre-dt-ped-ayuda {
-    margin-top: 8px;
-    font-size: 12.5px;
-    line-height: 1.4;
-    color: var(--pre-ink-2);
-}
 .pre-dt-ped-btn {
     margin-top: 20px;
+}
+/* sin la nota legal debajo, el boton cierra la tarjeta con el aire de su
+   relleno */
+.pre-dt-ped-btn {
+    margin-bottom: 4px;
 }
 .pre-dt-ped-legal {
     padding: 12px 12px 6px;
@@ -1725,25 +1324,22 @@
     text-wrap: pretty;
 }
 
-/* ============================================= D10 · otros planes */
-.pre-dt-otros-grilla {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 28px;
+/* ============================================= D10 · otros planes
+   Dos salidas en fila (sin las tarjetas de los otros planes) y la nota
+   legal: un cierre corto, no otra seccion entera. */
+.pre-dt-otros {
+    padding-top: 64px;
 }
-/* en media columna, «SOFTWARE HECHO PARA TI.» dejaba «TI.» solo */
-.pre-dt-otros-grilla .pre-c-tile-n {
-    text-wrap: balance;
+.pre-dt-otros .pre-dt-h3 {
+    margin-top: 0;
 }
 .pre-dt-todos {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 16px;
-    min-height: 212px;
-    padding: 18px;
-    border-radius: var(--pre-r-l);
+    align-items: center;
+    gap: 14px;
+    min-height: 72px;
+    padding: 14px 16px;
+    border-radius: var(--pre-r-m);
     box-shadow: inset 0 0 0 1px var(--pre-linea);
     color: var(--pre-hueso);
     transition:
@@ -1753,7 +1349,7 @@
     touch-action: manipulation;
 }
 .pre-dt-todos:active {
-    scale: 0.97;
+    scale: 0.98;
 }
 .pre-dt-todos-ir {
     display: grid;
@@ -1775,13 +1371,13 @@
     display: block;
     font-family: var(--f-display);
     font-weight: 600;
-    font-size: clamp(18px, 5.3vw, 20px);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
+    font-size: 18px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
 }
 .pre-dt-todos-t small {
     display: block;
-    margin-top: 8px;
+    margin-top: 4px;
     color: var(--t3);
 }
 .pre-dt-ayuda {
@@ -1805,6 +1401,9 @@
     text-decoration-color: rgba(244, 241, 234, 0.45);
     text-underline-offset: 4px;
     color: var(--pre-hueso);
+}
+.pre-dt-otros-legal {
+    margin-top: 20px;
 }
 
 /* ========================================================== el dock */
@@ -1951,13 +1550,10 @@
 
 /* ------------------------------------------------- movimiento reducido
    La regla global de movil.css deja las transiciones en ~0; aqui, los
-   estados iniciales quedan en su estado final: lineas llenas, arbol
-   dibujado, sin desplazamientos, el dock solo con opacidad. */
+   estados iniciales quedan en su estado final: lineas llenas, sin
+   desplazamientos, el dock solo con opacidad. */
 @media (prefers-reduced-motion: reduce) {
-    .m-js .pre-dt-ind ul:not(.is-in) li,
-    .m-js .pre-dt-partes-lista:not(.is-in) > .pre-dt-parte,
-    .m-js .pre-dt-arbol:not(.is-in) .pre-dt-parte,
-    .m-js .pre-dt-cotiza:not(.is-in) li {
+    .m-js .pre-dt-partes-lista:not(.is-in) > .pre-dt-parte {
         opacity: 1;
         translate: none;
     }
@@ -1968,15 +1564,8 @@
         scale: none;
         rotate: none;
     }
-    .m-js .pre-dt-partes[data-forma='recorrido'] .pre-dt-partes-lista:not(.is-in) .pre-dt-parte::after,
-    .m-js .pre-dt-partes-lista:not(.is-in) .pre-dt-mini i[data-on],
     .m-js .pre-dt-rango:not(.is-in) .pre-dt-rango-relleno {
         scale: none;
-    }
-    .m-js .pre-dt-arbol:not(.is-in) .pre-dt-arbol-raiz::after,
-    .m-js .pre-dt-arbol:not(.is-in) ul .pre-dt-parte::before,
-    .m-js .pre-dt-arbol:not(.is-in) ul .pre-dt-parte::after {
-        clip-path: inset(0 0 0 0);
     }
     .m-js .pre-dt-linea-caja:not(.is-in) path {
         stroke-dashoffset: 0;
@@ -1992,7 +1581,6 @@
     .pre .pre-dt-par:active,
     .pre .pre-dt-todos:active,
     .pre .pre-dt-dock-cta:active,
-    .pre .pre-dt-ind a:active,
     .pre-dt-sw:active .pre-dt-sw-pista i {
         scale: none;
     }

@@ -20,12 +20,10 @@ export function ParaTi({ d }: { d: Detalle }) {
             <div className="m-wrap">
                 <Titular id="para-t" className="pre-dt-t" texto="¿Es para ti?" destacar="ti?" />
 
-                {/* [CONFIRMAR copy con Harley] subtitulos */}
-                <h3 className="pre-dt-h3" data-rv>
-                    Te sirve si…
-                </h3>
+                {/* sin el «Te sirve si…»: el titular ya lo pregunta */}
                 <ListaCheck items={d.paraTi} dibujar className="pre-dt-para-si" />
 
+                {/* [CONFIRMAR copy con Harley] */}
                 <h3 className="pre-dt-h3 pre-dt-para-no-t" data-rv>
                     Mejor mira otro plan si…
                 </h3>

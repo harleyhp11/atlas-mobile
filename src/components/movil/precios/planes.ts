@@ -52,8 +52,6 @@ export type IconoIncluye =
     | 'capas'
     | 'enchufe'
     | 'salvavidas';
-export type FormaDentro = 'recorrido' | 'bandas' | 'arbol' | 'modulos';
-
 export type Detalle = {
     slug: SlugPlan;
     plan: Plan; // PLANES[i]
@@ -71,16 +69,15 @@ export type Detalle = {
     incluye: {
         figura?: { antes?: string; valor: string; cuenta?: number; unidad?: string };
         icono?: IconoIncluye;
-        explica: string;
-        ancla?: { texto: string; href: string };
+        explica: string; // una linea: el titulo (dato literal) ya dice que es
     }[];
     dentro: {
         titular: string;
         destacar: string;
-        cabecera: string;
-        forma: FormaDentro;
-        partes: { t: string; d: string }[];
-        nota?: string;
+        // solo el software: su escena es generica y la hoja dice que piezas
+        // podria tener. Los otros tres planes tienen su propia maqueta, que
+        // ya muestra sus partes
+        modulos?: { cabecera: string; partes: { t: string; d: string }[]; nota: string };
     };
     ejes: [string, string] | null; // extremos de la barra de rango (null = a medida)
     proyecto: string; // slug de PROYECTOS (proyectos/proyectos.ts)
@@ -126,23 +123,14 @@ export const DETALLES: Detalle[] = [
             { texto: '¿Quieres varias páginas y un blog?', a: 'web-corporativa' },
         ],
         incluye: [
-            { figura: { antes: 'Hasta', valor: '40', cuenta: 40 }, explica: 'Cada producto con su ficha: qué es, cuánto cuesta y cómo se ve. Tu cliente ya no tiene que preguntarte por chat.' },
-            { icono: 'whatsapp', explica: 'Tu cliente elige, arma su pedido y te llega a WhatsApp ya escrito. Tú solo confirmas.' },
-            { icono: 'qr', explica: 'Lo imprimes y lo pones donde ya están tus clientes. Lo escanean con la cámara y ven todo.' },
-            { icono: 'lapiz', explica: 'Te enseñamos a cambiar tus precios cuando quieras, sin esperar a nadie.' },
+            { figura: { antes: 'Hasta', valor: '40', cuenta: 40 }, explica: 'Tu cliente ve todo sin preguntarte por chat.' },
+            { icono: 'whatsapp', explica: 'El pedido te llega ya escrito. Tú solo confirmas.' },
+            { icono: 'qr', explica: 'Lo escanean con la cámara y ven tu carta.' },
+            { icono: 'lapiz', explica: 'Cambias tus precios cuando quieras, sin esperar a nadie.' },
         ],
         dentro: {
             titular: 'Del QR a tu WhatsApp.',
             destacar: 'WhatsApp.',
-            cabecera: 'Así funciona',
-            forma: 'recorrido',
-            partes: [
-                { t: 'Tu QR o tu enlace', d: 'Lo pones en la mesa, la vitrina o el empaque, o lo compartes por chat.' },
-                { t: 'Tu catálogo', d: 'Foto, precio y descripción de cada producto.' },
-                { t: 'El pedido', d: 'Tu cliente elige y arma su pedido.' },
-                { t: 'Tu WhatsApp', d: 'Te llega el mensaje con el pedido ya armado.' },
-                { t: 'Tus cambios', d: 'Actualizas tus precios tú mismo.' },
-            ],
         },
         ejes: ['Menos productos', 'Más productos'],
         proyecto: 'polleria-la-lena',
@@ -178,24 +166,14 @@ export const DETALLES: Detalle[] = [
             { texto: '¿Quieres mostrar productos y recibir pedidos?', a: 'tienda-online' },
         ],
         incluye: [
-            { icono: 'pluma', explica: 'No necesitas llegar con los textos: escribimos el mensaje y lo diseñamos para que se entienda a la primera.' },
-            { icono: 'sobre', explica: 'Cada persona que deja sus datos te llega directo al correo.' },
-            { icono: 'megafono', explica: 'Quien toca tu anuncio llega a una página con un solo mensaje y un solo paso siguiente, sin menús que lo desvíen.' },
-            { icono: 'grafico', explica: 'Ves cuánta gente entra y cuántos hacen clic. Así sabes si tus anuncios están funcionando.' },
+            { icono: 'pluma', explica: 'No necesitas llegar con los textos: los escribimos.' },
+            { icono: 'sobre', explica: 'Cada contacto te llega directo al correo.' },
+            { icono: 'megafono', explica: 'Un solo mensaje y un solo paso, sin menús que distraigan.' },
+            { icono: 'grafico', explica: 'Sabes si tus anuncios están funcionando.' },
         ],
         dentro: {
             titular: 'Una página, un objetivo.',
             destacar: 'objetivo.',
-            cabecera: 'Las partes de tu landing',
-            forma: 'bandas',
-            partes: [
-                { t: 'La oferta', d: 'Qué ofreces y por qué a ti, en la primera pantalla.' },
-                { t: 'Los beneficios', d: 'Lo que gana tu cliente, dicho en simple.' },
-                { t: 'La prueba', d: 'Fotos, trabajos u opiniones que respaldan lo que dices.' },
-                { t: 'Las dudas', d: 'Las preguntas de siempre, ya respondidas.' },
-                { t: 'El formulario', d: 'Te escriben y el mensaje te llega al correo.' },
-            ],
-            nota: 'El largo y el nivel de animación mueven el precio dentro del rango.',
         },
         ejes: ['Más corta y simple', 'Más larga y animada'],
         proyecto: 'rego-premium',
@@ -224,27 +202,14 @@ export const DETALLES: Detalle[] = [
             { texto: '¿Necesitas reservas, pedidos o un panel interno?', a: 'software-a-medida' },
         ],
         incluye: [
-            { figura: { valor: '5–7', unidad: 'páginas' }, explica: 'Cada tema de tu negocio en su propia página.', ancla: { texto: 'Ver un ejemplo', href: '#por-dentro' } },
-            { icono: 'blog', explica: 'Publicas novedades tú mismo, desde un panel, sin tocar código.' },
-            { icono: 'arroba', explica: 'Escribes desde una dirección con el nombre de tu negocio (por ejemplo, hola@tunegocio.pe) y no desde una cuenta gratuita.' },
-            { icono: 'lupa', explica: 'Desde el primer día sabes cuánta gente te visita y cómo te encuentra en Google.' },
+            { figura: { valor: '5–7', unidad: 'páginas' }, explica: 'Cada tema de tu negocio en su propia página.' },
+            { icono: 'blog', explica: 'Publicas novedades tú mismo, sin tocar código.' },
+            { icono: 'arroba', explica: 'Escribes desde hola@tunegocio.pe, no desde una cuenta gratuita.' },
+            { icono: 'lupa', explica: 'Sabes cuánta gente te visita y cómo te encuentra.' },
         ],
         dentro: {
             titular: 'Tu web, página por página.',
             destacar: 'página.',
-            cabecera: 'Mapa del sitio',
-            forma: 'arbol',
-            partes: [
-                { t: 'Inicio', d: 'Quién eres y qué ofreces, de un vistazo.' },
-                { t: 'Nosotros', d: 'Tu historia y tu equipo: lo que genera confianza.' },
-                { t: 'Servicios', d: 'Cada servicio explicado, para que no tengan que preguntarte.' },
-                { t: 'Proyectos', d: 'Trabajos que muestran lo que haces.' },
-                { t: 'Blog', d: 'Artículos que publicas tú, sin programar.' },
-                { t: 'Preguntas', d: 'Las dudas de siempre, ya respondidas.' },
-                { t: 'Contacto', d: 'Dónde estás y cómo escribirte.' },
-            ],
-            // [CONFIRMAR] si el inicio cuenta dentro de las «5 a 7 páginas internas»
-            nota: 'Ejemplo con 6 páginas internas además del inicio. El plan incluye entre 5 y 7, y las definimos contigo.',
         },
         ejes: ['Menos páginas', 'Más páginas'],
         proyecto: 'peru-travel',
@@ -273,25 +238,26 @@ export const DETALLES: Detalle[] = [
             { texto: '¿Solo necesitas que te encuentren en Google?', a: 'web-corporativa' },
         ],
         incluye: [
-            { icono: 'documento', explica: 'Antes de programar entendemos cómo trabajas hoy y dejamos por escrito qué se va a construir.' },
-            { icono: 'capas', explica: 'No esperas hasta el final: vas probando avances y das tu visto bueno antes de seguir.' },
-            { icono: 'enchufe', explica: 'Lo nuevo se conecta con lo que ya te funciona, en vez de obligarte a cambiarlo todo.' },
-            { icono: 'salvavidas', explica: 'Después de lanzar, seguimos contigo el primer mes mientras tu equipo lo usa.' },
+            { icono: 'documento', explica: 'Antes de programar, dejamos por escrito qué se construye.' },
+            { icono: 'capas', explica: 'Pruebas cada avance y das tu visto bueno antes de seguir.' },
+            { icono: 'enchufe', explica: 'Lo nuevo se conecta con lo que ya te funciona.' },
+            { icono: 'salvavidas', explica: 'Seguimos contigo mientras tu equipo lo empieza a usar.' },
         ],
         dentro: {
             titular: 'Se arma alrededor de tu proceso.',
             destacar: 'proceso.',
-            cabecera: 'Lo que podría tener',
-            forma: 'modulos',
-            partes: [
-                { t: 'Paneles', d: 'Los números de tu negocio en una sola pantalla.' },
-                { t: 'Reservas', d: 'Citas, mesas o cupos, sin cruces.' },
-                { t: 'Pedidos', d: 'Del pedido a la entrega, sin cuaderno.' },
-                { t: 'Clientes', d: 'Tu cartera en orden, con su historial.' },
-                { t: 'Integraciones', d: 'Que tus herramientas se hablen entre sí.' },
-            ],
-            // [CONFIRMAR] que apps e IA se cotizan por esta via
-            nota: 'Lo definimos juntos en el diagnóstico inicial. ¿Una app o una automatización con IA? También se cotiza a medida.',
+            modulos: {
+                cabecera: 'Lo que podría tener',
+                partes: [
+                    { t: 'Paneles', d: 'Los números de tu negocio en una sola pantalla.' },
+                    { t: 'Reservas', d: 'Citas, mesas o cupos, sin cruces.' },
+                    { t: 'Pedidos', d: 'Del pedido a la entrega, sin cuaderno.' },
+                    { t: 'Clientes', d: 'Tu cartera en orden, con su historial.' },
+                    { t: 'Integraciones', d: 'Que tus herramientas se hablen entre sí.' },
+                ],
+                // [CONFIRMAR] que apps e IA se cotizan por esta via
+                nota: 'Lo definimos juntos en el diagnóstico inicial. ¿Una app o una automatización con IA? También se cotiza a medida.',
+            },
         },
         ejes: null,
         proyecto: 'fluxa',

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { Escena } from '../../escenas/Escenas';
 import { Titular } from '../../Titular';
 import type { Detalle } from '../planes';
-import { Casa, Pausa, Reproducir } from './Iconos';
+import { Pausa, Reproducir } from './Iconos';
 import { MaquetaLanding } from './MaquetaLanding';
 import { MaquetaTienda } from './MaquetaTienda';
 import { MaquetaWeb } from './MaquetaWeb';
@@ -29,15 +29,10 @@ import { MaquetaWeb } from './MaquetaWeb';
    del catalogo muestra precios de mentira («S/ 32») y en una pagina de
    precios se confundirian con los de verdad.
 
-   Debajo, la hoja blanca de «las partes» (ref 35), con una forma propia
-   por plan (a Harley no le gusta la misma animacion para todo):
-     · recorrido (tienda) — el camino del pedido, del QR a tu WhatsApp; un
-       trazo rojo lo recorre de arriba abajo;
-     · bandas (landing)   — una misma pagina vista de arriba abajo: en cada
-       fila se marca la banda que toca;
-     · arbol (web)        — el mapa del sitio: el inicio y sus paginas;
-     · modulos (software) — piezas sueltas que se eligen segun tu proceso.
-   Las partes son EJEMPLOS (lo dice la pildora y, donde hace falta, la
+   Debajo, solo en Software, la hoja blanca de las piezas que podria tener
+   (ref 35): su escena es generica. En Tienda, Landing y Web la hoja
+   repetia lo que su maqueta ya cuenta paso a paso (Harley: contenido
+   repetido) y se quito. Las piezas son EJEMPLOS (lo dicen la pildora y la
    nota): el alcance real se define contigo. */
 
 export function PorDentro({ d }: { d: Detalle }) {
@@ -65,9 +60,7 @@ export function PorDentro({ d }: { d: Detalle }) {
     }, []);
 
     const run = visible && !pausa && !reducido;
-    const arbol = dentro.forma === 'arbol';
-    const [raiz, ...hojas] = dentro.partes;
-    const Lista = dentro.forma === 'recorrido' || dentro.forma === 'bandas' ? 'ol' : 'ul';
+    const { modulos } = dentro;
 
     return (
         <section id="por-dentro" className="pre-dt-sec pre-dt-dentro" data-tono="oscuro" aria-labelledby="dentro-t">
@@ -104,52 +97,18 @@ export function PorDentro({ d }: { d: Detalle }) {
                     </figcaption>
                 </figure>
 
-                <div className="pre-dt-partes m-claro" data-tono="claro" data-forma={dentro.forma} data-rv>
-                    <div className="pre-dt-partes-cab">
-                        <h3>{dentro.cabecera}</h3>
-                        {/* [CONFIRMAR copy con Harley] */}
-                        <span className="pre-dt-pildora">Ejemplo</span>
-                    </div>
-
-                    {arbol ? (
-                        <div className="pre-dt-arbol" data-in>
-                            <div className="pre-dt-parte pre-dt-arbol-raiz">
-                                <span className="pre-dt-parte-marca" aria-hidden="true">
-                                    <Casa />
-                                </span>
-                                <span className="pre-dt-parte-txt">
-                                    <b>{raiz.t}</b>
-                                    <span>{raiz.d}</span>
-                                </span>
-                            </div>
-                            <ul aria-label={`Páginas dentro de ${raiz.t}`}>
-                                {hojas.map((p, k) => (
-                                    <li key={p.t} className="pre-dt-parte" style={{ '--i': k + 1 } as CSSProperties}>
-                                        <span className="pre-dt-parte-marca" aria-hidden="true">
-                                            <i />
-                                        </span>
-                                        <span className="pre-dt-parte-txt">
-                                            <b>{p.t}</b>
-                                            <span>{p.d}</span>
-                                        </span>
-                                    </li>
-                                ))}
-                            </ul>
+                {modulos && (
+                    <div className="pre-dt-partes m-claro" data-tono="claro" data-rv>
+                        <div className="pre-dt-partes-cab">
+                            <h3>{modulos.cabecera}</h3>
+                            {/* [CONFIRMAR copy con Harley] */}
+                            <span className="pre-dt-pildora">Ejemplo</span>
                         </div>
-                    ) : (
-                        <Lista className="pre-dt-partes-lista" data-in>
-                            {dentro.partes.map((p, k) => (
+                        <ul className="pre-dt-partes-lista" data-in>
+                            {modulos.partes.map((p, k) => (
                                 <li key={p.t} className="pre-dt-parte" style={{ '--i': k } as CSSProperties}>
                                     <span className="pre-dt-parte-marca" aria-hidden="true">
-                                        {dentro.forma === 'bandas' ? (
-                                            <span className="pre-dt-mini">
-                                                {dentro.partes.map((_, b) => (
-                                                    <i key={b} data-on={b === k ? '' : undefined} />
-                                                ))}
-                                            </span>
-                                        ) : (
-                                            String(k + 1)
-                                        )}
+                                        {k + 1}
                                     </span>
                                     <span className="pre-dt-parte-txt">
                                         <b>{p.t}</b>
@@ -157,11 +116,10 @@ export function PorDentro({ d }: { d: Detalle }) {
                                     </span>
                                 </li>
                             ))}
-                        </Lista>
-                    )}
-
-                    {dentro.nota && <p className="pre-dt-partes-nota">{dentro.nota}</p>}
-                </div>
+                        </ul>
+                        <p className="pre-dt-partes-nota">{modulos.nota}</p>
+                    </div>
+                )}
             </div>
         </section>
     );

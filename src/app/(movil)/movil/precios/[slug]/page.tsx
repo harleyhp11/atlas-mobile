@@ -12,7 +12,6 @@ import { Parecido } from '@/components/movil/precios/detalle/Parecido';
 import { Pedido } from '@/components/movil/precios/detalle/Pedido';
 import { Plazo } from '@/components/movil/precios/detalle/Plazo';
 import { PorDentro } from '@/components/movil/precios/detalle/PorDentro';
-import { Precio } from '@/components/movil/precios/detalle/Precio';
 import { Resumen } from '@/components/movil/precios/detalle/Resumen';
 import { Transicion } from '@/components/movil/precios/detalle/Transicion';
 import { detalle, DETALLES, MENU_PRECIOS, rango, wspPlan, type Detalle } from '@/components/movil/precios/planes';
@@ -27,20 +26,21 @@ import '@/components/movil/precios/detalle/detalle.css';
 /* El detalle de cada plan en celular y tablet (/servicios/[slug], por el
    proxy; en el escritorio no existe y el proxy lo manda a /servicios).
 
-   Una sola plantilla para los cuatro planes, pensada para que nadie se
-   pierda en una pagina larga: arriba siempre se sabe donde estas (selector
-   de planes) y que hay mas abajo (indice), y el dock deja cotizar desde
-   cualquier punto. De arriba abajo:
+   Una sola plantilla para los cuatro planes. Cada dato vive en UN lugar
+   (Harley la vio larga y repetida: el precio salia cinco veces, la nota
+   legal tres y las partes de la landing dos): arriba se sabe donde estas
+   (selector de planes) y el dock deja cotizar desde cualquier punto. De
+   arriba abajo:
      · el hero con la foto del rubro y el nombre del plan (D1);
-     · el resumen: precio, entrega, respuesta y el boton (D2);
+     · el resumen: precio, lo que lo mueve, entrega, respuesta y el boton
+       (D2; antes el rango tenia su propia seccion, D6);
      · ¿es para ti? y, si no, a que plan ir (D3);
-     · todo lo que incluye, punto por punto (D4);
-     · por dentro: la maqueta y las partes de ejemplo (D5);
-     · lo que mueve el precio, o como se cotiza (D6);
+     · todo lo que incluye, una linea por punto (D4);
+     · por dentro: la maqueta (D5; la hoja de piezas, solo en Software);
      · cuando esta listo: el plazo y las cinco etapas (D7);
      · algo parecido que hicimos (D8);
      · el armador del mensaje de WhatsApp (D9);
-     · los otros planes (D10) y el dock.
+     · dos salidas y la nota legal (D10), y el dock.
    Los precios, plazos e «incluye» salen de (sitio)/servicios/datos.ts via
    planes.ts: aqui no se escribe ni un numero a mano.
 
@@ -118,11 +118,10 @@ export default async function PlanMovil({ params }: Props) {
                     <ParaTi d={d} />
                     <Incluye d={d} />
                     <PorDentro d={d} />
-                    <Precio d={d} />
                     <Plazo d={d} />
                     <Parecido d={d} />
                     <Empezar d={d} />
-                    <OtrosPlanes d={d} />
+                    <OtrosPlanes />
                     <Dock d={d} />
                 </Pedido>
             </main>

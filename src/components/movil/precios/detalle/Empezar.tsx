@@ -4,19 +4,20 @@ import { useRef, type CSSProperties } from 'react';
 import { Boton } from '../../Boton';
 import { Mas } from '../../iconos';
 import { Titular } from '../../Titular';
-import { PrecioPlan } from '../comun/PrecioPlan';
-import { LEYENDA_TIPO, mensajePlan, nombreExtra, NOTA_LEGAL, tipoDe, wspPlan, type Detalle } from '../planes';
+import { LEYENDA_TIPO, mensajePlan, nombreExtra, tipoDe, wspPlan, type Detalle } from '../planes';
 import { useExtras } from './Pedido';
 
 /* D9 · «¿Empezamos tu …?» (refs 33 y 34): el armador del mensaje.
 
    Arriba, los extras que tienen sentido con este plan (nombres EXACTOS de
    los 21 servicios de datos.ts, mostrados con nombreExtra() por si en este
-   plan se leen mal, con su leyenda en palabras del cliente: «se
-   suma si lo necesitas», «se cotiza aparte»…) como interruptores. Abajo, la
-   tarjeta «Tu pedido» de la ref 34: el plan, su rango y su entrega, lo que
-   sumaste (chips con × para quitar) y el mensaje EXACTO que va a llegar por
-   WhatsApp, en una burbuja de chat. Lo que ves es lo que se manda: nada de
+   plan se leen mal) como interruptores. Solo los que se cotizan aparte
+   llevan leyenda: «se suma si lo necesitas» se repetia en casi todas las
+   filas y ya lo dice el interruptor. Abajo, la tarjeta «Tu pedido» de la
+   ref 34: el plan, lo que sumaste (chips con × para quitar; si no sumaste
+   nada, no aparece) y el mensaje EXACTO que va a llegar por WhatsApp, en
+   una burbuja de chat. Sin rango, entrega ni nota legal: ya estan en el
+   resumen de arriba (Harley: contenido repetido). Lo que ves es lo que se manda: nada de
    formularios ni de datos personales; la persona termina de escribir en su
    WhatsApp («Mi negocio es: …», con el cursor parpadeando).
 
@@ -36,8 +37,8 @@ export function Empezar({ d }: { d: Detalle }) {
     const sumaste = useRef<HTMLDivElement>(null);
     const mensaje = mensajePlan(d, extras);
 
-    // al quitar un chip con su ×, el foco pasa al chip vecino (o al titulo
-    // «Sumaste» si no queda ninguno), no se pierde en el <body>
+    // al quitar un chip con su ×, el foco pasa al chip vecino (o, si no queda
+    // ninguno y «Sumaste» se esconde, a «Tu mensaje»), no se pierde en el <body>
     const quitarChip = (n: string) => {
         const k = extras.indexOf(n);
         quitar(n);
@@ -45,7 +46,7 @@ export function Empezar({ d }: { d: Detalle }) {
             const caja = sumaste.current;
             if (!caja) return;
             const botones = caja.querySelectorAll<HTMLButtonElement>('.pre-dt-chip button');
-            (botones[k] ?? botones[k - 1] ?? caja.querySelector<HTMLElement>('.pre-dt-ped-etq'))?.focus({ preventScroll: true });
+            (botones[k] ?? botones[k - 1] ?? caja.parentElement?.querySelector<HTMLElement>('.pre-dt-ped-msg .pre-dt-ped-etq'))?.focus({ preventScroll: true });
         });
     };
 
@@ -55,19 +56,19 @@ export function Empezar({ d }: { d: Detalle }) {
                 <Titular id="empezar-t" className="pre-dt-t" texto={`¿Empezamos tu ${d.pedido}?`} destacar={`${d.pedido}?`} />
                 {/* [CONFIRMAR copy con Harley] */}
                 <p className="pre-dt-bajada" data-rv>
-                    Marca lo que también te interesa y te llega todo en un solo mensaje. Es opcional.
+                    Opcional: marca lo que también te interesa.
                 </p>
 
                 <ul className="pre-dt-ext" aria-label="Extras opcionales">
                     {d.extras.map((n, k) => {
                         const on = extras.includes(n);
-                        const tipo = tipoDe(n);
+                        const aparte = tipoDe(n) === 'medida';
                         return (
                             <li key={n} data-rv style={{ '--d': `${k * 0.05}s` } as CSSProperties}>
                                 <button type="button" role="switch" aria-checked={on} className="pre-dt-sw" onClick={() => alternar(n)}>
                                     <span className="pre-dt-sw-t">
                                         <b>{nombreExtra(d, n)}</b>
-                                        {tipo && <small className="m-mono">{LEYENDA_TIPO[tipo]}</small>}
+                                        {aparte && <small className="m-mono">{LEYENDA_TIPO.medida}</small>}
                                     </span>
                                     <span className="pre-dt-sw-pista" aria-hidden="true">
                                         <span className="pre-dt-sw-no">No</span>
@@ -94,56 +95,36 @@ export function Empezar({ d }: { d: Detalle }) {
                         </span>
                     </div>
 
-                    <dl className="pre-dt-ped-datos">
-                        <div>
-                            <dt className="m-mono">{plan.aMedida ? 'Precio' : 'Rango'}</dt>
-                            <dd>
-                                <PrecioPlan plan={plan} tam="m" className="pre-dt-ped-precio" />
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="m-mono">Entrega</dt>
-                            <dd>{plan.entrega}</dd>
-                        </div>
-                    </dl>
-
-                    <div ref={sumaste} className="pre-dt-ped-sum">
-                        <p className="m-mono pre-dt-ped-etq" tabIndex={-1}>
-                            Sumaste
-                        </p>
-                        {extras.length > 0 ? (
-                            <ul className="pre-dt-chips">
-                                {extras.map((n) => (
-                                    <li key={n} className="pre-dt-chip">
-                                        <span>{nombreExtra(d, n)}</span>
-                                        <button type="button" aria-label={`Quitar ${nombreExtra(d, n)}`} onClick={() => quitarChip(n)}>
-                                            <Mas />
-                                        </button>
-                                    </li>
-                                ))}
-                            </ul>
-                        ) : (
-                            <p className="pre-dt-ped-nada">Nada extra por ahora.</p>
-                        )}
-                        <p className="sr-only" aria-live="polite">
-                            {extrasLeidos(extras.length)}
-                        </p>
+                    <div ref={sumaste} className="pre-dt-ped-sum" hidden={extras.length === 0}>
+                        <p className="m-mono pre-dt-ped-etq">Sumaste</p>
+                        <ul className="pre-dt-chips">
+                            {extras.map((n) => (
+                                <li key={n} className="pre-dt-chip">
+                                    <span>{nombreExtra(d, n)}</span>
+                                    <button type="button" aria-label={`Quitar ${nombreExtra(d, n)}`} onClick={() => quitarChip(n)}>
+                                        <Mas />
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
                     </div>
+                    <p className="sr-only" aria-live="polite">
+                        {extrasLeidos(extras.length)}
+                    </p>
 
                     <div className="pre-dt-ped-msg" data-loop>
-                        <p className="m-mono pre-dt-ped-etq">Tu mensaje</p>
+                        <p className="m-mono pre-dt-ped-etq" tabIndex={-1}>
+                            Tu mensaje
+                        </p>
                         <p className="pre-dt-burbuja" key={mensaje}>
                             {sinCorte(mensaje.trimEnd())}
                             <i className="pre-dt-cursor" aria-hidden="true" />
                         </p>
-                        {/* [CONFIRMAR copy con Harley] */}
-                        <p className="pre-dt-ped-ayuda">Lo terminas de escribir en tu WhatsApp.</p>
                     </div>
 
                     <Boton href={wspPlan(d, extras)} externo tinta className="pre-dt-ped-btn">
                         Enviar por WhatsApp
                     </Boton>
-                    <p className="pre-dt-ped-legal">{NOTA_LEGAL}</p>
                 </div>
             </div>
         </section>

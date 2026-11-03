@@ -1,13 +1,13 @@
 import type { CSSProperties } from 'react';
-import { FlechaAbajo } from '../../iconos';
 import { Titular } from '../../Titular';
 import type { Detalle } from '../planes';
 import { IconoIncluye } from './Iconos';
 
 /* D4 · «Todo lo que incluye.» (refs 35, 30 y 33): los cuatro puntos del plan,
    uno por fila, cada uno explicado en simple. El titulo de cada fila es el
-   dato LITERAL de datos.ts (plan.incluye[i]); la explicacion es de planes.ts
-   y solo aclara lo que el dato ya dice.
+   dato LITERAL de datos.ts (plan.incluye[i]); la explicacion es de planes.ts,
+   en UNA linea corta, y solo aclara lo que el dato ya dice (Harley: mucho
+   texto).
 
    Cada fila lleva a la izquierda un cuadro hueso: la cifra cuando el dato
    tiene una («Hasta 40», «5–7 páginas»; el 40 cuenta al aparecer) o un
@@ -50,12 +50,6 @@ export function Incluye({ d }: { d: Detalle }) {
                                 <div className="pre-dt-inc-txt">
                                     <h3>{item}</h3>
                                     <p>{x.explica}</p>
-                                    {x.ancla && (
-                                        <a className="pre-dt-inc-ancla" href={x.ancla.href}>
-                                            {x.ancla.texto}
-                                            <FlechaAbajo />
-                                        </a>
-                                    )}
                                 </div>
                             </li>
                         );

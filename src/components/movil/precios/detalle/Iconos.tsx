@@ -94,13 +94,6 @@ export const Capas = ({ className }: P) => (
     </Trazo>
 );
 
-/* la raiz del mapa del sitio (web corporativa) */
-export const Casa = ({ className }: P) => (
-    <Trazo className={className}>
-        <path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z" />
-    </Trazo>
-);
-
 /* boton de la maqueta (WCAG 2.2.2: lo que se mueve solo se puede parar) */
 export const Pausa = ({ className }: P) => (
     <svg className={className} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
