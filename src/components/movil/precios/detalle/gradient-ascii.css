@@ -1,0 +1,12 @@
+/* contenedor y lienzo del degradado ASCII (GradientASCII.tsx): llenan a su padre */
+.gradient-ascii-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+.gradient-ascii-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}

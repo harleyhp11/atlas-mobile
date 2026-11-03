@@ -1,30 +1,33 @@
 import type { CSSProperties } from 'react';
 import { Boton } from '../../Boton';
 import { PrecioPlan } from '../comun/PrecioPlan';
-import { FRASES, GARANTIAS, rango, soles, wspPlan, type Detalle } from '../planes';
+import { GARANTIAS, rango, soles, wspPlan, type Detalle } from '../planes';
+import { FondoResumen } from './FondoResumen';
 import './resumen.css';
 
 /* D2 · El resumen: lo que la persona vino a buscar en una sola mirada
    (cuanto cuesta, de que depende, cuando esta y en cuanto le respondemos)
    y el CTA principal. Es el UNICO lugar del contenido con el precio (el
-   dock y el mensaje de WhatsApp aparte).
+   dock y el mensaje de WhatsApp aparte). Sin la promesa «Antes de empezar
+   te damos el monto final por escrito» debajo del boton (Harley la quito).
 
-   Desde el 2026-11-03 es una tarjeta de vidrio oscura sobre brasas rojas
-   que se mueven (pedido de Harley, con un video de referencia: un control
-   «Effort» que se desliza solo y estalla al llegar al final). Aqui el
-   control es el rango del plan:
+   Desde el 2026-11-03 es una tarjeta de vidrio oscura sobre un degradado
+   ASCII rojo (FondoResumen; pedido de Harley, con un
+   video de referencia: un control «Effort» que se desliza solo y estalla
+   al llegar al final). Aqui el control es el rango del plan:
      · la perilla viaja sola de un extremo al otro y deja detras el
        degradado de la marca (vino → rojo → hueso);
      · debajo, la leyenda cambia con un desenfoque de «Desde S/ 400» a
        «Hasta S/ 1,200». SOLO los extremos: no hay una tabla de «tanto por
        tanto» y no se inventan cifras intermedias;
-     · al llegar, un destello con anillos y burbujas, y las brasas del fondo
-       se encienden; despues vuelve sin ruido y repite.
+     · al llegar, un destello con anillos y burbujas, la tarjeta entera se
+       sacude con el golpe y el campo ASCII lanza su onda desde la perilla;
+       despues vuelve sin ruido y repite.
    Todo con CSS y un reloj comun (--ciclo, en resumen.css); data-loop lo
    pausa fuera de pantalla y con movimiento reducido queda quieto al final.
 
    El plan a medida no tiene rango: lleva su nota («Propuesta cerrada tras
-   la primera llamada») y las mismas brasas, sin el control.
+   la primera llamada») y el mismo fondo, sin el control.
 
    El rango NO se cuenta (un «S/ 0 – 1,500» que sube no significa nada). La
    pildora dice lo que es: un precio referencial, o una propuesta a medida. */
@@ -58,9 +61,7 @@ export function Resumen({ d }: { d: Detalle }) {
     const r = rango(plan);
     return (
         <section className="pre-dt-res" data-tono="oscuro" aria-label="Resumen del plan" data-rv data-loop style={{ '--d': '.25s' } as CSSProperties}>
-            <span className="pre-dt-res-fondo" aria-hidden="true">
-                <i />
-            </span>
+            <FondoResumen />
             <span className="pre-dt-res-tirador" aria-hidden="true" />
             {/* [CONFIRMAR copy con Harley] */}
             <span className="pre-dt-res-pildora">{plan.aMedida ? 'Propuesta a medida' : 'Precio referencial'}</span>
@@ -143,7 +144,6 @@ export function Resumen({ d }: { d: Detalle }) {
             <Boton href={wspPlan(d)} externo variante="claro" className="pre-dt-res-btn">
                 {plan.cta}
             </Boton>
-            <p className="pre-dt-res-promesa">{FRASES.montoFinal}</p>
         </section>
     );
 }

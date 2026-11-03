@@ -1,18 +1,21 @@
 /* =====================================================================
-   D2 · el resumen del plan (Resumen.tsx): tarjeta de vidrio oscura sobre
-   brasas rojas, montada 48 px sobre el hero, con el rango que se desliza
-   solo y estalla al llegar (ref: el control «Effort» del video de Harley).
+   D2 · el resumen del plan (Resumen.tsx): tarjeta de vidrio oscura sobre el
+   degradado ASCII rojo (FondoResumen), montada 48 px sobre el hero, con el
+   rango que se desliza solo y estalla al llegar (ref: el control «Effort»
+   del video de Harley).
 
    Un solo reloj para todo (--ciclo, 8 s). En % del ciclo:
      0–8      la perilla quieta a la izquierda, «Desde S/ 400»;
      8–34     viaja a la derecha (se estira al arrastrar, rebota al llegar)
               y deja el degradado detras;
      30–38    la leyenda pasa a «Hasta S/ 1,200» con un desenfoque;
-     34–72    destello, tres anillos y las burbujas; las brasas del fondo
-              se encienden y el precio late una vez;
+     34–72    destello, tres anillos y las burbujas; la tarjeta entera se
+              sacude con el golpe (34–44), el campo ASCII lanza su onda
+              desde la perilla (FondoResumen), el brillo del fondo se
+              enciende y el precio late una vez;
      86–95    vuelve sin estallido; 95–100 quieta.
    Los estilos SIN animacion son el estado final (perilla a la derecha,
-   «Hasta…», brasas a media luz): es lo que queda con movimiento reducido,
+   «Hasta…», el brillo a media luz): es lo que queda con movimiento reducido,
    donde la regla global de movil.css termina cada animacion al instante.
    data-loop (Revelador) pone .is-off fuera de pantalla: ahi se pausa.
    ===================================================================== */
@@ -35,6 +38,14 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.18),
         0 30px 60px -24px rgba(225, 29, 58, 0.45),
         var(--pre-sombra-hoja);
+    /* el golpe de la perilla mueve la tarjeta entera. Con transform y no
+       con translate: translate es el de la entrada de Revelador (data-rv) */
+    transform-origin: 50% 60%;
+    animation: pre-ds-golpe var(--ciclo) infinite;
+}
+/* sin rango (Software) no hay golpe */
+.pre-dt-res:not(:has(.pre-dt-ds)) {
+    animation: none;
 }
 /* en tablet, la tarjeta se alinea con la columna del texto (m-wrap) */
 @media (min-width: 768px) {
@@ -43,13 +54,15 @@
         margin-inline: auto;
     }
 }
+.pre-dt-res.is-off,
 .pre-dt-res.is-off *,
 .pre-dt-res.is-off *::before,
 .pre-dt-res.is-off *::after {
     animation-play-state: paused;
 }
 
-/* ---- las brasas: el fondo de la tarjeta */
+/* ---- el fondo: negro con un velo vino arriba y, encima, el degradado
+   ASCII (FondoResumen): caracteres rojos arriba, un arco oscuro abajo */
 .pre-dt-res-fondo {
     position: absolute;
     z-index: -1;
@@ -57,22 +70,20 @@
     overflow: hidden;
     border-radius: inherit;
     background:
-        radial-gradient(90% 55% at 100% 0%, rgba(225, 29, 58, 0.5), transparent 70%),
-        radial-gradient(85% 60% at 0% 100%, rgba(150, 12, 34, 0.6), transparent 70%),
-        linear-gradient(160deg, #1c0709, #0b0b0c 55%, #21060a);
+        radial-gradient(90% 50% at 100% 0%, rgba(150, 12, 34, 0.45), transparent 70%),
+        linear-gradient(180deg, #120507, #0b0b0c 60%);
 }
-/* una brasa grande que deriva lenta por detras del vidrio */
-.pre-dt-res-fondo::before {
+.pre-dt-res-ascii {
+    position: absolute;
+    inset: 0;
+}
+/* arriba, donde van la etiqueta y el precio, el campo se apaga un poco */
+.pre-dt-res-fondo::after {
     content: '';
     position: absolute;
-    left: -30%;
-    top: 18%;
-    width: 85%;
-    height: 70%;
-    border-radius: 50%;
-    background: radial-gradient(closest-side, rgba(255, 40, 70, 0.42), transparent);
-    filter: blur(14px);
-    animation: pre-ds-deriva 15s ease-in-out infinite alternate;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(11, 11, 12, 0.55), rgba(11, 11, 12, 0) 45%);
+    pointer-events: none;
 }
 /* el brillo del estallido, del lado donde llega la perilla */
 .pre-dt-res-fondo i {
@@ -82,6 +93,7 @@
         radial-gradient(70% 45% at 86% 50%, rgba(255, 70, 95, 0.75), transparent 72%),
         radial-gradient(50% 30% at 86% 50%, rgba(255, 210, 215, 0.35), transparent 70%);
     opacity: 0.45;
+    mix-blend-mode: screen;
     animation: pre-ds-brillo var(--ciclo) linear infinite;
 }
 /* sin rango (Software) no hay estallido: el brillo queda quieto */
@@ -159,13 +171,6 @@
 }
 .pre-dt-res-btn {
     margin-top: 20px;
-}
-.pre-dt-res-promesa {
-    margin-top: 12px;
-    font-size: 12.5px;
-    line-height: 1.4;
-    text-align: center;
-    color: var(--t3);
 }
 
 /* ===================================================== el deslizador */
@@ -500,8 +505,25 @@
         translate: 0 6px;
     }
 }
-@keyframes pre-ds-deriva {
-    to {
-        translate: 60% -20%;
+@keyframes pre-ds-golpe {
+    0%,
+    34% {
+        transform: none;
+    }
+    35.2% {
+        transform: translate(3px, -3px) rotate(-0.6deg) scale(1.012);
+    }
+    36.6% {
+        transform: translate(-4px, 1px) rotate(0.5deg) scale(1.006);
+    }
+    38% {
+        transform: translate(3px, 0) rotate(-0.3deg);
+    }
+    39.6% {
+        transform: translate(-1.5px, 0) rotate(0.15deg);
+    }
+    41.5%,
+    100% {
+        transform: none;
     }
 }

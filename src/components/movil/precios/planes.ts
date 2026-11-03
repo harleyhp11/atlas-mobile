@@ -93,7 +93,6 @@ const SALUDO = 'Hola Atlas 👋';
 
 /* Literales de home/Preguntas.tsx (y dos de otros archivos, anotados) */
 export const FRASES = {
-    montoFinal: 'Antes de empezar te damos el monto final por escrito.', // PREGUNTAS[0]
     nadaSinVerlo: 'Nada se publica sin que lo veas.', // PREGUNTAS[2]
     despues: '30 días de soporte incluidos, atención directa por WhatsApp y capacitación para que administres tu web.', // PREGUNTAS[3]
     sistemas: 'Sistemas, apps y automatizaciones con IA', // de PREGUNTAS[4] [CONFIRMAR copy con Harley]
