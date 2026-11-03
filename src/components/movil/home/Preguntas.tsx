@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { anclar } from '../anclar';
 import { Ceja } from '../Ceja';
 import { Titular } from '../Titular';
+import { Ferrofluid } from './Ferrofluid';
 import './preguntas.css';
 
 /* (08) Preguntas — el FAQ de Reachwise ("Questions, answered.") sobre negro.
@@ -109,6 +110,12 @@ export function Preguntas() {
 
     return (
         <section id="preguntas" className="h-faq" data-tono="oscuro" aria-labelledby="preguntas-t">
+            {/* de fondo, el ferrofluido en los colores de Atlas (pedido de
+                Harley): puas que ondulan con luz hueso y filos rojos; al tocar
+                la pantalla sale una onda desde el dedo */}
+            <div className="h-faq-fondo" aria-hidden="true">
+                <Ferrofluid colors={['#f4f1ea', '#e11d3a', '#e11d3a']} speed={0.45} scale={1.6} tilt={48} opacity={0.75} dpr={1} />
+            </div>
             <div className="m-wrap">
                 <Ceja n="08">Preguntas</Ceja>
                 <Titular id="preguntas-t" className="m-h2 h-faq-h2" texto="Preguntas, respondidas." destacar="respondidas." />
