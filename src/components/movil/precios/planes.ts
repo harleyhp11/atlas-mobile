@@ -62,6 +62,8 @@ export type Detalle = {
     titulo: string; // nombre completo: SEO, mensajes, «Te conviene…»
     material: Material;
     foto: { src: string; mini: string; w: number; h: number; pos: string };
+    // el fondo abstracto de su tarjeta en el bento (Unsplash, licencia libre)
+    fondo: { src: string; pos: string };
     escena: EscenaServicio;
     paraTi: [string, string, string];
     mejorOtro: { texto: string; a: SlugPlan | 'whatsapp' }[];
@@ -110,6 +112,7 @@ export const DETALLES: Detalle[] = [
         corto: 'Tienda',
         titulo: 'Tiendas online y menús digitales',
         material: 'hueso',
+        fondo: { src: '/assets/movil/precios/fondos/tienda.webp', pos: '50% 40%' },
         foto: { src: '/assets/movil/negocios/restaurante.webp', mini: '/assets/movil/negocios/restaurante-mini.webp', w: 800, h: 1000, pos: '50% 62%' },
         escena: 'catalogo',
         // [CONFIRMAR copy con Harley] (paraTi, mejorOtro, incluye.explica, dentro, ejes, proyectoLinea, extras)
@@ -158,6 +161,7 @@ export const DETALLES: Detalle[] = [
         corto: 'Landing',
         titulo: 'Landing page',
         material: 'niebla',
+        fondo: { src: '/assets/movil/precios/fondos/landing.webp', pos: '68% 50%' },
         // un estudio con «www.» y un boton START con su cursor en la pared: la
         // landing es eso, un llamado a dar el paso. Foto CC0 de Rashed Hossain,
         // WordPress Photo Directory (pedido de Harley: en vez de Machu Picchu)
@@ -206,6 +210,7 @@ export const DETALLES: Detalle[] = [
         corto: 'Web',
         titulo: 'Web corporativa',
         material: 'grafito',
+        fondo: { src: '/assets/movil/precios/fondos/web.webp', pos: '35% 50%' },
         foto: { src: '/assets/movil/negocios/inmobiliaria.webp', mini: '/assets/movil/negocios/inmobiliaria-mini.webp', w: 800, h: 1000, pos: '50% 30%' },
         escena: 'navegador',
         // [CONFIRMAR copy con Harley] (paraTi, mejorOtro, incluye.explica, dentro, ejes, proyectoLinea, extras)
@@ -254,6 +259,7 @@ export const DETALLES: Detalle[] = [
         corto: 'Software',
         titulo: 'Software a medida',
         material: 'carbon',
+        fondo: { src: '/assets/movil/precios/fondos/software.webp', pos: '50% 45%' },
         foto: { src: '/assets/movil/negocios/distribuidora.webp', mini: '/assets/movil/negocios/distribuidora-mini.webp', w: 800, h: 1000, pos: '50% 55%' },
         escena: 'panel',
         // [CONFIRMAR copy con Harley] (paraTi, mejorOtro, incluye.explica, dentro, proyectoLinea, extras)

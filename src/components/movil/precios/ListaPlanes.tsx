@@ -160,6 +160,7 @@ function Elegir({ elegido, elegir }: { elegido: Eleccion; elegir: (id: Eleccion)
                         revelar
                         retraso={k * 0.07}
                         cuenta
+                        fondo
                     />
                 ))}
             </div>

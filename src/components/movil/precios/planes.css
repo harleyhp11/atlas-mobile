@@ -34,6 +34,11 @@
 .pre-pl-t {
     max-width: 15ch;
 }
+/* menos ruido arriba de los planes (pedido de Harley): el titular un poco
+   mas chico que el resto de los h2 (34–48 px), los chips tambien */
+.pre-pl-elegir .pre-pl-t {
+    font-size: clamp(28px, 8.4vw, 40px);
+}
 
 /* ===================================================== 1 · chips + bento */
 
@@ -65,12 +70,12 @@
 .pre-pl-chip {
     flex: none;
     scroll-snap-align: start;
-    height: 44px;
-    padding: 0 18px;
+    height: 36px;
+    padding: 0 14px;
     border-radius: 999px;
     background: rgba(244, 241, 234, 0.08);
     color: var(--t2);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: -0.005em;
     white-space: nowrap;

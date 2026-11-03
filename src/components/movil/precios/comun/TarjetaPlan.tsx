@@ -21,6 +21,10 @@ import './comun.css';
    cambiara la clase le borraria el .is-in de Revelador y volveria a
    esconderse (gotcha documentado en Servicios.tsx).
 
+   En el bento de #planes (`fondo`) cada una lleva ademas una imagen
+   abstracta de la marca (rojo, blanco, negro) a sangre, con un velo del
+   color de su material para que el texto se siga leyendo.
+
    El nombre lleva view-transition-name (pre-plan-<slug>): al tocar la
    tarjeta, el nombre viaja hasta el h1 del detalle. Va en un inline-block,
    porque un nombre partido en dos cajas aborta la transicion. Donde el
@@ -46,10 +50,11 @@ type Props = {
     retraso?: number;
     cuenta?: boolean;
     transicion?: boolean;
+    fondo?: boolean;
     as?: 'h2' | 'h3';
 };
 
-export function TarjetaPlan({ d, tam, estado, revelar, retraso = 0, cuenta, transicion = true, as: Tag = 'h3' }: Props) {
+export function TarjetaPlan({ d, tam, estado, revelar, retraso = 0, cuenta, transicion = true, fondo, as: Tag = 'h3' }: Props) {
     const { plan } = d;
     const ancho = tam === 'ancho';
     const estilo = retraso ? ({ '--d': `${retraso}s` } as CSSProperties) : undefined;
@@ -61,9 +66,17 @@ export function TarjetaPlan({ d, tam, estado, revelar, retraso = 0, cuenta, tran
             data-tam={tam}
             data-estado={estado}
             data-medida={plan.aMedida ? '' : undefined}
+            data-fondo={fondo ? '' : undefined}
             data-rv={revelar ? '' : undefined}
             style={estilo}
         >
+            {/* con `fondo` (el bento de #planes) la tarjeta lleva su imagen
+                abstracta detras, velada con el color de su material */}
+            {fondo && (
+                <span className="pre-c-tile-fondo" aria-hidden="true">
+                    <img src={d.fondo.src} alt="" loading="lazy" decoding="async" style={{ objectPosition: d.fondo.pos }} />
+                </span>
+            )}
             <span className="pre-c-tile-para" aria-hidden="true">
                 <i />
                 Para ti
