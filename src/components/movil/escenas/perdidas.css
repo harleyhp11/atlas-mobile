@@ -366,56 +366,54 @@
 }
 
 /* ============================================================== PEDIDO
-   Ciclo de 12 s: los pasos entran al 6, 22, 40 y 58 %; el reloj salta a
-   09, 21 y 47 min con ellos; la barra se llena hasta el 70 % y se pone roja
-   al pasar la marca de 20 min (40 %); el sello cae al 72 %. */
+   Ciclo de 10 s. «Con sistema» se llena del 6 al 18 % y marca listo.
+   «A mano» avanza a tirones: 6→20 % (se para), 30→42 % (se para),
+   52→66 %; el reloj salta a 15, 31 y 47 min con cada tramo y se pone rojo
+   al 42 %. La diferencia cae al 70 %; todo se apaga del 94 al 100 %. */
 .px-ped {
-    --ciclo: 12s;
+    --ciclo: 10s;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 14px 14px 12px;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 16px 20px;
 }
-.px-ped-top {
+.px-ped-etq {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mut);
+}
+.px-ped-carril {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    animation: px-ped-fuera var(--ciclo) linear infinite;
+}
+.px-ped-cab {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
 }
-.px-ped-top > span:first-child {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.15;
-}
-.px-ped-top b {
+.px-ped-cab b {
     font-family: var(--f-display);
     font-weight: 650;
     font-size: 17px;
     letter-spacing: -0.03em;
 }
-.px-ped-top small {
-    font-family: var(--f-mono);
-    font-size: 9.5px;
-    color: var(--mut);
-}
-.px-ped-reloj {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 10px 5px 8px;
+
+/* el reloj de «A mano» */
+.px-ped-min {
+    display: grid;
+    padding: 4px 10px;
     border-radius: 99px;
     font-family: var(--f-mono);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     font-variant-numeric: tabular-nums;
     animation: px-ped-reloj var(--ciclo) steps(1) infinite;
-}
-.px-ped-reloj svg {
-    width: 13px;
-    height: 13px;
-}
-.px-ped-min {
-    display: grid;
 }
 .px-ped-min > span {
     grid-area: 1 / 1;
@@ -435,11 +433,11 @@
 }
 @keyframes px-ped-reloj {
     0%,
-    39% {
+    41% {
         background: rgba(255, 255, 255, 0.1);
         color: var(--fg);
     }
-    40%,
+    42%,
     100% {
         background: var(--rojo);
         color: #fff;
@@ -447,59 +445,91 @@
 }
 @keyframes px-ped-m1 {
     0%,
-    21% {
+    19% {
         opacity: 1;
     }
-    22%,
+    20%,
     100% {
         opacity: 0;
     }
 }
 @keyframes px-ped-m2 {
     0%,
-    21% {
+    19% {
         opacity: 0;
     }
-    22%,
-    39% {
+    20%,
+    41% {
         opacity: 1;
     }
-    40%,
+    42%,
     100% {
         opacity: 0;
     }
 }
 @keyframes px-ped-m3 {
     0%,
-    39% {
+    41% {
         opacity: 0;
     }
-    40%,
-    57% {
+    42%,
+    65% {
         opacity: 1;
     }
-    58%,
+    66%,
     100% {
         opacity: 0;
     }
 }
 @keyframes px-ped-m4 {
     0%,
-    57% {
+    65% {
         opacity: 0;
     }
-    58%,
+    66%,
     100% {
         opacity: 1;
     }
 }
 
-/* la barra del tiempo, con la marca de lo prometido */
+/* el «listo» de «Con sistema» */
+.px-ped-listo {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px 4px 8px;
+    border-radius: 99px;
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--f-mono);
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0;
+    animation: px-ped-listo var(--ciclo) var(--pop) infinite;
+}
+.px-ped-listo svg {
+    width: 12px;
+    height: 12px;
+}
+@keyframes px-ped-listo {
+    0%,
+    17% {
+        opacity: 0;
+        scale: 0.6;
+    }
+    20%,
+    100% {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+/* las barras: gruesas, para leerse de lejos */
 .px-ped-barra {
     position: relative;
-    height: 6px;
-    margin-bottom: 14px;
-    border-radius: 3px;
+    height: 12px;
+    overflow: hidden;
+    border-radius: 6px;
     background: rgba(255, 255, 255, 0.1);
 }
 .px-ped-barra > i {
@@ -507,239 +537,146 @@
     inset: 0;
     border-radius: inherit;
     transform-origin: 0 50%;
-    animation: px-ped-barra var(--ciclo) linear infinite;
+    transform: scaleX(0.03);
 }
-@keyframes px-ped-barra {
+.px-ped-carril--sis .px-ped-barra > i {
+    background: #fff;
+    animation: px-ped-sis var(--ciclo) var(--ease) infinite;
+}
+.px-ped-carril--mano .px-ped-barra > i {
+    animation: px-ped-mano var(--ciclo) linear infinite;
+}
+@keyframes px-ped-sis {
     0%,
-    4% {
-        transform: scaleX(0.04);
-        background: var(--fg);
+    6% {
+        transform: scaleX(0.03);
     }
-    39% {
-        background: var(--fg);
+    18%,
+    100% {
+        transform: scaleX(1);
     }
-    40% {
+}
+@keyframes px-ped-mano {
+    0%,
+    6% {
+        transform: scaleX(0.03);
+        background: rgba(255, 255, 255, 0.55);
+    }
+    20%,
+    30% {
+        transform: scaleX(0.3);
+        background: rgba(255, 255, 255, 0.55);
+    }
+    42% {
         background: var(--rojo);
     }
-    70%,
+    42%,
+    52% {
+        transform: scaleX(0.58);
+    }
+    66%,
     100% {
         transform: scaleX(1);
         background: var(--rojo);
     }
 }
-.px-ped-meta {
-    position: absolute;
-    /* donde la barra llega al 40 % del ciclo, cuando el reloj pasa a 21 */
-    left: 56%;
-    top: -3px;
-    bottom: -3px;
-    width: 2px;
-    border-radius: 1px;
-    background: var(--fg);
-}
-.px-ped-meta small {
-    position: absolute;
-    top: calc(100% + 3px);
-    left: 50%;
-    translate: -50% 0;
-    font-family: var(--f-mono);
-    font-size: 8.5px;
-    color: var(--mut);
-    white-space: nowrap;
-}
 
-/* los pasos: entran uno tras otro; los dos ultimos, en rojo */
-.px-ped-pasos {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-.px-ped-paso {
-    display: flex;
-    align-items: center;
-    gap: 9px;
-    padding: 6px 9px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.07);
-    box-shadow: inset 0 0 0 1px var(--line);
-    opacity: 0;
-    animation: px-ped-paso1 var(--ciclo) var(--ease) infinite;
-}
-.px-ped-paso:nth-child(2) {
-    animation-name: px-ped-paso2;
-}
-.px-ped-paso:nth-child(3) {
-    animation-name: px-ped-paso3;
-}
-.px-ped-paso:nth-child(4) {
-    animation-name: px-ped-paso4;
-}
-.px-ped-paso > i {
-    flex: none;
+/* lo que esta pasando debajo de cada barra */
+.px-ped-estado {
     display: grid;
-    place-items: center;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--fg);
-    color: var(--fondo);
-}
-.px-ped-paso > i svg {
-    width: 12px;
-    height: 12px;
-}
-.px-ped-paso > span {
-    display: flex;
-    flex: 1;
-    min-width: 0;
-    flex-direction: column;
-    line-height: 1.2;
-}
-.px-ped-paso b {
     font-size: 11.5px;
-    font-weight: 600;
-}
-.px-ped-paso small {
-    font-size: 10px;
     color: var(--mut);
+}
+.px-ped-estado > small {
+    grid-area: 1 / 1;
+    font-size: inherit;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
-.px-ped-paso--mal {
-    background: rgba(225, 29, 58, 0.12);
-    box-shadow: inset 0 0 0 1px rgba(225, 29, 58, 0.45);
+.px-ped-carril--mano .px-ped-estado > small {
+    opacity: 0;
 }
-.px-ped-paso--mal > i {
-    background: var(--rojo);
-    color: #fff;
+.px-ped-carril--mano .px-ped-estado > small:nth-child(1) {
+    animation: px-ped-e1 var(--ciclo) linear infinite;
 }
-@keyframes px-ped-paso1 {
+.px-ped-carril--mano .px-ped-estado > small:nth-child(2) {
+    animation: px-ped-e2 var(--ciclo) linear infinite;
+}
+.px-ped-carril--mano .px-ped-estado > small:nth-child(3) {
+    color: #ff6b80;
+    animation: px-ped-e3 var(--ciclo) linear infinite;
+}
+@keyframes px-ped-e1 {
     0%,
-    5% {
-        opacity: 0;
-        translate: 0 8px;
-    }
-    9%,
-    94% {
+    28% {
         opacity: 1;
-        translate: 0 0;
     }
+    30%,
     100% {
         opacity: 0;
     }
 }
-@keyframes px-ped-paso2 {
+@keyframes px-ped-e2 {
     0%,
-    21% {
+    29% {
         opacity: 0;
-        translate: 0 8px;
     }
-    25%,
-    94% {
+    31%,
+    50% {
         opacity: 1;
-        translate: 0 0;
     }
+    52%,
     100% {
         opacity: 0;
     }
 }
-/* el error sacude un poco al entrar */
-@keyframes px-ped-paso3 {
+@keyframes px-ped-e3 {
     0%,
-    39% {
+    51% {
         opacity: 0;
-        translate: 0 8px;
     }
-    42% {
-        opacity: 1;
-        translate: 0 0;
-    }
-    43.5% {
-        translate: -4px 0;
-    }
-    45% {
-        translate: 3px 0;
-    }
-    46.5%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-    }
+    53%,
     100% {
-        opacity: 0;
-    }
-}
-@keyframes px-ped-paso4 {
-    0%,
-    57% {
-        opacity: 0;
-        translate: 0 8px;
-    }
-    60% {
         opacity: 1;
-        translate: 0 0;
-    }
-    61.5% {
-        translate: -4px 0;
-    }
-    63% {
-        translate: 3px 0;
-    }
-    64.5%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-    }
-    100% {
-        opacity: 0;
     }
 }
 
-/* el sello: cae con un golpe y se queda torcido sobre la lista */
-.px-ped-sello {
-    position: absolute;
-    left: 50%;
-    top: 62%;
+/* la diferencia, en grande: cae con un golpe */
+.px-ped-dif {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    padding: 8px 18px 9px;
-    border: 2.5px solid var(--rojo);
-    border-radius: 10px;
-    background: #141517;
-    white-space: nowrap;
-    color: var(--rojo);
-    font-family: var(--f-display);
-    font-weight: 800;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
-    translate: -50% -50%;
-    rotate: -9deg;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
     opacity: 0;
-    animation: px-ped-sello var(--ciclo) var(--pop) infinite;
+    transform-origin: 0 50%;
+    animation: px-ped-dif var(--ciclo) var(--pop) infinite;
 }
-.px-ped-sello small {
-    font-family: var(--f-mono);
-    font-weight: 500;
-    font-size: 9px;
-    letter-spacing: 0.08em;
+.px-ped-dif b {
+    font-family: var(--f-display);
+    font-weight: 750;
+    font-size: 34px;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--rojo);
 }
-@keyframes px-ped-sello {
+.px-ped-dif small {
+    font-size: 12.5px;
+    color: var(--fg);
+}
+@keyframes px-ped-dif {
     0%,
-    71% {
+    69% {
         opacity: 0;
-        scale: 1.8;
+        scale: 1.25;
     }
-    74% {
+    73% {
         opacity: 1;
-        scale: 0.94;
+        scale: 0.97;
     }
-    77%,
+    76%,
     94% {
         opacity: 1;
         scale: 1;
@@ -747,6 +684,18 @@
     100% {
         opacity: 0;
         scale: 1;
+    }
+}
+@keyframes px-ped-fuera {
+    0%,
+    94% {
+        opacity: 1;
+    }
+    99% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
 
@@ -756,26 +705,26 @@
     }
     .px-busca-fila,
     .px-noche-aviso,
-    .px-ped-paso,
-    .px-ped-sello,
     .px-noche-perdida,
-    .px-busca-cero {
+    .px-busca-cero,
+    .px-ped-listo,
+    .px-ped-dif {
         opacity: 1;
         translate: none;
         scale: 1;
     }
-    .px-ped-sello {
-        translate: -50% -50%;
-    }
-    .px-ped-min > span:last-child {
+    .px-ped-min > span:last-child,
+    .px-ped-carril--mano .px-ped-estado > small:last-child {
         opacity: 1;
     }
-    .px-ped-reloj {
+    .px-ped-min {
         background: var(--rojo);
         color: #fff;
     }
     .px-ped-barra > i {
         transform: none;
+    }
+    .px-ped-carril--mano .px-ped-barra > i {
         background: var(--rojo);
     }
 }

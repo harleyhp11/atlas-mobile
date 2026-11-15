@@ -82,66 +82,57 @@ export function UiNoche() {
 }
 
 /* ------------------------------------------------------------- TIEMPO
-   Un pedido sin sistema, de principio a fin: se anota en un cuaderno, el
-   papel pasa a cocina a mano, no queda stock (nadie lo llevaba) y la cuenta
-   sale mal. Nada de chats: eso ya lo cuentan las otras dos tarjetas. Arriba el reloj del pedido sube de 2 a 47 min y la barra pasa la
-   marca de lo prometido (20 min) y se pone roja; al final, el sello. */
+   Una carrera que se entiende sin leer: el mismo pedido hecho a mano y
+   con sistema. El de sistema llega en un tiron; el de a mano avanza a
+   tirones (cuaderno, papel en cocina, cuenta a mano), se pone rojo y al
+   final queda la diferencia en grande. Minutos de MAQUETA. */
 export function UiPedido() {
-    const pasos = [
-        { t: 'Lo anotas en el cuaderno', s: '2 pollos · delivery', ico: 'lapiz' },
-        { t: 'El papel pasa a cocina', s: 'a mano, cuando alguien puede', ico: 'pasa' },
-        { t: 'No queda pollo', s: 'nadie llevaba el stock', ico: 'mal' },
-        { t: 'Se cobra mal', s: 'la cuenta se hizo a mano', ico: 'mal' },
-    ] as const;
+    const mano = ['Lo anotan en un cuaderno', 'El papel espera en cocina', 'Sacan la cuenta a mano'];
     return (
         <div className="mx-ui px-ped" data-loop aria-hidden="true">
-            <div className="px-ped-top">
-                <span>
-                    <b>Pedido #048</b>
-                    <small>María · delivery</small>
-                </span>
-                <span className="px-ped-reloj">
-                    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                        <circle cx="8" cy="8" r="6" />
-                        <path d="M8 4.8V8l2.2 1.4" />
-                    </svg>
+            <p className="px-ped-etq">El mismo pedido</p>
+
+            <div className="px-ped-carril px-ped-carril--mano">
+                <div className="px-ped-cab">
+                    <b>A mano</b>
                     <span className="px-ped-min">
-                        {['02', '09', '21', '47'].map((m) => (
+                        {['02', '15', '31', '47'].map((m) => (
                             <span key={m}>{m} min</span>
                         ))}
                     </span>
+                </div>
+                <div className="px-ped-barra">
+                    <i />
+                </div>
+                <span className="px-ped-estado">
+                    {mano.map((t) => (
+                        <small key={t}>{t}…</small>
+                    ))}
                 </span>
             </div>
 
-            <div className="px-ped-barra">
-                <i />
-                <span className="px-ped-meta">
-                    <small>Prometido: 20 min</small>
+            <div className="px-ped-carril px-ped-carril--sis">
+                <div className="px-ped-cab">
+                    <b>Con sistema</b>
+                    <span className="px-ped-listo">
+                        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="m3.5 8.5 3 3 6-7" />
+                        </svg>
+                        5 min
+                    </span>
+                </div>
+                <div className="px-ped-barra">
+                    <i />
+                </div>
+                <span className="px-ped-estado">
+                    <small>Llega solo a cocina y a la cuenta</small>
                 </span>
             </div>
 
-            <ul className="px-ped-pasos">
-                {pasos.map((p, k) => (
-                    <li key={p.t} className={`px-ped-paso px-ped-paso--${p.ico}`} style={{ '--k': k } as CSSProperties}>
-                        <i>
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                {p.ico === 'pasa' && <path d="M3.5 8h8.5M9 5l3 3-3 3" />}
-                                {p.ico === 'lapiz' && <path d="M10.5 3.5 12.5 5.5 6 12H4v-2z" />}
-                                {p.ico === 'mal' && <path d="m5 5 6 6M11 5l-6 6" />}
-                            </svg>
-                        </i>
-                        <span>
-                            <b>{p.t}</b>
-                            <small>{p.s}</small>
-                        </span>
-                    </li>
-                ))}
-            </ul>
-
-            <span className="px-ped-sello">
-                Retrasado
-                <small>47 min · cliente perdido</small>
-            </span>
+            <p className="px-ped-dif">
+                <b>+42 min</b>
+                <small>de espera para tu cliente</small>
+            </p>
         </div>
     );
 }
