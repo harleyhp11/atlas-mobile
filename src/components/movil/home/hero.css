@@ -44,9 +44,6 @@
 .h-hero-in > .h-ctas {
     animation-delay: 0.32s;
 }
-.h-hero-in > .h-chips {
-    animation-delay: 0.42s;
-}
 @keyframes h-sube {
     from {
         opacity: 0;
@@ -131,12 +128,4 @@
     display: grid;
     gap: 10px;
     margin-top: 22px;
-}
-.h-chips {
-    margin-top: 18px;
-}
-.h-chips .m-chip {
-    background: rgba(0, 0, 0, 0.35);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
 }

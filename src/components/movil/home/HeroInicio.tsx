@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Boton } from '../Boton';
 import { Firma } from '../Firma';
-import { CHIPS_CONFIANZA, H1_ESTABLE, ROTATIVAS, SUBTITULO, WHATSAPP } from '../datos';
+import { H1_ESTABLE, ROTATIVAS, SUBTITULO, WHATSAPP } from '../datos';
 import { useRotacion } from '../useRotacion';
 import './hero.css';
 
@@ -80,14 +80,6 @@ export function HeroInicio({ trabajos = '/projects' }: { trabajos?: string }) {
                         Ver trabajos
                     </Boton>
                 </div>
-
-                <ul className="m-chips h-chips" aria-label="Por qué escribirnos">
-                    {CHIPS_CONFIANZA.map((c) => (
-                        <li key={c} className="m-chip">
-                            {c}
-                        </li>
-                    ))}
-                </ul>
             </div>
         </section>
     );
