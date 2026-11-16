@@ -1,6 +1,6 @@
 /* Los proyectos de Atlas en la version movil (/projects y /projects/[slug]).
 
-   Solo los de Harley (seis, con La Leña): la pagina del escritorio tambien lista los del
+   Solo los de Harley (ocho, con La Leña, OneFin y Homy): la pagina del escritorio tambien lista los del
    autor de la plantilla (Browser Automation Agent, Swarm AI...) y esos no
    son trabajo de Atlas.
 
@@ -16,7 +16,11 @@
      · Perú Travel no tiene codigo a la vista: sin rol, equipo, retos ni
        stack (eran supuestos), y sin etiqueta de cliente [CONFIRMAR];
      · La Leña esta en curso y su repo es privado: sin "Ver en vivo" ni
-       codigo, y no se dice de quien es la pollería (pedido de Harley). */
+       codigo, y no se dice de quien es la pollería (pedido de Harley);
+     · OneFin y Homy (2026-11, pedido de Harley: "como dos clientes") salen
+       de ~/onefin-es-kit y ~/homy-es-kit. Sin deploy ni repo publico: sin
+       "Ver en vivo" ni codigo, sin testimonios ni cifras del negocio. Los
+       textos son [CONFIRMAR copy con Harley]. */
 
 export type Servicio = 'webs' | 'apps' | 'software' | 'ia';
 
@@ -376,6 +380,122 @@ export const PROYECTOS: Proyecto[] = [
         stack: {
             base: ['HTML5', 'CSS3', 'JavaScript', 'GSAP', 'Lenis', 'esbuild'],
             herramientas: ['ScrollTrigger', 'SplitText', 'CustomEase', 'Filtros SVG', 'AVIF / WebP', 'Vercel'],
+        },
+    },
+    {
+        slug: 'onefin',
+        titulo: 'OneFin',
+        rubro: 'Fintech',
+        tiempo: 'Nov 2026',
+        etiqueta: 'Cliente',
+        estado: { texto: 'En curso' },
+        servicios: ['webs'],
+        linea: 'La web de una app de finanzas: gastos, pagos, inversiones y previsiones en un solo lugar.',
+        resumen:
+            'OneFin es una app para manejar el dinero de personas y empresas. Su web la presenta de punta a punta: una portada con el teléfono y las tarjetas de saldo flotando, las funciones de gastos, pagos e inversiones explicadas con video, planes y precios, blog, empleos, novedades del producto y preguntas frecuentes. Todo en español y hecho para verse igual de bien en celular que en escritorio.',
+        rol: 'Desarrollo web y animación',
+        direccion: 'OneFin',
+        destacados: ['Portada con la app flotando', 'Funciones con video', 'Blog, empleos y novedades'],
+        construimos: [
+            {
+                titulo: 'Portada y funciones',
+                items: [
+                    { t: 'Hero con la app', d: 'el teléfono y las tarjetas de saldo y gasto flotan sobre un degradado.' },
+                    { t: 'Gastos, pagos e inversiones', d: 'cada función se cuenta con su video y su icono.' },
+                    { t: 'Integraciones', d: 'las herramientas con las que se conecta, en un solo bloque.' },
+                ],
+            },
+            {
+                titulo: 'Para decidir',
+                items: [
+                    { t: 'Planes y precios', d: 'los planes lado a lado, con lo que incluye cada uno.' },
+                    { t: 'Preguntas frecuentes', d: 'las dudas resueltas antes de escribir.' },
+                    { t: 'Contacto', d: 'un formulario directo con el equipo.' },
+                ],
+            },
+            {
+                titulo: 'Contenido',
+                items: [
+                    { t: 'Blog con artículos', d: 'listado y una página por artículo.' },
+                    { t: 'Empleos y novedades', d: 'las vacantes y el historial de cambios del producto.' },
+                ],
+            },
+        ],
+        retos: [
+            {
+                problema: 'Un carrusel que ensanchaba la página en el celular.',
+                solucion: 'Con el dedo, el carrusel de inversiones empujaba la página a más del doble de ancho. Recortamos el desborde en el contenedor de la página y medimos en modo táctil, que es donde aparecía.',
+            },
+            {
+                problema: 'Titulares que cortaban distinto en cada lugar.',
+                solucion: 'Seis títulos del blog se reescribieron para ocupar las mismas líneas en la portada del artículo, en las tarjetas y en los destacados.',
+            },
+            {
+                problema: 'Más de cuarenta pantallas que revisar.',
+                solucion: 'Una prueba automática compara cada página, en escritorio y celular, contra el diseño de referencia y avisa si algo se movió.',
+            },
+        ],
+        stack: {
+            base: ['Next.js 16', 'React 19', 'TypeScript', 'CSS Modules', 'Motion'],
+            herramientas: ['Geist', 'Inter', 'Playwright', 'ImageMagick'],
+        },
+    },
+    {
+        slug: 'homy',
+        titulo: 'Homy',
+        rubro: 'Inmobiliaria',
+        tiempo: 'Nov 2026',
+        etiqueta: 'Cliente',
+        estado: { texto: 'En curso' },
+        servicios: ['webs'],
+        linea: 'Inmobiliaria de casas modernas: comprar, alquilar y agendar una visita.',
+        resumen:
+            'La web de Homy, una inmobiliaria de casas modernas. Abre con «HOGAR» a todo el ancho y la casa por delante, y lleva a lo que importa: ver las propiedades, entrar a la ficha de cada una y agendar una visita. Suma los servicios de compra y alquiler, opiniones, preguntas frecuentes, la página de la empresa y un contacto con mapa.',
+        rol: 'Desarrollo web y diseño del hero',
+        direccion: 'Homy',
+        destacados: ['Hero «HOGAR» a todo el ancho', 'Ficha por propiedad', 'Contacto con mapa'],
+        construimos: [
+            {
+                titulo: 'Portada',
+                items: [
+                    { t: 'Hero tipo póster', d: '«HOGAR» gigante con un degradado suave y la casa delante de las letras.' },
+                    { t: 'Propiedades destacadas', d: 'tres casas con fotos reales de libre uso.' },
+                    { t: 'Comprar, alquilar o explorar', d: 'los tres servicios, cada uno con su imagen.' },
+                ],
+            },
+            {
+                titulo: 'Propiedades',
+                items: [
+                    { t: 'Listado de casas', d: 'todas las propiedades disponibles en una página.' },
+                    { t: 'Ficha por propiedad', d: 'fotos, datos y el botón para agendar la visita.' },
+                ],
+            },
+            {
+                titulo: 'Empresa y contacto',
+                items: [
+                    { t: 'Nosotros', d: 'la misión, el equipo y las marcas con las que trabajan.' },
+                    { t: 'Formulario accesible', d: 'avisa qué falta corregir antes de enviar.' },
+                    { t: 'Mapa en gris', d: 'la ubicación sobre un mapa abierto, a tono con el sitio.' },
+                ],
+            },
+        ],
+        retos: [
+            {
+                problema: 'El humo del hero ensanchaba la página en el celular.',
+                solucion: 'La animación salía por los costados y la página medía más de 1 100 px de ancho en un teléfono. Recortamos el desborde en el contenedor y quedó a su ancho.',
+            },
+            {
+                problema: 'Un mapa que pedía clave y dejaba marcas de agua.',
+                solucion: 'Pasamos a Leaflet con teselas de OpenStreetMap, teñidas de gris para que el mapa no rompa la paleta.',
+            },
+            {
+                problema: 'Fotos que parecían hechas con IA.',
+                solucion: 'Las propiedades destacadas usan fotos reales con licencia libre, modernas sin llegar a mansión.',
+            },
+        ],
+        stack: {
+            base: ['Next.js 16', 'React 19', 'TypeScript', 'CSS Modules', 'Motion', 'Lenis'],
+            herramientas: ['Leaflet', 'OpenStreetMap', 'Playwright'],
         },
     },
 ];

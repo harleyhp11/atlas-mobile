@@ -24,7 +24,7 @@ export const CORTE_MOVIL = 1024;
      · el detalle de cada plan, /servicios/[slug] (en el escritorio no hay
        detalle: el proxy lo manda a su pagina de precios, /servicios).
    El proxy reescribe con esto. */
-export const PROYECTOS_MOVIL = ['workup', 'rego-premium', 'utopp', 'fluxa', 'peru-travel', 'polleria-la-lena'];
+export const PROYECTOS_MOVIL = ['workup', 'rego-premium', 'utopp', 'fluxa', 'peru-travel', 'polleria-la-lena', 'onefin', 'homy'];
 
 // los cuatro planes de /servicios con pagina de detalle (solo movil); el
 // orden es el de PLANES en (sitio)/servicios/datos.ts
