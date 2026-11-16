@@ -3,7 +3,8 @@ import { Cabecera } from '@/components/movil/Cabecera';
 import { Revelador } from '@/components/movil/Revelador';
 import { IntroPrecios } from '@/components/movil/precios/IntroPrecios';
 import { Planes } from '@/components/movil/precios/ListaPlanes';
-import { DETALLES, MENU_PRECIOS, rango, soles } from '@/components/movil/precios/planes';
+import { MENU_PRINCIPAL } from '@/components/movil/datos';
+import { DETALLES, rango, soles } from '@/components/movil/precios/planes';
 import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
 // estilos .pry-pie del PieCompacto (igual que /projects y /nosotros)
 import '@/components/movil/proyectos/proyectos.css';
@@ -35,7 +36,7 @@ export default function PreciosMovil() {
             <a className="m-salto" href="#m-contenido">
                 Saltar al contenido
             </a>
-            <Cabecera enlaces={MENU_PRECIOS} />
+            <Cabecera enlaces={MENU_PRINCIPAL} />
             <main id="m-contenido" className="pre">
                 <IntroPrecios />
                 <Planes />

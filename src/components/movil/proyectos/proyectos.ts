@@ -503,14 +503,3 @@ export const PROYECTOS: Proyecto[] = [
 export const imagen = (p: Proyecto) => `/assets/movil/proyectos/${p.slug}.webp`;
 export const miniatura = (p: Proyecto) => `/assets/movil/proyectos/${p.slug}-mini.webp`;
 export const numero = (p: Proyecto) => String(PROYECTOS.indexOf(p) + 1).padStart(2, '0');
-
-/* El menu de las paginas de proyectos: lo de la home va con "/" delante. */
-export const MENU_PROYECTOS = [
-    { n: '01', label: 'Inicio', href: '/' },
-    { n: '02', label: 'Nosotros', href: '/nosotros' },
-    { n: '03', label: 'Servicios', href: '/servicios' },
-    { n: '04', label: 'Proyectos', href: '/projects' },
-    { n: '05', label: 'Tu negocio', href: '/#negocios' },
-    { n: '06', label: 'Preguntas', href: '/#preguntas' },
-    { n: '07', label: 'Contacto', href: '/contact' },
-];

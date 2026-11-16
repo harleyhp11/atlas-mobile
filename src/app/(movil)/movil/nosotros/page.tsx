@@ -3,7 +3,8 @@ import { Cabecera } from '@/components/movil/Cabecera';
 import { Revelador } from '@/components/movil/Revelador';
 import { Cierre } from '@/components/movil/nosotros/Cierre';
 import { CuatroManos } from '@/components/movil/nosotros/CuatroManos';
-import { FOTOS_PROVISIONALES, MENU_NOSOTROS } from '@/components/movil/nosotros/equipo';
+import { MENU_PRINCIPAL } from '@/components/movil/datos';
+import { FOTOS_PROVISIONALES } from '@/components/movil/nosotros/equipo';
 import { Fichas } from '@/components/movil/nosotros/Fichas';
 import { HeroDupla } from '@/components/movil/nosotros/HeroDupla';
 import { Pasos } from '@/components/movil/nosotros/Pasos';
@@ -44,7 +45,7 @@ export default function NosotrosMovil() {
             </a>
             {/* fija: el hero es claro, y en el estado "arriba" (transparente) el
                 logo blanco desapareceria sobre el papel */}
-            <Cabecera enlaces={MENU_NOSOTROS} inicio="fija" />
+            <Cabecera enlaces={MENU_PRINCIPAL} inicio="fija" />
             <main id="m-contenido" className="nos">
                 <HeroDupla />
                 <Fichas />

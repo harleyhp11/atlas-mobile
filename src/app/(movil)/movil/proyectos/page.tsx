@@ -8,7 +8,7 @@ import { Disenos } from '@/components/movil/proyectos/Disenos';
 import { Indice } from '@/components/movil/proyectos/Indice';
 import { Lista } from '@/components/movil/proyectos/Lista';
 import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
-import { MENU_PROYECTOS } from '@/components/movil/proyectos/proyectos';
+import { MENU_PRINCIPAL } from '@/components/movil/datos';
 import '@/components/movil/proyectos/proyectos.css';
 
 /* /projects en celular y tablet (el proxy reescribe hasta aqui por debajo
@@ -38,7 +38,7 @@ export default function ProyectosMovil() {
             <a className="m-salto" href="#m-contenido">
                 Saltar al contenido
             </a>
-            <Cabecera enlaces={MENU_PROYECTOS} />
+            <Cabecera enlaces={MENU_PRINCIPAL} />
             <main id="m-contenido" className="pry">
                 <section className="pry-hero" data-tono="oscuro" aria-labelledby="pry-t">
                     <div className="m-wrap">

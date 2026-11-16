@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Cabecera } from '@/components/movil/Cabecera';
 import { Ceja } from '@/components/movil/Ceja';
 import { Cintas } from '@/components/movil/Cintas';
-import { WHATSAPP } from '@/components/movil/datos';
+import { MENU_PRINCIPAL } from '@/components/movil/datos';
 import { Revelador } from '@/components/movil/Revelador';
 import { Servicios } from '@/components/movil/Servicios';
 import { Titular } from '@/components/movil/Titular';
@@ -44,23 +44,13 @@ export const metadata: Metadata = {
     alternates: { canonical: '/' },
 };
 
-// Nosotros y Servicios llevan a sus propias paginas (/nosotros solo existe
-// en el movil; /servicios son los planes y precios); Contacto abre WhatsApp.
-const MENU_HOME = [
-    { n: '01', label: 'Nosotros', href: '/nosotros' },
-    { n: '02', label: 'Servicios', href: '/servicios' },
-    { n: '03', label: 'Proyectos', href: '/projects' },
-    { n: '04', label: 'Por qué Atlas', href: '#ventajas' },
-    { n: '05', label: 'Contacto', href: WHATSAPP, externo: true },
-];
-
 export default function HomeMovil() {
     return (
         <>
             <a className="m-salto" href="#m-contenido">
                 Saltar al contenido
             </a>
-            <Cabecera enlaces={MENU_HOME} />
+            <Cabecera enlaces={MENU_PRINCIPAL} />
             <main id="m-contenido" className="home-movil">
                 <HeroInicio trabajos="#trabajos" />
                 <Problema />

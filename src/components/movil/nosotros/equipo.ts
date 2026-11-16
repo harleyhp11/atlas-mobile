@@ -1,4 +1,4 @@
-import { WHATSAPP, whatsapp } from '../datos';
+import { whatsapp } from '../datos';
 
 /* Los datos de /nosotros (movil): las dos personas detras de Atlas y todo lo
    que la pagina dice de ellas. Es el UNICO archivo de datos de la pagina:
@@ -166,14 +166,3 @@ export const GARANTIAS: { icono: 'documento' | 'reloj' | 'salvavidas' | 'llave';
 
 export const CITA = 'Ninguna tecnología nos limita: elegimos la adecuada para tu negocio.';
 export const WSP_NOSOTROS = whatsapp('Hola Harley y Benjamín 👋 Quiero contarles mi proyecto.');
-
-// Menu de esta pagina: las anclas propias (#harley, #benjamin, #proceso)
-// mas lo de siempre. "Contacto" abre WhatsApp.
-export const MENU_NOSOTROS = [
-    { n: '01', label: 'Inicio', href: '/' },
-    { n: '02', label: 'Harley', href: '#harley' },
-    { n: '03', label: 'Benjamín', href: '#benjamin' },
-    { n: '04', label: 'Proceso', href: '#proceso' },
-    { n: '05', label: 'Proyectos', href: '/projects' },
-    { n: '06', label: 'Contacto', href: WHATSAPP, externo: true },
-];

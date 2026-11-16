@@ -8,7 +8,8 @@ import { Titular } from '@/components/movil/Titular';
 import { Construimos } from '@/components/movil/proyectos/Construimos';
 import { Marco } from '@/components/movil/proyectos/Marco';
 import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
-import { MENU_PROYECTOS, numero, PROYECTOS } from '@/components/movil/proyectos/proyectos';
+import { MENU_PRINCIPAL } from '@/components/movil/datos';
+import { numero, PROYECTOS } from '@/components/movil/proyectos/proyectos';
 import '@/components/movil/proyectos/proyectos.css';
 import '@/components/movil/proyectos/caso.css';
 
@@ -64,7 +65,7 @@ export default async function CasoMovil({ params }: Props) {
             <a className="m-salto" href="#m-contenido">
                 Saltar al contenido
             </a>
-            <Cabecera enlaces={MENU_PROYECTOS} />
+            <Cabecera enlaces={MENU_PRINCIPAL} />
             <main id="m-contenido" className="caso">
                 {/* ------------------------------------------------ el hero */}
                 <section className="caso-hero" data-tono="oscuro" aria-labelledby="caso-t">

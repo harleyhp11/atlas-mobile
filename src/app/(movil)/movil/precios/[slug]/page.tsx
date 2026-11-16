@@ -14,7 +14,8 @@ import { Plazo } from '@/components/movil/precios/detalle/Plazo';
 import { PorDentro } from '@/components/movil/precios/detalle/PorDentro';
 import { Resumen } from '@/components/movil/precios/detalle/Resumen';
 import { Transicion } from '@/components/movil/precios/detalle/Transicion';
-import { detalle, DETALLES, MENU_PRECIOS, rango, wspPlan, type Detalle } from '@/components/movil/precios/planes';
+import { MENU_PRINCIPAL } from '@/components/movil/datos';
+import { detalle, DETALLES, rango, wspPlan, type Detalle } from '@/components/movil/precios/planes';
 import { PieCompacto } from '@/components/movil/proyectos/PieCompacto';
 import { DOMINIO, IMAGEN_OG } from '@/lib/metadatos';
 // tokens, materiales y la transicion entre documentos (.pre, @view-transition)
@@ -110,7 +111,7 @@ export default async function PlanMovil({ params }: Props) {
             <a className="m-salto" href="#m-contenido">
                 Saltar al contenido
             </a>
-            <Cabecera enlaces={MENU_PRECIOS} cotizar={wspPlan(d)} />
+            <Cabecera enlaces={MENU_PRINCIPAL} cotizar={wspPlan(d)} />
             <main id="m-contenido" className="pre pre-dt">
                 <Pedido d={d}>
                     <HeroPlan d={d} />

@@ -1,6 +1,6 @@
 import { GRUPOS, LEYENDA_TIPO, NOTA_LEGAL, PLANES as PLANES_ESCRITORIO, type Plan, type TipoServicio } from '@/app/(sitio)/servicios/datos';
 import { PLANES_MOVIL } from '@/lib/vista';
-import { WHATSAPP, whatsapp, type EscenaServicio } from '../datos';
+import { whatsapp, type EscenaServicio } from '../datos';
 import { ETAPAS, GARANTIAS } from '../nosotros/equipo';
 
 /* Los datos de /servicios en el movil: la lista (#planes) y el detalle de cada
@@ -329,15 +329,6 @@ export const PASOS: { t: string; d: string; etapas?: boolean }[] = [
 
 // [CONFIRMAR] que las dos aplican a los cuatro planes
 export const EN_TODOS = [GARANTIAS[2], GARANTIAS[3]]; // 30 dias de soporte · Todo tuyo
-
-export const MENU_PRECIOS = [
-    { n: '01', label: 'Inicio', href: '/' },
-    { n: '02', label: 'Nosotros', href: '/nosotros' },
-    { n: '03', label: 'Servicios', href: '/servicios#planes' },
-    { n: '04', label: 'Proyectos', href: '/projects' },
-    { n: '05', label: 'Por qué Atlas', href: '/#ventajas' },
-    { n: '06', label: 'Contacto', href: WHATSAPP, externo: true },
-];
 
 /* ------------------------------------------- guardas (solo en desarrollo) */
 if (process.env.NODE_ENV !== 'production') {

@@ -169,6 +169,17 @@ export const SERVICIOS: Servicio[] = [
     },
 ];
 
+/* El menu de la cabecera, el MISMO en todas las paginas (pedido de Harley:
+   que no cambie al pasar de seccion). "Por qué Atlas" va con "/" delante
+   para que funcione desde cualquier pagina; Contacto abre WhatsApp. */
+export const MENU_PRINCIPAL = [
+    { n: '01', label: 'Nosotros', href: '/nosotros' },
+    { n: '02', label: 'Servicios', href: '/servicios' },
+    { n: '03', label: 'Proyectos', href: '/projects' },
+    { n: '04', label: 'Por qué Atlas', href: '/#ventajas' },
+    { n: '05', label: 'Contacto', href: WHATSAPP, externo: true },
+];
+
 export const MENU = [
     { n: '01', label: 'Servicios', href: '#servicios' },
     { n: '02', label: 'Trabajos', href: '#trabajos' },
