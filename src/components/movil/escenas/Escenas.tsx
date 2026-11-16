@@ -1,17 +1,20 @@
 'use client';
 
-import { UiNavegador, UiPanel } from '@/components/sections/faq/escenas';
 import type { EscenaServicio } from '../datos';
 import { Check, Estrella, WhatsApp } from '../iconos';
+import { UiPanelMovil, UiWebMovil } from './Reales';
 import '@/components/sections/faq/AtlasFAQ.css';
 import './escenas-base.css';
 import './escenas.css';
 
 /* Mini-interfaces de los servicios: cada una es una pelicula corta en bucle,
-   hecha en codigo. Navegador y Panel son las escenas del FAQ del escritorio
-   (rAF propio, se paran con `run`); Catalogo, Apps y Flujo son nuevas, solo
-   CSS, y se pausan con .is-off. Las cifras de dentro son de MAQUETA, como en
-   el FAQ: un restaurante inventado, una app inventada. */
+   hecha en codigo. Web y Panel salen de las escenas del FAQ del escritorio
+   (rAF propio, se paran con `run`) pero con contenido real (Reales.tsx);
+   Catalogo, Apps y Flujo son solo CSS y se pausan con .is-off. Las cifras
+   de dentro son de MAQUETA: un restaurante inventado, una app inventada.
+   Las fotos son CC0 (public/assets/movil/escenas). */
+
+const F = '/assets/movil/escenas';
 
 type Props = { tipo: EscenaServicio; run: boolean; tema?: 'claro' | 'oscuro' };
 
@@ -31,13 +34,13 @@ export function Escena({ tipo, run, tema = 'oscuro' }: Props) {
         case 'navegador':
             return (
                 <DelFaq tema={tema}>
-                    <UiNavegador run={run} />
+                    <UiWebMovil run={run} />
                 </DelFaq>
             );
         case 'panel':
             return (
                 <DelFaq tema={tema}>
-                    <UiPanel run={run} />
+                    <UiPanelMovil run={run} />
                 </DelFaq>
             );
         case 'catalogo':
@@ -57,9 +60,9 @@ type Ui = { run: boolean; tema: 'claro' | 'oscuro' };
    pedido ya armado. Abajo, el QR de la mesa. */
 
 const PLATOS = [
-    { n: 'Ceviche clásico', p: 'S/ 32' },
-    { n: 'Lomo saltado', p: 'S/ 38' },
-    { n: 'Chicha morada', p: 'S/ 8' },
+    { n: 'Ceviche clásico', p: 'S/ 32', f: 'ceviche' },
+    { n: 'Lomo a la parrilla', p: 'S/ 38', f: 'lomo' },
+    { n: 'Sangría de la casa', p: 'S/ 16', f: 'sangria' },
 ];
 
 function UiCatalogo({ run, tema }: Ui) {
@@ -74,7 +77,7 @@ function UiCatalogo({ run, tema }: Ui) {
                 <ul className="mx-cat-lista">
                     {PLATOS.map((p, i) => (
                         <li key={p.n} className={`mx-cat-item mx-cat-item--${i}`}>
-                            <i className="mx-cat-foto" />
+                            <i className="mx-cat-foto" style={{ backgroundImage: `url(${F}/${p.f}.webp)` }} />
                             <span>
                                 <b>{p.n}</b>
                                 <small>{p.p}</small>
@@ -103,7 +106,7 @@ function UiCatalogo({ run, tema }: Ui) {
                 <p>
                     Hola 👋 Quiero pedir:
                     <br />1 Ceviche clásico
-                    <br />1 Lomo saltado
+                    <br />1 Lomo a la parrilla
                 </p>
                 <span className="mx-cat-msg-pie">
                     Total S/ 70
@@ -156,8 +159,9 @@ function UiApps({ run, tema }: Ui) {
             <div className="mx-tel mx-apps-tel mx-apps-tel--der">
                 <div className="mx-tel-isla" />
                 <div className="mx-apps-det">
-                    <i className="mx-apps-img" />
-                    <b>Zapatillas Andes</b>
+                    <i className="mx-apps-img" style={{ backgroundImage: `url(${F}/frappe.webp)` }} />
+                    <b>Frappé de café</b>
+                    <small className="mx-apps-precio">S/ 14</small>
                     <span className="mx-apps-estrellas">
                         <Estrella />
                         <Estrella />
@@ -196,8 +200,20 @@ function UiApps({ run, tema }: Ui) {
                             <small>en camino</small>
                         </span>
                     </div>
-                    <span className="mx-apps-fila" />
-                    <span className="mx-apps-fila mx-apps-fila--corta" />
+                    <span className="mx-apps-fila">
+                        <i style={{ backgroundImage: `url(${F}/frappe.webp)` }} />
+                        <span>
+                            Frappé de café ×2
+                            <small>S/ 28</small>
+                        </span>
+                    </span>
+                    <span className="mx-apps-fila">
+                        <i className="mx-apps-pin" />
+                        <span>
+                            Av. Larco 345
+                            <small>Miraflores</small>
+                        </span>
+                    </span>
                 </div>
                 <div className="mx-apps-tabs">
                     <i />
@@ -239,7 +255,7 @@ function UiFlujo({ run, tema }: Ui) {
 
             <div className="mx-flujo-in">
                 <span className="mx-flujo-tag">
-                    <WhatsApp /> Cliente
+                    <WhatsApp /> Carla · 19:42
                 </span>
                 <p>¿Tienen mesa para 4 hoy a las 8?</p>
             </div>
@@ -268,6 +284,11 @@ function UiFlujo({ run, tema }: Ui) {
 
             <div className="mx-flujo-resp">
                 <span>¡Listo! Mesa para 4 a las 8 pm. Te esperamos.</span>
+                <small className="mx-flujo-hora">
+                    19:42
+                    <Check />
+                    <Check />
+                </small>
             </div>
         </div>
     );

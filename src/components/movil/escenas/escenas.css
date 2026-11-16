@@ -100,21 +100,11 @@
 }
 .mx-cat-foto {
     flex: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #d9d9d4, #a9a9a4);
-}
-.mx-cat-item--0 .mx-cat-foto {
-    background:
-        radial-gradient(circle at 35% 35%, #fff 0 18%, transparent 19%),
-        linear-gradient(135deg, #f1efe9, #c9c6bd);
-}
-.mx-cat-item--1 .mx-cat-foto {
-    background: linear-gradient(135deg, #6f6a64, #2b2927);
-}
-.mx-cat-item--2 .mx-cat-foto {
-    background: linear-gradient(135deg, #5b1420, #1c0a0e);
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #d9d9d4 center / cover no-repeat;
+    box-shadow: inset 0 0 0 1px rgba(11, 11, 12, 0.06);
 }
 .mx-cat-mas {
     position: relative;
@@ -605,9 +595,7 @@
 .mx-apps-img {
     height: 92px;
     border-radius: 12px;
-    background:
-        radial-gradient(70% 55% at 50% 60%, rgba(255, 255, 255, 0.5), transparent 70%),
-        linear-gradient(160deg, #d6d6d1, #9d9d97);
+    background: #d6d6d1 center / cover no-repeat;
     margin-bottom: 9px;
 }
 .mx-apps-det b {
@@ -745,13 +733,49 @@
     color: #6b6b70;
 }
 .mx-apps-fila {
-    height: 22px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 4px 6px 4px 4px;
     border-radius: 9px;
-    background: rgba(11, 11, 12, 0.06);
-    margin-bottom: 5px;
+    background: rgba(11, 11, 12, 0.05);
+    margin-bottom: 4px;
 }
-.mx-apps-fila--corta {
-    width: 70%;
+.mx-apps-fila > i {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    background: #d6d6d1 center / cover no-repeat;
+}
+.mx-apps-fila > i.mx-apps-pin {
+    background: var(--rojo);
+    border-radius: 50% 50% 50% 2px;
+    rotate: -45deg;
+    scale: 0.7;
+}
+.mx-apps-fila > span {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    overflow: hidden;
+    font-size: 7.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.mx-apps-fila small {
+    font-size: 6.5px;
+    font-weight: 400;
+    color: #6b6b70;
+}
+.mx-apps-precio {
+    margin-top: 1px;
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    color: #6b6b70;
 }
 .mx-apps-tabs {
     position: absolute;
@@ -1178,7 +1202,7 @@
 .mx-flujo-resp {
     position: absolute;
     right: 14px;
-    top: 244px;
+    top: 234px;
     max-width: min(78%, 270px);
     padding: 8px 11px;
     border-radius: 14px 14px 4px 14px;
@@ -1189,6 +1213,22 @@
     box-shadow: 0 14px 30px -14px rgba(225, 29, 58, 0.7);
     opacity: 0;
     animation: mx-flujo-resp var(--ciclo) var(--ease) infinite;
+}
+.mx-flujo-hora {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 3px;
+    margin-top: 1px;
+    font-size: 8px;
+    opacity: 0.8;
+}
+.mx-flujo-hora svg {
+    width: 9px;
+    height: 9px;
+}
+.mx-flujo-hora svg + svg {
+    margin-left: -6px;
 }
 .mx-flujo-resp span {
     display: block;

@@ -32,7 +32,7 @@ const DIGITOS = "0123456789".split("");
 /* Contador de rodillo: cada cifra es una tira 0-9 que se desliza. Al cambiar
    el valor, rueda solo la cifra que cambia, con un pequeño desfase entre
    columnas, como un cuentakilometros. */
-function Odo({ value, digits }: { value: number; digits: number }) {
+export function Odo({ value, digits }: { value: number; digits: number }) {
     const s = String(Math.max(0, Math.round(value))).padStart(digits, "0").slice(-digits);
     return (
         <span className="afq-odo">
@@ -54,7 +54,7 @@ function Odo({ value, digits }: { value: number; digits: number }) {
 
 /* Notificacion flotante: pildora blanca, icono de "grabando" y el punto rojo
    en la esquina, que hace el papel del punto rosa de la referencia. */
-function Toast({ on, children, style }: { on: boolean; children: ReactNode; style?: CSSProperties }) {
+export function Toast({ on, children, style }: { on: boolean; children: ReactNode; style?: CSSProperties }) {
     return (
         <p className={`afq-toast${on ? " is-on" : ""}`} style={style}>
             <i />
@@ -66,7 +66,7 @@ function Toast({ on, children, style }: { on: boolean; children: ReactNode; styl
 /* Coordenadas de un elemento relativas al lienzo de la escena. Se mide al
    cambiar `clave`, no en cada fotograma. Sin objetivo devuelve la esquina
    inferior derecha, por fuera: de ahi entra el cursor la primera vez. */
-function useApunte(
+export function useApunte(
     cont: RefObject<HTMLElement | null>,
     objetivo: () => HTMLElement | null | undefined,
     clave: string,
@@ -93,7 +93,7 @@ function useApunte(
 /* Cursor de maqueta. Se desliza hasta su objetivo y, en cada clic, se encoge
    un instante y suelta una onda. `clicks` es un contador: cambiarlo vuelve a
    montar la onda, y con eso se repite la animacion. */
-function Cursor({ p, vis, clicks }: { p: Punto; vis: boolean; clicks: number }) {
+export function Cursor({ p, vis, clicks }: { p: Punto; vis: boolean; clicks: number }) {
     return (
         <span className={`afq-cur${vis ? "" : " is-off"}`} style={{ transform: `translate(${p.x - 4}px, ${p.y - 3}px)` }}>
             <svg key={clicks} className={clicks ? "is-click" : undefined} viewBox="0 0 24 24">
@@ -682,12 +682,12 @@ export function UiChat({ run }: Escena) {
 
 const SEMANA = [12, 15, 14, 18, 20, 22];
 const DIAS = ["L", "M", "M", "J", "V", "S", "Hoy"];
-const CHISPA = "M0 38 L21 33 L42 35 L63 25 L84 28 L105 17 L126 19 L150 6";
+export const CHISPA = "M0 38 L21 33 L42 35 L63 25 L84 28 L105 17 L126 19 L150 6";
 const PANEL_CICLO = 13400;
 
 /* Rubros que viven de una agenda: el mismo sistema les sirve a todos. Salen
    en abanico desde el centro del panel cuando termina la ultima reserva. */
-const RUBROS: [string, LucideIcon][] = [
+export const RUBROS: [string, LucideIcon][] = [
     ["Consultorios", Stethoscope],
     ["Clínicas", Hospital],
     ["Barberías", Scissors],
@@ -699,9 +699,9 @@ const RUBROS: [string, LucideIcon][] = [
     ["Academias", GraduationCap],
 ];
 // Giro con el que sale cada tarjeta del mazo, para que no salgan en fila.
-const GIROS = [-14, 8, -6, 12, -10, 5, -8, 14, -4];
+export const GIROS = [-14, 8, -6, 12, -10, 5, -8, 14, -4];
 
-function Gauge({ v, max, label, text }: { v: number; max: number; label: string; text: string }) {
+export function Gauge({ v, max, label, text }: { v: number; max: number; label: string; text: string }) {
     const p = clamp01(v / max);
     const ang = Math.PI * (1 - p);
     const x = 60 + 50 * Math.cos(ang);

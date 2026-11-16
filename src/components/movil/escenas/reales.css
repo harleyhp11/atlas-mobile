@@ -1,0 +1,285 @@
+/* =====================================================================
+   ATLAS · MÓVIL — Web y Panel con contenido real (Reales.tsx).
+   Se apoyan en las clases del FAQ (.afq-br, .afq-pg, .afq-pan…) y solo
+   añaden lo nuevo; el escritorio no carga este archivo.
+   ===================================================================== */
+
+/* ================================================================ WEB */
+.mx-w.afq-pg {
+    gap: 10px;
+    padding: 0 0 14px;
+}
+.mx-w > * {
+    margin-inline: 12px;
+}
+.mx-w-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 10px;
+    font-family: var(--font-b);
+    font-size: 9.5px;
+    color: #55555a;
+}
+.mx-w-nav b {
+    margin-right: auto;
+    font-family: var(--font-d);
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--at-ink);
+    white-space: nowrap;
+}
+.mx-w-nav i {
+    font-style: normal;
+}
+.mx-w-nav em,
+.mx-w-hero em {
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: var(--at-ink);
+    color: #fff;
+    font-style: normal;
+    font-family: var(--font-b);
+    font-size: 9.5px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.mx-w-hero {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 5px;
+    height: 132px;
+    padding: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #222 center / cover no-repeat;
+    color: #fff;
+    isolation: isolate;
+}
+.mx-w-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 20%, rgba(0, 0, 0, 0.72));
+}
+.mx-w-hero small {
+    font-family: var(--font-m);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+.mx-w-hero strong {
+    max-width: 15ch;
+    font-family: var(--font-d);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+}
+.mx-w-hero em {
+    margin-top: 3px;
+    background: var(--at-signal);
+}
+.mx-w-sec {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding-top: 2px;
+}
+.mx-w-sec b {
+    font-family: var(--font-d);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+.mx-w-sec small {
+    font-size: 9px;
+    color: #55555a;
+}
+.mx-w-platos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+}
+.mx-w-plato {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.mx-w-plato i {
+    aspect-ratio: 1;
+    margin-bottom: 3px;
+    border-radius: 9px;
+    background: #eee center / cover no-repeat;
+}
+.mx-w-plato b {
+    overflow: hidden;
+    font-size: 9px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.mx-w-plato small {
+    font-family: var(--font-m);
+    font-size: 8.5px;
+    color: #55555a;
+}
+.mx-w-resena {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: #f1f1ee;
+    font-size: 9px;
+    color: #55555a;
+}
+.mx-w-resena b {
+    color: var(--at-signal);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+}
+.mx-w-pie {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    color: #55555a;
+}
+.mx-w-pie i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #1fae5b;
+}
+/* en vista de celular: sin enlaces y dos platos por fila */
+@container (max-width: 260px) {
+    .mx-w-nav i,
+    .mx-w-nav em,
+    .mx-w-sec small {
+        display: none;
+    }
+    .mx-w-hero {
+        height: 120px;
+    }
+    .mx-w-hero strong {
+        font-size: 15px;
+    }
+    .mx-w-platos {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .mx-w-plato:nth-child(3) {
+        display: none;
+    }
+    .mx-w-resena span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+
+/* ============================================================== PANEL */
+.mx-pan.afq-ui {
+    gap: 8px;
+}
+.mx-pan .afq-pan-top {
+    padding: 12px 14px 12px;
+}
+.mx-pan-fila {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    gap: 8px;
+}
+.mx-pan-fila .afq-g {
+    justify-content: center;
+}
+.mx-pan-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+    padding: 11px 11px 10px;
+    overflow: hidden;
+    box-shadow: 0 18px 36px -26px rgba(0, 0, 0, 0.5);
+}
+.mx-pan-lista ul {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+.mx-pan-lista li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+.mx-pan-lista li > b {
+    flex: none;
+    width: 34px;
+    font-family: var(--font-m);
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--at-mut);
+}
+.mx-pan-lista li > span {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    flex-direction: column;
+    font-size: 10.5px;
+    font-weight: 600;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+.mx-pan-lista li small {
+    font-size: 9px;
+    font-weight: 400;
+    color: var(--at-mut);
+}
+.mx-pan-lista li > em {
+    flex: none;
+    padding: 2px 6px;
+    border-radius: 999px;
+    background: var(--at-signal);
+    color: #fff;
+    font-style: normal;
+    font-size: 8px;
+    font-weight: 600;
+}
+/* la reserva nueva entra empujando a las demas */
+.mx-pan-nueva {
+    overflow: hidden;
+    margin-bottom: -6px;
+    max-height: 0;
+    opacity: 0;
+    translate: 0 -6px;
+    transition:
+        max-height 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        margin 0.5s cubic-bezier(0.2, 0.8, 0.2, 1),
+        opacity 0.4s ease 0.1s,
+        translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s;
+}
+.mx-pan-nueva.is-on {
+    max-height: 30px;
+    margin-bottom: 0;
+    opacity: 1;
+    translate: 0 0;
+}
+.mx-pan-lista li.mx-pan-nueva > b {
+    color: var(--at-signal);
+}
+
+/* el titulo de los rubros, legible sobre el grafito */
+.m-afq-p.is-dk .afq-rub-h b {
+    color: #fff;
+}
