@@ -72,10 +72,13 @@ export const PROMESAS: Promesa[] = [
    reconoce. El titular nombra las tres tarjetas de abajo (clientes, plata,
    tiempo) para que no suene a "solo hacemos webs": web, chatbot y sistema
    (pedido de Harley, opcion A; el escritorio sigue con "Te buscan, no
-   apareces."). [CONFIRMAR copy con Harley] */
+   apareces."). Va una frase a la vez, rotando, detras del "No" fijo
+   (TitularPerdidas.tsx). [CONFIRMAR copy con Harley] */
 export const PROBLEMA = {
     ceja: 'Lo que pierdes hoy',
-    titular: 'No te encuentran.\nNo te compran.\nNo te alcanza el día.',
+    frases: ['te encuentran.', 'te compran.', 'te alcanza el día.'],
+    // las tres juntas, para los titulares estaticos (laboratorio)
+    titular: 'No te encuentran. No te compran. No te alcanza el día.',
     destacar: 'No',
     frase: 'Clientes que no llegan, ventas que se van fuera de horario y horas perdidas en tareas a mano. Todo eso tiene solución.',
     cta: 'Quiero resolverlo',

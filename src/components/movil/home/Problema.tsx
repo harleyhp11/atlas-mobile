@@ -1,8 +1,8 @@
 import { Boton } from '../Boton';
 import { Ceja } from '../Ceja';
 import { PROBLEMA, whatsapp } from '../datos';
-import { Titular } from '../Titular';
 import { CarruselPerdidas } from './CarruselPerdidas';
+import { TitularPerdidas } from './TitularPerdidas';
 import './problema.css';
 
 /* (01) Lo que pierdes hoy.
@@ -24,7 +24,7 @@ export function Problema() {
                     <span className="h-problema-chip" aria-hidden="true">
                         <i />0 resultados
                     </span>
-                    <Titular id="problema-t" className="m-h2 h-problema-h2" texto={PROBLEMA.titular} destacar={PROBLEMA.destacar} />
+                    <TitularPerdidas />
                 </div>
             </div>
 

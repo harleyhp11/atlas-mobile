@@ -63,9 +63,51 @@
     right: 18px;
     bottom: 20px;
     color: var(--blanco);
-    /* tres frases cortas, una por linea (la ultima puede partirse en dos) */
-    font-size: clamp(28px, 8.2vw, 40px);
+    /* una frase a la vez: "No" fijo + la frase que rota (TitularPerdidas) */
+    font-size: clamp(38px, 11.6vw, 56px);
     text-wrap: wrap;
+}
+.h-prob-w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding: 0.06em 0.03em 0.16em;
+    margin: -0.06em -0.03em -0.16em;
+}
+.h-prob-w > span {
+    display: inline-block;
+    translate: 0 112%;
+}
+/* entra palabra a palabra cuando el titular ya aparecio (Revelador pone
+   .is-in) y cada vez que cambia la frase (se monta de nuevo) */
+.h-problema-h2.is-in .h-prob-w > span {
+    animation: h-prob-sube 0.8s var(--ease) calc(var(--i, 0) * 60ms + 0.05s) both;
+}
+.h-problema-h2.is-in .h-prob-rot[data-fase='out'] .h-prob-w > span {
+    animation: h-prob-sale 0.34s var(--ease-io) calc(var(--i, 0) * 25ms) both;
+}
+@keyframes h-prob-sube {
+    from {
+        translate: 0 112%;
+    }
+    to {
+        translate: 0 0;
+    }
+}
+@keyframes h-prob-sale {
+    from {
+        translate: 0 0;
+    }
+    to {
+        translate: 0 -112%;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .h-prob-w > span,
+    .h-problema-h2.is-in .h-prob-w > span {
+        translate: none;
+        animation: none;
+    }
 }
 .h-problema-carrusel.m-wrap {
     max-width: none;
