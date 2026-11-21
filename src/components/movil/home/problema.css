@@ -63,7 +63,9 @@
     right: 18px;
     bottom: 20px;
     color: var(--blanco);
-    font-size: clamp(40px, 12.5vw, 58px);
+    /* tres frases cortas, una por linea (la ultima puede partirse en dos) */
+    font-size: clamp(28px, 8.2vw, 40px);
+    text-wrap: wrap;
 }
 .h-problema-carrusel.m-wrap {
     max-width: none;

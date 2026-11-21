@@ -5,7 +5,7 @@ import { Titular } from '../Titular';
 import { CarruselPerdidas } from './CarruselPerdidas';
 import './problema.css';
 
-/* (01) Lo que pierdes sin web.
+/* (01) Lo que pierdes hoy.
 
    Arriba, la foto del telon rojo del bloque "(El problema)" del escritorio
    con el titular encima y el "0 resultados" flotando junto al telefono.

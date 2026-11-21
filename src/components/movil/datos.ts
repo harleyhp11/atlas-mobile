@@ -68,16 +68,18 @@ export const PROMESAS: Promesa[] = [
     { cat: 'Propiedad', cuenta: 100, despues: ' %', unidad: 'tuyo', texto: 'El código y el dominio son tuyos.' },
 ];
 
-/* Lo que pierde un negocio sin web. Sin cifras: escenas que cualquier
-   dueño reconoce. El titular y la frase larga son los del bloque "(El
-   problema)" del escritorio ("Te buscan, no apareces."). */
+/* Lo que pierde un negocio hoy. Sin cifras: escenas que cualquier dueño
+   reconoce. El titular nombra las tres tarjetas de abajo (clientes, plata,
+   tiempo) para que no suene a "solo hacemos webs": web, chatbot y sistema
+   (pedido de Harley, opcion A; el escritorio sigue con "Te buscan, no
+   apareces."). [CONFIRMAR copy con Harley] */
 export const PROBLEMA = {
-    ceja: 'Lo que pierdes sin web',
-    titular: 'Te buscan, no apareces.',
-    destacar: 'no',
-    frase: 'Cada día sin presencia digital es un cliente que compara, duda y compra en otro lado.',
-    cta: 'Quiero aparecer',
-    whatsapp: 'Hola Atlas 👋 Quiero que mi negocio aparezca en internet.',
+    ceja: 'Lo que pierdes hoy',
+    titular: 'No te encuentran.\nNo te compran.\nNo te alcanza el día.',
+    destacar: 'No',
+    frase: 'Clientes que no llegan, ventas que se van fuera de horario y horas perdidas en tareas a mano. Todo eso tiene solución.',
+    cta: 'Quiero resolverlo',
+    whatsapp: 'Hola Atlas 👋 Quiero ordenar y hacer crecer mi negocio.',
 };
 
 export type Perdida = {

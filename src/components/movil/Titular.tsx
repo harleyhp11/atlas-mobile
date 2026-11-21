@@ -6,7 +6,7 @@ import { MarcoFigma } from './MarcoFigma';
      · 'caja': una caja roja que barre detras, con el texto en blanco;
      · 'marco': el recuadro de seleccion de Figma con sus medidas.
    El texto completo queda en el DOM tal cual: el lector de pantalla lo lee
-   de corrido. */
+   de corrido. Un "\n" en `texto` fuerza un salto de linea ahi. */
 
 type Props = {
     texto: string;
@@ -19,7 +19,10 @@ type Props = {
 };
 
 export function Titular({ texto, destacar, modo = 'caja', as: Tag = 'h2', id, className = '', retraso = 0 }: Props) {
-    const palabras = texto.split(' ');
+    const lineas = texto.split('\n').map((l) => l.trim().split(' '));
+    const palabras = lineas.flat();
+    // posicion de la ultima palabra de cada linea, para poner el salto
+    const finales = new Set(lineas.slice(0, -1).map((_, k) => lineas.slice(0, k + 1).flat().length - 1));
     return (
         <Tag id={id} className={`m-tit ${className}`} data-in style={{ '--d': `${retraso}s` } as CSSProperties}>
             {palabras.map((p, i) => {
@@ -42,7 +45,7 @@ export function Titular({ texto, destacar, modo = 'caja', as: Tag = 'h2', id, cl
                 return (
                     <Fragment key={i}>
                         {contenido}
-                        {i < palabras.length - 1 ? ' ' : null}
+                        {finales.has(i) ? <br /> : i < palabras.length - 1 ? ' ' : null}
                     </Fragment>
                 );
             })}
