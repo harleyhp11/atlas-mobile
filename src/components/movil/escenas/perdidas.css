@@ -1,730 +1,1433 @@
 /* =====================================================================
-   ATLAS · MÓVIL — mini-interfaces de "Lo que pierdes sin web"
-   Busqueda (clientes), Noche (plata) y Pedido (tiempo). Un ciclo por
-   escena; .is-off las pausa fuera de pantalla.
+   ATLAS · MÓVIL — mini-interfaces de "Lo que pierdes hoy"
+   Clientes (web), Plata (chatbot) y Tiempo (sistema). Las tres comparten
+   el reloj por porcentajes: 0–48 % el "Sin …", el interruptor cambia del
+   48 al 51 % y 51–96 % el "Con …". Cada animacion termina (100 %) en el
+   estado "Con" y va con fill `both`: con movimiento reducido la escena
+   queda quieta en la solucion. Al reiniciar, la escena entera vuelve a
+   aparecer (px-escena) y el salto no se ve.
    ===================================================================== */
 
-/* ============================================================ BUSQUEDA */
-.px-busca {
-    --ciclo: 9s;
+.px-esc {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 16px 14px;
+    gap: 8px;
+    padding: 12px;
+    animation: px-escena var(--ciclo) linear both infinite;
 }
-.px-busca-barra {
-    display: flex;
+@keyframes px-escena {
+    0% {
+        opacity: 0;
+    }
+    3%,
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ------------------------------------------------------- interruptor */
+.px-sw {
+    position: relative;
+    flex: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 26px;
+    padding: 3px;
+    border-radius: 99px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px var(--line);
+    font-family: var(--f-mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+.px-sw > i {
+    position: absolute;
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    width: calc(50% - 3px);
+    border-radius: 99px;
+    animation: px-sw-i var(--ciclo) var(--ease) both infinite;
+}
+.px-sw > span {
+    position: relative;
+    display: grid;
+    place-items: center;
+    white-space: nowrap;
+    animation: px-sw-a var(--ciclo) steps(1) both infinite;
+}
+.px-sw > span:last-child {
+    animation-name: px-sw-b;
+}
+@keyframes px-sw-i {
+    0%,
+    47% {
+        transform: translateX(0);
+        background: var(--rojo);
+    }
+    51%,
+    100% {
+        transform: translateX(100%);
+        background: #fff;
+    }
+}
+@keyframes px-sw-a {
+    0% {
+        color: #fff;
+    }
+    49%,
+    100% {
+        color: var(--mut);
+    }
+}
+@keyframes px-sw-b {
+    0% {
+        color: var(--mut);
+    }
+    49%,
+    100% {
+        color: var(--ink);
+    }
+}
+
+/* avisos (pildoras que caen al final de cada tiempo) */
+.px-aviso {
+    position: absolute;
+    z-index: 5;
+    display: inline-flex;
     align-items: center;
-    gap: 9px;
-    height: 40px;
-    padding: 0 14px;
-    border-radius: 20px;
+    gap: 6px;
+    padding: 6px 11px 6px 9px;
+    border-radius: 99px;
+    font-size: 10.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 12px 26px -12px rgba(0, 0, 0, 0.7);
+}
+.px-aviso > i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+}
+.px-aviso--mal {
+    background: #2a1418;
+    color: #fff;
+    box-shadow:
+        inset 0 0 0 1px rgba(225, 29, 58, 0.55),
+        0 12px 26px -12px rgba(0, 0, 0, 0.7);
+}
+.px-aviso--mal > i {
+    background: var(--rojo);
+}
+.px-aviso--bien {
     background: #fff;
     color: var(--ink);
-    font-size: 12.5px;
+}
+.px-aviso--bien > i {
+    background: #1fae5b;
+}
+.px-sello {
+    position: absolute;
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 7px 16px 8px;
+    border: 2.5px solid var(--rojo);
+    border-radius: 10px;
+    background: #141517;
+    color: var(--rojo);
+    font-family: var(--f-display);
+    font-weight: 800;
+    font-size: 21px;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    rotate: -8deg;
+    box-shadow: 0 18px 40px -16px rgba(0, 0, 0, 0.8);
+}
+.px-sello small {
+    font-family: var(--f-mono);
+    font-weight: 500;
+    font-size: 8.5px;
+    letter-spacing: 0.06em;
+}
+.px-est {
+    color: #f5b301;
+    font-size: 9px;
+}
+
+/* =========================================================== CLIENTES
+   10 s. Se escribe la busqueda (2–13 %), entran los resultados (14–20 %),
+   el dedo toca a la competencia (24–32 %) y cae el aviso (32–47 %).
+   Con web (51 %): tu ficha gana foto y estrellas y sube al primer lugar
+   (52–60 %), el dedo la toca (63–67 %) y se abre tu pagina (68 %). */
+.px-web {
+    --ciclo: 10s;
+}
+.px-q {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 12px;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 11.5px;
     box-shadow: 0 10px 24px -14px rgba(0, 0, 0, 0.6);
 }
-.px-busca-barra svg {
+.px-q svg {
     flex: none;
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     color: #6b6b70;
 }
-.px-busca-q {
+.px-q-txt {
     overflow: hidden;
     white-space: nowrap;
-    animation: px-teclea var(--ciclo) steps(22, end) infinite;
-}
-.px-busca-cursor {
-    flex: none;
-    width: 1.5px;
-    height: 15px;
-    margin-left: -6px;
-    background: var(--ink);
-    animation: m-parpadeo 1s steps(1) infinite;
+    animation: px-teclea var(--ciclo) steps(22, end) both infinite;
 }
 @keyframes px-teclea {
     0%,
-    4% {
+    2% {
         max-width: 0;
     }
-    20%,
+    13%,
     100% {
         max-width: 190px;
     }
 }
-.px-busca-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+
+.px-res {
+    position: relative;
+    height: 150px;
 }
-.px-busca-fila {
+.px-fila {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 9px 10px;
+    gap: 9px;
+    height: 46px;
+    padding: 0 9px;
     border-radius: 13px;
     background: rgba(255, 255, 255, 0.07);
     box-shadow: inset 0 0 0 1px var(--line);
-    color: var(--fg);
-    opacity: 0;
-    translate: 0 10px;
-    animation: px-fila var(--ciclo) var(--ease) infinite;
-    animation-delay: calc(var(--k) * 0.28s);
+    animation: px-fila-a var(--ciclo) var(--ease) both infinite;
 }
-.mx-ui[data-tema='claro'] .px-busca-fila {
-    background: rgba(255, 255, 255, 0.75);
+.px-fila--b {
+    animation-name: px-fila-b;
 }
-.px-busca-fila > i {
+.px-fila--tuya {
+    display: grid;
+    padding: 0;
+    animation-name: px-fila-t;
+}
+.px-capa {
+    grid-area: 1 / 1;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    padding: 0 9px;
+}
+.px-capa--sin {
+    animation: px-sale var(--ciclo) linear both infinite;
+}
+.px-capa--con {
+    animation: px-entra-con var(--ciclo) linear both infinite;
+}
+.px-foto {
     flex: none;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: 9px;
-    background: linear-gradient(135deg, #6f6a64, #2b2927);
+    background: #3a3b40 center / cover no-repeat;
 }
-.px-busca-fila > span {
+.px-foto--vacia {
+    background:
+        linear-gradient(135deg, transparent 46%, rgba(255, 255, 255, 0.25) 47% 53%, transparent 54%),
+        #2c2d31;
+}
+.px-fila-t {
     display: flex;
     flex: 1;
     min-width: 0;
     flex-direction: column;
     line-height: 1.2;
 }
-.px-busca-fila b {
-    font-size: 12px;
+.px-fila-t b {
+    overflow: hidden;
+    font-size: 11px;
     font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
-.px-busca-fila small {
-    font-family: var(--f-mono);
+.px-fila-t small {
+    overflow: hidden;
     font-size: 9px;
     color: var(--mut);
     white-space: nowrap;
-    overflow: hidden;
     text-overflow: ellipsis;
 }
-.px-busca-fila em {
+.px-capa--sin .px-fila-t {
+    opacity: 0.55;
+}
+.px-chip {
     flex: none;
-    padding: 5px 9px;
+    padding: 3px 7px;
     border-radius: 99px;
-    background: var(--fg);
-    color: var(--fondo);
+    box-shadow: inset 0 0 0 1px var(--line);
+    font-style: normal;
+    font-size: 8.5px;
+    font-weight: 600;
+    color: var(--fg);
+}
+.px-chip--rojo {
+    background: var(--rojo);
+    box-shadow: none;
+    color: #fff;
+}
+/* rival A: arriba; con web baja un lugar */
+@keyframes px-fila-a {
+    0%,
+    13% {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    16%,
+    51% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    60%,
+    100% {
+        opacity: 1;
+        transform: translateY(52px);
+    }
+}
+@keyframes px-fila-b {
+    0%,
+    15% {
+        opacity: 0;
+        transform: translateY(60px);
+    }
+    18%,
+    51% {
+        opacity: 1;
+        transform: translateY(52px);
+    }
+    60%,
+    100% {
+        opacity: 1;
+        transform: translateY(104px);
+    }
+}
+/* la tuya: ultima y apagada; con web sube al primer lugar y se enciende */
+@keyframes px-fila-t {
+    0%,
+    17% {
+        opacity: 0;
+        transform: translateY(112px);
+        background: rgba(255, 255, 255, 0.04);
+        box-shadow: inset 0 0 0 1px var(--line);
+    }
+    20%,
+    51% {
+        opacity: 1;
+        transform: translateY(104px);
+        background: rgba(255, 255, 255, 0.04);
+        box-shadow: inset 0 0 0 1px var(--line);
+    }
+    60%,
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+    }
+}
+@keyframes px-sale {
+    0%,
+    51% {
+        opacity: 1;
+    }
+    54%,
+    100% {
+        opacity: 0;
+    }
+}
+@keyframes px-entra-con {
+    0%,
+    52% {
+        opacity: 0;
+    }
+    55%,
+    100% {
+        opacity: 1;
+    }
+}
+
+/* el dedo */
+.px-dedo {
+    position: absolute;
+    z-index: 4;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.28);
+    box-shadow:
+        0 0 0 2px rgba(255, 255, 255, 0.9),
+        0 6px 14px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    animation: px-dedo-a var(--ciclo) var(--ease) both infinite;
+}
+.px-dedo--a {
+    left: 46%;
+    top: 11px;
+}
+.px-dedo--b {
+    left: 46%;
+    top: 11px;
+    animation-name: px-dedo-b;
+}
+@keyframes px-dedo-a {
+    0%,
+    22% {
+        opacity: 0;
+        transform: translate(40px, 60px) scale(1);
+    }
+    26% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    29% {
+        transform: translate(0, 0) scale(0.75);
+    }
+    32% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    36%,
+    100% {
+        opacity: 0;
+        transform: translate(0, 0) scale(1);
+    }
+}
+@keyframes px-dedo-b {
+    0%,
+    61% {
+        opacity: 0;
+        transform: translate(40px, 60px) scale(1);
+    }
+    64% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    66% {
+        transform: translate(0, 0) scale(0.75);
+    }
+    68% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    71%,
+    100% {
+        opacity: 0;
+        transform: translate(0, 0) scale(1);
+    }
+}
+
+.px-web .px-aviso--mal {
+    left: 50%;
+    bottom: 14px;
+    animation: px-aviso-mal var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-aviso-mal {
+    0%,
+    31% {
+        opacity: 0;
+        transform: translate(-50%, 10px) scale(0.92);
+    }
+    34%,
+    46% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1);
+    }
+    49%,
+    100% {
+        opacity: 0;
+        transform: translate(-50%, 0) scale(1);
+    }
+}
+
+/* tu pagina, que sube al tocar tu ficha */
+.px-sitio {
+    position: absolute;
+    z-index: 3;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    height: 128px;
+    border-radius: 14px;
+    background: #fff;
+    color: var(--ink);
+    box-shadow: 0 -10px 30px -12px rgba(0, 0, 0, 0.7);
+    animation: px-sitio var(--ciclo) var(--pop) both infinite;
+}
+.px-sitio-url {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 24px;
+    flex: none;
+    font-family: var(--f-mono);
+    font-size: 9px;
+    color: #55555a;
+    border-bottom: 1px solid #ececea;
+}
+.px-sitio-url svg {
+    width: 9px;
+    height: 9px;
+}
+.px-sitio-hero {
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    gap: 5px;
+    margin: 6px;
+    padding: 10px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #222 center / cover no-repeat;
+    color: #fff;
+    isolation: isolate;
+}
+.px-sitio-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(180deg, transparent 25%, rgba(0, 0, 0, 0.72));
+}
+.px-sitio-hero b {
+    font-family: var(--f-display);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+.px-sitio-hero em {
+    padding: 4px 10px;
+    border-radius: 99px;
+    background: var(--rojo);
     font-style: normal;
     font-size: 9.5px;
     font-weight: 600;
 }
-@keyframes px-fila {
+.px-sitio .px-aviso--bien {
+    right: 14px;
+    bottom: 14px;
+    animation: px-aviso-bien var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-sitio {
     0%,
-    23% {
+    67% {
         opacity: 0;
-        translate: 0 10px;
+        transform: translateY(70%);
     }
-    28%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-    }
+    72%,
     100% {
-        opacity: 0;
-        translate: 0 0;
+        opacity: 1;
+        transform: translateY(0);
     }
 }
-.px-busca-fila--tuya {
-    background: transparent;
-    box-shadow: none;
-    outline: 1.5px dashed var(--line);
-    outline-offset: -1.5px;
-    animation-name: px-tuya;
-    animation-delay: 0s;
-}
-.mx-ui[data-tema='claro'] .px-busca-fila--tuya {
-    background: transparent;
-}
-.px-busca-fila--tuya > i {
-    background: transparent;
-    outline: 1.5px dashed var(--line);
-    outline-offset: -1.5px;
-}
-.px-busca-fila--tuya b,
-.px-busca-fila--tuya small {
-    opacity: 0.5;
-}
-.px-busca-cero {
-    background: var(--rojo) !important;
-    color: #fff !important;
-    animation: px-cero var(--ciclo) var(--pop) infinite;
-}
-@keyframes px-tuya {
+@keyframes px-aviso-bien {
     0%,
-    38% {
+    76% {
         opacity: 0;
-        translate: 0 10px;
+        transform: translateY(8px) scale(0.9);
     }
-    43%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-    }
+    80%,
     100% {
-        opacity: 0;
-    }
-}
-@keyframes px-cero {
-    0%,
-    44% {
-        scale: 0.4;
-        opacity: 0;
-    }
-    49% {
-        scale: 1.12;
         opacity: 1;
-    }
-    53%,
-    94% {
-        scale: 1;
-        opacity: 1;
-    }
-    100% {
-        scale: 1;
-        opacity: 0;
+        transform: translateY(0) scale(1);
     }
 }
 
-/* =============================================================== NOCHE */
-.px-noche {
-    --ciclo: 9s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 18px 14px 14px;
-    background:
-        radial-gradient(90% 60% at 50% 0%, rgba(255, 255, 255, 0.08), transparent 70%),
-        radial-gradient(120% 70% at 50% 115%, rgba(225, 29, 58, 0.22), transparent 60%),
-        #111214;
+/* ============================================================== PLATA
+   11 s. Sin chatbot: llega el mensaje (4 %), "Sin respuesta" (13 %), dos
+   mensajes mas (20 y 28 %) y el sello de venta perdida (34–47 %).
+   Con chatbot (51 %): el mismo mensaje (53 %), el asistente escribe
+   (56–60 %), responde (60 %), Carla confirma (68 %), pedido en camino
+   (74 %) y "Venta cerrada" (80 %). Las burbujas crecen desde alto 0: la
+   conversacion sube como en un chat de verdad. */
+.px-chat {
+    --ciclo: 11s;
 }
-.mx-ui[data-tema='claro'].px-noche {
-    color: #fff;
-    --fg: #fff;
-    --mut: rgba(255, 255, 255, 0.62);
-    --line: rgba(255, 255, 255, 0.14);
-}
-.px-noche-hora {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    line-height: 1;
-    margin-bottom: 14px;
-}
-.px-noche-hora small {
-    font-family: var(--f-mono);
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--mut);
-}
-.px-noche-hora b {
-    margin-top: 4px;
-    font-family: var(--f-display);
-    font-weight: 600;
-    font-size: 46px;
-    letter-spacing: -0.04em;
-}
-.px-noche-avisos {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
-}
-.px-noche-aviso {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 9px 11px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.12);
-    -webkit-backdrop-filter: blur(10px);
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    translate: 0 -12px;
-    scale: 0.96;
-}
-.px-noche-aviso > span:last-child {
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    line-height: 1.25;
-}
-.px-noche-aviso small {
-    font-family: var(--f-mono);
-    font-size: 9px;
-    color: var(--mut);
-}
-.px-noche-aviso b {
-    font-size: 12px;
-    font-weight: 500;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.px-noche-app {
+.px-chat-cab {
     flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+}
+.px-chat-ava {
     display: grid;
     place-items: center;
     width: 26px;
     height: 26px;
-    border-radius: 8px;
-    background: #fff;
-    color: var(--ink);
+    border-radius: 50%;
+    background: #3a3b40;
+    font-family: var(--f-display);
+    font-size: 12px;
+    font-weight: 700;
 }
-.px-noche-app svg {
-    width: 15px;
-    height: 15px;
+.px-chat-quien {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    line-height: 1.15;
 }
-.px-noche-aviso--0 {
-    animation: px-aviso0 var(--ciclo) var(--pop) infinite;
+.px-chat-quien b {
+    font-size: 11.5px;
+    font-weight: 600;
 }
-.px-noche-aviso--1 {
-    animation: px-aviso1 var(--ciclo) var(--pop) infinite;
+.px-chat-quien small {
+    font-size: 9px;
+    color: var(--mut);
 }
-.px-noche-aviso--2 {
-    animation: px-aviso2 var(--ciclo) var(--pop) infinite;
-    box-shadow: inset 0 0 0 1.5px var(--rojo);
-}
-@keyframes px-aviso0 {
-    0%,
-    10% {
-        opacity: 0;
-        translate: 0 -12px;
-        scale: 0.96;
-    }
-    15%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-        scale: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-aviso1 {
-    0%,
-    26% {
-        opacity: 0;
-        translate: 0 -12px;
-        scale: 0.96;
-    }
-    31%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-        scale: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-aviso2 {
-    0%,
-    46% {
-        opacity: 0;
-        translate: 0 -12px;
-        scale: 0.96;
-    }
-    51%,
-    94% {
-        opacity: 1;
-        translate: 0 0;
-        scale: 1;
-    }
-    100% {
-        opacity: 0;
-    }
-}
-.px-noche-perdida {
+.px-chat-hora {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    margin-top: auto;
-    padding: 7px 12px;
+    gap: 5px;
+    font-family: var(--f-mono);
+    font-size: 9.5px;
+    color: var(--mut);
+}
+.px-chat-hora svg {
+    width: 11px;
+    height: 11px;
+}
+.px-chat-msgs {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    /* lo que sube se desvanece arriba, como al hacer scroll en un chat */
+    -webkit-mask-image: linear-gradient(180deg, transparent, #000 22px);
+    mask-image: linear-gradient(180deg, transparent, #000 22px);
+}
+.px-chat-lista {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+.px-chat-lista--sin {
+    animation: px-sale var(--ciclo) linear both infinite;
+}
+.px-chat-lista--con {
+    animation: px-entra-con var(--ciclo) linear both infinite;
+}
+.px-b,
+.px-nota,
+.px-escribe {
+    max-height: 0;
+    margin-top: 0;
+    opacity: 0;
+    animation: px-b1 var(--ciclo) var(--ease) both infinite;
+}
+.px-b {
+    display: flex;
+}
+.px-b--tu {
+    justify-content: flex-end;
+}
+.px-b-in {
+    max-width: 84%;
+    padding: 6px 9px 5px;
+    border-radius: 13px 13px 13px 4px;
+    background: rgba(255, 255, 255, 0.11);
+    font-size: 10.5px;
+    line-height: 1.32;
+}
+.px-b--tu .px-b-in {
+    border-radius: 13px 13px 4px 13px;
+    background: #b5132c;
+}
+.px-b-in small {
+    float: right;
+    display: inline-flex;
+    gap: 3px;
+    margin: 4px 0 -2px 8px;
+    font-size: 8px;
+    color: rgba(255, 255, 255, 0.6);
+}
+.px-check {
+    font-style: normal;
+    letter-spacing: -0.2em;
+    color: #8fd3ff;
+}
+.px-ia {
+    display: block;
+    margin-bottom: 2px;
+    font-family: var(--f-mono);
+    font-style: normal;
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+}
+.px-nota {
+    align-self: center;
+    padding: 0 9px;
+    border-radius: 99px;
+    background: rgba(225, 29, 58, 0.14);
+    color: #ff8a9b;
+    font-family: var(--f-mono);
+    font-size: 8.5px;
+    line-height: 18px;
+}
+.px-escribe {
+    display: flex;
+    justify-content: flex-end;
+}
+.px-escribe > span {
+    display: flex;
+    gap: 3px;
+    padding: 8px 10px;
+    border-radius: 13px 13px 4px 13px;
+    background: #b5132c;
+}
+.px-escribe i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #fff;
+    animation: px-punto 0.9s ease-in-out infinite;
+}
+.px-escribe i:nth-child(2) {
+    animation-delay: 0.15s;
+}
+.px-escribe i:nth-child(3) {
+    animation-delay: 0.3s;
+}
+@keyframes px-punto {
+    0%,
+    100% {
+        opacity: 0.35;
+        transform: translateY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-2px);
+    }
+}
+.px-s2 {
+    animation-name: px-b2;
+}
+.px-s3 {
+    animation-name: px-b3;
+}
+.px-s4 {
+    animation-name: px-b4;
+}
+.px-c1 {
+    animation-name: px-c1;
+}
+.px-c2 {
+    animation-name: px-c2;
+}
+.px-c3 {
+    animation-name: px-c3;
+}
+.px-c4 {
+    animation-name: px-c4;
+}
+.px-c5 {
+    animation-name: px-c5;
+}
+/* una keyframe por burbuja: aparece en su momento y se queda */
+@keyframes px-b1 {
+    0%,
+    4% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    7%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+@keyframes px-b2 {
+    0%,
+    13% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    16%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+@keyframes px-b3 {
+    0%,
+    20% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    23%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+@keyframes px-b4 {
+    0%,
+    28% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    31%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+@keyframes px-c1 {
+    0%,
+    52% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    54%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+/* "escribiendo…": aparece y se va cuando llega la respuesta */
+@keyframes px-c2 {
+    0%,
+    55% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    57%,
+    59% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+    61%,
+    100% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+}
+@keyframes px-c3 {
+    0%,
+    59% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    62%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+@keyframes px-c4 {
+    0%,
+    67% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    70%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+@keyframes px-c5 {
+    0%,
+    73% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+    }
+    76%,
+    100% {
+        max-height: 70px;
+        margin-top: 6px;
+        opacity: 1;
+    }
+}
+.px-sello--chat {
+    left: 50%;
+    top: 56%;
+    animation: px-sello var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-sello {
+    0%,
+    33% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.7);
+    }
+    36% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    38%,
+    46% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    49%,
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+.px-cierre {
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    max-height: 0;
+    margin-top: 0;
+    padding: 0 11px;
+    border-radius: 99px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 24px;
+    opacity: 0;
+    animation: px-c6 var(--ciclo) var(--pop) both infinite;
+}
+.px-cierre > i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #1fae5b;
+}
+@keyframes px-c6 {
+    0%,
+    80% {
+        max-height: 0;
+        margin-top: 0;
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    83%,
+    100% {
+        max-height: 30px;
+        margin-top: 8px;
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* ============================================================= TIEMPO
+   10 s. Sin sistema: el cuaderno se va escribiendo (4, 11 y 19 %), el
+   tachon (15 %), el post-it (24 %), el reloj del 048 se pone rojo (28 %),
+   falta pescado (32 %) y el sello (37–47 %). Con sistema (51 %): el
+   tablero; el 048 pasa de Nuevo a En cocina (60–64 %) y a Listo (72–76 %),
+   baja el stock, sube la caja y "048 listo en 12 min" (80 %). */
+.px-sis {
+    --ciclo: 10s;
+}
+.px-sis-area {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+}
+
+/* el cuaderno */
+.px-cuaderno {
+    position: absolute;
+    inset: 2px 4px 4px;
+    border-radius: 6px;
+    background:
+        linear-gradient(90deg, transparent 25px, rgba(225, 29, 58, 0.55) 25px 26.5px, transparent 26.5px),
+        repeating-linear-gradient(180deg, transparent 0 21px, #c9d3e3 21px 22px),
+        #f4f0e4;
+    background-position:
+        0 0,
+        0 6px,
+        0 0;
+    color: #22305a;
+    rotate: -1.6deg;
+    box-shadow: 0 16px 34px -16px rgba(0, 0, 0, 0.8);
+    animation: px-sale var(--ciclo) linear both infinite;
+}
+.px-linea {
+    position: absolute;
+    left: 32px;
+    right: 8px;
+    top: calc(10px + var(--k) * 22px);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    height: 22px;
+    font-family: var(--f-texto);
+    font-style: italic;
+    font-size: 11px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+.px-tinta {
+    display: inline-block;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: px-escribe1 var(--ciclo) linear both infinite;
+}
+.px-linea--1 .px-tinta {
+    animation-name: px-escribe2;
+}
+.px-linea--2 .px-tinta {
+    animation-name: px-escribe3;
+}
+@keyframes px-escribe1 {
+    0%,
+    4% {
+        clip-path: inset(0 100% 0 0);
+    }
+    10%,
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+@keyframes px-escribe2 {
+    0%,
+    11% {
+        clip-path: inset(0 100% 0 0);
+    }
+    15%,
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+@keyframes px-escribe3 {
+    0%,
+    19% {
+        clip-path: inset(0 100% 0 0);
+    }
+    25%,
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+.px-tacha {
+    position: absolute;
+    left: 66px;
+    width: 38px;
+    top: 50%;
+    height: 2px;
+    border-radius: 2px;
+    background: #22305a;
+    transform-origin: 0 50%;
+    rotate: -6deg;
+    animation: px-tacha var(--ciclo) linear both infinite;
+}
+@keyframes px-tacha {
+    0%,
+    15% {
+        transform: scaleX(0);
+    }
+    17%,
+    100% {
+        transform: scaleX(1);
+    }
+}
+.px-extra {
+    font-family: var(--f-firma);
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    color: #22305a;
+    animation: px-aparece-18 var(--ciclo) linear both infinite;
+}
+@keyframes px-aparece-18 {
+    0%,
+    17% {
+        opacity: 0;
+    }
+    19%,
+    100% {
+        opacity: 1;
+    }
+}
+.px-post {
+    position: absolute;
+    right: 10px;
+    top: 84px;
+    padding: 7px 10px 8px;
+    background: #fff8d6;
+    color: #22305a;
+    font-family: var(--f-firma);
+    font-size: 17px;
+    line-height: 1;
+    rotate: 4deg;
+    box-shadow: 0 10px 18px -10px rgba(0, 0, 0, 0.55);
+    animation: px-post var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-post {
+    0%,
+    23% {
+        opacity: 0;
+        transform: translateY(-10px) scale(1.15);
+    }
+    26%,
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+.px-reloj {
+    position: absolute;
+    left: 34px;
+    bottom: 48px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 9px 5px 7px;
     border-radius: 99px;
     background: var(--rojo);
     color: #fff;
     font-family: var(--f-mono);
-    font-size: 10.5px;
+    font-size: 10px;
+    font-style: normal;
     font-weight: 500;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0;
-    animation: px-cero var(--ciclo) var(--pop) infinite;
-    animation-delay: 1.4s;
+    animation: px-reloj var(--ciclo) var(--pop) both infinite;
 }
-.px-noche-perdida i {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #fff;
+.px-reloj svg {
+    width: 12px;
+    height: 12px;
+}
+@keyframes px-reloj {
+    0%,
+    27% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    31.5% {
+        transform: translateX(-3px);
+    }
+    33% {
+        transform: translateX(3px);
+    }
+    34.5%,
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+.px-falta {
+    position: absolute;
+    left: 34px;
+    bottom: 16px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: inset 0 0 0 1.5px var(--rojo);
+    color: var(--rojo);
+    font-size: 9.5px;
+    font-weight: 700;
+    animation: px-falta var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-falta {
+    0%,
+    32% {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    35%,
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.px-sello--sis {
+    left: 50%;
+    top: 46%;
+    animation: px-sello-sis var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-sello-sis {
+    0%,
+    37% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.7);
+    }
+    40% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+    42%,
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
 }
 
-/* ============================================================== PEDIDO
-   Ciclo de 10 s. «Con sistema» se llena del 6 al 18 % y marca listo.
-   «A mano» avanza a tirones: 6→20 % (se para), 30→42 % (se para),
-   52→66 %; el reloj salta a 15, 31 y 47 min con cada tramo y se pone rojo
-   al 42 %. La diferencia cae al 70 %; todo se apaga del 94 al 100 %. */
-.px-ped {
-    --ciclo: 10s;
+/* el tablero */
+.px-tablero {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-    padding: 14px 16px 20px;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 14px;
+    background: #26272b;
+    box-shadow: inset 0 0 0 1px var(--line);
+    animation: px-tablero var(--ciclo) var(--ease) both infinite;
 }
-.px-ped-etq {
-    font-family: var(--f-mono);
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--mut);
+@keyframes px-tablero {
+    0%,
+    50% {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+    55%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
-.px-ped-carril {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    animation: px-ped-fuera var(--ciclo) linear infinite;
-}
-.px-ped-cab {
+.px-tab-cab {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
 }
-.px-ped-cab b {
+.px-tab-cab b {
     font-family: var(--f-display);
+    font-size: 13px;
     font-weight: 650;
-    font-size: 17px;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
 }
-
-/* el reloj de «A mano» */
-.px-ped-min {
-    display: grid;
-    padding: 4px 10px;
-    border-radius: 99px;
-    font-family: var(--f-mono);
-    font-size: 12px;
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-    animation: px-ped-reloj var(--ciclo) steps(1) infinite;
-}
-.px-ped-min > span {
-    grid-area: 1 / 1;
-    opacity: 0;
-}
-.px-ped-min > span:nth-child(1) {
-    animation: px-ped-m1 var(--ciclo) steps(1) infinite;
-}
-.px-ped-min > span:nth-child(2) {
-    animation: px-ped-m2 var(--ciclo) steps(1) infinite;
-}
-.px-ped-min > span:nth-child(3) {
-    animation: px-ped-m3 var(--ciclo) steps(1) infinite;
-}
-.px-ped-min > span:nth-child(4) {
-    animation: px-ped-m4 var(--ciclo) steps(1) infinite;
-}
-@keyframes px-ped-reloj {
-    0%,
-    41% {
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--fg);
-    }
-    42%,
-    100% {
-        background: var(--rojo);
-        color: #fff;
-    }
-}
-@keyframes px-ped-m1 {
-    0%,
-    19% {
-        opacity: 1;
-    }
-    20%,
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-ped-m2 {
-    0%,
-    19% {
-        opacity: 0;
-    }
-    20%,
-    41% {
-        opacity: 1;
-    }
-    42%,
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-ped-m3 {
-    0%,
-    41% {
-        opacity: 0;
-    }
-    42%,
-    65% {
-        opacity: 1;
-    }
-    66%,
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-ped-m4 {
-    0%,
-    65% {
-        opacity: 0;
-    }
-    66%,
-    100% {
-        opacity: 1;
-    }
-}
-
-/* el «listo» de «Con sistema» */
-.px-ped-listo {
+.px-tab-cab span {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 4px 10px 4px 8px;
+    gap: 4px;
+    padding: 3px 8px 3px 6px;
     border-radius: 99px;
     background: #fff;
     color: var(--ink);
     font-family: var(--f-mono);
-    font-size: 12px;
+    font-size: 9.5px;
     font-weight: 500;
-    opacity: 0;
-    animation: px-ped-listo var(--ciclo) var(--pop) infinite;
 }
-.px-ped-listo svg {
-    width: 12px;
-    height: 12px;
+.px-tab-cab svg {
+    width: 11px;
+    height: 11px;
 }
-@keyframes px-ped-listo {
-    0%,
-    17% {
-        opacity: 0;
-        scale: 0.6;
-    }
-    20%,
-    100% {
-        opacity: 1;
-        scale: 1;
-    }
-}
-
-/* las barras: gruesas, para leerse de lejos */
-.px-ped-barra {
+.px-cols {
+    --ancho: calc((100% - 12px) / 3);
     position: relative;
-    height: 12px;
-    overflow: hidden;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.1);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    height: 100px;
 }
-.px-ped-barra > i {
+.px-col {
+    padding-top: 1px;
+    border-top: 2px solid rgba(255, 255, 255, 0.14);
+    font-family: var(--f-mono);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mut);
+}
+.px-col:nth-child(3) {
+    border-color: #1fae5b;
+}
+.px-ord {
+    position: absolute;
+    left: 0;
+    top: 18px;
+    width: var(--ancho);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    height: 36px;
+    padding: 5px 7px;
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+    line-height: 1.15;
+    box-shadow: 0 8px 16px -10px rgba(0, 0, 0, 0.6);
+}
+.px-ord b {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    font-weight: 600;
+}
+.px-ord small {
+    overflow: hidden;
+    font-size: 8.5px;
+    color: #55555a;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.px-ord--047 {
+    transform: translateX(calc(100% + 6px));
+}
+.px-ord--046 {
+    transform: translateX(calc(200% + 12px));
+}
+.px-ord--048 {
+    box-shadow:
+        inset 0 0 0 1.5px var(--rojo),
+        0 8px 16px -10px rgba(0, 0, 0, 0.6);
+    animation: px-ord var(--ciclo) var(--ease) both infinite;
+}
+@keyframes px-ord {
+    0%,
+    59% {
+        transform: translate(0, 0);
+    }
+    64%,
+    71% {
+        transform: translate(calc(100% + 6px), 41px);
+    }
+    76%,
+    100% {
+        transform: translate(calc(200% + 12px), 41px);
+    }
+}
+.px-tab-pie {
+    display: flex;
+    gap: 8px;
+}
+.px-stock,
+.px-caja {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.07);
+}
+.px-stock small,
+.px-caja small {
+    font-family: var(--f-mono);
+    font-size: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--mut);
+}
+.px-stock i {
+    position: relative;
+    height: 5px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+}
+.px-stock i::after {
+    content: '';
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    transform-origin: 0 50%;
-    transform: scaleX(0.03);
-}
-.px-ped-carril--sis .px-ped-barra > i {
     background: #fff;
-    animation: px-ped-sis var(--ciclo) var(--ease) infinite;
+    transform-origin: 0 50%;
+    animation: px-stock var(--ciclo) var(--ease) both infinite;
 }
-.px-ped-carril--mano .px-ped-barra > i {
-    animation: px-ped-mano var(--ciclo) linear infinite;
-}
-@keyframes px-ped-sis {
+@keyframes px-stock {
     0%,
-    6% {
-        transform: scaleX(0.03);
-    }
-    18%,
-    100% {
-        transform: scaleX(1);
-    }
-}
-@keyframes px-ped-mano {
-    0%,
-    6% {
-        transform: scaleX(0.03);
-        background: rgba(255, 255, 255, 0.55);
-    }
-    20%,
-    30% {
-        transform: scaleX(0.3);
-        background: rgba(255, 255, 255, 0.55);
-    }
-    42% {
-        background: var(--rojo);
-    }
-    42%,
-    52% {
-        transform: scaleX(0.58);
+    62% {
+        transform: scaleX(0.78);
     }
     66%,
     100% {
-        transform: scaleX(1);
-        background: var(--rojo);
+        transform: scaleX(0.66);
     }
 }
-
-/* lo que esta pasando debajo de cada barra */
-.px-ped-estado {
+.px-caja b {
     display: grid;
-    font-size: 11.5px;
-    color: var(--mut);
+    font-family: var(--f-mono);
+    font-size: 10.5px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
 }
-.px-ped-estado > small {
+.px-caja b span {
     grid-area: 1 / 1;
-    font-size: inherit;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    animation: px-sale-76 var(--ciclo) steps(1) both infinite;
 }
-.px-ped-carril--mano .px-ped-estado > small {
-    opacity: 0;
+.px-caja b span:last-child {
+    animation-name: px-entra-76;
 }
-.px-ped-carril--mano .px-ped-estado > small:nth-child(1) {
-    animation: px-ped-e1 var(--ciclo) linear infinite;
-}
-.px-ped-carril--mano .px-ped-estado > small:nth-child(2) {
-    animation: px-ped-e2 var(--ciclo) linear infinite;
-}
-.px-ped-carril--mano .px-ped-estado > small:nth-child(3) {
-    color: #ff6b80;
-    animation: px-ped-e3 var(--ciclo) linear infinite;
-}
-@keyframes px-ped-e1 {
-    0%,
-    28% {
+@keyframes px-sale-76 {
+    0% {
         opacity: 1;
-    }
-    30%,
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-ped-e2 {
-    0%,
-    29% {
-        opacity: 0;
-    }
-    31%,
-    50% {
-        opacity: 1;
-    }
-    52%,
-    100% {
-        opacity: 0;
-    }
-}
-@keyframes px-ped-e3 {
-    0%,
-    51% {
-        opacity: 0;
-    }
-    53%,
-    100% {
-        opacity: 1;
-    }
-}
-
-/* la diferencia, en grande: cae con un golpe */
-.px-ped-dif {
-    display: flex;
-    align-items: baseline;
-    flex-wrap: wrap;
-    gap: 2px 10px;
-    padding-top: 10px;
-    border-top: 1px solid var(--line);
-    opacity: 0;
-    transform-origin: 0 50%;
-    animation: px-ped-dif var(--ciclo) var(--pop) infinite;
-}
-.px-ped-dif b {
-    font-family: var(--f-display);
-    font-weight: 750;
-    font-size: 34px;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    color: var(--rojo);
-}
-.px-ped-dif small {
-    font-size: 12.5px;
-    color: var(--fg);
-}
-@keyframes px-ped-dif {
-    0%,
-    69% {
-        opacity: 0;
-        scale: 1.25;
-    }
-    73% {
-        opacity: 1;
-        scale: 0.97;
     }
     76%,
-    94% {
-        opacity: 1;
-        scale: 1;
-    }
     100% {
         opacity: 0;
-        scale: 1;
     }
 }
-@keyframes px-ped-fuera {
+@keyframes px-entra-76 {
+    0% {
+        opacity: 0;
+    }
+    76%,
+    100% {
+        opacity: 1;
+    }
+}
+.px-aviso--sis {
+    left: 0;
+    top: 62px;
+    animation: px-aviso-sis var(--ciclo) var(--pop) both infinite;
+}
+@keyframes px-aviso-sis {
     0%,
-    94% {
-        opacity: 1;
-    }
-    99% {
+    79% {
         opacity: 0;
+        transform: translateY(8px) scale(0.9);
     }
+    83%,
     100% {
         opacity: 1;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .px-busca-q {
-        max-width: none;
-    }
-    .px-busca-fila,
-    .px-noche-aviso,
-    .px-noche-perdida,
-    .px-busca-cero,
-    .px-ped-listo,
-    .px-ped-dif {
-        opacity: 1;
-        translate: none;
-        scale: 1;
-    }
-    .px-ped-min > span:last-child,
-    .px-ped-carril--mano .px-ped-estado > small:last-child {
-        opacity: 1;
-    }
-    .px-ped-min {
-        background: var(--rojo);
-        color: #fff;
-    }
-    .px-ped-barra > i {
-        transform: none;
-    }
-    .px-ped-carril--mano .px-ped-barra > i {
-        background: var(--rojo);
+        transform: translateY(0) scale(1);
     }
 }
